@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Meta -->
+		<meta name="description" content="Responsive Bootstrap4 Dashboard Template">
+		<meta name="author" content="ParkerThemes">
+		<link rel="shortcut icon" href="img/fav.png" />
+
+		<!-- Title -->
+		<title>Wafi Admin Template - Custom Tables</title>
+
+
+		<!-- *************
+			************ Common Css Files *************
+		************ -->
+		<!-- Bootstrap css -->
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+
+		<!-- Icomoon Font Icons css -->
+		<link rel="stylesheet" href="fonts/style.css">
+		
+		<!-- Main css -->
+		<link rel="stylesheet" href="css/main.css">
+
+
+		<!-- *************
+			************ Vendor Css Files *************
+		************ -->
+		<!-- DateRange css -->
+		<link rel="stylesheet" href="vendor/daterange/daterange.css" />
+
+	</head>
+
+	<body>
+
+		<!-- Loading starts -->
+		<div id="loading-wrapper">
+			<div class="spinner-border" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+		<!-- Loading ends -->
+
+
+		<!-- Page wrapper start -->
+		<div class="page-wrapper pinned">
+			
+			<!-- Sidebar wrapper start -->
+			<nav id="sidebar" class="sidebar-wrapper">
+				<!-- Sidebar brand start  -->
+				<div class="sidebar-brand">
+					<a href="index.html" class="logo">
+						<img src="img/logo.png" alt="Wafi Admin Dashboard" />
+					</a>
+					<a href="index.html" class="logo-sm">
+						<img src="img/logo-sm.png" alt="Wafi Admin Dashboard" />
+					</a>
+				</div>
+				<!-- Sidebar brand end  -->
+
+				<!-- Sidebar content start -->
+				<div class="sidebar-content">
+
+					<!-- sidebar menu start -->
+					<div class="sidebar-menu">
+						<ul>
+							<li class="header-menu">General</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-devices_other"></i>
+									<span class="menu-text">Dashboards</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="index.html">Admin</a>
+										</li>
+										<li>
+											<a href="project-dashboard.html">Project Management</a>
+										</li>
+										<li>
+											<a href="sales-dashboard.html">Sales Admin</a>
+										</li>
+										<li>
+											<a href="crm-dashboard.html">CRM Admin</a>
+										</li>
+										<li>
+											<a href="ecommerce-dashboard.html">Ecommerce Admin</a>
+										</li>
+										<li>
+											<a href="quick-dashboard.html">Quick Admin</a>
+										</li>
+										<li>
+											<a href="smart-dashboard.html">Smart Admin</a>
+										</li>
+										<li>
+											<a href="helpdesk-dashboard.html">Help Desk Admin</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="chat.html">
+									<i class="icon-message-circle"></i>
+									<span class="menu-text">Chat App</span>
+								</a>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-calendar1"></i>
+									<span class="menu-text">Calendars</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="calendar.html">Daygrid View</a>
+										</li>
+										<li>
+											<a href="calendar-external-draggable.html">External Draggable</a>
+										</li>
+										<li>
+											<a href="calendar-google.html">Google Calendar</a>
+										</li>
+										<li>
+											<a href="calendar-list-view.html">List View</a>
+										</li>
+										<li>
+											<a href="calendar-selectable.html">Selectable</a>
+										</li>
+										<li>
+											<a href="calendar-week-numbers.html">Week Numbers</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="contacts.html">
+									<i class="icon-phone1"></i>
+									<span class="menu-text">Contacts List</span>
+								</a>
+							</li>
+							<li>
+								<a href="documents.html">
+									<i class="icon-documents"></i>
+									<span class="menu-text">Documents</span>
+								</a>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-layout"></i>
+									<span class="menu-text">Layouts</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="default-layout.html">Default Layout</a>
+										</li>
+										<li>
+											<a href="default-dark-layout.html">Default Dark Version</a>
+										</li>
+										<li>
+											<a href="fixed-layout.html">Fixed Layout</a>
+										</li>
+										<li>
+											<a href="fixed-layout-dark.html">Fixed Dark Version</a>
+										</li>
+										<li>
+											<a href="slim-sidebar.html">Slim Layout</a>
+										</li>
+										<li>
+											<a href="slim-sidebar-dark.html">Slim Dark Version</a>
+										</li>
+										<li>
+											<a href="card-options.html">Card Options</a>
+										</li>
+										<li>
+											<a href="drag-drop-cards.html">Drag and Drop Cards</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-book-open"></i>
+									<span class="menu-text">Pages</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="account-settings.html">Account Settings</a>
+										</li>
+										<li>
+											<a href="blog.html">Blog</a>
+										</li>
+										<li>
+											<a href="cards.html">Cards</a>
+										</li>
+										<li>
+											<a href="datepickers.html">Datepickers</a>
+										</li>
+										<li>
+											<a href="faq.html">Faq</a>
+										</li>
+										<li>
+											<a href="invoice.html">Invoice</a>
+										</li>
+										<li>
+											<a href="search-results.html">Search Results</a>
+										</li>
+										<li>
+											<a href="timeline.html">Timeline</a>
+										</li>
+										<li>
+											<a href="comments.html">User Comments</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="pricing.html">
+									<i class="icon-dollar-sign"></i>
+									<span class="menu-text">Pricing Plans</span>
+								</a>
+							</li>
+							<li>
+								<a href="user-profile.html">
+									<i class="icon-user1"></i>
+									<span class="menu-text">User Profile</span>
+								</a>
+							</li>
+							<li>
+								<a href="tasks.html">
+									<i class="icon-check-circle"></i>
+									<span class="menu-text">Tasks App</span>
+								</a>
+							</li>
+							<li class="header-menu">Forms</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-edit1"></i>
+									<span class="menu-text">Inputs</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="form-inputs.html">Form Inputs</a>
+										</li>
+										<li>
+											<a href="input-groups.html">Input Groups</a>
+										</li>
+										<li>
+											<a href="check-radio.html">Check Boxes</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-file-text"></i>
+									<span class="menu-text">Contact Forms</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="contact.html">Contact Form</a>
+										</li>
+										<li>
+											<a href="contact2.html">Contact Form #2</a>
+										</li>
+										<li>
+											<a href="contact3.html">Contact Form #3</a>
+										</li>
+										<li>
+											<a href="contact4.html">Contact Form #4</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="bs-select.html">
+									<i class="icon-pocket"></i>
+									<span class="menu-text">BS Select</span>
+								</a>
+							</li>
+							<li>
+								<a href="editor.html">
+									<i class="icon-edit-3"></i>
+									<span class="menu-text">Editor</span>
+								</a>
+							</li>
+							<li>
+								<a href="input-masks.html">
+									<i class="icon-eye-off"></i>
+									<span class="menu-text">Input Masks</span>
+								</a>
+							</li>
+							<li>
+								<a href="input-tags.html">
+									<i class="icon-terminal"></i>
+									<span class="menu-text">Input Tags</span>
+								</a>
+							</li>
+							<li>
+								<a href="range-sliders.html">
+									<i class="icon-toggle-right"></i>
+									<span class="menu-text">Range Sliders</span>
+								</a>
+							</li>
+							<li>
+								<a href="wizard.html">
+									<i class="icon-triangle"></i>
+									<span class="menu-text">Wizards</span>
+								</a>
+							</li>
+							<li class="header-menu">UI Elements</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-list2"></i>
+									<span class="menu-text">Accordions</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="accordion.html">Accordion</a>
+										</li>
+										<li>
+											<a href="accordion-icons.html">Accordion Icons</a>
+										</li>
+										<li>
+											<a href="accordion-arrows.html">Accordion Arrows</a>
+										</li>
+										<li>
+											<a href="accordion-lg.html">Accordion Large</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-disc"></i>
+									<span class="menu-text">Buttons</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="buttons.html">Buttons</a>
+										</li>
+										<li>
+											<a href="button-groups.html">Button Groups</a>
+										</li>
+										<li>
+											<a href="dropdowns.html">Dropdowns</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="carousel.html">
+									<i class="icon-toll"></i>
+									<span class="menu-text">Carousels</span>
+								</a>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-star2"></i>
+									<span class="menu-text">Components</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="jumbotron.html">Jumbotron</a>
+										</li>
+										<li>
+											<a href="labels-badges.html">Labels &amp; Badges</a>
+										</li>
+										<li>
+											<a href="list-items.html">List Items</a>
+										</li>
+										<li>
+											<a href="pagination.html">Paginations</a>
+										</li>
+										<li>
+											<a href="progress.html">Progress Bars</a>
+										</li>
+										<li>
+											<a href="pills.html">Pills</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-image"></i>
+									<span class="menu-text">Gallery</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="gallery.html">Gallery Slider</a>
+										</li>
+										<li>
+											<a href="gallery2.html">Gallery Thumbnail</a>
+										</li>
+										<li>
+											<a href="gallery3.html">Gallery Hover</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-box"></i>
+									<span class="menu-text">Grid</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="grid.html">Grid</a>
+										</li>
+										<li>
+											<a href="grid-doc.html">Grid Doc</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="icons.html">
+									<i class="icon-timer"></i>
+									<span class="menu-text">Icons</span>
+								</a>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-image"></i>
+									<span class="menu-text">Images</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="avatars.html">Avatars</a>
+										</li>
+										<li>
+											<a href="media-objects.html">Media Objects</a>
+										</li>
+										<li>
+											<a href="images.html">Thumbnails</a>
+										</li>
+										<li>
+											<a href="text-avatars.html">Text Avatars</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="modals.html">
+									<i class="icon-credit-card"></i>
+									<span class="menu-text">Modals</span>
+								</a>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-bell"></i>
+									<span class="menu-text">Notifications</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="bootstrap-alerts.html">Default Alerts</a>
+										</li>
+										<li>
+											<a href="custom-alerts.html">Custom Alerts</a>
+										</li>
+										<li>
+											<a href="toasts.html">Toasts</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="spinners.html">
+									<i class="icon-circular-graph"></i>
+									<span class="menu-text">Spinners</span>
+								</a>
+							</li>
+							<li>
+								<a href="tooltips.html">
+									<i class="icon-change_history"></i>
+									<span class="menu-text">Tooltips</span>
+								</a>
+							</li>
+							<li>
+								<a href="typography.html">
+									<i class="icon-sort_by_alpha"></i>
+									<span class="menu-text">Typography</span>
+								</a>
+							</li>
+							<li class="header-menu">Tables</li>
+							<li class="sidebar-dropdown active">
+								<a href="#">
+									<i class="icon-border_all"></i>
+									<span class="menu-text">Tables</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="custom-tables.html" class="current-page">Custom Tables</a>
+										</li>
+										<li>
+											<a href="default-table.html">Default Table</a>
+										</li>
+										<li>
+											<a href="table-bordered.html">Table Bordered</a>
+										</li>
+										<li>
+											<a href="table-hover.html">Table Hover</a>
+										</li>
+										<li>
+											<a href="table-striped.html">Table Striped</a>
+										</li>
+										<li>
+											<a href="table-small.html">Table Small</a>
+										</li>
+										<li>
+											<a href="table-colors.html">Table Colors</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="data-tables.html">
+									<i class="icon-border_all"></i>
+									<span class="menu-text">Data Tables</span>
+								</a>
+							</li>
+							<li class="header-menu">Graphs &amp; Maps</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-line-graph"></i>
+									<span class="menu-text">Apex Graphs</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="area-graphs.html">Area Charts</a>
+										</li>
+										<li>
+											<a href="bubble.html">Bubble Graphs</a>
+										</li>
+										<li>
+											<a href="bar-graphs.html">Bar Charts</a>
+										</li>
+										<li>
+											<a href="candlestick.html">Candlestick</a>
+										</li>
+										<li>
+											<a href="column-graphs.html">Column Charts</a>
+										</li>
+										<li>
+											<a href="donut-graphs.html">Donut Charts</a>
+										</li>
+										<li>
+											<a href="line-graphs.html">Line Charts</a>
+										</li>
+										<li>
+											<a href="mixed-graphs.html">Mixed Charts</a>
+										</li>
+										<li>
+											<a href="pie-graphs.html">Pie Charts</a>
+										</li>
+										<li>
+											<a href="radial-chart.html">Radial Graph</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="morris-graphs.html">
+									<i class="icon-tonality"></i>
+									<span class="menu-text">Morris Graphs</span>
+								</a>
+							</li>
+							<li>
+								<a href="flot-graphs.html">
+									<i class="icon-pie_chart_outlined"></i>
+									<span class="menu-text">Flot Graphs</span>
+								</a>
+							</li>
+							<li>
+								<a href="c3-graphs.html">
+									<i class="icon-activity"></i>
+									<span class="menu-text">C3 Graphs</span>
+								</a>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-map2"></i>
+									<span class="menu-text">Maps</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="vector-maps.html">Vector Maps</a>
+										</li>
+										<li>
+											<a href="google-maps.html">Google Maps</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="header-menu">Extra</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-airplay"></i>
+									<span class="menu-text">Login</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="login.html">Login</a>
+										</li>
+										<li>
+											<a href="signup.html">Signup</a>
+										</li>
+										<li>
+											<a href="forgot-pwd.html">Forgot Password</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-mail"></i>
+									<span class="menu-text">Subscribe</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="subscribe.html">Subscribe 1</a>
+										</li>
+										<li>
+											<a href="subscribe2.html">Subscribe 2</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="sidebar-dropdown">
+								<a href="#">
+									<i class="icon-alert-triangle"></i>
+									<span class="menu-text">Error Pages</span>
+								</a>
+								<div class="sidebar-submenu">
+									<ul>
+										<li>
+											<a href="error.html">404</a>
+										</li>
+										<li>
+											<a href="error2.html">505</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<a href="coming-soon.html">
+									<i class="icon-schedule"></i>
+									<span class="menu-text">Coming Soon</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<!-- sidebar menu end -->
+
+				</div>
+				<!-- Sidebar content end -->
+			</nav>
+			<!-- Sidebar wrapper end -->
+
+			<!-- Page content start  -->
+			<div class="page-content">
+
+				<!-- Header start -->
+				<header class="header">
+					<div class="toggle-btns">
+						<a id="toggle-sidebar" href="#">
+							<i class="icon-list"></i>
+						</a>
+						<a id="pin-sidebar" href="#">
+							<i class="icon-list"></i>
+						</a>
+					</div>
+					<div class="header-items">
+						<!-- Custom search start -->
+						<div class="custom-search">
+							<input type="text" class="search-query" placeholder="Search here ...">
+							<i class="icon-search1"></i>
+						</div>
+						<!-- Custom search end -->
+
+						<!-- Header actions start -->
+						<ul class="header-actions">
+							<li class="dropdown">
+								<a href="#" id="notifications" data-toggle="dropdown" aria-haspopup="true">
+									<i class="icon-box"></i>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right lrg" aria-labelledby="notifications">
+									<div class="dropdown-menu-header">
+										Tasks (05)
+									</div>	
+									<ul class="header-tasks">
+										<li>
+											<p>#48 - Dashboard UI<span>90%</span></p>
+											<div class="progress">
+												<div class="progress-bar bg-primary" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
+													<span class="sr-only">90% Complete (success)</span>
+												</div>
+											</div>
+										</li>
+										<li>
+											<p>#95 - Alignment Fix<span>60%</span></p>
+											<div class="progress">
+												<div class="progress-bar bg-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+													<span class="sr-only">60% Complete (success)</span>
+												</div>
+											</div>
+										</li>
+										<li>
+											<p>#7 - Broken Button<span>40%</span></p>
+											<div class="progress">
+												<div class="progress-bar bg-secondary" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+													<span class="sr-only">40% Complete (success)</span>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="dropdown">
+								<a href="#" id="notifications" data-toggle="dropdown" aria-haspopup="true">
+									<i class="icon-bell"></i>
+									<span class="count-label">8</span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right lrg" aria-labelledby="notifications">
+									<div class="dropdown-menu-header">
+										Notifications (40)
+									</div>
+									<ul class="header-notifications">
+										<li>
+											<a href="#">
+												<div class="user-img away">
+													<img src="img/user21.png" alt="User">
+												</div>
+												<div class="details">
+													<div class="user-title">Abbott</div>
+													<div class="noti-details">Membership has been ended.</div>
+													<div class="noti-date">Oct 20, 07:30 pm</div>
+												</div>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<div class="user-img busy">
+													<img src="img/user10.png" alt="User">
+												</div>
+												<div class="details">
+													<div class="user-title">Braxten</div>
+													<div class="noti-details">Approved new design.</div>
+													<div class="noti-date">Oct 10, 12:00 am</div>
+												</div>
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												<div class="user-img online">
+													<img src="img/user6.png" alt="User">
+												</div>
+												<div class="details">
+													<div class="user-title">Larkyn</div>
+													<div class="noti-details">Check out every table in detail.</div>
+													<div class="noti-date">Oct 15, 04:00 pm</div>
+												</div>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li class="dropdown">
+								<a href="#" id="userSettings" class="user-settings" data-toggle="dropdown" aria-haspopup="true">
+									<span class="user-name">Zyan Ferris</span>
+									<span class="avatar">ZF<span class="status busy"></span></span>
+								</a>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userSettings">
+									<div class="header-profile-actions">
+										<div class="header-user-profile">
+											<div class="header-user">
+												<img src="img/user.png" alt="Admin Template">
+											</div>
+											<h5>Zyan Ferris</h5>
+											<p>Admin</p>
+										</div>
+										<a href="user-profile.html"><i class="icon-user1"></i> My Profile</a>
+										<a href="account-settings.html"><i class="icon-settings1"></i> Account Settings</a>
+										<a href="login.html"><i class="icon-log-out1"></i> Sign Out</a>
+									</div>
+								</div>
+							</li>
+						</ul>						
+						<!-- Header actions end -->
+					</div>
+				</header>
+				<!-- Header end -->
+
+				<!-- Page header start -->
+				<div class="page-header">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item">Tables</li>
+						<li class="breadcrumb-item active">Custom Tables</li>
+					</ol>
+
+					<ul class="app-actions">
+						<li>
+							<a href="#" id="reportrange">
+								<span class="range-text"></span>
+								<i class="icon-chevron-down"></i>	
+							</a>
+						</li>
+						<li>
+							<a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print">
+								<i class="icon-print"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download CSV">
+								<i class="icon-cloud_download"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- Page header end -->
+				
+				<!-- Main container start -->
+				<div class="main-container">
+
+					<!-- Row start -->
+					<div class="row gutters">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+							<div class="table-container">
+								<div class="table-responsive">
+									<table class="table custom-table m-0">
+										<thead>
+											<tr>
+												<th>Customer ID</th>
+												<th>First Name</th>
+												<th>Last Name</th>
+												<th>Phone</th>
+												<th>Email</th>
+												<th>Items Bought</th>
+												<th>Money Spent</th>
+												<th>Last Login</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>#00001</td>
+												<td>Alia</td>
+												<td>Willams</td>
+												<td>+143-148-60985</td>
+												<td>aliawilllams@wafi.com</td>
+												<td>250</td>
+												<td>$4500</td>
+												<td>10/10/2019 4:30pm</td>
+											</tr>
+											<tr>
+												<td>#00002</td>
+												<td>Nathan</td>
+												<td>James</td>
+												<td>+278-119-88790</td>
+												<td>nathanjames@wafi.com</td>
+												<td>390</td>
+												<td>$3500</td>
+												<td>12/10/2019 2:37am</td>
+											</tr>
+											<tr>
+												<td>#00003</td>
+												<td>Kelly</td>
+												<td>Thomas</td>
+												<td>+125-117-88763</td>
+												<td>thomas-gm@wafi.com</td>
+												<td>135</td>
+												<td>$2400</td>
+												<td>14/10/2019 7:50pm</td>
+											</tr>
+											<tr>
+												<td>#00004</td>
+												<td>Steve</td>
+												<td>Smitth</td>
+												<td>+334-676-66530</td>
+												<td>smith-st@wafi.com</td>
+												<td>765</td>
+												<td>$7890</td>
+												<td>18/10/2019 9:30pm</td>
+											</tr>
+											<tr>
+												<td>#00005</td>
+												<td>Kevin</td>
+												<td>Oliver</td>
+												<td>+435-667-99808</td>
+												<td>kevin-oliver@wafi.com</td>
+												<td>763</td>
+												<td>$5690</td>
+												<td>21/10/2019 3:20pm</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+
+							<div class="table-container">
+								<div class="table-responsive">
+									<table class="table custom-table m-0">
+										<thead>
+											<tr>
+												<th>Country</th>
+												<th>Languages</th>
+												<th>Population</th>
+												<th>Median Age</th>
+												<th>Area (Km²)</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><img src="flags/1x1/hk.svg" class="flag-img" alt="Hong Kong" />Hong Kong</td>
+												<td>Chinese (official), English</td>
+												<td>7,39,000</td>
+												<td>31.3</td>
+												<td>1106</td>
+											</tr>
+											<tr>
+												<td><img src="flags/1x1/au.svg" class="flag-img" alt="Australia" />Australia</td>
+												<td>English 79%, native and other languages</td>
+												<td>23,630,169</td>
+												<td>37.3</td>
+												<td>7,739,983</td>
+											</tr>
+											<tr>
+												<td><img src="flags/1x1/tz.svg" class="flag-img" alt="Tanzania" />Tanzania</td>
+												<td>Swahili (national), English, Arabic, Chaga, Makonde</td>
+												<td>57,353,670</td>
+												<td>39.1</td>
+												<td>945,086</td>
+											</tr>
+											<tr>
+												<td><img src="flags/1x1/ru.svg" class="flag-img" alt="Russia" />Russia</td>
+												<td>Russian, others</td>
+												<td>142,467,651</td>
+												<td>38.4</td>
+												<td>17,076,310</td>
+											</tr>
+											<tr>
+												<td><img src="flags/1x1/de.svg" class="flag-img" alt="Germany" />Germany</td>
+												<td>German, Danish, Low Rhenish, Romani</td>
+												<td>82,081,261</td>
+												<td>41.1</td>
+												<td>357,386</td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="5" class="text-center">Data retrieved from <a href="" class="link">wafi</a> and <a href="" class="link">unify</a>.</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+							</div>
+
+
+							<div class="table-container">
+								<div class="table-responsive">
+									<table class="table custom-table m-0">
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Title</th>
+												<th>Comment</th>
+												<th>Module</th>
+												<th>Reporter</th>
+												<th>Status</th>
+												<th>Owner</th>
+												<th>Severity</th>
+												<th class="text-right">Created</th>
+												<th class="text-right">Updated</th>
+												<th class="text-right">Due</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>1</td>
+												<td>App crashes</td>
+												<td>Kelly, can you please take a look.</td>
+												<td>Main App</td>
+												<td>Lewis</td>
+												<td><span class="badge badge-danger">Open</span></td>
+												<td>Micheal</td>
+												<td class="text-danger">High</td>
+												<td class="text-right">Aug-10, 2019</td>
+												<td class="text-right">Sep-14, 2019</td>
+												<td class="text-right">Oct-20, 2019</td>
+											</tr>
+											<tr>
+												<td>2</td>
+												<td>Saving file</td>
+												<td>Let me take this up.</td>
+												<td>Form Screen</td>
+												<td>James</td>
+												<td><span class="badge badge-success">In Progress</span></td>
+												<td>Donald</td>
+												<td class="text-success">Low</td>
+												<td class="text-right">Aug-10, 2019</td>
+												<td class="text-right">Sep-14, 2019</td>
+												<td class="text-right">Oct-20, 2019</td>
+											</tr>
+											<tr>
+												<td>3</td>
+												<td>Login fail</td>
+												<td>Hey, critical issue.</td>
+												<td>Main App</td>
+												<td>Powell</td>
+												<td><span class="badge badge-danger">Open</span></td>
+												<td>Glory</td>
+												<td class="text-danger">High</td>
+												<td class="text-right">Aug-10, 2019</td>
+												<td class="text-right">Sep-14, 2019</td>
+												<td class="text-right">Oct-20, 2019</td>
+											</tr>
+											<tr>
+												<td>4</td>
+												<td>Saving file</td>
+												<td>Let me take this up.</td>
+												<td>Form Screen</td>
+												<td>James</td>
+												<td><span class="badge badge-success">In Progress</span></td>
+												<td>Donald</td>
+												<td class="text-success">Low</td>
+												<td class="text-right">Aug-10, 2019</td>
+												<td class="text-right">Sep-14, 2019</td>
+												<td class="text-right">Oct-20, 2019</td>
+											</tr>
+											<tr>
+												<td>5</td>
+												<td>Login fail</td>
+												<td>Hey, critical issue.</td>
+												<td>Main App</td>
+												<td>Powell</td>
+												<td><span class="badge badge-success">In Progress</span></td>
+												<td>Glory</td>
+												<td class="text-danger">High</td>
+												<td class="text-right">Aug-10, 2019</td>
+												<td class="text-right">Sep-14, 2019</td>
+												<td class="text-right">Oct-20, 2019</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+
+							<div class="table-container">
+								<div class="table-responsive">
+									<table class="table custom-table m-0">
+										<thead>
+											<tr>
+												<th>Country</th>
+												<th>Sessions</th>
+												<th>Users</th>
+												<th>Price</th>
+												<th>Sessions</th>
+												<th>Value</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>&nbsp;</td>
+												<td>74%<br><small>of Total:<br>80.00% (10)</small></td>
+												<td>57%<br><small>Avg for View:<br>90.00% (-16.67%)</small></td>
+												<td>32%<br><small>Avg for View:<br>50.00% (70.00%)</small></td>
+												<td>35.32<br><small>Avg for View:<br>2.70 (75.93%)</small></td>
+												<td>79<br><small>Avg for View:<br>0.00% (0.00%)</small></td>
+												<td>&nbsp;</td>
+											</tr>
+											<tr>
+												<td>1. USA</td>
+												<td>327</td>
+												<td>229</td>
+												<td>$139.85</td>
+												<td>21.55%</td>
+												<td>USD 980</td>
+												<td>
+													<div class="td-actions">
+														<a href="#" class="icon red" data-toggle="tooltip" data-placement="top" title="Add Row">
+															<i class="icon-circle-with-plus"></i>
+														</a>
+														<a href="#" class="icon green" data-toggle="tooltip" data-placement="top" title="Save Row">
+															<i class="icon-save"></i>
+														</a>
+														<a href="#" class="icon blue" data-toggle="tooltip" data-placement="top" title="Delete Row">
+															<i class="icon-cancel"></i>
+														</a>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>2. India</td>
+												<td>578</td>
+												<td>375</td>
+												<td>$89,319</td>
+												<td>46.90%</td>
+												<td>USD 887</td>
+												<td>
+													<div class="td-actions">
+														<a href="#" class="icon red" data-toggle="tooltip" data-placement="top" title="Add Row">
+															<i class="icon-circle-with-plus"></i>
+														</a>
+														<a href="#" class="icon green" data-toggle="tooltip" data-placement="top" title="Save Row">
+															<i class="icon-save"></i>
+														</a>
+														<a href="#" class="icon blue" data-toggle="tooltip" data-placement="top" title="Delete Row">
+															<i class="icon-cancel"></i>
+														</a>
+													</div>
+												</td>
+											</tr>
+											<tr>
+												<td>3. Australia</td>
+												<td>126</td>
+												<td>845</td>
+												<td>$68.00</td>
+												<td>16.25%</td>
+												<td>USD 685</td>
+												<td>
+													<div class="td-actions">
+														<a href="#" class="icon red" data-toggle="tooltip" data-placement="top" title="Add Row">
+															<i class="icon-circle-with-plus"></i>
+														</a>
+														<a href="#" class="icon green" data-toggle="tooltip" data-placement="top" title="Save Row">
+															<i class="icon-save"></i>
+														</a>
+														<a href="#" class="icon blue" data-toggle="tooltip" data-placement="top" title="Delete Row">
+															<i class="icon-cancel"></i>
+														</a>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<!-- Row end -->
+
+				</div>
+				<!-- Main container end -->
+
+			</div>
+			<!-- Page content end -->
+
+		</div>
+		<!-- Page wrapper end -->
+
+		<!--**************************
+			**************************
+				**************************
+							Required JavaScript Files
+				**************************
+			**************************
+		**************************-->
+		<!-- Required jQuery first, then Bootstrap Bundle JS -->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.bundle.min.js"></script>
+		<script src="js/moment.js"></script>
+
+
+		<!-- *************
+			************ Vendor Js Files *************
+		************* -->
+		<!-- Slimscroll JS -->
+		<script src="vendor/slimscroll/slimscroll.min.js"></script>
+		<script src="vendor/slimscroll/custom-scrollbar.js"></script>
+
+		<!-- Daterange -->
+		<script src="vendor/daterange/daterange.js"></script>
+		<script src="vendor/daterange/custom-daterange.js"></script>
+
+
+		<!-- Main JS -->
+		<script src="js/main.js"></script>
+
+	</body>
+</html>

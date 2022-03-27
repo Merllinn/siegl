@@ -1,0 +1,124 @@
+<?php
+
+namespace BulkGate\Message\Bridges\MessageTracy;
+
+use BulkGate;
+use Tracy\Dumper;
+
+/**
+ * @var int $count
+ * @var array $info
+ */
+
+?>
+<style class="tracy-debug">
+
+	#tracy-debug .bulkgate-MessagePanel .tracy-inner {
+		min-width: 700px;
+		width: auto;
+		overflow-x: hidden;
+	}
+
+	#tracy-debug .bulkgate-MessagePanel table {
+		width: 100%;
+		white-space: nowrap;
+	}
+
+	#tracy-debug .bulkgate-MessagePanel .created {
+		font-weight: bold;
+	}
+
+	#tracy-debug .bulkgate-MessagePanel .yes {
+		color: green;
+		font-weight: bold;
+	}
+
+    #tracy-debug .bulkgate-MessagePanel .success {
+        color: green;
+        font-weight: bold;
+    }
+
+    #tracy-debug .bulkgate-MessagePanel .error {
+        color: red;
+        font-weight: bold;
+    }
+
+    #tracy-debug .bulkgate-MessagePanel .right {
+        float: right;
+    }
+
+	#tracy-debug .tracy-panel .sms tr:nth-child(2n) td {
+		background: #ffffff;
+	}
+	#tracy-debug .tracy-panel .sms tr td {
+		background: #fefefe;
+	}
+</style>
+<div class="bulkgate-MessagePanel">
+	<h1><?= $count ?> BulkGate messages have been sent</h1>
+	<div class="tracy-inner">
+
+		<?php foreach($info as $item): ?>
+		<table width="100%">
+            <tr>
+                <th>Type</th>
+                <td><b><?= ucfirst($item->action ?? '') ?></b> <?php if(isset($item->response->error)): ?><span class="error right">Error: <?= $item->response->error ?? 'failed' ?></span><?php endif; ?></td>
+            </tr>
+            <tr>
+                <th>Unicode</th>
+                <td class="<?= $item->request['unicode'] ? 'yes' : 'no' ?>"><?= $item->request['unicode'] ? 'Yes' : 'No' ?></td>
+            </tr>
+            <tr>
+                <th>Flash</th>
+                <td class="<?= $item->request['flash'] ? 'yes' : 'no' ?>"><?= $item->request['flash'] ? 'Yes' : 'No' ?></td>
+            </tr>
+            <tr>
+                <th>Sender</th>
+                <td><?php echo empty($item->request['sender']) ? 'default' : Dumper::toHtml($item->request['sender'], [Dumper::COLLAPSE => true]); ?></td>
+
+            </tr>
+            <tr>
+                <th>Messages</th>
+                <td>
+                    <table class="sms">
+                        <tr>
+                            <th>Type</th>
+                            <th>Number</th>
+                            <th>Text</th>
+                            <th>Country</th>
+                            <th>Price</th>
+                            <th>ID</th>
+                            <th>Status</th>
+                        </tr>
+                        <?php if($item->action === 'transaction-sms'): ?>
+                        <tr>
+                            <td><b>SMS</b></td>
+                            <td><b><?= isset($item->response->number) ? $item->response->number : $item->request['message']->getPhoneNumber()->getPhoneNumber() ?></b></td>
+                            <td><?= $item->request['message']->getText() ?></td>
+                            <td><?= $item->request['message']->getPhoneNumber()->getIso() ? $item->request['message']->getPhoneNumber()->getIso() : '-' ?></td>
+                            <td><?= isset($item->response->price) ? $item->response->price : '-' ?></td>
+                            <td><?= isset($item->response->sms_id) ? $item->response->sms_id : '-' ?></td>
+                            <td><?php if(isset($item->response->status) && $this->status($item->response->status)): ?> <span class="success">Sent</span><?php else: ?><span class="error">Error</span><?php endif; ?></td>
+                        </tr>
+                        <?php elseif ($item->action === 'bulk-sms'): ?>
+
+                            <?php foreach($item->request['message'] as $key => $message): ?>
+                                <tr>
+                                    <td><b>SMS</b></td>
+                                    <td><b><?= isset($item->response->response[$key]) ? $item->response->response[$key]['number'] : $message->getPhoneNumber()->getPhoneNumber() ?></b></td>
+                                    <td><?= $message->getText() ?></td>
+                                    <td><?= $message->getPhoneNumber()->getIso() ?: '-' ?></td>
+                                    <td><?= isset($item->response->response[$key]) ? $item->response->response[$key]['price'] : '-' ?></td>
+                                    <td><?= isset($item->response->response[$key]) ? $item->response->response[$key]['sms_id'] : '-' ?></td>
+                                    <td><?php if(isset($item->response->response[$key]) && $this->status($item->response->response[$key]['status'])): ?> <span class="success">Sent</span><?php else: ?><span class="error">Error</span><?php endif; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </table>
+                </td>
+            </tr>
+		</table>
+		<br>
+		<?php endforeach; ?>
+	</div>
+</div>

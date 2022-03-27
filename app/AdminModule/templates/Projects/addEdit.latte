@@ -1,0 +1,13 @@
+{block content}
+    <div class="container fs">
+        <div class="head">
+            <h1 class="title">{if empty($project)}Vytvoření{else}Úprava{/if} zakázky</h1>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col col-6">
+                {control projectForm}
+            </div>
+    </div>
+
+{/block}

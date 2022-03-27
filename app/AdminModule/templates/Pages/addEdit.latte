@@ -1,0 +1,16 @@
+{block content}
+        <div class="container fs">
+            <div class="head">
+                <h1 class="title">Úprava stránky</h1>
+                <div class="clearfix"></div>
+            </div>
+        	{if !empty($edited) && false}
+        		{if $edited->type==0}
+        			<a class="btn btn-info" n:href="setType! $edited->id, 1"> Změnit na odkaz</a>
+        		{else}
+        			<a class="btn btn-info" n:href="setType! $edited->id, 0"> Změnit na obsahovou stránku</a>
+        		{/if}
+        	{/if}
+			{control pageForm}
+		</div>
+{/block}

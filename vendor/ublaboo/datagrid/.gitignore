@@ -1,0 +1,14 @@
+# Editor
+/.idea
+
+# Tests
+/tests/temp
+/coverage.xml
+
+# Composer
+/vendor
+/composer.lock
+
+# Node.jS
+/node_modules
+/package-lock.json

@@ -1,0 +1,148 @@
+	<p>
+        Dobrý den,
+    </p>
+
+    <p>
+        Prosíme o tisk fotek
+    </p>
+    <p>
+    	Zakázka č. {$order->id}<br>
+    	Datum: {$order->date|date:'d. m. Y'}<br>
+    	Jméno zákazníka: {$order->name} {$order->surname}<br>
+    </p>
+	<p style="margin: 0 0 16px;" n:if="!empty($order->publicNote)">
+		Poznámka:<br>
+		<strong>
+		{$order->publicNote|breaklines|noescape}
+		</strong>
+	</p>
+
+
+	{var $photos = array()}
+	{var $sizesSum = array()}
+	{foreach $items as $itemId=>$item}
+		{if empty($photos[$item->folderId])}
+			{var $photos[$item->folderId] = array()}
+		{/if}
+		{if !isset($sizesSum[$item->size])}
+			{php $sizesSum[$item->size] = $item->amount}
+		{else}
+			{php $sizesSum[$item->size] += $item->amount}
+		{/if}
+		{if strpos($item->fileName, "usr_")===0}
+			{if empty($photos[$item->folderId]["custom"])}
+				{var $photos[$item->folderId]["custom"] = array()}
+			{/if}
+			{php $photos[$item->folderId]["custom"][] = $item}
+		{else}
+			{if empty($photos[$item->folderId]["scan"])}
+				{var $photos[$item->folderId]["scan"] = array()}
+			{/if}
+			{php $photos[$item->folderId]["scan"][] = $item}
+		{/if}
+	{/foreach}
+	
+	{if !empty($photos)}
+		
+		<table>
+			{foreach $photos as $folderId=>$photosLists}
+				{var $album = $albums[$folderId]}
+				<tr>
+					<td colspan="5"><h3>Složka {$album->id}_{$album->labId}{if $album->custom} - uživatelská{/if} z {$album->date|date:"d. m. Y"} | <a href="https://drive.google.com/drive/folders/{$folderId}" target="_blank">Zobrazit složku</a></h3></td>
+				</tr>
+				{if !empty($photosLists["scan"])}
+					<tr>
+						<td colspan="5"><h4>Položky objednávky ze skenů</h4></td>
+						<tr>
+							<th>Fotografie</th>
+							<th>Rámeček</th>
+							<th>Velikost</th>
+							<th>Papír</th>
+							<th>Množství</th>
+						</tr>
+						{foreach $photosLists["scan"] as $item}
+							<tr>
+								<td>
+									<img src="https://drive.google.com/thumbnail?authuser=0&id={$item->fileId}" title="" width="50" /><br>
+									<a n:if="!empty($gItems[$item->fileId]->getWebContentLink())" href="{$gItems[$item->fileId]->getWebContentLink()}">{$item->fileName}</a>
+									<span n:if="empty($gItems[$item->fileId]->getWebContentLink())">{$item->fileName}</span>
+								</td>
+								<td>
+									{if !empty($item->border)}
+										ANO
+									{else}
+										NE
+									{/if}
+								</td>
+								<td>
+									{$sizes[$item->size]["name"]}
+								</td>
+								<td>
+									{$materials[$item->material]}
+								</td>
+								<td>
+									{$item->amount} ks
+								</td>
+							</tr>
+						{/foreach}
+					</tr>
+				{/if}
+				{if !empty($photosLists["custom"])}
+					<tr>
+						<td colspan="5"><h4>Položky objednávky - fotky nahrané uživatelem</h4></td>
+						<tr>
+							<th>Fotografie</th>
+							<th>Rámeček</th>
+							<th>Velikost</th>
+							<th>Papír</th>
+							<th>Množství</th>
+						</tr>
+						{foreach $photosLists["custom"] as $item}
+							<tr>
+								<td>
+									<img src="https://drive.google.com/thumbnail?authuser=0&id={$item->fileId}" title="" width="50" /><br>
+									<a n:if="!empty($gItems[$item->fileId]->getWebContentLink())" href="{$gItems[$item->fileId]->getWebContentLink()}">{$item->fileName}</a>
+									<span n:if="empty($gItems[$item->fileId]->getWebContentLink())">{$item->fileName}</span>
+								</td>
+								<td>
+									{if !empty($item->border)}
+										ANO
+									{else}
+										NE
+									{/if}
+								</td>
+								<td>
+									{$sizes[$item->size]["name"]}
+								</td>
+								<td>
+									{$materials[$item->material]}
+								</td>
+								<td>
+									{$item->amount} ks
+								</td>
+							</tr>
+						{/foreach}
+					</tr>
+				{/if}
+			
+			
+			{/foreach}
+		</table>
+	{/if}
+
+	<h4>Souhrny podle velikosti</h4>
+		<table>
+			<tr>
+				<th>Velikost</th>
+				<th>Množství</th>
+			</tr>
+			<tr n:foreach="$sizesSum as $sizeId=>$sizeSum">
+				<td>
+					{$sizes[$sizeId]["name"]}
+				</td>
+				<td>
+					{$sizeSum} ks
+				</td>
+			</tr>
+		</table>
+

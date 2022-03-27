@@ -1,0 +1,985 @@
+{layout ../@layout.latte}
+{block content}
+      <div class="container rental-container">
+          <h1 class="title">
+            {$page->name}
+        </h1>
+          <div class="row">
+              <div class="col-md-6">
+                  <article>
+                    {block subcontent}
+                    {$page->content|noescape}
+                    {/block}
+                  </article>
+              </div>
+              <div class="col-md-4">
+                  <strong class="our-rentals">
+                      Naše půjčovny:
+                  </strong>
+                <div class="our-rentals-box" id="our-rentals">
+                    <ul class="list-unstyled">
+                        <li>
+                            <div id="heading-rental-prague" class="show-rental">
+                                <a data-toggle="collapse" data-target="#rental-prague" aria-expanded="true" aria-controls="rental-prague">
+                                    <i class="fa fa-map-marker"></i> Praha
+                                </a>
+                            </div>
+                            <div id="rental-prague" class="collapse" aria-labelledby="heading-rental-prague" data-parent="#our-rentals">
+                                <p>
+                                    <a class="strong" href="https://www.polagraph.cz/">Polagraph</a>, Husinecká 14, Praha 3<br>
+                                    po-pá 11.00 – 18.30
+                                </p>
+                            </div>
+                        </li>
+                        <!-- ./rental prague -->
+                        <li>
+                            <div id="heading-rental-brno" class="show-rental">
+                                <a data-toggle="collapse" data-target="#rental-brno" aria-expanded="true" aria-controls="rental-brno">
+                                    <i class="fa fa-map-marker"></i> Brno
+                                </a>
+                            </div>
+                            <div id="rental-brno" class="collapse" aria-labelledby="heading-rental-brno" data-parent="#our-rentals">
+                                <p>
+                                    <a class="strong" href="https://www.polagraph.cz/">Polagraph</a>, Pekařská 34, Brno<br>
+                                    po-pá 11.00 – 18.30
+                                </p>
+                            </div>
+                        </li>
+                        <!-- ./rental brno -->
+                        <li>
+                            <div id="heading-rental-ostrava" class="show-rental">
+                                <a data-toggle="collapse" data-target="#rental-ostrava" aria-expanded="true" aria-controls="rental-ostrava">
+                                    <i class="fa fa-map-marker"></i> Ostrava
+                                </a>
+                            </div>
+                            <div id="rental-ostrava" class="collapse" aria-labelledby="heading-rental-ostrava" data-parent="#our-rentals">
+                                <p>
+                                    <a class="strong" target="_blank" href="http://www.artbookscoffee.sk/index.php/kontakt/">ArtBooksCoffee</a>, Baštová 6/B, Bratislava<br>
+                                    po-pá 8.00 – 19.00, so 11.00 – 19.00
+                                </p>
+                            </div>
+                        </li>
+                        <!-- ./rental ostrava -->
+                        <li>
+                            <div id="heading-rental-bratislava" class="show-rental">
+                                <a data-toggle="collapse" data-target="#rental-bratislava" aria-expanded="true" aria-controls="rental-bratislava">
+                                    <i class="fa fa-map-marker"></i> Bratislava
+                                </a>
+                            </div>
+                            <div id="rental-bratislava" class="collapse" aria-labelledby="heading-rental-bratislava" data-parent="#our-rentals">
+                                <p>
+                                    <a class="strong" target="_blank" href="https://www.cityfolklore.com/">City Folklore</a>, Nádražní 40, Ostrava<br>
+                                    po-pá 10.00 – 18.00
+                                </p>
+                            </div>
+                        </li>
+                        <!-- ./rental bratislava -->
+                    </ul>
+                </div>
+                <!-- ./our rentals -->
+              </div>
+        </div>
+      </div>
+      <!-- ./container -->
+      <section class="rental">
+        {snippet rent}
+          <div class="container text-center">
+              <ul class="list-inline rental-pagination">
+                  <li id="rental-step-one" class="list-inline-item {if !empty($basket->step) && $basket->step >0}active{/if}">
+                      1
+                  </li>
+                  <li id="rental-step-two" class="list-inline-item {if !empty($basket->step) && $basket->step >1}active{/if}">
+                      2
+                  </li>
+                  <li id="rental-step-three" class="list-inline-item {if !empty($basket->step) && $basket->step >2}active{/if}">
+                      3
+                  </li>
+                  <li id="rental-step-three" class="list-inline-item {if !empty($basket->step) && $basket->step >3}active{/if}">
+                      4
+                  </li>
+              </ul>
+              <div id="rental-step-zero" n:if="empty($basket->step) && empty($final)">
+                  <h2 class="title">
+                      Vyberte si typ fotoaparátu, <span>záleží na tom formát fotek</span>
+                  </h2>
+                  <div class="row">
+                      <div class="col-md-6 col-lg-3" n:foreach="$cameras as $camera">
+                          <div class="camera-type {$camera->alias}">
+                              <span class="title">
+                                  {$camera->name}
+                              </span>
+                              <div class="thumb">
+                                  <div>
+                                    {foreach $presenter->models->products->getPhotos($camera->id) as $im}
+                                          <img n:if="$im->main == true" src="{$im|thumb:220:185:'FIT'}" alt="{$camera->name}">
+                                          <img n:if="!$im->main == true" class="thumb-hover" src="{$im|thumb:220:185:'FIT'}" alt="{$camera->name}">
+                                    {/foreach}
+                                  </div>
+                              </div>
+                              <div class="description">
+                                    {$camera->description|noescape}
+                              </div>
+                              <ul class="list-unstyled">
+                                  <li>
+                                      fotka {$camera->technical}
+                                  </li>
+                                  <li>
+                                      {$camera->price} Kč
+                                  </li>
+                              </ul>
+                              <a class="btn btn-primary to-step-one ajax" n:href="selectCamera! $camera->id" title="Půjčit {$camera->name}">
+                                  Půjčit {$camera->name}
+                              </a>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- ./row -->
+              </div>
+              <!-- ./rental step zero -->
+              <div id="rental-step-one" n:if="!empty($basket->step) && $basket->step==1">
+                  <div class="camera-icon">
+                      <img src="{$basket->camera|thumb:220:158:'FIT'}" alt="{$basket->camera->name}">
+                      <span>
+                          {$basket->camera->name}
+                      </span>
+                  </div>
+                  <h2 class="title">
+                      Kolik potřebujete fotek?
+                  </h2>
+                  <div id="number-of-photos-slider"></div>
+                  <div class="number-of-photos">
+                      <div class="float-left">
+                          50 fotek
+                      </div>
+                      <div class="float-right">
+                          150 fotek
+                      </div>
+                      <div class="clearfix"></div>
+                  </div>
+                  <p class="camera-description">
+                      {strip_tags($basket->camera->description)|nl2br|noescape}
+                  </p>
+                  <a class="btn btn-primary btn-continue to-step-two ajax" n:href="setPictures!" title="Pokračovat na další krok">
+                      Pokračovat
+                  </a>
+              </div>
+              <!-- ./rental step one -->
+              <div id="rental-step-two" n:if="!empty($basket->step) && $basket->step==2">
+                  <div class="camera-icon">
+                      <img src="{$basket->camera|thumb:220:158:'FIT'}" alt="{$basket->camera->name}">
+                      <span>
+                          {$basket->camera->name} a {$basket->amount} ks fotek
+                      </span>
+                  </div>
+                  <h2 class="title">
+                      Druhý krok: Vyberte si počet fotek <span>a napište své údaje</span>
+                  </h2>
+                  {form rentForm, class=>"rental-form ajax"}
+                      <div class="row">
+                        <div class="form-group col-md-6">
+                            {label branch, class=>"required" /}
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                {input branch}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {label dates, class=>"required" /}
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                {input dates}
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {label name/}
+                            {input name}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {label surname, class=>"required" /}
+                            {input surname}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {label email, class=>"required" /}
+                            {input email}
+                        </div>
+                        <div class="form-group col-md-6">
+                            {label phone, class=>"required" /}
+                            {input phone}
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    {input submit}
+                  {/form}
+                  <!-- ./form -->
+              </div>
+              <!-- ./rental step two -->
+              <div id="rental-step-three" n:if="!empty($basket->step) && $basket->step==3">
+                  <div class="row">
+                      <div class="col-md-4">
+                          <div class="related-box">
+                              <div class="related-box-selected" style="background: url({$basePath}/images/pujcte_si_polaroid_coverII.jpg)">
+                                  <img src="{$basePath}/images/ico-selected.svg" alt="Ikona vybráno">
+                                  <div class="header">
+                                      <span>
+                                          Ostatní
+                                      </span>
+                                  </div>
+                                  <a class="btn btn-primary btn-change-order" title="Změnit objednávku">
+                                      Změnit
+                                  </a>
+                              </div>
+                              <div class="header" style="background: url({$basePath}/images/pujcte_si_polaroid_coverII.jpg)">
+                                  <span>
+                                      Ostatní
+                                  </span>
+                              </div>
+                              <div class="content">
+                                  <div class="related">
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#" data-toggle="modal" data-target="#myModal">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary btn-add-to-order" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                </div>
+                                <!-- ./related -->
+                            </div>
+                          </div>
+                      </div>
+                      <!-- ./ostatni -->
+                      <div class="col-md-4">
+                          <div class="related-box">
+                              <div class="header" style="background: url({$basePath}/images/pujcte_si_polaroid_coverII.jpg)">
+                                  <span>
+                                      Fotoalba
+                                  </span>
+                              </div>
+                              <div class="content">
+                                  <div class="related">
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                      <!-- ./fotoalba -->
+                      <div class="col-md-4">
+                          <div class="related-box">
+                              <div class="header" style="background: url({$basePath}/images/pujcte_si_polaroid_coverII.jpg)">
+                                  <span>
+                                      Masky
+                                  </span>
+                              </div>
+                              <div class="content">
+                                  <div class="related">
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                    <div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <i class="fas fa-search"></i>
+                                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                            </a>
+                                        </div>
+                                        <span class="title">
+                                              Fotoalbum
+                                          </span>
+                                          <ul class="variants list-inline">
+                                              <li style="background-color: #C21515" class="list-inline-item"></li>
+                                              <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                              <li style="background-color: #000" class="list-inline-item"></li>
+                                          </ul>
+                                          <p>
+                                              od Kateřiny Kynclové<br>
+                                              4ks, 500 Kč (k zapůjčení)
+                                          </p>
+                                          <div class="input-group plus-minus-input">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                                    <i class="fa fa-minus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            <input class="form-control" type="text" name="quantity" value="0">
+                                            <div class="input-group-button">
+                                                <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                          <p>
+                                              690 Kč
+                                          </p>
+                                          <a class="btn btn-primary" title="Přidat do objednávky">
+                                              Přidat do objednávky
+                                          </a>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                      <!-- ./masky -->
+                  </div>
+                  <!-- ./row -->
+                  <a class="btn btn-primary btn-complete-reservation ajax" n:href="showSummary!" title="Dokončit rezervaci">
+                      Dokončit
+                  </a>
+                  <div class="reservation-summary">
+                      <ul class="list-unstyled">
+                          <li>
+                              <strong>2x Fotoalbum</strong> – rozměry 19x28cm
+                          </li>
+                          <li>
+                              <strong>4x Andy Warhol</strong> – maska
+                          </li>
+                      </ul>
+                  </div>
+                  <!-- ./reservation summary -->
+              </div>
+              <!-- ./rental step three -->
+              <div id="rental-step-four" class="text-left" n:if="!empty($basket->step) && $basket->step==4">
+                  <h2 class="title text-center">
+                      Potvrzení objednávky
+                  </h2>
+                  <div class="row">
+                      <div class="col-lg-6 offset-lg-3">
+                          <table class="table order-summary">
+                              <thead>
+                                  <tr>
+                                      <th colspan="3">
+                                          Vaše objednávka obsahuje
+                                      </th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td class="text-center">
+                                          <img src="{$basket->camera|thumb:220:158:'FIT'}" alt="{$basket->camera->name}">
+                                      </td>
+                                      <td>
+                                          {$basket->camera->name}
+                                      </td>
+                                      <td class="text-right">
+                                          Zdarma
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td class="number-of-photos text-center">
+                                          <img src="{$basePath}/images/ico-photography.png" alt="Fotoaparát">
+                                      </td>
+                                      <td>
+                                          {$basket->amount} fotografií
+                                      </td>
+                                      <td class="text-right">
+                                          {$basket->amount*$basket->camera->price|number:0:',':' '} Kč
+                                      </td>
+                                  </tr>
+                                  <tr n:if="false">
+                                      <td class="text-center">
+                                          <img src="{$basePath}/images/andy-warhol.png" alt="Andy Warhol">
+                                      </td>
+                                      <td>
+                                          Maska Andy Warhol (1x)
+                                      </td>
+                                      <td class="text-right">
+                                          400 Kč
+                                      </td>
+                                  </tr>
+                              </tbody>
+                              <tfoot>
+                                  <tr>
+                                      <td colspan="2">
+                                          Objednávka celkem
+                                      </td>
+                                      <td class="text-right">
+                                          {$basket->price|number:0:',':' '} Kč
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <td colspan="2">
+                                          Obsahuje DPH 21 %
+                                      </td>
+                                      <td class="text-right">
+                                          {$basket->price*0.21|number:0:',':' '} Kč
+                                      </td>
+                                  </tr>
+                              </tfoot>
+                          </table>
+                          <!-- /.table summary -->
+                          <div class="order-address">
+                              <strong>
+                                  Objednávka na vás bude čekat
+                              </strong>
+                              <ul class="list-unstyled">
+                                  <li>
+                                      <i class="fa fa-calendar"></i> {$basket->details->from|date:'d. m. Y'}
+                                  </li>
+                                  <li class="address">
+                                      <i class="fas fa-map-marker-alt"></i> {$branches[$basket->details->branch]}
+                                  </li>
+                              </ul>
+                          </div>
+                          <!-- ./order address -->
+                          {form finishRentForm}
+                              <div class="form-group">
+                                {label note/}
+                                {input note}
+                            </div>
+                            <div class="form-check">
+                                {input newsletter}
+                                {label newsletter, class=>"form-check-label"/}
+                            </div>
+                            <div class="pay">
+                                <div class="form-group">
+                                    <p>
+                                        Zaplaťte ihned a ušetříte 20 % a nám starosti :)
+                                    </p>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            {input reserve}
+                                        </div>
+                                        <div class="col">
+                                            {input pay}
+                                            <span>
+                                                Ušetříte {$basket->price*0.2|number:0:',':' '} Kč
+                                            </span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                          {/form}
+                      </div>
+                  </div>
+              </div>
+              <!-- ./rental step four -->
+              <div id="rental-finished" n:if="empty($basket->step) && !empty($final)">
+                  <img src="{$basePath}/images/ico-reservation-done.svg" alt="Rezervace dokončena ico">
+                  <h2>
+                      Děkujeme za rezervaci a nákup, ještě od nás <span>dostanete e-mail s potvrzením.</span>
+                  </h2>
+              </div>
+              <!-- ./rental finished -->
+          </div>
+          <script n:if="!empty($ajax)">
+            $(document).ready(function(){
+              $( "#number-of-photos-slider" ).slider({
+                range: "min",
+                value: 100,
+                min: 50,
+                max: 150,
+                behaviour: 'tap',
+                step: 1,
+                start: function( event, ui ) {
+                  $(ui.handle).find('.ui-slider-tooltip').show();
+                },
+                slide: function(event, ui) {
+                  $(ui.handle).find('.ui-slider-tooltip').text(ui.value);
+                },
+                create: function( event, ui ) {
+                  var tooltip = $('<div class="ui-slider-tooltip" />').css({
+                    position: 'absolute'
+                  });
+
+                  $(event.target).find('.ui-slider-handle').append(tooltip);
+                },
+                change: function(event, ui) {}
+              });
+
+              $('.selectpicker').selectpicker();
+
+              $('input[name="dates"]').daterangepicker({
+                "locale": {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Použít",
+                    "cancelLabel": "Zavřít",
+                    "fromLabel": "Od",
+                    "toLabel": "Do",
+                    "customRangeLabel": "Vlastní",
+                    "daysOfWeek": [
+                        "Ne",
+                        "Po",
+                        "Út",
+                        "St",
+                        "Čt",
+                        "Pá",
+                        "So"
+                    ],
+                    "monthNames": [
+                        "Leden",
+                        "Únor",
+                        "Březen",
+                        "Duben",
+                        "Květen",
+                        "Červen",
+                        "Červenec",
+                        "Srpen",
+                        "Září",
+                        "Říjen",
+                        "Listopad",
+                        "Prosinec"
+                    ],
+                    "firstDay": 1
+                }
+              });
+
+              $('input[name="dates"]').val('');
+              $('input[name="dates"]').attr("placeholder","Datum půjčení - Datum vrácení");
+
+                /* Volání AJAXu u všech odkazů s třídou ajax */
+                $("a.ajax").on("click", function (event) {
+                    event.preventDefault();
+                    $("#load_dialog").show();
+                    if($(this).hasClass("to-step-two")){
+                        var link = this.href;
+                        var amount = $('#number-of-photos-slider').slider("option", "value");
+                        link = link+"&amount="+amount;
+                        $.get(link);
+                    }
+                    else{
+                        $.get(this.href);
+                    }
+                });
+
+                /* AJAXové odeslání formulářů */
+                $("form.ajax").on("submit", function () {
+                    //$("#load_dialog").show();
+                    $(this).ajaxSubmit();
+                    return false;
+                });
+
+                $("form.ajax :submit").on("click", function () {
+                    //$("#load_dialog").show();
+                    $(this).ajaxSubmit();
+                    return false;
+                });
+
+
+            });
+            $('.related').not('.slick-initialized').slick({
+                centerMode: true,
+                centerPadding: '70px',
+                slidesToShow: 1,
+                //autoplay: true
+              });
+
+              $('.related-modal').not('.slick-initialized').slick({
+                slidesToShow: 1,
+                //autoplay: true
+              });
+
+              $('.modal').on('shown.bs.modal', function (e) {
+                $('.related-modal').resize();
+              })
+          </script>
+        {/snippet}
+      </section>
+      <!-- ./rental section -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="{$basePath}/images/pujcte_si_polaroid_coverII.jpg" alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="{$basePath}/images/pujcte_si_polaroid_coverII.jpg" alt="Second slide">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal"><i class="fas fa-times"></i></button>
+                <div class="modal-body">
+                    <div class="related-modal">
+                        <div>
+                            <div class="modal-product-content">
+                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                <span class="title">
+                                      Fotoalbum
+                                  </span>
+                                  <ul class="variants list-inline">
+                                      <li style="background-color: #C21515" class="list-inline-item"></li>
+                                      <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                      <li style="background-color: #000" class="list-inline-item"></li>
+                                  </ul>
+                                  <p>
+                                      od Kateřiny Kynclové<br>
+                                      4ks, 500 Kč (k zapůjčení)
+                                  </p>
+                                  <div class="input-group plus-minus-input">
+                                    <div class="input-group-button">
+                                        <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                            <i class="fa fa-minus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <input class="form-control" type="text" name="quantity" value="0">
+                                    <div class="input-group-button">
+                                        <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                  <p>
+                                      690 Kč
+                                  </p>
+                              </div>
+                              <a class="btn btn-primary btn-add-to-order" title="Přidat do objednávky">
+                                  Přidat do objednávky
+                              </a>
+                        </div>
+                        <div>
+                            <div class="modal-product-content">
+                                <img src="{$basePath}/images/fotoalbum.jpg" alt="Fotoalbum">
+                                <span class="title">
+                                      Fotoalbum
+                                  </span>
+                                  <ul class="variants list-inline">
+                                      <li style="background-color: #C21515" class="list-inline-item"></li>
+                                      <li style="background-color: #C29F15" class="list-inline-item"></li>
+                                      <li style="background-color: #000" class="list-inline-item"></li>
+                                  </ul>
+                                  <p>
+                                      od Kateřiny Kynclové<br>
+                                      4ks, 500 Kč (k zapůjčení)
+                                  </p>
+                                  <div class="input-group plus-minus-input">
+                                    <div class="input-group-button">
+                                        <button type="button" class="hollow" data-quantity="minus" data-field="quantity">
+                                            <i class="fa fa-minus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                    <input class="form-control" type="text" name="quantity" value="0">
+                                    <div class="input-group-button">
+                                        <button type="button" class="hollow" data-quantity="plus" data-field="quantity">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                  <p>
+                                      690 Kč
+                                  </p>
+                              </div>
+                              <a class="btn btn-primary btn-add-to-order" title="Přidat do objednávky">
+                                  Přidat do objednávky
+                              </a>
+                        </div>
+                    </div>
+                    <!-- ./related -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ./modal -->
+{/block}

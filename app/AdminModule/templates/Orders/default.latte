@@ -1,0 +1,97 @@
+{block content}
+
+        <div class="span10">
+
+      <div class="content" style="clear: both">
+        <div class="head">
+          <h1 class="title">Přehled objednávek tisku</h1>
+          <a class="btn btn-primary" n:href="add" n:if="false"><i class="fas fa-plus"></i> Vytvořit objednávku</a>
+          <a class="btn btn-primary" n:href="export!"><i class="fas fa-file-csv"></i> Exportovat e-maily</a>
+          <div class="clearfix"></div>
+        </div>
+        <div class="filter">
+          {form filterForm}
+              <div class="row">
+                  <div class="col">
+                    {label reserver/}
+                    {input reserver}
+                  </div>
+                  <div class="col">
+                    {label branch/}
+                    {input branch}
+                  </div>
+                  <div class="col">
+                    {label delivery/}
+                    {input delivery}
+                  </div>
+                  <div class="col">
+                    {input submit}
+                    {input reset}
+                  </div>
+              </div>
+          {/form}
+          <div class="row" style="margin-top: 1rem" n:if="false">
+              <div class="col">
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <a n:href="filterStatus!"><span class="badge badge-light">
+                        {if empty($presenter->filter->status)}
+                            <u>Vše</u>
+                        {else}
+                            Vše
+                        {/if}
+                    </span></a>
+                  </li>
+                {foreach $allstatuses as $status}
+                <li class="list-inline-item">
+                  <a n:href="filterStatus! $status->id"><span class="badge {$status->class}">
+                    {if !empty($presenter->filter->status) && $presenter->filter->status==$status->id}
+                        <u>
+                        	{if $status->forBranch}
+                        		<i class="fas fa-home"></i>
+                        	{/if}
+                        	{if $status->forDelivery}
+                        		<i class="fas fa-truck"></i>
+                        	{/if}
+                        	{$status->name}
+                        </u>
+                    {else}
+                        {if $status->forBranch}
+                        	<i class="fas fa-home"></i>
+                        {/if}
+                        {if $status->forDelivery}
+                        	<i class="fas fa-truck"></i>
+                        {/if}
+                        {$status->name}
+                    {/if}
+                </span></a>
+                </li>
+                {/foreach}
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+		<script>
+			$(document).ready(function(){
+				$(".statusSelect").change(function(){
+					var link = $(this).data("link");
+					var status = $(this).val();
+					link = link+"&status="+status;
+					$.get(link);
+				});
+				$(".branchSelect").change(function(){
+					var link = $(this).data("link");
+					var branch = $(this).val();
+					link = link+"&branch="+branch;
+					$.get(link);
+				});
+			});
+		</script>
+
+ 	  {control orders}
+
+          <!--Body content-->
+        </div>
+{/block}

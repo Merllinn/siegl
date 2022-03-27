@@ -1,0 +1,39 @@
+{block content}
+
+        <div class="container fs">
+          <div class="head">
+            <h1 class="title">Slevové kupóny</h1>
+            <a class="btn btn-primary" n:href=":Admin:Vouchers:new"><i class="icon-plus icon-white"></i> Vytvořit kupón</a>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="filter">
+            {form filterForm}
+              <div class="row">
+                <div class="col">
+                    {input code, class=>"form-control"}
+                </div>
+                <div class="col">
+                    {input event, class=>"form-control"}
+                </div>
+                <div class="col">
+                    {input used, class=>"form-control"}
+                </div>
+                <div class="col" style="padding-top: 0">
+                    {input submit, class=>"btn btn-primary"}
+                    {input reset, class=>"btn btn-light"}
+                </div>
+              </div>
+            {/form}
+          </div>
+
+
+	  {*
+        <a class="btn btn-success" n:href="export!"><i class="icon-th-list icon-white"></i> Exportovat vybrané</a>
+      *}
+
+ 	  {control vouchers}
+
+          <!--Body content-->
+        </div>
+{/block}

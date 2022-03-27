@@ -1,0 +1,199 @@
+<html>
+<head>
+<title>Administrace</title>
+	<link rel="stylesheet" href="{$baseUri}/css/common/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" media="screen" href="{$baseUri}/css/common/polagraph.css" type="text/css" />
+  <link rel="stylesheet" media="screen" href="{$baseUri}/css/common/jquery-ui.css" type="text/css" />
+  <link rel="stylesheet" media="screen" href="{$baseUri}/css/common/calendar.css" type="text/css" />
+  <link rel="stylesheet" media="screen" href="{$baseUri}/css/common/datagrid.css" type="text/css" />
+  <link rel="stylesheet" media="screen" href="{$baseUri}/css/common/select2.css" type="text/css" />
+  <link rel="stylesheet" media="screen" href="{$baseUri}/cm/lib/codemirror.css" type="text/css" />
+	<meta name="robots" content="noindex,nofollow" />
+	<script language="javascript" src="{$baseUri}/js/common/jquery.js" ></script>
+    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+	<script language="javascript" src="{$baseUri}/js/common/bootstrap.js" ></script>
+	<script language="javascript" src="{$baseUri}/js/common/jquery-ui.js" ></script>
+    <script language="javascript" src="{$basePath}/js/common/datepicker.js" ></script>
+	<script language="javascript" src="{$baseUri}/js/common/main.js" ></script>
+	<script src="{$basePath}/js/common/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <script language="javascript" src="{$basePath}/js/common/netteForms.js" ></script>
+    <script language="javascript" src="{$basePath}/js/common/nette.ajax.js" ></script>
+    <script language="javascript" src="{$basePath}/js/common/datagrid.js" ></script>
+    <script language="javascript" src="{$basePath}/js/common/select2.js" ></script>
+    <script language="javascript" src="{$basePath}/cm/lib/codemirror.js" ></script>
+    <script language="javascript" src="{$basePath}/cm/mode/xml/xml.js" ></script>
+    <script>
+        $(document).ready(function(){
+            $.nette.init();
+            
+            tinymce.init({
+                selector: "textarea.wysiwyg",
+                theme: "modern",
+                skin: 'pepper-grinder',
+                     language : 'cs',
+                plugins: [
+                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                     "save table contextmenu directionality emoticons template paste textcolor"
+               ],
+               toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
+               toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
+               image_advtab: true ,
+               external_filemanager_path:{$rootFolder}+"/js/common/filemanager/",
+               filemanager_title:"Správa médií" ,
+               external_plugins: { "filemanager" : {$rootFolder}+"/js/common/filemanager/plugin.min.js"},
+               content_css: {$rootFolder}+"/css/bootstrap.css, "+{$rootFolder}+"/css/custom.css",
+               entity_encoding : "raw",
+             });
+
+        });
+    </script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+
+<body class="polagraph-style">
+
+
+     <!-- Top  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark hidden-print">
+        <a class="navbar-brand" n:href=":Admin:Pages:default">Siegl</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse" id="mainMenu">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {ifCurrent :Admin:Pages:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Pages:default">Správa stránek</a>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:Pages:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Languages:translates 'cz'">Textové konstanty</a>
+                </li>
+				{*
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="reservationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Zakázky
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="reservationsDropdown">
+                      <a class="dropdown-item" n:href=":Admin:Projects:default">Přehled zakázek</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" n:href=":Admin:Projects:add">Vytvořit zakázku</a>
+                    </div>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:Orders:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Orders:default">Objednávky tisku</a>
+                </li>
+                <li class="nav-item dropdown"n:if="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="reservationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Objednávky tisku
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="reservationsDropdown">
+                      <a class="dropdown-item" n:href=":Admin:Orders:default">Přehled objednávek</a>
+                      <div class="dropdown-divider" n:if="false"></div>
+                      <a class="dropdown-item" n:href=":Admin:Orders:add" n:if="false">Vytvořit objednávku</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Katalog
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="catalogDropdown">
+                      <a n:if="false" class="dropdown-item" n:href=":Admin:Categories:default">Kategorie produktů</a>
+                      <a class="dropdown-item" n:href=":Admin:Products:default">Produkty k prodeji</a>
+                    </div>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:Vouchers:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Vouchers:default">Slevové kupóny</a>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:OrderStatuses:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:OrderStatuses:default">Stavy objednávek tisku</a>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:Slider:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Slider:default">Slider</a>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:Admins:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Admins:default">Správci</a>
+                </li>
+                <li class="nav-item {ifCurrent :Admin:Sizes:default}active{/ifCurrent}">
+                    <a class="nav-link" n:href=":Admin:Sizes:default">Rozměry a ceny</a>
+                </li>
+				*}
+            </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {$user->identity->login}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="loginDropdown">
+                  <a class="dropdown-item" n:href="logout!">Odhlásit</a>
+                </div>
+            </li>
+            <li class="nav-item" n:if="$user->identity->role==9">
+                <a class="nav-link" n:href=":Admin:Settings:default">Nastavení</a>
+            </li>
+        </ul>
+      </div>
+    </nav>
+
+    <style>
+
+    .top {
+      margin-top: 15px;
+    }
+
+
+    </style>
+
+   <!-- /super admin menu -->
+
+    	<div class='clear'></div>
+
+
+	<!-- - - - - - MAIN CONTENT - - - - - -->
+
+     <div class="container-fluid">
+
+		<!-- - - - - - - - BREADCRUMBS - - - - - - - -->
+		{if isset($breadcrumbs)&&count($breadcrumbs)>0}
+			<ul class="breadcrumb">
+				{foreach $breadcrumbs as $breadcrumb}
+					<li>
+						{if !$iterator->first}<span class="divider">/</span>{/if}
+						{if $breadcrumb['link']!='' && !$iterator->last}
+							<a href="{$breadcrumb['link']|noescape}" title="">{$breadcrumb['title']}</a>
+						{else}
+							<span class="active">{$breadcrumb['title']}</span>
+						{/if}
+					</li>
+				{/foreach}
+			</ul>
+		{/if}
+		<!-- - - - - - - - /BREADCRUMBS - - - - - - - -->
+
+	    <!-- - - - - - FLASHMESSAGES - - - - - -->
+	    {snippet flashmessages}
+	    <div id="flashBlock">
+		    <div n:foreach="$flashes as $flash" class="flashMessage  alert alert-success {$flash->type}">
+	            <span>{$flash->message|noescape}</span>
+		    </div>
+	    </div>
+
+	    {/snippet}
+	    <!-- - - - - - /FLASHMESSAGES - - - - - -->
+
+
+	    <div class='clear'></div>
+      <div class="grid-10">
+
+
+
+			{block content}{/block}
+	  </div>
+	</div>
+
+	<!-- - - - - - /MAIN CONTENT - - - - - -->
+
+
+
+</body>
+</html>

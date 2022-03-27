@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="cs" class="notouch yeswebp">
+
+	{include '_parts/head.latte'}
+
+	<body {if $presenter->action=='page'}class="homepage"{/if}>
+		{include '_parts/header.latte'}
+        <!-- ./header -->
+        {foreach $flashes as $flash}
+            <div class="container alert-container">
+                <div class="alert {$flash->type}">{$flash->message}</div>
+            </div>
+        {/foreach}
+
+        {block content}{/block}
+
+        {include '_parts/footer.latte'}
+
+		{block scripts}{/block}
+	</body>
+</html>

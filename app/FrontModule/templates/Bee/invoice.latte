@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<winstrom version="1.0">
+  <adresar update="ignore">
+    <kod>{$order->name}-{$order->surname}</kod>
+    <id>code:{$order->name}-{$order->surname}</id>
+    <nazev>{$order->name} {$order->surname}</nazev>
+    <ulice></ulice>
+    <mesto></mesto>
+    <psc></psc>
+    <ic></ic>
+    <dic></dic>
+    <stat>code:CZ</stat>
+  </adresar>
+
+  <!-- Doklady faktur -->
+  <faktura-vydana>
+    <varSym>{$order->id}</varSym>
+
+    <!-- Vystaveno (datum) - -->
+    <datVyst>{$order->date|date:'Y-m-d'}+01:00</datVyst>
+    <popis></popis>
+    <typDokl>code:FAKTURA</typDokl>
+    <typUcOp>code:TRŽBA SLUŽBY</typUcOp>
+    <firma>code:{$order->name}-{$order->surname}</firma>
+
+    {var $camera = $presenter->productManager->find($order->camera)}
+    <polozkyFaktury>
+      <faktura-vydana-polozka>
+        <kod>camera</kod>
+        <nazev>Půjčení fotoaparátu {$camera->name}</nazev>
+        <typPolozkyK>typPolozky.obecny</typPolozkyK>
+        <mnozMj>1.0</mnozMj>
+        <typCenyDphK>typCeny.sDph</typCenyDphK>
+        <typSzbDphK>typSzbDph.dphZakl</typSzbDphK>
+        <szbDph>21.0</szbDph>
+        <cenaMj>0.0</cenaMj>
+      </faktura-vydana-polozka>
+      <faktura-vydana-polozka>
+        <kod>photos</kod>
+        <nazev>Snímky pro {$camera->name}</nazev>
+        <typPolozkyK>typPolozky.obecny</typPolozkyK>
+        <mnozMj>{$order->photos|number:1:'.':''}</mnozMj>
+        <typCenyDphK>typCeny.sDph</typCenyDphK>
+        <typSzbDphK>typSzbDph.dphZakl</typSzbDphK>
+        <szbDph>21.0</szbDph>
+        <cenaMj>{$camera->price}</cenaMj>
+      </faktura-vydana-polozka>
+      <faktura-vydana-polozka n:foreach="$items as $item">
+        <kod>{$item->id}</kod>
+        <nazev>{$item->name}</nazev>
+        <typPolozkyK>typPolozky.obecny</typPolozkyK>
+        <mnozMj>{$item->quantity|number:1:'.':''}</mnozMj>
+        <typCenyDphK>typCeny.sDph</typCenyDphK>
+        <typSzbDphK>typSzbDph.dphZakl</typSzbDphK>
+        <szbDph>21.0</szbDph>
+        <cenaMj>{$item->price/$item->quantity|number:1:'.':''}</cenaMj>
+      </faktura-vydana-polozka>
+
+    </polozkyFaktury>
+  </faktura-vydana>
+</winstrom>

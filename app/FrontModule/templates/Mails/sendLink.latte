@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Vaše filmy jsou vyvolané a naskenované</title>
+</head>
+
+<body marginwidth="0" topmargin="0" marginheight="0" offset="0">
+  <div id="wrapper" style="-webkit-text-size-adjust: none !important; background-color: #f5f5f5; margin: 0; padding: 70px 0 70px 0; width: 100%;">
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%">
+      <tbody>
+        <tr>
+          <td align="center" valign="top">
+            <div id="template_header_image" style="background: #000; padding: 16px 0; text-align: left; width: 600px;">
+              <p style="margin-bottom: 0; margin-top: 0;">
+                <img src="http://www.polagraph.cz/wp-content/themes/bronx/assets/img/e_polagraph-logo.png" style="border: none; display: inline; font-size: 14px; font-weight: bold; height: auto; line-height: 100%; margin-bottom: 0; margin-left: 36px; max-width: 120px; outline: none; text-decoration: none; text-transform: capitalize;" />
+              </p>
+            </div>
+            <table border="0" cellpadding="0" cellspacing="0" width="600" id="template_container" style="background-color: #f5f5f5;">
+              <tbody>
+                <tr>
+                  <td align="center" valign="top">
+                    <!-- Header -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="template_header" style="background-color: #38b3b1; border-bottom: 0; color: #38b3b1, #202020, #ffffff; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-weight: bold; line-height: 100%; vertical-align: middle;">
+                      <tbody>
+                        <tr>
+                          <td id="header_wrapper" style="display: block; padding: 24px 36px;">
+                            <h1 style="-webkit-font-smoothing: antialiased; color: #FFFFFF; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 30px; font-weight: 300; line-height: 150%; margin: 0; text-align: left; text-shadow: 0 1px 0 #dcdcdc;">Vaše filmy jsou vyvolané a naskenované</h1>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- End Header -->
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" valign="top">
+                    <!-- Header -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="template_header_polagraph">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <img src="http://www.polagraph.cz/wp-content/themes/bronx/assets/img/polagraph.jpg" style="border: none; display: inline; font-size: 14px; font-weight: bold; height: auto; line-height: 100%; margin-bottom: 0; max-width: 100%; outline: none; text-decoration: none; text-transform: capitalize; width: 100%;" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- End Header -->
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" valign="top">
+                    <!-- Body -->
+                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="template_body">
+                      <tbody>
+                        <tr>
+                          <td valign="top" id="body_content" style="background-color: #FFFFFF;">
+                            <!-- Content -->
+                            <table border="0" cellpadding="20" cellspacing="0" width="100%">
+                              <tbody>
+                                <tr>
+                                  <td valign="top" style="padding: 36px 36px 0 36px;">
+                                    <div id="body_content_inner" style="color: #737373; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif; font-size: 15px; line-height: 150%; text-align: left;">
+                                      <p style="margin: 0 0 16px;">
+                                        Dobrý den, tady Polagraph!<br />
+                                        vaše filmy jsou už vyvolané a naskenované.
+                                      </p>
+
+                                      <p style="margin: 0 0 16px;">
+                                        Skeny si můžete stáhnout na následujících odkazech:
+                                        <ul>
+                                        	<li n:foreach="$projects as $project">
+                                        		<a style="color:#38b3b1;font-weight:normal;text-decoration:underline;" n:href="//:Front:Homepage:album $project->hash">Zakázka {$project->id}</a>
+                                        	</li>
+                                        </ul>
+                                      </p>
+
+
+                                      <p style="margin: 0 0 16px;" n:if="!empty($project->publicNote)">
+                                        <strong>
+                                        {$project->publicNote|breaklines|noescape}
+                                        </strong>
+                                      </p>
+
+                                      <p style="margin: 0 0 16px;">Pokud jste zvolili Kombisadu, vaše papírové fotky jsou již připraveny k vyzvednutí v Polagraphu či na cestě k vám. <br /><br />Pokud jste si objednali pouze vyvolání a naskenování, nezoufejte – na odkazu výše si vyberte fotky, které chcete <a href="https://www.polagraph.cz/tisk">vytisknout</a> – a hned druhý den si je u nás můžete vyzvednout hotové. Fotky umíme i <a href="https://www.polagraph.cz/ramovani/">zarámovat</a>. Napište nám a pošleme vám vizualizaci a kalkulaci!
+                                      </p>
+
+                                      <p style="margin: 0 0 16px;">
+                                        PS: nezapomeňte si <a href="https://www.polagraph.cz/kategorie-produktu/klasicka-fotka/filmy-klasicka-fotka/">dokoupit další filmy</a>, ať máte na co fotit! 
+                                      </p>
+                                       <p style="margin: 0 0 16px;">
+                                         <b>SLEVA:</b> Protože u nás vyvoláváte, můžete využít 10% slevový kód, který platí na  <a href="https://www.polagraph.cz/kategorie-produktu/klasicka-fotka/filmy-klasicka-fotka/">nákup nových filmů</a>, na všechna  <a href="https://www.polagraph.cz/kategorie-produktu/alba/alba-alba/">fotoalba</a> a nově také na  <a href="https://www.polagraph.cz/ramovani">rámování fotek</a>. <br />
+                                         Kód je <i>"vyvolanyfilm"</i> a můžete ho zadat v posledním kroku objednávky.
+                                      </p>
+                                      
+                                      <p style="margin: 0 0 16px;">
+                                        Připomínáme, že jsou u nás skeny uloženy pouze po dobu 30ti dnů. Do té doby si je prosím stáhněte. Během 30ti dnů je také nutné vyzvednout si u nás v Polagraphu negativy a hotové fotky. Pokud máte objednané zaslání negativů a fotek Zásilkovnou či kurýrem, informaci o nutném vyzvednutí můžete ignorovat, balíček už je na cestě k vám :-)
+                                      </p>
+
+                                      <p style="margin: 0 0 16px;">
+                                        Děkujeme a těšíme se opět brzy na viděnou!<br />
+                                        Polagraph
+                                      </p>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <!-- End Content -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <!-- End Body -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

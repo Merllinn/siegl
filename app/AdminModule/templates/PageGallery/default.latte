@@ -1,0 +1,44 @@
+{block content}
+
+        <div class="container">
+          <div class="head">
+            <h1 class="title">Správa galerie</h1>
+            <div class="clearfix"></div>
+          </div>
+
+      <h2 class="title">Pridání obrázků</h2>
+      {control upload}
+
+      <hr />
+
+      {if !empty($edit)}
+          <h2 class="title">Úprava obrázku</h2>
+          <div class="clearfix">
+              <img style="display: block; float: left; margin-right: 20px;" alt="" src="{$edit|thumb:null:200}" /><br>
+              <div style="float: left;">
+                  {form editForm}
+                      {label name, style=>'float: none;' /}
+                      {input name, style=>'width: 300px;'}<br>
+                      {input submit} <a class="btn btn-inverse" n:href="default $page">Storno</a>
+                  {/form}
+              </div>
+          </div>
+          <hr />
+      {/if}
+
+      <h2 class="title">Uložené obrázky</h2>
+
+      <div class="adminGallery" id="sortable" data-action="{link saveOrder!}">
+          <div n:foreach="$files as $file" data-id="{$file->id}" n:class="$file->main==1?main,fileBlock">
+              <p n:if="$file->name<>''" class="title">{$file->name|truncate:50}</p>
+              <a n:if="$file->main==0" n:href="setMain! $file->id" title="Nastavit jako hlavní" class="setMain"><i class="far fa-star"></i></a>
+              <div n:if="$file->main==1" class="main"><i class="fas fa-star"></i></div>
+              <a n:href="default $page, $file->id" title="Upravit" class="edit"><i class="fas fa-edit"></i></a>
+              <a n:href="delete! $file->id" title="Smazat" class="delete"><i class="fas fa-trash-alt"></i></a>
+              <img src="{$file|thumb:150:150}" />
+          </div>
+      </div>
+
+          <!--Body content-->
+        </div>
+{/block}

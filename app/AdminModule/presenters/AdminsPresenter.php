@@ -69,20 +69,12 @@ class AdminsPresenter extends BasePresenter
 
         $grid->addColumnText('login', 'Login');
         $grid->addColumnText('email', 'E-mail');
+        /*
         $grid->addColumnText('role', 'Role')
             ->setRenderer(function($row) use ($presenter) {
                     return $presenter->roles[$row->role];
         });
-
-        $grid->addColumnText('branch', 'Pobočka')
-            ->setRenderer(function($row) use ($presenter) {
-                if(!empty($row->branch)){
-					return $presenter->branchesSimple[$row->branch];
-                }   
-                else{
-					return "";
-                } 
-        });
+        */
 
         $grid->addColumnText('active', 'Aktivní')
             ->setRenderer(function($row) use ($presenter) {
@@ -131,6 +123,7 @@ class AdminsPresenter extends BasePresenter
 				->addRule(Form::FILLED, "Vyplňte login");
 		$form ->addText("email", "E-mail")
 				->addRule(Form::FILLED, "Vyplňte e-mail");
+        /*
         $form->addSelect("role", "Role", $this->roles)
                 ->setPrompt("vyberte roli")
 				->addRule(Form::FILLED, "Vyberte roli")
@@ -138,6 +131,7 @@ class AdminsPresenter extends BasePresenter
         $form->addSelect("branch", "Pobočka", $this->branchesSimple)
                 ->setPrompt("bez přiřazení pobočky")
                 ->getControlPrototype()->class("form-control");
+		*/
 		$form->addSubmit("submit", "Uložit admina")
 				->getControlPrototype()->class("btn btn-success");
 

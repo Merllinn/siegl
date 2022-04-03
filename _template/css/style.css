@@ -32,6 +32,10 @@ label:focus,
   box-shadow: none !important;
 }
 
+label {
+  cursor: pointer;
+}
+
 strong {
   font-weight: 600;
 }
@@ -41,6 +45,7 @@ a:hover {
   transition: color .25s;
 }
 
+h1,
 h2 {
   font-size: 1.5rem;
   font-weight: 700;
@@ -48,16 +53,19 @@ h2 {
   letter-spacing: .5px;
 }
 
+  h1.title,
   h2.title {
     text-align: center;
     color: #004a39;
     font-size: 1.875rem;
   }
 
+  h1.underline,
   h2.underline {
     margin-bottom: 25px;
   }
 
+    h1.underline::after,
     h2.underline::after {
       content: "";
       display: block;
@@ -389,6 +397,8 @@ nav a {
   }
 
   nav a:hover span,
+  a.active span,
+  a.active,
   div.submenu li a:hover,
   nav li.submenu.active span {
     color: #424242;
@@ -397,6 +407,11 @@ nav a {
     -webkit-text-stroke-color: #424242;
     border-bottom: 1px solid #424242;
   }
+
+    a.active span,
+    a.active {
+      border-bottom: 0;
+    }
 
   nav li a.external::after {
     font-family: "Font Awesome 6 Free";
@@ -1015,6 +1030,151 @@ div.bottom-navigation ul {
     margin-right: 14px;
     opacity: .85;
   }
+
+/*!
+* Subpage - top section
+*/
+
+section.top {
+  background-color: #eaeaea;
+  padding-top: 290px;
+  padding-bottom: 100px;
+}
+
+/*!
+* Subpage - containers
+*/
+
+section.products .container {
+  max-width: 1185px;
+}
+
+.col-container h2 {
+  text-transform: none;
+  text-align: center;
+  font-weight: 300;
+  background-color: #d81921;
+  margin: 0;
+}
+
+  .col-container h2 a {
+    color: #FFF;
+    text-decoration: none;
+    display: block;
+    padding-top: 43px;
+    padding-bottom: 35px;
+    position: relative;
+  }
+
+    .col-container h2 a::after {
+      content: "";
+      position: absolute;
+      bottom: -18px; left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 18px 17.5px 0 17.5px;
+      border-color: #d81923 transparent transparent transparent;
+    }
+
+.accordion-button {
+  padding: 0;
+  position: relative;
+}
+
+  .accordion-button::before {
+    content: "";
+    width: 100%; height: 1px;
+    background-color: #e7e7e7;
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .accordion-button::after {
+    margin-left: 3px;
+    background: #FFF url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+
+  .accordion-button:not(.collapsed)::after {
+    background: #FFF url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+  }
+
+  .accordion-button span.price {
+    position: absolute;
+    right: 0;
+    background-color: #FFF;
+    padding-left: 10px;
+  }
+
+  .accordion-button em {
+    background-color: #FFF;
+    font-style: normal;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .accordion-button:not(.collapsed) {
+    box-shadow: none;
+    color: inherit;
+    background-color: transparent;
+      -webkit-text-fill-color: #424242;
+    -webkit-text-stroke-width: .5px;
+    -webkit-text-stroke-color: #424242;
+  }
+
+.accordion-item {
+  border: 0;
+}
+
+span.without-vat {
+  display: block;
+  text-align: center;
+  margin: 16px auto;
+}
+
+a.container-detail {
+  display: table;
+  margin: 16px auto 0 auto;
+  text-transform: uppercase;
+}
+
+.col-container .btn {
+  display: table;
+  margin: 0 auto;
+  margin-left: calc(50% - 140px);
+}
+
+div.container-image {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 17px;
+  position: relative;
+}
+
+  div.container-image img {
+    max-width: 190px; width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  div.container-image::after {
+    content: "";
+    width: 100%; height: 1.5px;
+    background-color: #e7e7e7;
+    position: absolute;
+    left: 0; bottom: 10px;
+  }
+
+div.accordion#containers {
+  border-bottom: 1.5px solid #e7e7e7;
+  padding-bottom: 16px;
+}
 
 /*!
 * Footer

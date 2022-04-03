@@ -35,9 +35,10 @@
 
     <link href="" rel="icon" type="image/x-icon">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.typekit.net/pen5pzr.css">
-    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
@@ -138,37 +139,198 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
-                    <h1>Přistavení kontejneru vám garantujeme rychlostí Siegl, nejrychleji v Praze.</h1>
-                    <p>A umíme ještě víc od <strong>likvidace odpadu</strong><br> až po <strong>dopravu stavebního materiálu</strong><br> a <strong>zemní a výkopové práce</strong>.</p>
-                    <p>Co neumíme?<br>O práci dlouze mluvit.</p>
+                    <h1 data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-delay="50">Přistavení kontejneru vám garantujeme rychlostí Siegl, nejrychleji v Praze.</h1>
+                    <p data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-delay="150">A umíme ještě víc od <strong>likvidace odpadu</strong><br> až po <strong>dopravu stavebního materiálu</strong><br> a <strong>zemní a výkopové práce</strong>.</p>
+                    <p data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-delay="250">Co neumíme?<br>O práci dlouze mluvit.</p>
                 </div>
                 <div class="col-md-7">
                     <div class="map">
                         <div class="v-cili">
-                            <img src="img/i_v-cili.png" alt="Ikonka V cíli po Praze do 1 - 4 hodin">
-                            <img class="shadow" src="img/v-cili-shadow.png" alt="Obrázek stínu">
+                            <img data-aos="zoom-in" data-aos-easing="linear" data-aos-delay="750" src="img/i_v-cili.png" alt="Ikonka V cíli po Praze do 1 - 4 hodin">
+                            <img data-aos="fade-in" data-aos-duration="1500" data-aos-delay="900" class="shadow" src="img/v-cili-shadow.png" alt="Obrázek stínu">
                         </div>
                         <!-- ./v cili -->
-                        <img src="img/map.png" alt="Obrázek mapy">
+                        <img src="img/map.png" alt="Obrázek mapy" data-aos="fade-in" data-aos-delay="300">
                     </div>
                     <img class="car" src="img/car.png" alt="Obrázek auta">
                 </div>
             </div>
             <img class="stripe" src="img/stripe.png" alt="Obrázek pruhů">
         </div>
-        <img class="mosaic left" src="img/mosaic_s2.png" alt="Obrázek mozaiky">
-        <img class="mosaic right" src="img/mosaic_s3.png" alt="Obrázek mozaiky">
+        <img class="mosaic left" src="img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+        <img class="mosaic right" src="img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
     </section>
     <!-- ./slide -->
     <section class="demand">
-        <h2>Kalkulace do 24 hodin</h2>
-        <ul class="list-inline">
-            <li>množstevní slevy</li>
-            <li>individuální férové ceny</li>
-        </ul>
-        <a class="btn btn-primary" href="#" title="Přejít na poptávku">Zadat poptávku</a>
+        <div class="container">
+            <div class="calculation">
+                <h2>Kalkulace do 24 hodin</h2>
+                <ul class="list-inline">
+                    <li class="list-inline-item">množstevní slevy</li>
+                    <li class="list-inline-item">individuální férové ceny</li>
+                </ul>
+            </div>
+            <!-- ./calculation -->
+            <a class="btn btn-primary btn-arrow btn-white" href="#" title="Přejít na poptávku">Zadat poptávku <i class="fa-solid fa-angles-right"></i></a>
+            <div class="clearfix"></div>
+        </div>
     </section>
     <!-- ./demand -->
+    <section class="services">
+        <div class="container">
+            <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Rozsah služeb</h2>
+            <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">Odvezeme odpad i suť, přivezeme písek a jiný stavební materiál,<br>vykopeme bazén, zlikvidujeme černou skládku…</p>
+            <div class="row">
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50">
+                    <a href="#" title="Přejít na kontejnery na odpad">
+                        <div class="service-icon">
+                            <img src="img/i_kontejnery-na-odpad.svg" alt="Ikona kontejnerů na odpad">
+                        </div>
+                        Kontejnery <span>na odpad</span>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+                    <a href="#" title="Přejít na kontejnery na suť">
+                        <div class="service-icon">
+                            <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+                        </div>
+                        Kontejnery <span>na suť</span>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="100">
+                    <a href="#" title="Přejít na kontejnery na dřevo">
+                        <div class="service-icon">
+                            <img src="img/i_kontejnery-na-drevo.svg" alt="Ikona kontejnerů na dřevo">
+                        </div>
+                        Kontejnery <span>na dřevo</span>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="125">
+                    <a href="#" title="Přejít na kontejnery na zeminu">
+                        <div class="service-icon">
+                            <img src="img/i_kontejnery-na-zeminu.svg" alt="Ikona kontejnerů na zeminu">
+                        </div>
+                        Kontejnery <span>na zeminu</span>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="150">
+                    <a href="#" title="Přejít na velkoobjemové kontejnery">
+                        <div class="service-icon">
+                            <img class="velkoobjemove-kontejnery" src="img/i_velkoobjemove-kontejnery.svg" alt="Ikona velkoobjemových kontejnerů">
+                        </div>
+                        <span>Velkoobjemové</span> kontejnery
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="175">
+                    <a href="#" title="Přejít na řetězové/vanové kontejnery">
+                        <div class="service-icon">
+                            <img class="retezove-vanove-kontejnery" src="img/i_retezove-vanove-kontejnery.svg" alt="Ikona řetězových/vanových kontejnerů">
+                        </div>
+                        <span>Řetězové/vanové</span> kontejnery
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="200">
+                    <a href="#" title="Přejít na prodej a dovoz štěrku a písku">
+                        <div class="service-icon">
+                            <img class="prodej-a-dovoz-pisku-a-sterku" src="img/i_prodej-a-dovoz-pisku-a-sterku.svg" alt="Ikona prodeje a dovozu písku a štěrku">
+                        </div>
+                        Prodej a dovoz <span>písku a štěrku</span>
+                    </a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="225">
+                    <a href="#" title="Přejít na kalkulaci do 24 hodin">
+                        <div class="service-icon">
+                            <img class="kalkulace-do-24-hodin" src="img/i_kalkulace-do-24-hodin.svg" alt="Ikona kalkulace do 24 hodin">
+                        </div>
+                        Kalkulace <span>do 24 hodin</span>
+                    </a>
+                </div>
+            </div>
+            <a class="btn btn-primary btn-arrow btn-red" href="#" title="Přejít na další služby">Další služby <i class="fa-solid fa-angles-right"></i></a>
+        </div>
+    </section>
+    <!-- ./services -->
+    <section class="blog">
+        <div class="container">
+            <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Siegl blog</h2>
+            <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">Rady, tipy, názory...</p>
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="250" data-aos-delay="50">
+                    <div class="blog-post">
+                        <a href="#" title="Přečíst příspěvek Tempo lorem">
+                            <img class="img-fluid" src="images/18839748_1353386268109970_2238416687991636229_o.jpeg" alt="Náhledový obrázek příspěvku Tempo lorem">
+                        </a>
+                        <span class="date">01/05/2022</span>
+                        <a href="#" title="Přečíst příspěvek Tempo lorem"><h3>Tempo lorem</h3></a>
+                        <p>Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est..</p>
+                        <a class="read-more" href="#" title="Přečíst příspěvek Tempo lorem">Přečíst</a>
+                    </div>
+                </div>
+                <!-- ./blog post -->
+                <div class="col-md-4">
+                    <div class="blog-post" data-aos="fade-in" data-aos-duration="250" data-aos-delay="150">
+                        <a href="#" title="Přečíst příspěvek Tempo lorem">
+                            <img class="img-fluid" src="images/18839748_1353386268109970_2238416687991636229_o.jpeg" alt="Náhledový obrázek příspěvku Tempo lorem">
+                        </a>
+                        <span class="date">01/05/2022</span>
+                        <a href="#" title="Přečíst příspěvek Tempo lorem"><h3>Tempo lorem</h3></a>
+                        <p>Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est..</p>
+                        <a class="read-more" href="#" title="Přečíst příspěvek Tempo lorem">Přečíst</a>
+                    </div>
+                </div>
+                <!-- ./blog post -->
+                <div class="col-md-4">
+                    <div class="blog-post" data-aos="fade-in" data-aos-duration="250" data-aos-delay="250">
+                        <a href="#" title="Přečíst příspěvek Tempo lorem">
+                            <img class="img-fluid" src="images/18839748_1353386268109970_2238416687991636229_o.jpeg" alt="Náhledový obrázek příspěvku Tempo lorem">
+                        </a>
+                        <span class="date">01/05/2022</span>
+                        <a href="#" title="Přečíst příspěvek Tempo lorem"><h3>Tempo lorem</h3></a>
+                        <p>Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est..</p>
+                        <a class="read-more" href="#" title="Přečíst příspěvek Tempo lorem">Přečíst</a>
+                    </div>
+                </div>
+                <!-- ./blog post -->
+            </div>
+            <a class="btn btn-primary btn-arrow btn-white" target="_blank" href="http://siegl.cz/blog" title="Přejít na náš blog">Otevřít blog <i class="fa-solid fa-angles-right"></i></a>
+        </div>
+        <!-- ./container -->
+        <img class="mosaic" style="bottom: 121px" src="img/mosaic_s5.png" alt="Obrázek mozaiky">
+        <div class="rectangle"></div>
+        <img class="stripe" src="img/stripe_2.png" alt="Pruhy">
+    </section>
+    <!-- ./blog -->
+    <section class="video">
+        <div class="video-container">
+            <a target="_blank" title="Přehrát celé video na Youtube" href="https://youtu.be/6UIO6Gw9MVY">
+                <video id="loop" loop="" muted="muted" playsinline="playsinline">
+                    <source src="video/siegl_recut_08032022_01.mp4" type="video/mp4">
+                    <source src="movie.ogg" type="video/ogg">
+                    Váš prohlížeč nepodporuje přehrávání HTML videí.
+                </video>
+            </a>
+        </div>
+        <div class="bottom-navigation">
+            <div class="container">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" title="Typy odpadů">Typy odpadů</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" title="Aktuálně">Aktuálně</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- ./bottom navigation -->
+    </section>
+    <!-- ./video -->
     <footer>
         <div class="container">
             <div class="logo">
@@ -212,8 +374,10 @@
         <!-- ./copyright -->
     </footer>
     <!-- ./footer -->
-    <script src="js/custom.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/f9c28b4b90.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"></script>
+    <script src="js/custom.js"></script>
 </body>
 </html>

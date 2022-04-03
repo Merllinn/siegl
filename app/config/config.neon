@@ -52,6 +52,7 @@ services:
     - App\Model\LanguageManager(@database.app.context)
     - App\Model\ProductManager(@database.app.context)
     - App\Model\CategoryManager(@database.app.context)
+    - App\Model\AttributeManager(@database.app.context)
 #    - App\Model\WpManager(@database.web.context)
     mailchimp: Services\MailchimpService(%mailchimp%, @user)
     router: App\RouterFactory::createRouter

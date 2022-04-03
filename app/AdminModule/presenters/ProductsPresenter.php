@@ -14,6 +14,7 @@ class ProductsPresenter extends BasePresenter
 	public $pa = false;
 	public $fullCats;
     public $categories;
+    public $productType = 1;
 
 	 /** @persistent */
 	public $search = "";
@@ -22,13 +23,11 @@ class ProductsPresenter extends BasePresenter
 
 	public function startup(){
 		parent::startup();
-		$this->addBreadcrumbs("Produkty", $this->link(":Admin:Products:default"));
+		$this->addBreadcrumbs("Kontejnery", $this->link(":Admin:Products:default"));
 
 		if(!isset($this->filter)){
 			$this->filter = $this->getSession("productsFilter");
 		}
-
-        $this->categories = $this->categoryManager->getActiveList();
 
 	}
 
@@ -40,7 +39,7 @@ class ProductsPresenter extends BasePresenter
 			foreach($items as $index=>$item){
 				$this->productManager->update(array("order"=>$index+1), $item);
 			}
-			$this->flashMessage("Pořadí produktů bylo uloženo");
+			$this->flashMessage("Pořadí kontejnerů bylo uloženo");
 			$this->redirect(":Admin:Products:default", array("search"=>$search));
 		}
 
@@ -48,6 +47,7 @@ class ProductsPresenter extends BasePresenter
 
 
 
+	/*
 	public function renderAttributes($id){
 		$this->productId = $id;
 		$this->template->product = $pageDetails = $this->productManager->getOne($id);
@@ -62,16 +62,44 @@ class ProductsPresenter extends BasePresenter
 		$this->template->attribute = $attibute = $this->productManager->getProductAttribute($id, $attrId);
 		$this->template->values = $this->models->attributes->fetchValues($attrId, $pa);
 	}
+	*/
 
 	public function actionAdd(){
 		$this->setView("addEdit");
 	}
 
 	public function actionEdit($id){
-		$pageDetails = $this->productManager->find($id);
-		$this["productForm"]->setDefaults($pageDetails);
+		$details = $this->productManager->find($id);
+		$details = $this->rowToArray($details);
+		$attributes = explode("|", $details->attributes);
+		$prodAttribs = array();
+		foreach($attributes as $attr){
+			list($attrId, $attrVal) = explode("-", $attr);
+			$prodAttribs[$attrId] = $attrVal;
+		}
+		$details->attributes = $prodAttribs;
+		$this["productForm"]->setDefaults($details);
 		$this->edited = $id;
 		$this->setView("addEdit");
+	}
+
+	public function actionPrices($id){
+		$this->template->details = $this->productManager->find($id);
+		$this->edited = $id;
+		$prices = $this->productManager->getPrices($id);
+		$details = array();
+		if($prices){
+			foreach($prices as $prRow){
+				if(empty($details[$prRow->attributeValue])){
+					$details[$prRow->attributeValue] = array();
+				}
+				for($i=1;$i<=$this->zones;$i++){
+					$key = "price".$i;
+					$details[$prRow->attributeValue][$i] = $prRow->$key;
+				}
+			}
+		}
+		$this["productPriceForm"]->setDefaults($details);
 	}
 
 	public function actionDelete($id){
@@ -85,31 +113,20 @@ class ProductsPresenter extends BasePresenter
 		}
 	}
 
-	/** Create product form
-	*
-	* @return Form
-	*/
 	public function createComponentProductForm(){
 		$form = new Form();
+		
+		$productAttributes = $this->attributeManager->getForCont(1);
 
 		$form->addGroup("Základní údaje");
 		//$form ->addHidden("id");
 		$form ->addText("name", "Jméno")
 				->addRule(Form::FILLED, "Vyplňte jméno produktu");
-        $form ->addSelect("category", "Kategorie", $this->categories)
-				//->setRequired(true)
-				->setPrompt("bez kategorie")
-				->getControlPrototype()->placeholder("vyberte");
-        /*
-		$form ->addText("order", "Pořadí")
-				->addRule(Form::FILLED, "Vyplňte pořadí");
-		*/
-        $form ->addText("price_vat", "Cena s DPH")
-                ->addRule(Form::FILLED, "Vyplňte cenu produktu");
 		$form ->addTextArea("perex", "Zkrácený popis");
 		$form ->addTextArea("description", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
+		$form->addCheckbox("turbo", "Turbokontejner");
         /*
         $form ->addTextArea("technical", "Technická specifikace")
 				->getControlPrototype()
@@ -119,11 +136,16 @@ class ProductsPresenter extends BasePresenter
 		$form ->addTextArea("seo_description", "SEO description");
 		$form ->addText("seo_keywords", "SEO keywords");
         */
-		$form->addSubmit("submit", "Uložit produkt")->getControlPrototype()->class("btn btn-primary");
 
-		if(!empty($this->filter->category)){
-			$form->setDefaults(array("category"=>$this->filter->category));
+		$form->addGroup("Atributy");
+		$attributes = $form->addContainer("attributes");
+		foreach($productAttributes as $pa){
+			$paValues = $this->attributeManager->getValuesArr($pa->id);
+			$attributes->addSelect($pa->id, $pa->name, $paValues);
 		}
+
+		$form->addGroup(NULL);
+		$form->addSubmit("submit", "Uložit produkt")->getControlPrototype()->class("btn btn-primary");
 
 		$form->onSuccess[] = [$this, 'saveProduct'];
 
@@ -131,31 +153,28 @@ class ProductsPresenter extends BasePresenter
 	}
 
 
-	/** callback for page form
-	*
-	* @param Form data from page form
-	* @return void
-	*/
 	public function saveProduct(Form $form){
 		$values = $form->getValues();
 		$values->alias = $this->makeAlias("products", $values->name, $this->edited);
 
 		if($form->isValid()){
 			try{
-                $vat = $this->productManager->getVat(1);
-                $values->price = $values->price_vat/(1+($vat->value/100));
+				$attributes = $values->attributes;
+				$attrs = array();
+				foreach($attributes as $attrId=>$attrVal){
+					$attrs[] = $attrId."-".$attrVal;
+				}
+				$values->attributes = implode("|", $attrs);
 				if($this->edited){
 					$this->productManager->update($values, $this->edited);
-
 				}
 				else{
-
 					if(empty($values->alias)){
 						$values->alias = \Nette\Utils\Strings::webalize($values->name);
 					}
-					$values->type=1;
 					$values->created = new \nette\utils\DateTime();
-                    $values->vat_id = 1;
+                    //$values->vat_id = 1;
+					$values->type = $this->productType;
 					$id = $this->productManager->add($values);
 
 				}
@@ -170,10 +189,77 @@ class ProductsPresenter extends BasePresenter
 		}
 	}
 
+	public function createComponentProductPriceForm(){
+		$form = new Form();
+		
+		$productAttributes = $this->attributeManager->getForCont(2);
+
+		foreach($productAttributes as $pa){
+			$paValues = $this->attributeManager->getValuesArr($pa->id);
+			foreach($paValues as $paValId=>$paValVal){
+				$form->addGroup($pa->name." - ".$paValVal);
+				$container = $form->addContainer($paValId);
+				for($i=1;$i<=$this->zones;$i++){
+					$container->addText($i, "Zóna ".$i);
+				}
+			}
+		}
+
+		$form->addGroup(NULL);
+		$form->addSubmit("submit", "Uložit ceny")->getControlPrototype()->class("btn btn-primary");
+
+		$form->onSuccess[] = [$this, 'saveProductPrices'];
+
+		return $form;
+	}
+
+
+	public function saveProductPrices(Form $form){
+		$values = $form->getValues();
+
+		if($form->isValid()){
+			try{
+				$this->productManager->deletePrices($this->edited);
+				$productAttributes = $this->attributeManager->getForCont(2);
+				foreach($productAttributes as $pa){
+					$paValues = $this->attributeManager->getValuesArr($pa->id);
+					foreach($paValues as $paValId=>$paValVal){
+						$prices = $values->$paValId;
+						$minPrice = 999999;
+						$maxPrice = 000000;
+						$dataPrices = array(
+							"product" => $this->edited,
+							"attributeValue" => $paValId,
+						);
+						for($i=1;$i<=$this->zones;$i++){
+							$dataPrices["price".$i] = $prices[$i];
+							$minPrice = min($minPrice, $prices[$i]);
+							$maxPrice = max($maxPrice, $prices[$i]);
+						}
+						$dataPrices["priceFrom"] = $minPrice;
+						$dataPrices["priceTo"] = $maxPrice;
+						$this->productManager->savePrices($dataPrices);
+					}
+
+				}
+				
+				
+				$this->flashMessage("Ceny produktu byly uloženy.");
+				$this->redirect(":Admin:Products:default");
+
+
+			}
+			catch(DibiDriverException $e){
+				$this->flashMessage($e->getMessage(), "error");
+			}
+		}
+	}
+
 	/** Create product form
 	*
 	* @return Form
 	*/
+	/*
 	public function createComponentAttributeValuesForm(){
 		$form = new Form();
 
@@ -222,6 +308,7 @@ class ProductsPresenter extends BasePresenter
 	   $this->flashMessage("Hodnoty parametrů byly aktualizovány", "success");
 	   $this->redirect("this");
 	}
+	*/
 
 
     /**
@@ -233,7 +320,7 @@ class ProductsPresenter extends BasePresenter
     {
         $presenter = $this;
 
-        $source = $this->productManager->fetchDS(1, $this->filter);
+        $source = $this->productManager->fetchDS($this->productType, $this->filter);
 
         //$this->fullCats = $this->models->categories->fetchFullInfo();
 
@@ -256,21 +343,15 @@ class ProductsPresenter extends BasePresenter
         });
         $grid->addColumnText('name', 'Název');
 
-        $grid->addColumnText('category', 'Kategorie')
+        $grid->addColumnText('turbo', 'Turbokontejner')
             ->setRenderer(function($row) use ($presenter) {
-                if(empty($row->category)){
-                    return "";
+                if($row->turbo){
+                	return "ano";
                 }
                 else{
-                    return $presenter->categories[$row->category];
+                	return "ne";
                 }
         });
-
-        $grid->addColumnText('price_vat', 'Cena s DPH')
-            ->setRenderer(function($row) use ($presenter) {
-                return number_format($row->price_vat, 0, ",", " ")." Kč";
-        });
-
 
         $grid->addColumnText('active', 'Aktivní')
             ->setRenderer(function($row) use ($presenter) {
@@ -295,7 +376,9 @@ class ProductsPresenter extends BasePresenter
                 $el->insert(1, " ");
                 $el->insert(2, html::el("a")->class("btn btn-mini")->href($presenter->link(":Admin:Products:edit", $row->id))->setHtml(html::el("i")->class("fas fa-edit"))->title(" Upravit"));
                 $el->insert(3, " ");
-                $el->insert(4, html::el("a")->class("btn btn-mini btn-danger")->href($presenter->link(":Admin:Products:delete", $row->id))->setHtml(html::el("i")->class("fas fa-trash-alt"))->setHtml(html::el("i")->class("fas fa-trash-alt"))->title("Smazat"));
+                $el->insert(4, html::el("a")->class("btn btn-mini btn-info")->href($presenter->link(":Admin:Products:prices", $row->id))->setHtml(html::el("i")->class("fas fa-dollar-sign"))->title(" Ceny"));
+                $el->insert(5, " ");
+                $el->insert(6, html::el("a")->class("btn btn-mini btn-danger")->href($presenter->link(":Admin:Products:delete", $row->id))->setHtml(html::el("i")->class("fas fa-trash-alt"))->setHtml(html::el("i")->class("fas fa-trash-alt"))->title("Smazat"));
                 return $el;
         });
 		}
@@ -332,10 +415,6 @@ class ProductsPresenter extends BasePresenter
 
 		$form->getElementPrototype()->class("form-inline");
 
-		$form->addSelect("category", "", $this->categories)
-            ->setPrompt(" - všechny kategorie - ")
-            ->getControlPrototype()->class("form-control");
-
 		$form->addText("fulltext")
 			->getControlPrototype()->class("form-control")->placeholder("hledaný výraz");
 
@@ -364,14 +443,12 @@ class ProductsPresenter extends BasePresenter
 		$values = $form->getValues();
 
 		if($form["reset"]->isSubmittedBy()){
-			$this->filter->category = null;
             $this->filter->fulltext = null;
 			$this->filter->active = null;
 			//$this->filter->noPhoto = false;
 			$this->redirect("this");
 		}
 		else{
-			$this->filter->category = $values->category;
             $this->filter->fulltext = $values->fulltext;
 			$this->filter->active = $values->active;
 			//$this->filter->noPhoto = $values->noPhoto;
@@ -383,7 +460,7 @@ class ProductsPresenter extends BasePresenter
         foreach($items as $index=>$item){
             $this->productManager->update(array("order"=>$index+1), $item);
         }
-        $this->flashMessage("Pořadí produktů v rámci kategorie bylo uloženo");
+        $this->flashMessage("Pořadí produktů bylo uloženo");
         $this->redirect("this");
     }
 

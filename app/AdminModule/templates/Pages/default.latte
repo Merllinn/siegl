@@ -1,6 +1,5 @@
 {block content}
 
-        <div class="container fs">
           <div class="head">
             <h1 class="title">Správa menu{if !empty($parent)} - podstránky "{$parent->name}"{/if}</h1>
     	  	<a class="btn btn-primary" n:href=":Admin:Pages:add 1, !empty($parent)?$parent->id:''"><i class="fas fa-plus"></i> Přidat odkaz</a>
@@ -9,8 +8,7 @@
           </div>
 
 
-	      <div class="sortable" data-action="{link sort!}">
+	      <div class="sortable table-responsive" data-action="{link sort!}">
 	      	{control pages}
 	      </div>
-      </div>
 {/block}

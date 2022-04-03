@@ -1,10 +1,9 @@
 {block content}
 
-  <div class="container fs">
 
       <div class="head">
-        <h1 class="title">Správa produktů</h1>
-        <a class="btn btn-primary" n:href=":Admin:Products:add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat produkt</a>
+        <h1 class="title">Správa kontejnerů</h1>
+        <a class="btn btn-primary" n:href=":Admin:Products:add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat kontejner</a>
         <div class="clearfix"></div>
       </div>
 
@@ -13,9 +12,6 @@
           <div class="row">
             <div class="col">
         	   {input fulltext, style=>'width:300px;'}
-            </div>
-            <div class="col">
-               {input category}
             </div>
             <div class="col">
         	   {input active}
@@ -31,10 +27,8 @@
         {/form}
       </div>
 
-      <div {if !empty($presenter->filter->category)}class="sortable"{/if} data-action="{link sort!}">
+      <div class="sortable" data-action="{link sort!}">
 	    {control products}
       </div>
 
-          <!--Body content-->
-        </div>
 {/block}

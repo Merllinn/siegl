@@ -14,7 +14,8 @@ final class ProductManager
 
 	const
         BASE = 'products',
-		IMAGES = 'product_image';
+		IMAGES = 'product_image',
+		PRICES = 'product_prices';
 
 
 	/** @var Nette\Database\Context */
@@ -205,6 +206,28 @@ final class ProductManager
                     ->fetch();
     }
 
+    public function getPr()
+    {
+        return $this->database->table(self::PRICES);
+    }
+
+    public function savePrices($values)
+    {
+        $this->getPr()->insert($values);
+    }
+
+    public function getPrices($id)
+    {
+        return $this->getPr()
+        ->where("product", $id);
+    }
+
+    public function deletePrices($id)
+    {
+        $this->getPr()
+        ->where("product", $id)
+        ->delete();
+    }
 
 
 

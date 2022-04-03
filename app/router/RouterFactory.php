@@ -25,7 +25,7 @@ final class RouterFactory
         $admin[] = new Route('admin/<presenter>/<action>', array('presenter' => 'Homepage','action' => 'default','lang' => 'cz'));;
 
         $router[] = $front = new RouteList('Front');
-        $front[] = new Route('prihlasit', 'Homepage:login');
+        $front[] = new Route('prihlasit', array('presenter' => 'Hpmepage','action' => 'login', 'lang'=>'cz'));
         $front[] = new Route('import-feed', array('presenter' => 'Xml','action' => 'importFeed'));
         $front[] = new Route('cron', array('presenter' => 'Cron','action' => 'default'));
         $front[] = new Route('platba[/<id>]', array('presenter' => 'Homepage','action' => 'payment'));

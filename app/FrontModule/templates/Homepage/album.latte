@@ -1,0 +1,240 @@
+{layout ../@layout.latte}
+{block content}
+      <div class="container login-page album">
+          <h1 class="title">Vaše fotografie ke stažení a k tisku</h1>
+			{*if empty($album)}
+				<p>Odkaz na album není platný nebo vypršela jeho platnost</p>
+				<p>Můžete i založit <a n:href=":Front:Homepage:createAlbum">nové album</a></p>
+			{else*}
+          	<p class="album-created" n:if="!empty($album)">Vytvořeno: {$album->date|date:"d. m. Y"}</p>
+
+          	<div class="copy-album" n:if="!empty($album)">
+          		<ul class="list-inline">
+          			<li class="list-inline-item">
+			          	<input type="text" value="{link //album $album->hash}" id="copyInput" style="">
+			          	<button class="btn btn-primary" onclick="copyFunction()"><i class="fas fa-link"></i> Zkopírovat odkaz na album</button>
+			        </li>
+			        <li class="list-inline-item">
+	          			<a target="_blank" class="btn btn-primary" href="https://www.facebook.com/sharer/sharer.php?u={link //album $album->hash}"><i class="fab fa-facebook-f"></i> Sdílet odkaz na album na Facebooku</a>
+	          		</li>
+	          	</ul>
+	        </div>
+	        <!-- ./copy album -->
+
+			<div class="filesList">
+				<div class="row justify-content-center chocolat-parent" n:if="!empty($album)">
+					<div class="col-sm-6 col-md-4 col-lg-3 print-col text-center" n:foreach="$files as $fileN=>$file">
+						<div class="fileItem">
+							{*=var_dump($file)*}
+							<div class="print-image">
+								<button class="btn btn-primary btn-select"><i class="fas fa-check"></i> Vybrat fotku</button>
+								<button class="btn btn-primary btn-unselect"><i class="fas fa-times"></i> Zrušit výběr</button>
+								<a href="https://drive.google.com/thumbnail?id={$file->getId()}&sz=w{1600}-h{1200}" class="chocolat-image"><img src="https://drive.google.com/thumbnail?id={$file->getId()}" title="{$file->getName()}" class="img-responsive"></a>
+								<div></div>
+								<label>
+								<input type="checkbox" class="fileCheck" name="files[{$file->getId()}]" value="{$file->getId()}" data-name="{$file->getName()}" data-id="{$iterator->counter}" data-tif="{if !empty($tifs[$fileN])}{$tifs[$fileN]->getId()}{/if}" /> {$file->getName()}
+							</label>
+							</div>
+							
+							<div></div>
+							<ul class="list-inline">
+								<li class="list-inline-item" n:if="!empty($file->getWebContentLink())">
+									<a href="{$file->getWebContentLink()}" class="btn btn-sm btn-primary" title="Stáhnout ve formátu JPEG"><i class="fas fa-download"></i> JPEG</a>
+								</li>
+								<li class="list-inline-item" n:if="!empty($tifs[$fileN]) && !empty($tifs[$fileN]->getWebContentLink())">
+									<a href="{$tifs[$fileN]->getWebContentLink()}" class="btn btn-sm btn-primary" title="Stáhnout ve formátu TIFF"><i class="fas fa-download"></i>TIFF</a>
+								</li>
+								<li class="list-inline-item">
+									<a n:href="addToOrder! $album->hash, $file->getId(), $file->getName()" class="btn btn-sm btn-primary" title="Vytisknout tuto fotografii"><i class="fas fa-print"></i> Tisk</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="more-photos">
+					<h2 class="title">Přidat další fotografie k tisku</h2>
+					<form style="width: 300px; margin: 0 auto;">
+						<div id="queue"></div>
+						<input id="file_upload" name="file_upload" type="file" multiple="true"><br>
+						{*<a class="btn btn-primary"href="javascript:$('#file_upload').uploadifive('upload')">Nahrát soubory</a>*}
+					</form>
+					{*control upload*}
+				</div>
+			</div>
+		</div>
+		<!-- ./container -->
+		<div class="album-meta" n:if="!empty($album)">
+			<div class="container">
+				<ul class="list-inline">
+					<li class="list-inline-item">
+						<span>Označit</span> <a href="" class="checkAll btn btn-sm btn-primary"><i class="fas fa-check"></i> vše</a> <a href="" class="checkNone btn btn-sm btn-secondary"><i class="fas fa-times"></i> nic</a>
+					</li>
+					<li class="list-inline-item">
+						<span>Označené</span>
+						<a n:href="downloadZip! $album->id " class="downloadFiles jpeg btn btn-sm btn-primary" data-images="0"><i class="fas fa-download" aria-hidden="true"></i> Stáhnout JPEG (<span class="photoCount">0</span> fotografií)</a>
+						<a n:href="downloadZip! $album->id, 'TIF'" class="downloadFiles tif btn btn-sm btn-primary" data-images="0"><i class="fas fa-download" aria-hidden="true"></i> Stáhnout TIFF (<span class="photoCount">0</span> fotografií)</a>
+					<li class="list-inline-item next">
+						<a n:href="addToOrderMulti! $album->hash" class="btn btn-primary btn-pink addToCartMulti">Zvolit rozměry a typ papíru <i class="fas fa-chevron-right"></i></a>
+					</li>
+				</ul>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		{*/if*}
+
+		<div class="modal fade" id="imagesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLongTitle">Chyba</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		       	<p>Ve výběru není řádná fotografie v odpovídajícím rozměru</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+{/block}
+
+{block scripts}
+    <script>
+        $(document).ready(function(){
+			$(".checkAll").click(function(e){
+				e.preventDefault();
+				$(".fileCheck").each(function(){
+                    if($(this).prop("checked")==false){
+                       $(this).trigger("click"); 
+                    }
+                });
+				recalcImages();
+			});
+			$(".checkNone").click(function(e){
+				e.preventDefault();
+                $(".fileCheck").each(function(){
+                    if($(this).prop("checked")==true){
+                       $(this).trigger("click"); 
+                    }
+                });
+				recalcImages();
+			});
+			$(".fileCheck").change(function(e){
+				recalcImages();
+			});
+			$(".addToCartMulti").click(function(e){
+				e.preventDefault();
+				var link = $(this).attr("href");
+				$(".fileCheck").each(function(){
+					if($(this).prop("checked")==true){
+						var id = $(this).data("id");
+						var name = $(this).data("name");
+						link += "&images["+id+"]="+$(this).val();
+						link += "&names["+id+"]="+name;
+					}
+				});
+				//console.log(link);
+				$.get(link);
+			});
+			$(".downloadFiles").click(function(e){
+				e.preventDefault();
+				if(parseInt($(this).data("images"))==0){
+					$('#imagesModal').modal('show');
+				}
+				else{
+					var link = $(this).attr("href");
+					var jpegsParams = "";
+					var tifsParams = "";
+					$(".fileCheck").each(function(){
+						if($(this).prop("checked")==true){
+							jpegsParams = jpegsParams+"&images[]="+$(this).val();
+							if($(this).data("tif") != ""){
+								tifsParams = tifsParams+"&images[]="+$(this).data("tif");
+							}
+						}
+					});
+					if($(this).hasClass("jpeg")){
+						link = link + jpegsParams;
+					}
+					else{
+						link = link + tifsParams;
+					}
+
+					//window.open(link, 'Stažení ZIP');
+					$(this).append(' <div class="spinner-border spinner-border-sm" role="status"><span class="sr-only">Nahrávám...</span></div>');
+					$.ajax({
+					        url: link,
+					        type: 'GET',
+					        dataType: 'json', // added data type
+					        success: function(res) {
+					            //console.log(res.url);
+					            $(".downloadFiles").find(".spinner-border").replaceWith("");
+					            location.href = res.url;
+					        }
+					});
+				
+				}
+			});
+
+			function recalcImages(){
+				var jpegs = 0;
+				var tifs = 0;
+				$(".fileCheck").each(function(){
+					if($(this).prop("checked")==true){
+						jpegs = jpegs+1;
+						if($(this).data("tif") != ""){
+							tifs = tifs+1;
+						}
+					}
+				});
+				$(".downloadFiles.jpeg").data("images", jpegs);
+				$(".downloadFiles.jpeg span.photoCount").html(jpegs);
+				$(".downloadFiles.tif").data("images", tifs);
+				$(".downloadFiles.tif span.photoCount").html(tifs);
+			}
+			{var $timestamp = time()}
+			$(function() {
+				$('#file_upload').uploadifive({
+					'auto'             : true,
+					'buttonText'	   : 'Vybrat soubory',
+					'uploadLimit'		: 20,
+					//'checkScript'      : 'check-exists.php',
+					'formData'         : {
+										   'timestamp' : {$timestamp},
+										   'token'     : {=md5('unique_salt' . $timestamp)}
+					                     },
+					'queueID'          : 'queue',
+					'uploadScript'     : {link Homepage:uploadFile},
+					'onQueueComplete' : function(file, data) { location.href = {link this}; }
+				});
+			});
+
+			$('.chocolat-parent').Chocolat();
+
+			$("div.print-col").click(function(){
+				console.log()
+				if($(this).find("input:checked").length==0){
+					$(this).closest("div").find("button.btn-select").fadeIn("fast");
+					$(this).closest("div").find("button.btn-unselect").fadeOut();
+					$(this).closest("div").find("div.fileItem").removeClass( "selected" );
+				}
+				else{
+					$(this).closest("div").find("button.btn-select").fadeOut("fast");
+					$(this).closest("div").find("button.btn-unselect").fadeIn();
+					$(this).closest("div").find("div.fileItem").addClass( "selected" );
+				}
+			});
+
+			//toggle file checkboxes
+			$("button.btn-select,button.btn-unselect").on("click", function(){
+				$(this).closest("div").find("input").trigger("click");
+			});
+			
+        });
+    </script>
+{/block}

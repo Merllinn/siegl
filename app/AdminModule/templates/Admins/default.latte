@@ -1,0 +1,11 @@
+{block content}
+
+        <div class="container fs">
+	      <div class="head">
+	        <h1 class="title">Administrátoři</h1>
+	        <a class="btn btn-primary" n:href=":Admin:Admins:add" n:if="$user->identity->role==9"><i class="fas fa-plus"></i> Přidat administrátora</a>
+	        <div class="clearfix"></div>
+	      </div>
+	      {control users}
+        </div>
+{/block}

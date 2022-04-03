@@ -1,0 +1,34 @@
+{
+    "name": "vojir/nette-csv-response",
+    "type": "library",
+    "description": "Nette CSV Responses",
+    "homepage": "https://github.com/vojir/nette-csv-response",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Stanislav Vojíř",
+            "email": "stanislav.vojir@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Vladislav Hejda",
+            "email": "hejda@vspdata.cz",
+            "role": "Developer"
+        },
+        {
+            "name": "Ondra Hlaváč",
+            "email": "ondra@hlavac.cz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",
+        "nette/http": ">=2.4",
+        "nette/utils": ">=2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vojir\\Responses\\CsvResponse\\": "src/"
+        }
+    }
+}

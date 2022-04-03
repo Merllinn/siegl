@@ -1,0 +1,307 @@
+{layout ../@layout.latte}
+{block content}
+		<style>
+			.filesList{
+				display: flex;
+			}
+			.filesList .fileItem{
+				margin: 10px;
+				width:25%;
+				text-align: center;
+			}
+		</style>
+      <div class="container login-page">
+          <h1 class="title">Objednávka tisku fotografií</h1>
+			{if empty($items)}
+				<p>Objednávka neobsahuje žádné fotky</p>
+			{else}
+				<div class="orderItems">
+					<h2 class="title">Položky</h2>
+					<div class="table-responsive">
+						<table class="table table-order">
+							<thead>
+								<tr>
+									<th>Fotografie</th>
+									<th>Rámeček</th>
+									<th>Rozměr</th>
+									<th>Typ papíru</th>
+									<th>Množství</th>
+									<th>Cena/ks</th>
+									<th>Cena celkem</th>
+								</tr>
+							</thead>
+						{var $totalPrice = 0}
+						{var $sizeAmounts = array()}
+						{foreach $sizes as $sizeItem}
+							{php $sizeAmounts[$sizeItem->id] = 0}
+						{/foreach}
+						
+						<tbody>
+							<tr n:foreach="$items as $itemId=>$item" data-id="{$itemId}">
+								<td class="photo-thumbnail chocolat-parent {if !empty($borders[$itemId])}framed{/if}">
+									<a class="chocolat-image" href="https://drive.google.com/thumbnail?id={$item}&sz=w{1600}-h{1200}" style="border:1px solid #ddd;display: inline-block;"><img src="https://drive.google.com/thumbnail?id={$item}" title="" width="100" style="{if !empty($borders[$itemId])}border:5px solid #FFF;{/if}"></a>
+								</td>
+								<td class="photo-borders">
+									{if !empty($borders[$itemId])}
+										ANO
+									{else}
+										NE
+									{/if}
+								</td>
+								<td class="sizes">
+									{$sizes[$sizesS[$itemId]]["name"]}
+								</td>
+								<td class="materials">
+									{$materials[$materialsS[$itemId]]}
+								</td>
+								<td class="amounts">
+									{$amountsS[$itemId]} ks
+								</td>
+								<td class="price">
+									{$sizes[$sizesS[$itemId]]["price"]} Kč
+								</td>
+								<td class="price">
+									{$sizes[$sizesS[$itemId]]["price"] * $amountsS[$itemId]} Kč
+									{php $totalPrice += ($sizes[$sizesS[$itemId]]["price"] * $amountsS[$itemId])}
+									{php $sizeAmounts[$sizesS[$itemId]] += $amountsS[$itemId]}
+								</td>
+							</tr>
+							<tr n:foreach="$products as $itemId=>$product" data-id="{$itemId}">
+								<td class="photo-thumbnail">
+									{var $img = $presenter->productManager->getMainPhoto($product->id)}
+									<img n:if="!empty($img)" src="{$img|thumb:100:null}" title="{$product->name}" width="100">
+								</td>
+								<td class="sizes" colspan="3">
+									<strong>{$product->name}</strong>
+								</td>
+								<td class="amounts">
+									{$product->amount} ks
+								</td>
+								<td class="price">
+									{$product->price_vat|number:0:',':' '} Kč
+								</td>
+								<td class="price">
+									{$product->price_vat*$product->amount|number:0:',':' '} Kč
+									{php $totalPrice += ($product->price_vat*$product->amount)}
+								</td>
+							</tr>
+							<tr n:if="!empty($basket->voucher)">
+							  	<td class="text-right" colspan="6">
+							    	<strong>Slevový kupón:</strong> {$basket->voucher->code}
+							  	</td>
+							  	<td colspan="2">
+							  		{if !empty($basket->voucher->sale)}
+							  			{var $voucherSale = $basket->voucher->sale}
+							  		{elseif !empty($basket->voucher->salePercent)}
+							  			{var $voucherSale = $totalPrice*($basket->voucher->salePercent/100)}
+							  		{/if}
+							  		{php $voucherSale = min($voucherSale, $totalPrice)}
+							  		{php $totalPrice -= $voucherSale}
+							        -{$voucherSale|number:0:',':' '} Kč
+							  	</td>
+							</tr>
+							<tr n:if="!empty($order->delivery)">
+							  	<td class="text-right" colspan="6">
+							    	<strong>Způsob dopravy:</strong> {$deliveries[$order->delivery]}
+							  	</td>
+							  	<td>
+							  		{php $totalPrice += $order->deliveryPrice}
+							        {$order->deliveryPrice|number:0:',':' '} Kč
+							  	</td>
+							</tr>
+							<tr n:if="!empty($order->payment)">
+							  	<td class="text-right" colspan="6">
+							    	<strong>Způsob platby:</strong> {$payments[$order->payment]}
+							  	</td>
+							  	<td>
+							  		{php $totalPrice += $order->paymentPrice}
+							        {$order->paymentPrice|number:0:',':' '} Kč
+							  	</td>
+							</tr>
+							<tr>
+								<td class="text-right" colspan="6"><strong>Celková cena:</strong></td>
+								<td>
+									{$totalPrice|number:0:',':' '} Kč
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="voucherForm" n:if="empty($basket->voucher)">
+					{control voucherForm}
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="pola-products">
+				<div class="container">
+					<h2 class="title">
+						Doplňkové produkty
+					</h2>
+					<div class="owl-carousel owl-pola-products owl-theme">
+						{var $products = $presenter->productManager->getActive()}
+						<div class="item" n:foreach="$products as $product">
+							<div class="item-product">
+								<img class="img-fluid" src="{$product|thumb}" alt="{$product->name}" />
+								<h3>{$product->name}</h3>
+								<span class="price">{$product->price|number:0:',':' '} Kč</span>
+								<a class="btn btn-primary" n:href="addProductToOrder! $product->id">Přidat do košíku</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ./pola products -->
+			<div class="order-summary-informations">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="billing-information summary">
+							<h2 class="title">Fakturační údaje</h2>
+								<table class="table table-data">
+									<tr>
+										<td>Jméno:</td>
+										<td>{$order->name}</td>
+									</tr>
+									<tr>
+										<td>Přjmení:</td>
+										<td>{$order->surname}</td>
+									</tr>
+									<tr>
+										<td>E-mail:</td>
+										<td>{$order->email}</td>
+									</tr>
+									<tr>
+										<td>Telefon:</td>
+										<td>{$order->phone}</td>
+									</tr>
+									<tr>
+										<td>Adresa:</td>
+										<td>{$order->street}</td>
+									</tr>
+									<tr>
+										<td>Město:</td>
+										<td>{$order->city}</td>
+									</tr>
+									<tr>
+										<td>PSČ:</td>
+										<td>{$order->zip}</td>
+									</tr>
+									{if !empty($order->note)}
+									<tr>
+										<td>Poznámka:</td>
+										<td>{$order->note|breaklines|noescape}</td>
+									</tr>
+									{/if}
+								</table>
+							</div>
+						</div>
+						<div class="col-md-5 offset-md-1 col-delivery">
+							{if !empty($order->different_delivery)}
+								<div class="delivery-information">
+									<h2 class="title">Doručovací údaje</h2>
+									<table class="table table-data w-auto">
+										{if !empty($order->delivery_name)}
+											<tr>
+												<td>Jméno:</td>
+												<td>{$order->delivery_name}</td>
+											</tr>
+										{/if}
+										<tr>
+											<td>Adresa:</td>
+											<td>{$order->delivery_street}</td>
+										</tr>
+										<tr>
+											<td>Město:</td>
+											<td>{$order->delivery_city}</td>
+										</tr>
+										<tr>
+											<td>PSČ:</td>
+											<td>{$order->delivery_zip}</td>
+										</tr>
+									</table>
+								</div>
+							{/if}
+							<div class="delivery-method">
+								<h2 class="title">Způsob doručení</h2>
+								<ul class="list-unstyled">
+									<li>{$deliveries[$order->delivery]}</li>
+								</ul>
+							</div>
+							<div class="delivery-method">
+								<h2 class="title">Způsob platby</h2>
+								<ul class="list-unstyled">
+									<li>{$payments[$order->payment]}</li>
+								</ul>
+							</div>
+							<div class="framing" n:if="$order->framing">
+								<h2 class="title">Rámování</h2>
+								<ul class="list-unstyled">
+									<li>Chci nabídku rámování</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ./container -->
+				<div class="album-meta step-summary">
+					<div class="container">
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<a n:href=":Front:Homepage:order" class="btn btn-primary"><i class="fas fa-edit"></i> Změnit velikost nebo typ papíru</a>
+								<a n:href=":Front:Homepage:order2" class="btn btn-primary"><i class="fas fa-edit"></i> Změnit údaje</a>
+							</li>
+							{var $isMinOrder = false}
+							{foreach $sizes as $sizeItem}
+								{if $sizeAmounts[$sizeItem->id]>=$sizeItem->minOrder}
+									{php $isMinOrder = true}
+								{/if}
+							{/foreach}
+							<li class="list-inline-item" n:if="$isMinOrder">
+								<a n:href=":Front:Homepage:finishOrder" class="btn btn-primary btn-pink" n:if="$order->payment!=1"><i class="fas fa-print"></i> Dokončit objednávku</a>
+								<a n:href=":Front:Homepage:finishOrder, true" class="btn btn-primary btn-pink" n:if="$order->payment==1"><i class="fas fa-print"></i> Dokončit a zaplatit objednávku on-line</a>
+							</li>
+							<li class="list-inline-item" n:if="!$isMinOrder">
+								<a n:href=":Front:Homepage:album" class="btn btn-primary"><i class="fas fa-plus"></i> Přidat další fotky</a>
+								<a href="" class="btn btn-secondary btn-pink disabled" n:if="$order->payment!=1"><i class="fas fa-print"></i> Dokončit objednávku</a>
+								<a href="" class="btn btn-secondary btn-pink disabled" n:if="$order->payment==1"><i class="fas fa-print"></i> Dokončit a zaplatit objednávku on-line</a>
+								<p class="alert alert-danger">Objednávka musí obsahovat alespoň:<br>
+								 {foreach $sizes as $sizeItem}
+								 	{if !$iterator->first}nebo {/if}
+								 	{$sizeItem->minOrder} ks fotek v rozměru {$sizeItem->name}<br>
+								 {/foreach}
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			{/if}
+
+{/block}
+
+{block scripts}
+    <script>
+        $(document).ready(function(){
+			$("select").change(function(){
+				updatePrices();
+			});
+
+			function updatePrices(){
+				var totalPrice= 0;
+				var link = {link updateOrder!}
+				$(".sizeSelect").each(function(){
+					var selectedOption = $(this).find("option:selected");
+					totalPrice += parseInt(selectedOption.data("price"));
+					link = link + "&sizes["+$(this).parents(".row").data("id")+"]="+$(this).val();
+				});
+				$(".materialSelect").each(function(){
+					var selectedOption = $(this).find("option:selected");
+					link = link + "&materials["+$(this).parents(".row").data("id")+"]="+$(this).val();
+				});
+				$(".totalPrice").html(totalPrice);
+				$.get(link);
+
+			}
+			updatePrices();
+		});
+    </script>
+{/block}

@@ -1,0 +1,8 @@
+{layout ../@layout.latte}
+{block content}
+	<section  class="slide">
+    	{block subcontent}
+        	{$page->content|noescape}
+      	{/block}
+    </section>
+{/block}

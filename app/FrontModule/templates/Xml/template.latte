@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SHOP>
+	<SHOPITEM n:foreach="$products as $pr">
+		{if empty($cat)}
+			{var $cat = $pr->categoryAlias}
+		{/if}
+		<PRODUCT>{$pr->name}</PRODUCT>
+		<DESCRIPTION>{!$pr->description}</DESCRIPTION>
+		<URL>{link //:Front:Products:detail $cat, $pr->alias}</URL>
+		<DELIVERY_DATE>{$pr->delivery}</DELIVERY_DATE>
+		<IMGURL>http://www.sportovni-pomucky.cz/{$pr|thumb}</IMGURL>
+		<PRICE_VAT>{$pr->price_vat|number:0:'.':''}</PRICE_VAT>
+	</SHOPITEM>
+</SHOP>

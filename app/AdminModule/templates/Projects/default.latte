@@ -1,0 +1,52 @@
+{block content}
+
+        <div class="span10">
+
+      <div class="content" style="clear: both">
+        <div class="head">
+          <h1 class="title">Přehled zakázek</h1>
+          <a class="btn btn-danger" n:href="import!"><i class="fas fa-cart-arrow-down"></i> Stáhnout z e-shopu</a>
+          <a class="btn btn-warning" n:href="sendLinks!"><i class="fas fa-paper-plane"></i> Odeslat odkazy</a>
+          <a class="btn btn-primary" n:href="add"><i class="fas fa-plus"></i> Vytvořit zakázku</a>
+          <div class="clearfix"></div>
+        </div>
+        <div class="filter">
+          {form filterForm}
+              <div class="row">
+                  <div class="col">
+                    {label reserver/}
+                    {input reserver}
+                  </div>
+                  <div class="col">
+                    {label branch/}
+                    {input branch}
+                  </div>
+                  <div class="col">
+                    {input submit}
+                    {input reset}
+                  </div>
+              </div>
+          {/form}
+          <div class="row" style="margin-top: 1rem" n:if="false">
+              <div class="col">
+                <ul class="list-inline">
+                  <li class="list-inline-item">
+                    <a n:href="filterStatus!"><span class="badge badge-light">
+                        {if empty($presenter->filter->status)}
+                            <u>Vše</u>
+                        {else}
+                            Vše
+                        {/if}
+                    </span></a>
+                  </li>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+ 	  {control projects}
+
+          <!--Body content-->
+        </div>
+{/block}

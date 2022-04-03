@@ -1,0 +1,18 @@
+{layout ../@layout.latte}
+{block content}
+      <div class="container">
+          <h1 class="title">
+            {$page->name}
+        </h1>
+          <div class="row">
+              <div class="col-md-10">
+                  <article>
+                    {block subcontent}
+                    {$page->content|noescape}
+                    {/block}
+                  </article>
+              </div>
+        </div>
+      </div>
+      <!-- ./container -->
+{/block}

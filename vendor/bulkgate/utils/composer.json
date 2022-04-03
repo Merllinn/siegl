@@ -1,0 +1,27 @@
+{
+  "name": "bulkgate/utils",
+  "description": "Generic utilites for BulkGate portal PHP SDK",
+  "keywords": ["sms", "bulkgate", "json", "compress", "strict", "iterator"],
+  "homepage": "https://www.bulkgate.com",
+  "license": ["BSD-3-Clause"],
+  "authors": [
+    {
+      "name": "TOPefekt s.r.o.",
+      "homepage": "http://www.topefekt.com"
+    },
+    {
+      "name": "Lukáš Piják",
+      "homepage": "http://www.lukaspijak.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "nette/tester": "~2.0"
+  },
+  "autoload": {
+    "classmap": ["src/"]
+  },
+  "minimum-stability": "dev"
+}

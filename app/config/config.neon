@@ -1,0 +1,60 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+parameters:
+    mailchimp:
+        apiurl: https://us8.api.mailchimp.com/3.0/
+#        apikey: b58787a158b5419a33fabd3e35f7ff52-us8
+#        list: e65ce2efbb
+        logfile: %tempDir%/mailchimp.log
+
+application:
+#    errorPresenter: Error
+    mapping:
+        *: App\*Module\Presenters\*Presenter
+latte:
+    macros:
+        - App\Utils\Macros
+
+session:
+    expiration: 14 days
+    savePath: "%tempDir%/sessions"
+    autoStart: true
+    name: polatisk
+
+extensions:
+    bulkgate: BulkGate\Message\Bridges\MessageDI\MessageExtension
+    gopay: Markette\Gopay\DI\Extension
+
+bulkgate:
+    application_id: 3229
+    application_token: eoCUylaaKF3bjU82CxBPaDo5WROSucB38ZSGFGmSa9JdxZm7LP
+
+gopay:
+    gopayId        : 8031626471
+    gopaySecretKey : 8kEdrwFarx8DFUEcTa2kXpNh
+    testMode       : false
+    payments:
+        changeChannel: yes
+        channels:
+            card_gpkb: 'Zaplatit'
+
+services:
+    - App\Model\CommonManager(@database.app.context)
+    - App\Model\PageManager(@database.app.context)
+    - App\Model\ProjectManager(@database.app.context)
+    - App\Model\OrderManager(@database.app.context)
+    - App\Model\OrderStatusManager(@database.app.context)
+    - App\Model\VoucherManager(@database.app.context)
+    - App\Model\UserManager(@database.app.context)
+    - App\Model\TranslateManager(@database.app.context)
+    - App\Model\LanguageManager(@database.app.context)
+    - App\Model\ProductManager(@database.app.context)
+    - App\Model\CategoryManager(@database.app.context)
+#    - App\Model\WpManager(@database.web.context)
+    mailchimp: Services\MailchimpService(%mailchimp%, @user)
+    router: App\RouterFactory::createRouter
+    latte.latteFactory:
+        setup:
+            - setTempDirectory(null)

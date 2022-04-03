@@ -1,0 +1,23 @@
+{block content}
+     <div class="container fs">
+        <div class="head">
+          <h1 class="title">Úprava stavu rezervace</h1>
+          <div class="clearfix"></div>
+        </div>
+        {control statusForm}
+
+    <script>
+        $(document).ready(function(){
+            $(".classRadio").each(function(){
+                var cls = $(this).val();
+                $(this).closest("label").addClass("badge "+cls);
+            });
+              var editors = document.getElementsByClassName("highlight")
+              var myCodeMirror = CodeMirror.fromTextArea(editors[0], {
+                  lineNumbers: true,
+                  mode: "xml"
+                });
+        });
+    </script>
+
+{/block}

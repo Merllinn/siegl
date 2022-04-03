@@ -1,0 +1,25 @@
+{layout ../@layout.latte}
+{block content}
+  <div class="container">
+      <h1 class="title">
+        Uhrazení objednávky
+    </h1>
+    <article class="payment">
+      {if $order->paid == true}
+          <p>Vaše objednávka byla uhrazena. Děkujeme.</p>
+          <a class="btn btn-primary" n:href="Homepage:album">Vytisknout další fotky</a>
+      {else}
+          {if empty($status)}
+              <a class="btn btn-primary" n:href="payOrder! $order->id">Uhradit {$order->price|number:0:",", " "} Kč za objednávku</a>
+          {else}
+              {if $status==1}
+                  <p>Děkujeme za rezervaci! Potvrzení a doklad o platbě najdete v e-mailu.</p>
+              {else}
+                  <h1 class="title">Platba se nezdařila. Prosíme zkuste to znovu</h1>
+                  <a class="btn btn-primary" n:href="payOrder! $order->id">Uhradit {$order->price|number:0:",", " "} Kč za objednávku</a>
+              {/if}
+          {/if}
+      {/if}
+    </article>
+  </div>
+{/block}

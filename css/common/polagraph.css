@@ -1,0 +1,213 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,500,700");
+
+body.polagraph-style {
+  font-family: "Raleway", sans-serif;
+}
+
+.polagraph-style .navbar {
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+  .polagraph-style .navbar li:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .polagraph-style .navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 0.9375rem;
+    padding-left: 0.9375rem;
+  }
+
+.polagraph-style .bg-dark {
+  background-color: #131219 !important;
+}
+
+.polagraph-style .navbar-dark .navbar-nav .nav-link {
+  color: #FFF;
+  transition: color .25s;
+}
+
+  .polagraph-style .navbar-dark .navbar-nav .nav-link:hover,
+  .polagraph-style .navbar-dark .navbar-nav .nav-item.active .nav-link {
+    color: #38b3b1;
+    transition: color .25s;
+  }
+
+  .polagraph-style .navbar-expand-lg .navbar-nav .dropdown-menu {
+    top: 50px;
+    font-size: 0.8125rem;
+    border-radius: 0;
+    padding: 0;
+  }
+
+    .polagraph-style .dropdown-item {
+      padding: 0.9375rem;
+      transition: color .25s;
+    }
+
+      .polagraph-style .dropdown-item:hover {
+        color: #38b3b1;
+        transition: color .25s;
+        background-color: transparent;
+      }
+
+    .polagraph-style .dropdown-divider {
+      margin: 0;
+    }
+
+.polagraph-style .head {
+  margin: 30px 0;
+}
+
+  .polagraph-style .head h1.title {
+    float: left;
+  }
+
+  .polagraph-style .head .btn {
+    float: right;
+  }
+
+.polagraph-style h1.title,
+.polagraph-style h2.title,
+.polagraph-style legend {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+.polagraph-style h2.title,
+.polagraph-style legend {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.polagraph-style .filter {
+  background-color: #f9f9f9;
+  padding: 20px;
+  font-size: 0.75rem;
+  margin-bottom: 30px;
+}
+
+  .polagraph-style .filter form {
+    margin-bottom: 0;
+  }
+
+  .polagraph-style label {
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .polagraph-style .filter .badge {
+    font-size: 100%;
+  }
+
+  .polagraph-style .filter ul {
+    margin-bottom: 0;
+  }
+
+  .polagraph-style .filter .col {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .polagraph-style .filter .row {
+    margin-right: -5px;
+    margin-left: -5px;
+  }
+
+  .polagraph-style .filter .row:first-child .col:last-child {
+    padding-top: 25px;
+  }
+
+  .polagraph-style .form-control,
+  .polagraph-style .badge,
+  .polagraph-style .btn {
+    border-radius: 0;
+  }
+
+  .polagraph-style .datagrid {
+    padding: 0;
+  }
+
+.polagraph-style .table-bordered th,
+.polagraph-style .table-bordered td {
+  border: 0;
+}
+
+.polagraph-style .table-bordered th {
+  padding: 0.75rem 0.3rem;
+}
+
+.polagraph-style .table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.polagraph-style .navbar-brand {
+  font-weight: 700;
+}
+
+.polagraph-style .fs {
+  font-size: 0.875rem;
+}
+
+.polagraph-style .table-sm th,
+.polagraph-style .table-sm td {
+  padding: 1rem;
+}
+
+.polagraph-style .btn-primary,
+.polagraph-style .btn-primary:not(:disabled):not(.disabled):active,
+.polagraph-style .btn-primary:not(:disabled):not(.disabled).active,
+.polagraph-style .show > .btn-primary.dropdown-toggle {
+  background-color: #32a19f;
+  border-color: #32a19f;
+}
+
+  .polagraph-style .btn-primary:hover {
+    background-color: #2c8c8b;
+    border-color: #2c8c8b;
+  }
+
+.polagraph-style .badge-primary {
+  background-color: #131219;
+}
+
+  .polagraph-style .badge-primary:hover {
+    background-color: #2c8c8b;
+  }
+
+.polagraph-style #calendarBlock .calendar .rect {
+  background-color: transparent;
+  color: #212529;
+}
+
+.polagraph-style .calendarNav a,
+.polagraph-style .col-name a,
+.polagraph-style .breadcrumb a {
+  color: #32a19f;
+}
+
+  .polagraph-style .calendarNav a:hover,
+  .polagraph-style .col-name a:hover,
+  .polagraph-style .breadcrumb a:hover {
+    color: #2c8c8b;
+  }
+
+.polagraph-style .breadcrumb {
+  margin-top: 1rem;
+  border-radius: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+

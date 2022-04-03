@@ -1,0 +1,15 @@
+parameters:
+
+database:
+	app:
+	    dsn: 'mysql:host=127.0.0.1;dbname=tp-siegl'
+	    user: root
+	    password: 
+	    options:
+	        lazy: yes
+#	web:
+#	    dsn: 'mysql:host=127.0.0.1;dbname=tp-polagraph-eshop'
+#	    user: root
+#	    password: 
+#	    options:
+#	        lazy: yes

@@ -1,0 +1,168 @@
+{layout ../@layout.latte}
+{block content}
+		<style>
+			.filesList{
+				display: flex;
+			}
+			.filesList .fileItem{
+				margin: 10px;
+				width:25%;
+				text-align: center;
+			}
+		</style>
+      <div class="container login-page">
+          <h1 class="title">Objednávka tisku</h1>
+			{if empty($items)}
+				<p>Objednávka neobsahuje žádné fotky</p>
+			{else}
+				<div class="order-form">
+					{form orderForm}
+						<div class="row">
+							<div class="col-md-6">
+								<div class="billing-information">
+				          			<h2 class="title">Vyplňte fakturační údaje</h2>
+									<ul class="errors" n:if="$form->hasErrors()">
+										<li style="color:red;" n:foreach="$form->errors as $error">{$error}</li>
+									</ul>
+									<div class="row">
+										<div class="form-group col-md-12">
+											{label name/}
+											{input name}
+										</div>
+										<div class="form-group col-md-12">
+											{label surname/}
+											{input surname}
+										</div>
+										<div class="form-group col-md-12">
+											{label email/}
+											{input email}
+										</div>
+										<div class="form-group col-md-12">
+											{label phone/}
+											{input phone}
+										</div>
+										<div class="form-group col-md-12">
+											{label street/}
+											{input street}
+										</div>
+										<div class="form-group col-md-6">
+											{label city/}
+											{input city}
+										</div>
+										<div class="form-group col-md-6">
+											{label zip/}
+											{input zip}
+										</div>
+									</div>
+									<div class="form-group">
+										{label note/}
+										{input note}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5 offset-md-1 col-delivery">
+								<div class="delivery-information">
+			          				<h2 class="title">Vyplňte doručovací údaje</h2>
+									<div class="form-check">
+										{input different_delivery}
+										{label different_delivery}
+									</div>
+									<div class="deliveryInfo row">
+										<div class="form-group col-md-12">
+											{label delivery_name/}
+											{input delivery_name}
+										</div>
+										<div class="form-group col-md-12">
+											{label delivery_street/}
+											{input delivery_street}
+										</div>
+										<div class="form-group col-md-12">
+											{label delivery_city/}
+											{input delivery_city}
+										</div>
+										<div class="form-group col-md-12">
+											{label delivery_zip/}
+											{input delivery_zip}
+										</div>
+									</div>
+								</div>
+								<div class="delivery-method">
+				          			<h2 class="title">Zvolte způsob doručení</h2>
+				          			<div class="form-check">
+				          				{input delivery}
+				          			</div>
+				          		</div>
+				          		<div class="payment-method">
+				          			<h2 class="title">Zvolte způsob platby</h2>
+				          			<div class="form-check">
+				          				{input payment}
+				          			</div>
+				          		</div>
+				          		<div class="payment-method">
+				          			<h2 class="title">Rámování</h2>
+				          			<div class="form-check">
+				          				{input framing}
+				          			</div>
+				          		</div>
+				          	</div>
+				        </div>
+	          		</div>
+	          	</div>
+				<div class="album-meta step-3">
+					<div class="container">
+						<ul class="list-inline">
+							<li class="list-inline-item">
+								<a n:href=":Front:Homepage:order" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Zpět na volbu velikosti a typu papíru</a>
+							</li>
+							<li class="list-inline-item">
+								{input submit}
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				{/form}
+			{/if}
+
+{/block}
+
+{block scripts}
+    <script>
+        $(document).ready(function(){
+			$("select").change(function(){
+				updatePrices();
+			});
+			$(".differentDelivery").change(function(){
+				updateDelivery();
+			});
+
+			function updatePrices(){
+				var totalPrice= 0;
+				var link = {link updateOrder!}
+				$(".sizeSelect").each(function(){
+					var selectedOption = $(this).find("option:selected");
+					totalPrice += parseInt(selectedOption.data("price"));
+					link = link + "&sizes["+$(this).parents(".row").data("id")+"]="+$(this).val();
+				});
+				$(".materialSelect").each(function(){
+					var selectedOption = $(this).find("option:selected");
+					link = link + "&materials["+$(this).parents(".row").data("id")+"]="+$(this).val();
+				});
+				$(".totalPrice").html(totalPrice);
+				$.get(link);
+
+			}
+			function updateDelivery(){
+				if($(".differentDelivery").prop("checked")==true){
+					$(".deliveryInfo").show();
+				}
+				else{
+					$(".deliveryInfo").hide();
+				}
+
+			}
+			updateDelivery();
+			updatePrices();
+		});
+    </script>
+{/block}

@@ -55,7 +55,8 @@ final class PageManager
 	            ->where("parent = ?", $parent);
         }
         else{
-			return $this->get();
+			return $this->get()
+			->where("parent IS NULL");
         }
     }
 

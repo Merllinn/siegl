@@ -30,6 +30,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     public $settings;
     public $basket;
     public $onlineSale = 0;
+    
+    public $zones = 5;
 
     /** @var Model\CommonManager  @inject */
     public $commonManager;
@@ -53,6 +55,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 	public $userManager;
     /** @var Model\LanguageManager  @inject */
     public $languageManager;
+    /** @var Model\AttributeManager  @inject */
+    public $attributeManager;
 
     /** @var BulkGate\Sms\ISender @inject */
     public $sender;

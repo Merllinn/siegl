@@ -1,186 +1,216 @@
-$().ready(function(){
-    /* Volání AJAXu u všech odkazů s třídou ajax */
-    $("a.ajax").live("click", function (event) {
-        event.preventDefault();
-        $("#load_dialog").show();
-        $.get(this.href);
-    });
+/*!
+ * Bootstrap 4 multi dropdown navbar ( https://bootstrapthemes.co/demo/resource/bootstrap-4-multi-dropdown-navbar/ )
+ * Copyright 2017.
+ * Licensed under the GPL license
+*/
 
-    /* Volání AJAXu u všech odkazů s třídou tabella_ajax */
-    $("a.tabella_ajax").live("click", function (event) {
-		event.preventDefault();
-		if($(this).hasClass("confirmPaid")){
-			conf = confirm("Tato funkce je placená. Pokračovat?");
+$(document).ready(function(){
+	$('.dropdown-menu a.dropdown-toggle').on('click', function (e){
+		var $el = $(this);
+		var $parent = $(this).offsetParent(".dropdown-menu");
+		if (!$(this).next().hasClass('show')){
+			$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
 		}
-		else{
-			conf = true;
-		}
+		var $subMenu = $(this).next(".dropdown-menu");
+		$subMenu.toggleClass('show');
 		
-		if(conf){
-        	//$(this).closest("tr").find("a.tabella_ajax").toggle();
-        	$.get(this.href);
-		}
-		else{
-			return false;
-		}
-    });
-    
-    $('[data-toggle="popover"]').popover({
-        container: 'body'
-    });
+		$(this).parent("li").toggleClass('show');
 
-    $("select.select2").select2({ width: "element" });
-
-
-	//categories realted selects
-	$("select.cat1").live("change", function(){
-		$('.cat2, .cat3').attr("disabled", "disabled");
-		if($(this).val()!=""){
-			$.get($(this).data("link"), { "level": 2, "value": $(this).val() }, function(data) {
-				$('.cat2').replaceWith(data);
-			}, "html");
-		}
-	});
-	$("select.cat2").live("change", function(){
-		$('.cat3').attr("disabled", "disabled");
-		if($(this).val()!=""){
-			$.get($(this).data("link"), { "level": 3, "value": $(this).val() }, function(data) {
-				$('.cat3').replaceWith(data);
-			}, "html");
-		}
-	});
-
-    // lightbox galleries and images
-
-    $(".innerMain img").not(".auto").each(function(){
-		var img = $(this);
-		if(img.hasClass("gallery")){
-			var cls = "gallery";
-		}
-		else{
-			var cls = "fullscreen";
-		}
-		var title = img.attr("title");
-		var src = img.attr("src");
-		img.wrap($('<a>',{
-   			class: cls,
-   			href: src,
-   			title: title
-		}));
-    });
-
-
-    var lbParams = {
-			imageLoading: $("body").data("basepath")+'/images/lightbox/lightbox-ico-loading.gif',
-			imageBtnClose: $("body").data("basepath")+'/images/lightbox/lightbox-btn-close.gif',
-			imageBtnPrev: $("body").data("basepath")+'/images/lightbox/lightbox-btn-prev.gif',
-			imageBtnNext: $("body").data("basepath")+'/images/lightbox/lightbox-btn-next.gif',
-			txtImage: 'Obrázek',
-			txtOf: 'z'
-	    };
-    var lbParamsSingle = {
-			imageLoading: $("body").data("basepath")+'/images/lightbox/lightbox-ico-loading.gif',
-			imageBtnClose: $("body").data("basepath")+'/images/lightbox/lightbox-btn-close.gif',
-			imageBtnPrev: $("body").data("basepath")+'/images/lightbox/lightbox-btn-prev.gif',
-			imageBtnNext: $("body").data("basepath")+'/images/lightbox/lightbox-btn-next.gif',
-			txtImage: 'Obrázek',
-			txtOf: 'z',
-			disableNavigation:true
-	    };
-    if($('a.gallery').length>0){
-	    $('a.gallery').lightBox(lbParams);
-    }
-    if($('a.fullscreen').length>0){
-	    $('a.fullscreen').lightBox(lbParamsSingle);
-    }
-
-
-    //flashDialog
-    $("#flashDialog").live("liveEvent", function(){
-	    $("#flashDialog").dialog({
-	        position: { my: "top", at: "top", of: window },
-	        resizable: false,
-	        modal: true,
-	        buttons: {
-	            "OK": function() {
-	                $( this ).dialog( "destroy" );
-	                $("div#flashDialog").replaceWith("");
-	            }
-	        }
-	    });
-    });
-
-    //images swapping
-    $(".small-images ul li img").bind("click", function(){
-		var big = $(this).data("big");
-		var detail = $(this).data("detail");
-		var bigRef = $(".big_image a");
-		var bigRefImg = $(".big_image a img");
-		bigRef.attr("href", big);
-		bigRefImg.attr("src", detail);
-    });
-
-   $(".colorSwatcher").live("click", function(){
-	   if($(this).hasClass("checked")){
-	   	$(this).removeClass("checked");
-	   }
-	   else{
-	   	$(this).addClass("checked");
-	   }
-   });
-
-
-   //sortable
-   $( ".sortable tbody" ).sortable({
-		update : function (event, ui) {
-			var sortEl = $(this);
-			var action = sortEl.data("action");
-			$.get(action, {
-				'items': sortEl.sortable("toArray", {
-					attribute:"data-id"
-				})
-			});
-		}
-   }).disableSelection();
-
-
-   //sortable table
-	var fixHelper = function(e, ui) {
-		ui.children().each(function() {
-			$(this).width($(this).width());
+		$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e){
+			$('.dropdown-menu .show').removeClass("show");
 		});
-		return ui;
-	};
-
-   $( "table.sortable tbody" ).sortable({
-		helper: fixHelper,
-		update : function (event, ui) {
-			var sortEl = $(this);
-			var action = sortEl.data("action");
-			$.get(action, {
-				'items': sortEl.sortable("toArray", {
-					attribute:"data-id"
-				})
-			});
+		
+		if (!$parent.parent().hasClass('navbar-nav')){
+			$el.next().css({"top": $el[0].offsetTop, "left": $parent.outerWidth() - 4});
 		}
-   }).disableSelection();
-
-   $(".btn-danger").on("click",function(e){
-    var link = this;
-
-    e.preventDefault();
-
-    $("<div>Jste si jistí?</div>").dialog({
-        modal: true,
-        buttons: {
-            "Ano": function() {
-                window.location = link.href;
-            },
-            "Ne": function() {
-                $(this).dialog("close");
-            }
-        }
-    });
-   });
-
+		return false;
+	});
 });
+
+
+
+
+
+// Todays Date
+$(function() {
+	var interval = setInterval(function() {
+		var momentNow = moment();
+		$('#today-date').html(momentNow.format('DD') + ' ' + ' '
+		+ momentNow.format('- dddd').substring(0, 12));
+	}, 100);
+});
+
+
+$(function() {
+	var interval = setInterval(function() {
+		var momentNow = moment();
+		$('#todays-date').html(momentNow.format('DD MMMM YYYY'));
+	}, 100);
+});
+
+
+
+
+// Loading
+$(function() {
+	$("#loading-wrapper").fadeOut(3000);
+});
+
+
+
+// Textarea characters left
+$(function() {
+	$('#characterLeft').text('140 characters left');
+	$('#message').keydown(function () {
+		var max = 140;
+		var len = $(this).val().length;
+		if (len >= max) {
+			$('#characterLeft').text('You have reached the limit');
+			$('#characterLeft').addClass('red');
+			$('#btnSubmit').addClass('disabled');            
+		} 
+		else {
+			var ch = max - len;
+			$('#characterLeft').text(ch + ' characters left');
+			$('#btnSubmit').removeClass('disabled');
+			$('#characterLeft').removeClass('red');            
+		}
+	});
+});
+
+
+// Todo list
+$('.todo-body').on('click', 'li.todo-list', function() {
+	$(this).toggleClass('done');
+});
+
+
+
+// Tasks
+(function($) {
+	var checkList = $('.task-checkbox'),
+	toDoCheck = checkList.children('input[type="checkbox"]');
+	toDoCheck.each(function(index, element) {
+		var $this = $(element),
+		taskItem = $this.closest('.task-block');
+		$this.on('click', function(e) {
+			taskItem.toggleClass('task-checked');
+		});
+	});
+})(jQuery);
+
+
+// Tasks Important Active
+$('.task-actions').on('click', '.important', function() {
+	$(this).toggleClass('active');
+});
+
+
+// Tasks Important Active
+$('.task-actions').on('click', '.star', function() {
+	$(this).toggleClass('active');
+});
+
+
+// Quick Links Sidebar
+(function($) {
+	// Collaboration Yammer Sidebar
+	$('.quick-links-btn').click(function(){
+		// Slide Box Toggle
+		$('.quick-links-box').toggleClass("quick-links-box-show");
+		$('.screen-overlay').toggleClass("show");
+		$('body').css('overflow', 'hidden');
+	});
+	$('.quick-links-box-close').click(function(){
+		// Slide Box Toggle
+		$('.quick-links-box').toggleClass("quick-links-box-show");
+		$('.screen-overlay').toggleClass("show");
+		$('body').css('overflow', 'auto');
+	});
+})(jQuery);
+
+
+// Quick Settings Sidebar
+(function($) {
+	// Collaboration Yammer Sidebar
+	$('.quick-settings-btn').click(function(){
+		// Slide Box Toggle
+		$('.quick-settings-box').toggleClass("quick-settings-box-show");
+		$('.screen-overlay').toggleClass("show");
+		$('body').css('overflow', 'hidden');
+	});
+	$('.quick-settings-box-close').click(function(){
+		// Slide Box Toggle
+		$('.quick-settings-box').toggleClass("quick-settings-box-show");
+		$('.screen-overlay').toggleClass("show");
+		$('body').css('overflow', 'auto');
+	});
+})(jQuery);
+
+
+
+
+
+// Countdown
+$(document).ready(function(){
+  countdown();
+  setInterval(countdown, 1000);
+  function countdown () {
+  var now = moment(), // get the current moment
+    // May 28, 2013 @ 12:00AM
+    then = moment([2020, 2, 7]),
+    // get the difference from now to then in ms
+    ms = then.diff(now, 'milliseconds', true);
+    // If you need years, uncomment this line and make sure you add it to the concatonated phrase
+    /*
+    years = Math.floor(moment.duration(ms).asYears());
+    then = then.subtract('years', years);
+    */
+    // update the duration in ms
+    ms = then.diff(now, 'milliseconds', true);
+    // get the duration as months and round down
+    // months = Math.floor(moment.duration(ms).asMonths());
+ 
+    // // subtract months from the original moment (not sure why I had to offset by 1 day)
+    // then = then.subtract('months', months).subtract('days', 1);
+    // update the duration in ms
+    ms = then.diff(now, 'milliseconds', true);
+    days = Math.floor(moment.duration(ms).asDays());
+ 
+    then = then.subtract(days, 'days');
+    // update the duration in ms
+    ms = then.diff(now, 'milliseconds', true);
+    hours = Math.floor(moment.duration(ms).asHours());
+ 
+    then = then.subtract(hours, 'hours');
+    // update the duration in ms
+    ms = then.diff(now, 'milliseconds', true);
+    minutes = Math.floor(moment.duration(ms).asMinutes());
+ 
+    then = then.subtract(minutes, 'minutes');
+    // update the duration in ms
+    ms = then.diff(now, 'milliseconds', true);
+    seconds = Math.floor(moment.duration(ms).asSeconds());
+    
+    // concatonate the variables
+    diff = '<div class="num">' + days + ' <span class="text"> Days Left</span></div>';
+    $('#daysLeft').html(diff);
+  }
+ 
+});
+
+
+
+
+
+
+// Bootstrap JS ***********
+
+// Tooltip
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+})
+
+$(function () {
+	$('[data-toggle="popover"]').popover()
+})

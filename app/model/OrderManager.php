@@ -309,6 +309,7 @@ final class OrderManager
     }
 
     public function getStatusesFull(){
+        $statuses = array();
         $ret = $this->database->table(self::STATUS_TABLE)
             ->order("id");
         foreach($ret as $row){

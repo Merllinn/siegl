@@ -42,7 +42,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="containers">
     <header>
         <div class="container">
             <div class="logo">
@@ -137,10 +137,10 @@
     <!-- ./header -->
     <section class="top containers">
         <div class="container">
-            <h1 class="title underline">Ceník kontejnerů na odpad</h1>
+            <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Ceník kontejnerů na odpad</h1>
             <div class="filter">
                 <form>
-                    <ul class="list-inline">
+                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item druh-odpadu">
                             <label class="select">
                                 <select class="selectpicker" aria-label="Druh odpadu">
@@ -195,7 +195,7 @@
                         </li>
                         <!-- ./dph -->
                     </ul>
-                    <button class="btn btn-primary btn-deselect">Zrušit výběr</button>
+                    <button class="btn btn-primary btn-deselect" data-aos="fade-in" data-aos-duration="200" data-aos-delay="300">Zrušit výběr</button>
                 </form>
                 <!-- ./form -->
             </div>
@@ -205,14 +205,14 @@
         <img class="mosaic right" src="img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
     </section>
     <!-- ./top -->
-    <section class="products">
+    <section class="products" data-image-src="img/_MG_4880.jpg">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50">
                     <div class="col-container">
                         <h2><a href="#">3 m<sup>3</sup> / 3 tuny</a></h2>
                         <div class="container-image">
-                            <img src="images/container.png" alt="Obrázek kontekneru 3 m3 / 3 tuny">
+                            <img src="images/container.png" alt="Obrázek kontejneru 3 m3 / 3 tuny">
                         </div>
                         <div class="accordion accordion-flush" id="container-3m3-3tuny">
                             <div class="accordion-item">
@@ -278,16 +278,16 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat">Ceny jsou bez DPH</span>
-                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
+                        <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-3m3-3tunyModal" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></button>
                         <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
                     </div>
                 </div>
                 <!-- ./col container -->
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
                     <div class="col-container">
-                        <h2><a href="#">3 m<sup>3</sup> / 6 tun</a></h2>
+                        <h2><a href="#">4 m<sup>3</sup> / 6 tun</a></h2>
                         <div class="container-image">
-                            <img src="images/container.png" alt="Obrázek kontekneru 3 m3 / 6 tun">
+                            <img src="images/container.png" alt="Obrázek kontejneru 3 m3 / 6 tun">
                         </div>
                         <div class="accordion accordion-flush" id="container-3m3-6tun">
                             <div class="accordion-item">
@@ -358,9 +358,9 @@
                     </div>
                 </div>
                 <!-- ./col container -->
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="100">
                     <div class="col-container">
-                        <h2><a href="#">4 m<sup>3</sup> / 6 tun</a></h2>
+                        <h2><a href="#">4 m<sup>3</sup> / 6 tun <span>(úzký)</span></a></h2>
                         <div class="container-image">
                             <img src="images/container.png" alt="Obrázek kontejneru 4 m3 / 6 tun">
                         </div>
@@ -433,6 +433,294 @@
                     </div>
                 </div>
                 <!-- ./col container -->
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="125">
+                    <div class="col-container">
+                        <h2><a href="#">9 m<sup>3</sup> / 3 tuny</a></h2>
+                        <div class="container-image">
+                            <img src="images/container.png" alt="Obrázek kontekneru 9 m3 / 3 tuny">
+                        </div>
+                        <div class="accordion accordion-flush" id="container-9m3-3tuny">
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-sut">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-9m3-3tuny-collapseSut" aria-expanded="false" aria-controls="sut">
+                                        <em>Suť</em> <span class="price">2 000 Kč - 2 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-9m3-3tuny-collapseSut" class="accordion-collapse collapse" aria-labelledby="container-sut" data-bs-parent="#container-9m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zemina">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-9m3-3tuny-collapseZemina" aria-expanded="false" aria-controls="zemina">
+                                        <em>Zemina</em> <span class="price">2 500 Kč - 3 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-9m3-3tuny-collapseZemina" class="accordion-collapse collapse" aria-labelledby="container-zemina" data-bs-parent="#container-9m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-odpad">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-9m3-3tuny-collapseOdpad" aria-expanded="false" aria-controls="odpad">
+                                        <em>Odpad</em> <span class="price">2 250 Kč - 2 750 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-9m3-3tuny-collapseOdpad" class="accordion-collapse collapse" aria-labelledby="container-odpad" data-bs-parent="#container-9m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-drevo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-9m3-3tuny-collapseDrevo" aria-expanded="false" aria-controls="drevo">
+                                        <em>Dřevo</em> <span class="price">2 320 Kč - 4 150 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-9m3-3tuny-collapseDrevo" class="accordion-collapse collapse" aria-labelledby="container-drevo" data-bs-parent="#container-9m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zivice">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-9m3-3tuny-collapseZivice" aria-expanded="false" aria-controls="zivice">
+                                        <em>Živice</em> <span class="price">2 800 Kč - 3 600 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-9m3-3tuny-collapseZivice" class="accordion-collapse collapse" aria-labelledby="container-zivice" data-bs-parent="#container-9m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./prices -->
+                        <span class="without-vat">Ceny jsou bez DPH</span>
+                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
+                        <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                    </div>
+                </div>
+                <!-- ./col container -->
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="150">
+                    <div class="col-container">
+                        <h2><a href="#">15 m<sup>3</sup> / 5 tun</a></h2>
+                        <div class="container-image">
+                            <img src="images/container.png" alt="Obrázek kontejneru 15 m3 / 5 tun">
+                        </div>
+                        <div class="accordion accordion-flush" id="container-15m3-5tun">
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-sut">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-15m3-5tun-collapseSut" aria-expanded="false" aria-controls="sut">
+                                        <em>Suť</em> <span class="price">2 000 Kč - 2 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-15m3-5tun-collapseSut" class="accordion-collapse collapse" aria-labelledby="container-sut" data-bs-parent="#container-15m3-5tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zemina">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-15m3-5tun-collapseZemina" aria-expanded="false" aria-controls="zemina">
+                                        <em>Zemina</em> <span class="price">2 500 Kč - 3 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-15m3-5tun-collapseZemina" class="accordion-collapse collapse" aria-labelledby="container-zemina" data-bs-parent="#container-15m3-5tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-odpad">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-15m3-5tun-collapseOdpad" aria-expanded="false" aria-controls="odpad">
+                                        <em>Odpad</em> <span class="price">2 250 Kč - 2 750 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-15m3-5tun-collapseOdpad" class="accordion-collapse collapse" aria-labelledby="container-odpad" data-bs-parent="#container-15m3-5tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-drevo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-15m3-5tun-collapseDrevo" aria-expanded="false" aria-controls="drevo">
+                                        <em>Dřevo</em> <span class="price">2 320 Kč - 4 150 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-15m3-5tun-collapseDrevo" class="accordion-collapse collapse" aria-labelledby="container-drevo" data-bs-parent="#container-15m3-5tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zivice">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-15m3-5tun-collapseZivice" aria-expanded="false" aria-controls="zivice">
+                                        <em>Živice</em> <span class="price">2 800 Kč - 3 600 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-15m3-5tun-collapseZivice" class="accordion-collapse collapse" aria-labelledby="container-zivice" data-bs-parent="#container-15m3-5tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./prices -->
+                        <span class="without-vat">Ceny jsou bez DPH</span>
+                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
+                        <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                    </div>
+                </div>
+                <!-- ./col container -->
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="175">
+                    <div class="col-container">
+                        <h2><a href="#">10 m<sup>3</sup> / 12 tun</a></h2>
+                        <div class="container-image">
+                            <img src="images/container.png" alt="Obrázek kontekneru 10 m3 / 12 tun">
+                        </div>
+                        <div class="accordion accordion-flush" id="container-10m3-12tun">
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-sut">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-10m3-12tun-collapseSut" aria-expanded="false" aria-controls="sut">
+                                        <em>Suť</em> <span class="price">2 000 Kč - 2 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-10m3-12tun-collapseSut" class="accordion-collapse collapse" aria-labelledby="container-sut" data-bs-parent="#container-10m3-12tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zemina">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-10m3-12tun-collapseZemina" aria-expanded="false" aria-controls="zemina">
+                                        <em>Zemina</em> <span class="price">2 500 Kč - 3 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-10m3-12tun-collapseZemina" class="accordion-collapse collapse" aria-labelledby="container-zemina" data-bs-parent="#container-10m3-12tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-odpad">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-10m3-12tun-collapseOdpad" aria-expanded="false" aria-controls="odpad">
+                                        <em>Odpad</em> <span class="price">2 250 Kč - 2 750 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-10m3-12tun-collapseOdpad" class="accordion-collapse collapse" aria-labelledby="container-odpad" data-bs-parent="#container-10m3-12tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-drevo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-10m3-12tun-collapseDrevo" aria-expanded="false" aria-controls="drevo">
+                                        <em>Dřevo</em> <span class="price">2 320 Kč - 4 150 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-10m3-12tun-collapseDrevo" class="accordion-collapse collapse" aria-labelledby="container-drevo" data-bs-parent="#container-10m3-12tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zivice">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-10m3-12tun-collapseZivice" aria-expanded="false" aria-controls="zivice">
+                                        <em>Živice</em> <span class="price">2 800 Kč - 3 600 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-10m3-12tun-collapseZivice" class="accordion-collapse collapse" aria-labelledby="container-zivice" data-bs-parent="#container-10m3-12tun">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./prices -->
+                        <span class="without-vat">Ceny jsou bez DPH</span>
+                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
+                        <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                    </div>
+                </div>
+                <!-- ./col container -->
+                <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="200">
+                    <div class="col-container">
+                        <h2><a href="#">40 m<sup>3</sup> / 10 tun <span>(bez suti)</span></a></h2>
+                        <div class="container-image">
+                            <img src="images/container.png" alt="Obrázek kontekneru 40 m3 / 3 tuny">
+                        </div>
+                        <div class="accordion accordion-flush" id="container-40m3-3tuny">
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zemina">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-40m3-3tuny-collapseZemina" aria-expanded="false" aria-controls="zemina">
+                                        <em>Zemina</em> <span class="price">2 500 Kč - 3 105 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-40m3-3tuny-collapseZemina" class="accordion-collapse collapse" aria-labelledby="container-zemina" data-bs-parent="#container-40m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-odpad">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-40m3-3tuny-collapseOdpad" aria-expanded="false" aria-controls="odpad">
+                                        <em>Odpad</em> <span class="price">2 250 Kč - 2 750 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-40m3-3tuny-collapseOdpad" class="accordion-collapse collapse" aria-labelledby="container-odpad" data-bs-parent="#container-40m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-drevo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-40m3-3tuny-collapseDrevo" aria-expanded="false" aria-controls="drevo">
+                                        <em>Dřevo</em> <span class="price">2 320 Kč - 4 150 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-40m3-3tuny-collapseDrevo" class="accordion-collapse collapse" aria-labelledby="container-drevo" data-bs-parent="#container-40m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <div class="accordion-header" id="container-zivice">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-40m3-3tuny-collapseZivice" aria-expanded="false" aria-controls="zivice">
+                                        <em>Živice</em> <span class="price">2 800 Kč - 3 600 Kč</span>
+                                    </button>
+                                </div>
+                                <div id="container-40m3-3tuny-collapseZivice" class="accordion-collapse collapse" aria-labelledby="container-zivice" data-bs-parent="#container-40m3-3tuny">
+                                    <div class="accordion-body">
+                                        Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./prices -->
+                        <span class="without-vat">Ceny jsou bez DPH</span>
+                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
+                        <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                    </div>
+                </div>
+                <!-- ./col container -->
             </div>
             <!-- ./containers row -->
             <div class="help">
@@ -455,7 +743,7 @@
             <!-- ./calculation -->
         </div>
         <!-- ./container -->
-        <div class="bottom-navigation">
+        <div class="bottom-navigation background">
             <div class="container">
                 <ul class="list-inline">
                     <li class="list-inline-item">
@@ -474,6 +762,8 @@
             </div>
         </div>
         <!-- ./bottom navigation -->
+        <div class="rectangle"></div>
+        <!-- ./rectangle -->
     </section>
     <!-- ./products -->
     <footer>
@@ -519,6 +809,144 @@
         <!-- ./copyright -->
     </footer>
     <!-- ./footer -->
+
+     <div class="modal fade" id="container-3m3-3tunyModal" tabindex="-1" aria-labelledby="container-3m3-3tunyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">3 m<sup>3</sup> / 3 tuny</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>
+                                    Druh odpadu
+                                </td>
+                                <td>
+                                    Cena kontejneru
+                                </td>
+                                <td>
+                                    Počet
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"> Suť
+                                </td>
+                                <td>
+                                    2 000 Kč - 2 105 Kč
+                                </td>
+                                <td>
+                                    <select>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"> Zemina
+                                </td>
+                                <td>
+                                    2 500 Kč - 3 105 Kč
+                                </td>
+                                <td>
+                                    <select>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"> Odpad
+                                </td>
+                                <td>
+                                    2 250 Kč - 2 750 Kč
+                                </td>
+                                <td>
+                                    <select>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"> Dřevo
+                                </td>
+                                <td>
+                                    2 320 Kč - 4 150 Kč
+                                </td>
+                                <td>
+                                    <select>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox"> Živice
+                                </td>
+                                <td>
+                                    2 800 Kč - 3 600 Kč
+                                </td>
+                                <td>
+                                    <select>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                    <button class="btn btn-primary btn-arrow btn-red" title="Poptat přistavení kontejneru">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/f9c28b4b90.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

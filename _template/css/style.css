@@ -80,6 +80,180 @@ h2 {
       margin: 23px auto 0 auto;
     }
 
+.modal-backdrop {
+  background-color: #424242;
+}
+
+  .modal-backdrop.show {
+    opacity: .8;
+  }
+
+.modal-content {
+  border: 0;
+  background-color: transparent;
+  color: #424242;
+  border-radius: 0;
+  padding: 0;
+  z-index: 1;
+  min-height: 913px;
+  padding-top: 200px;
+}
+
+  .modal-content h2 {
+    font-size: 2.5rem;
+    line-height: 1;
+    padding: 40px 64px;
+    background-color: #d71921;
+    color: #FFF;
+    text-transform: none;
+    font-weight: 300;
+    margin: 0;
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+  }
+
+.modal-body {
+  padding: 0;
+}
+
+  .modal-body thead {
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: #004a39;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+.modal-rectangle {
+  width: calc(100% + 400px);
+  height: 800px;
+  background-color: #eaeaea;
+  position: absolute;
+  left: -200px;
+  right: -200px;
+  top: 50%;
+  transform: rotate(7deg) translateY(-50%);
+  opacity: 1;
+  overflow: hidden;
+}
+
+  .modal-rectangle img.cars {
+    transform: rotate(-7deg);
+    mix-blend-mode: multiply;
+    opacity: .1;
+    position: absolute;
+    bottom: 0; left: 50%;
+  }
+
+    .modal-rectangle img.stripe {
+      position: absolute;
+      left: 157px; top: -139px;
+      transform: rotate(-7deg);
+    }
+
+.table>:not(caption)>*>*,
+.table>:not(:first-child) {
+  border: 0;
+  padding: 0;
+}
+
+.modal-body table {
+  text-align: center;
+  font-size: 1.875rem;
+  color: #424242;
+  font-weight: 400;
+  margin: 0;
+}
+
+  .modal-body table a {
+    color: #424242;
+    text-decoration: none;
+    position: relative;
+  }
+
+    .modal-body table a:hover,
+    .modal-body table a[aria-expanded="true"] {
+      color: #004a39;
+    }
+
+    .modal-body table a[data-bs-toggle="collapse"]::after {
+      font-family: "Font Awesome 6 Free";
+      font-weight: 600;
+      content: "\f059";
+      position: absolute;
+      top: 13px; right: -20px;
+      font-size: 1rem;
+    }
+
+  .modal-body table em {
+    font-style: normal;
+    font-size: 1.25rem;
+  }
+
+  .modal-body table strong {
+    font-weight: 800;
+  }
+
+.modal-body thead tr,
+.modal-body tbody tr {
+  background-color: transparent;
+  border-bottom-width: 3px;
+  border-color: #424242;
+  box-shadow: none;
+}
+
+  .modal-body tbody tr {
+    position: relative;
+  }
+
+  .modal-body tbody tr td:first-child {
+    text-align: left;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding-left: 58px;
+  }
+
+  .modal-body tbody tr td:last-child {
+    padding-right: 70px;
+  }
+
+  .modal-body tbody tr:last-child {
+    border: 0;
+  }
+
+  .modal-body td {
+    vertical-align: middle;
+    padding: 20px;
+    line-height: 1;
+  }
+
+    .modal-body thead td {
+      padding-top: 0;
+      padding-bottom: 20px;
+    }
+
+    .modal-body tfoot td {
+      padding-top: 40px;
+    }
+
+  .modal-body .btn-close {
+    position: absolute;
+    top: 0; right: -80px;
+    width: 21px; height: 21px;
+    opacity: .75;
+  }
+
+  .modal-body label.select select,
+  .modal-body label.select::before,
+  .modal-body .btn-white {
+    font-size: 1.125rem;
+  }
+
+    .modal-body .btn-white {
+      padding: 10px 16px 9px 27px;
+    }
+
 .container {
   position: relative;
 }
@@ -155,8 +329,13 @@ h2 {
     background-size: cover;
   }
 
+  .btn-white::before {
+    background: url(../img/white-arrow.svg);
+    background-size: cover;
+  }
+
   .btn-red.btn-arrow::after,
-  div.calculation-bar .btn-arrow::after {
+  .btn-white::after {
     background-color: #004a39;
   }
 
@@ -350,6 +529,12 @@ header img.mosaic {
   transform: translateX(-457px);
   z-index: 1;
   mix-blend-mode: multiply;
+}
+
+@media (min-width: 1024px) {
+  .modal-dialog {
+    max-width: 985px;
+  }
 }
 
 /*!
@@ -654,13 +839,6 @@ section.demand .btn {
   float: right;
   margin-top: 3px;
   margin-right: 45px;
-}
-
-section.demand .btn-white::before,
-section.blog .btn-white::before,
-div.calculation-bar .btn-white::before {
-  background: url(../img/white-arrow.svg);
-  background-size: cover;
 }
 
   section.demand .btn-arrow::after {
@@ -1115,7 +1293,7 @@ section.top {
 
   section.top img.stripe {
     left: 20px;
-    width: 618px; height: 570px;
+    width: 618px; height: 550px;
     object-fit: cover;
   }
 
@@ -1202,7 +1380,8 @@ label.select {
           position: relative;
         }
 
-          li.turbokontejner .form-check-input[type=checkbox] {
+          li.turbokontejner .form-check-input[type=checkbox],
+          .modal-content [type=checkbox] {
             position: absolute;
             top: 8px; right: 11px;
             z-index: 3;
@@ -1212,12 +1391,24 @@ label.select {
             cursor: pointer;
           }
 
-            li.turbokontejner .form-check-input[type=checkbox]:checked {
+            .modal-content [type=checkbox] {
+              position: relative;
+              top: auto; right: auto;
+            }
+
+            .modal-content .form-check-input {
+              margin-top: 3.5px;
+              margin-right: 20px;
+            }
+
+            li.turbokontejner .form-check-input[type=checkbox]:checked,
+            .modal-content [type=checkbox]:checked {
               background-color: #FFF;
               transition: all .25s;
             }
 
-            li.turbokontejner .form-check-input[type=checkbox]:checked::after {
+            li.turbokontejner .form-check-input[type=checkbox]:checked::after,
+            .modal-content [type=checkbox]:checked::after {
               font-family: "Font Awesome 6 Free";
               font-weight: 600;
               color: #424242;
@@ -1229,6 +1420,11 @@ label.select {
             -webkit-text-stroke-width: 1px;
             -webkit-text-stroke-color: #424242;
             }
+
+              .modal-content [type=checkbox]:checked::after {
+                font-size: 1.125rem;
+                top: 3px; right: 4px;
+              }
 
       li.vat {
         background-color: #FFF;
@@ -1641,6 +1837,29 @@ div.calculation-bar {
     top: 50%; right: 72px;
     transform: translateY(-50%);
   }
+
+div.type-description {
+  font-size: .875rem;
+  text-transform: none;
+  font-weight: 400;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0px;
+  width: calc(100% - 255px);
+  z-index: 4;
+  background-color: rgba(234, 234, 234, .95);
+  color: #424242;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 5px;
+}
+
+  div.type-description.collapsing {
+    transition: all .1s;
+  }
+
+
 
 /*!
 * Footer

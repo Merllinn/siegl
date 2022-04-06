@@ -353,7 +353,7 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat">Ceny jsou bez DPH</span>
-                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
+                        <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-4m3-6tunModal" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></button>
                         <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
                     </div>
                 </div>
@@ -809,144 +809,314 @@
         <!-- ./copyright -->
     </footer>
     <!-- ./footer -->
-
-     <div class="modal fade" id="container-3m3-3tunyModal" tabindex="-1" aria-labelledby="container-3m3-3tunyLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+     <div class="modal" id="container-3m3-3tunyModal" tabindex="-1" aria-labelledby="container-3m3-3tunyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">3 m<sup>3</sup> / 3 tuny</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                <h2>3 m<sup>3</sup> / 3 tuny</h2>
                 <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <td>
-                                    Druh odpadu
-                                </td>
-                                <td>
-                                    Cena kontejneru
-                                </td>
-                                <td>
-                                    Počet
-                                </td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input type="checkbox"> Suť
-                                </td>
-                                <td>
-                                    2 000 Kč - 2 105 Kč
-                                </td>
-                                <td>
-                                    <select>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="checkbox"> Zemina
-                                </td>
-                                <td>
-                                    2 500 Kč - 3 105 Kč
-                                </td>
-                                <td>
-                                    <select>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="checkbox"> Odpad
-                                </td>
-                                <td>
-                                    2 250 Kč - 2 750 Kč
-                                </td>
-                                <td>
-                                    <select>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="checkbox"> Dřevo
-                                </td>
-                                <td>
-                                    2 320 Kč - 4 150 Kč
-                                </td>
-                                <td>
-                                    <select>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="checkbox"> Živice
-                                </td>
-                                <td>
-                                    2 800 Kč - 3 600 Kč
-                                </td>
-                                <td>
-                                    <select>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4">
-                                    <button class="btn btn-primary btn-arrow btn-red" title="Poptat přistavení kontejneru">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+                    <form>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Druh odpadu
+                                    </td>
+                                    <td>
+                                        Cena kontejneru
+                                    </td>
+                                    <td>
+                                        Počet
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> <a data-bs-toggle="collapse" href="#container-3m3-3tunySut" role="button" aria-expanded="false" aria-controls="container-3m3-3tunySut" title="Co sem patří a nepatří?">Suť</a>
+                                        <div class="collapse type-description" id="container-3m3-3tunySut">
+                                            <strong>Patří sem</strong>: zemina a kamení (nesmí přesáhnout nosnost kontejneru), rozbité cihly, beton, obklady, sádrokarton, nábytek, koberce, lina, plasty, igelity, železo, dřevo, elektro (kromě nebezpečného), atd...<br>
+                                            <strong>Nepatří sem</strong>: nebezpečný odpad.
+                                        </div>
+                                    </td>
+                                    <td>
+                                        2 000 <em>Kč</em> - 2 105 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Zemina
+                                    </td>
+                                    <td>
+                                        2 500 <em>Kč</em> - 3 105 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Odpad
+                                    </td>
+                                    <td>
+                                        2 250 <em>Kč</em> - 2 750 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Dřevo
+                                    </td>
+                                    <td>
+                                        2 320 <em>Kč</em> - 4 150 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Živice
+                                    </td>
+                                    <td>
+                                        2 800 <em>Kč</em> - 3 600 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">
+                                        <button class="btn btn-primary btn-arrow btn-red" title="Poptat přistavení kontejneru">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
+        <div class="modal-rectangle">
+            <img class="stripe" src="img/stripe-modal.png" alt="Obrázek pruhů">
+            <img class="cars" src="img/cars-modal.png" alt="Obrázek Siegl aut">
+        </div>
     </div>
-
+    <!-- ./modal -->
+    <div class="modal" id="container-4m3-6tunModal" tabindex="-1" aria-labelledby="container-4m3-6tunLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <h2>4 m<sup>3</sup> / 6 tun</h2>
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+                    <form>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Druh odpadu
+                                    </td>
+                                    <td>
+                                        Cena kontejneru
+                                    </td>
+                                    <td>
+                                        Počet
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Suť
+                                    </td>
+                                    <td>
+                                        2 000 <em>Kč</em> - 2 105 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Zemina
+                                    </td>
+                                    <td>
+                                        2 500 <em>Kč</em> - 3 105 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Odpad
+                                    </td>
+                                    <td>
+                                        2 250 <em>Kč</em> - 2 750 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Dřevo
+                                    </td>
+                                    <td>
+                                        2 320 <em>Kč</em> - 4 150 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input"> Živice
+                                    </td>
+                                    <td>
+                                        2 800 <em>Kč</em> - 3 600 <em>Kč</em>
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">
+                                        <button class="btn btn-primary btn-arrow btn-red" title="Poptat přistavení kontejneru">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-rectangle">
+            <img class="stripe" src="img/stripe-modal.png" alt="Obrázek pruhů">
+            <img class="cars" src="img/cars-modal.png" alt="Obrázek Siegl aut">
+        </div>
+    </div>
+    <!-- ./modal -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/f9c28b4b90.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

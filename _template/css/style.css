@@ -177,6 +177,10 @@ h2 {
       color: #004a39;
     }
 
+    .modal-body table a.btn-cancel:hover {
+      color: #d71921;
+    }
+
     .modal-body table a[data-bs-toggle="collapse"]::after {
       font-family: "Font Awesome 6 Free";
       font-weight: 600;
@@ -306,6 +310,11 @@ h2 {
       animation: step-end;
     }
 
+    .btn-cancel i {
+      font-size: 1.25rem;
+      right: -30px;
+    }
+
 .btn-white,
 .btn-white:hover {
   background-color: #FFF;
@@ -337,6 +346,10 @@ h2 {
   .btn-red.btn-arrow::after,
   .btn-white::after {
     background-color: #004a39;
+  }
+
+  .btn-cancel::after {
+    background-color: #d71921;
   }
 
   .btn-red:active,

@@ -38,7 +38,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://use.typekit.net/pen5pzr.css" />
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/chocolat.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" rel="stylesheet" />
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
@@ -143,7 +144,7 @@
                     <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item druh-odpadu">
                             <label class="select">
-                                <select class="selectpicker" aria-label="Druh odpadu">
+                                <select aria-label="Druh odpadu">
                                     <option selected disabled>Druh odpadu</option>
                                     <option value="sut">Suť</option>
                                     <option value="odpad">Odpad</option>
@@ -156,7 +157,7 @@
                         <!-- ./druh odpadu -->
                         <li class="list-inline-item objem">
                             <label class="select">
-                                <select class="selectpicker" aria-label="Objem">
+                                <select aria-label="Objem">
                                     <option selected disabled>Objem (m&sup3)</option>
                                     <option value="3-m3">3 m&sup3</option>
                                     <option value="4-m3">4 m&sup3</option>
@@ -170,7 +171,7 @@
                         <!-- ./objem -->
                         <li class="list-inline-item nosnost">
                             <label class="select">
-                                <select class="selectpicker" aria-label="Nosnost">
+                                <select aria-label="Nosnost">
                                     <option selected disabled>Nosnost</option>
                                     <option value="3-tuny">3 tuny</option>
                                     <option value="5-tun">5 tun</option>
@@ -210,7 +211,7 @@
             <div class="row">
                 <div class="col-md-4" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50">
                     <div class="col-container">
-                        <h2><a href="#">3 m<sup>3</sup> / 3 tuny</a></h2>
+                        <h2><a href="detail-kontejneru.html">3 m<sup>3</sup> / 3 tuny</a></h2>
                         <div class="container-image">
                             <img src="images/container.png" alt="Obrázek kontejneru 3 m3 / 3 tuny">
                         </div>
@@ -279,7 +280,7 @@
                         <!-- ./prices -->
                         <span class="without-vat">Ceny jsou bez DPH</span>
                         <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-3m3-3tunyModal" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></button>
-                        <a class="container-detail" href="#" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                        <a class="container-detail" href="detail-kontejneru.html" title="Přejít na detail kontejneru">Detail kontejneru</a>
                     </div>
                 </div>
                 <!-- ./col container -->
@@ -834,7 +835,7 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" class="form-check-input"> <a data-bs-toggle="collapse" href="#container-3m3-3tunySut" role="button" aria-expanded="false" aria-controls="container-3m3-3tunySut" title="Co sem patří a nepatří?">Suť</a>
+                                        <input type="checkbox" class="form-check-input" checked> <a data-bs-toggle="collapse" href="#container-3m3-3tunySut" role="button" aria-expanded="false" aria-controls="container-3m3-3tunySut" title="Co sem patří a nepatří?">Suť</a>
                                         <div class="collapse type-description" id="container-3m3-3tunySut">
                                             <strong>Patří sem</strong>: zemina a kamení (nesmí přesáhnout nosnost kontejneru), rozbité cihly, beton, obklady, sádrokarton, nábytek, koberce, lina, plasty, igelity, železo, dřevo, elektro (kromě nebezpečného), atd...<br>
                                             <strong>Nepatří sem</strong>: nebezpečný odpad.
@@ -1121,6 +1122,7 @@
     <script src="https://kit.fontawesome.com/f9c28b4b90.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js"></script>
+    <script src="js/chocolat.js"></script>
     <script src="js/custom.js"></script>
 </body>
 </html>

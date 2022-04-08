@@ -11,6 +11,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #FFF;
   overflow-x: hidden;
+  position: relative;
 }
 
 textarea:hover, 
@@ -1310,7 +1311,7 @@ section.top {
   }
 
     section.top.container-detail {
-      padding-bottom: 0;
+      background-color: transparent;
       z-index: 2;
       position: relative;
       padding-bottom: 85px;
@@ -1347,6 +1348,20 @@ section.top {
       z-index: 2;
     }
 
+      body.container-detail::after {
+        content: "";
+        width: 100%; height: 470px;
+        background: url("../img/prague-bottom.png");
+        background-position: 50% -50px;
+        background-repeat: no-repeat;
+        position: absolute;
+        background-size: contain;
+        left: 0; bottom: 0;
+                filter: grayscale(100%);
+        -webkit-filter: grayscale(100%);
+           -moz-filter: grayscale(100%);
+      }
+
   section.top img.stripe {
     left: 20px;
     width: 618px; height: 550px;
@@ -1354,7 +1369,7 @@ section.top {
   }
 
     section.top.container-detail img.stripe {
-      top: -264px; right: -145px; left: auto;
+      top: -218px; right: -163px; left: auto;
       height: 681px;
     }
 
@@ -1942,13 +1957,13 @@ div.sidebar-container {
     content: "";
     position: absolute;
     bottom: -2px; left: 0;
-    width: 2px; height: 125px;
+    width: 2px; height: 45px;
     background-color: #424242;
   }
 
     div.sidebar-container::after {
       left: auto; right: 0;
-      height: 168px;
+      height: 88px;
     }
 
   div.sidebar h1 {
@@ -2078,7 +2093,7 @@ div.sidebar a.btn {
 }
 
   div.sidebar .btn-primary {
-    padding: 9px 16px 7px 14px;
+    padding: 9px 14px 7px 14px;
   }
 
 div.sidebar div.or {
@@ -2154,9 +2169,47 @@ a.btn-manipulation {
 
 div.waste-type {
   color: #FFF;
-  margin-top: 100px;
+  margin-top: 130px;
   font-size: 1.375rem;
+  min-height: 190px;
 }
+
+  div.waste-type-rectangle {
+    content: "";
+    width: calc(100% + 400px); height: 800px;
+    background-color: #004a39;
+    position: absolute;
+    left: -200px;
+    right: -200px;
+    top: 233px;
+    transform: rotate(-7deg);
+    z-index: 1;
+    overflow-x: hidden;
+  }
+
+    div.waste-type-rectangle::before {
+      content: "";
+      width: 830px; height: 690px;
+      position: absolute;
+      left: 175px; bottom: -25px;
+      background: url("../img/mosaic_s7.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      transform: rotate(7deg);
+    }
+
+    div.waste-type-rectangle::after {
+      content: "";
+      width: 900px; height: 690px;
+      position: absolute;
+      right: 0; top: 50%;
+      background: url("../img/mosaic_s4.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      transform: rotate(7deg);
+      mix-blend-mode: multiply;
+    }
 
 div.speed {
   margin-top: 110px;
@@ -2229,7 +2282,12 @@ footer {
   font-size: 1.048rem;
   padding-top: 31px;
   position: relative;
+  z-index: 1;
 }
+
+  body.container-detail footer {
+    background-color: rgba(234, 234, 234, 0.4);
+  }
 
   footer div.container {
     position: relative;

@@ -58,6 +58,13 @@ final class ProductManager
         return $ret;
     }
 
+    public function getByType($type)
+    {
+        return $this->get()
+            ->where("type = ?", $type)
+            ->where("active = ?", true);
+    }
+
 
 
 

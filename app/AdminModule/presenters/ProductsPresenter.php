@@ -24,6 +24,7 @@ class ProductsPresenter extends BasePresenter
 	public function startup(){
 		parent::startup();
 		$this->addBreadcrumbs("Kontejnery", $this->link(":Admin:Products:default"));
+		$this->categories = $this->categoryManager->getActiveList($this->type);
 
 		if(!isset($this->filter)){
 			$this->filter = $this->getSession("productsFilter");
@@ -126,6 +127,10 @@ class ProductsPresenter extends BasePresenter
 		$form ->addTextArea("description", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
+        $form ->addMultiSelect("category", "Kategorie", $this->categories)
+				//->addRule(Form::FILLED, "Vyberte kategorii")
+				//->setPrompt("Vyberte kategorie")
+				;
 		$form->addCheckbox("turbo", "Turbokontejner");
         /*
         $form ->addTextArea("technical", "Technická specifikace")
@@ -161,6 +166,10 @@ class ProductsPresenter extends BasePresenter
 			try{
 				$attributes = $values->attributes;
 				$attrs = array();
+				$categories = $values->category;
+				unset($values->category);
+				$categoriesString = implode("|", $categories);
+				$values->categories = "|".$categoriesString."|";
 				foreach($attributes as $attrId=>$attrVal){
 					$attrs[] = $attrId."-".$attrVal;
 				}
@@ -342,6 +351,24 @@ class ProductsPresenter extends BasePresenter
                     }
         });
         $grid->addColumnText('name', 'Název');
+
+        $grid->addColumnText("category","Kategorie")
+        ->setRenderer(function($row) use ($presenter) {
+            if($row->categories){
+            	$cats = explode("|", trim($row->categories, "|"));
+            	$ret = "";
+            	foreach($cats as $cat){
+					$ret .= $this->categories[$cat].Html::el("br");
+            	}
+                return Html::el("span")->insert(0, $ret);
+            }
+            else{
+            	return "";
+            }
+		});
+
+        // add columns
+        $grid->addColumnText("alias", "Alias");
 
         $grid->addColumnText('turbo', 'Turbokontejner')
             ->setRenderer(function($row) use ($presenter) {

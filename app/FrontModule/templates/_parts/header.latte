@@ -22,5 +22,5 @@
             {include 'mainMenu.latte'}
         </nav>
         <!-- ./main navigation -->
-        <img class="mosaic" src="{$basePath}/img/mosaic_s1.png" alt="Obrázek mozaiky">
+        <img n:if="$page->layoutId==7" class="mosaic" src="{$basePath}/img/mosaic_s1.png" alt="Obrázek mozaiky">
     </header>

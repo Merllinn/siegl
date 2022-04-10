@@ -206,6 +206,11 @@ class AttributesPresenter extends BasePresenter
         
         $grid->addColumnText('unit', 'Jednotka');
 
+        $grid->addColumnText('type', 'Typ')
+            ->setRenderer(function($row) use ($presenter) {
+            	return $presenter->types[$row->type];
+        });
+
         $grid->addColumnText('forCont', 'Pro kontejnery')
             ->setRenderer(function($row) use ($presenter) {
                 if($row->forCont){
@@ -214,11 +219,6 @@ class AttributesPresenter extends BasePresenter
                 else{
                 	return "ne";
                 }
-        });
-
-        $grid->addColumnText('type', 'Typ')
-            ->setRenderer(function($row) use ($presenter) {
-            	return $presenter->types[$row->type];
         });
 
         $grid->addColumnText('forMaterial', 'Pro materiál')

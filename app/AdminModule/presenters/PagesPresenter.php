@@ -36,8 +36,8 @@ class PagesPresenter extends BasePresenter
 
 	public function actionEdit($id, $type){
 		$this->id = $id;
-		$this->type = $type;
 		$pageDetails = $this->template->edited = $this->pageManager->find($id);
+		$this->type = $pageDetails->type;
 		$this->parent = $pageDetails->parent;
 		$this["pageForm"]->setDefaults($pageDetails);
 		$this->setView("addEdit");

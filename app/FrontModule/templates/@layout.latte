@@ -3,7 +3,7 @@
 
 	{include '_parts/head.latte'}
 
-	<body {if $presenter->action=='page'}class="homepage"{/if}>
+	<body {if $page->layoutId==7}class="homepage"{/if}>
 		{include '_parts/header.latte'}
         <!-- ./header -->
         {foreach $flashes as $flash}

@@ -183,15 +183,24 @@
 				</button>
 				<div class="collapse navbar-collapse" id="WafiAdminNavbar">
 		            <ul class="navbar-nav mr-auto">
-		                <li class="nav-item {ifCurrent :Admin:Pages:default}active{/ifCurrent}">
-		                    <a class="nav-link" n:href=":Admin:Pages:default">Správa stránek</a>
+		                <li class="nav-item dropdown">
+		                    <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		                      Obsah
+		                    </a>
+		                    <div class="dropdown-menu" aria-labelledby="catalogDropdown">
+		                    	<a class="nav-link" n:href=":Admin:Pages:default">Správa stránek</a>
+		                    	<a class="nav-link" n:href=":Admin:Pages:default 1">Správa služeb na úvodní stránce</a>
+		                    </div>
 		                </li>
 		                <li class="nav-item dropdown">
 		                    <a class="nav-link dropdown-toggle" href="#" id="catalogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		                      Katalog
 		                    </a>
 		                    <div class="dropdown-menu" aria-labelledby="catalogDropdown">
+		                      <a class="dropdown-item" n:href=":Admin:Categories:default">Kategorie kontejnerů</a>
 		                      <a class="dropdown-item" n:href=":Admin:Products:default">Kontejnery</a>
+		                      <div class="dropdown-divider"></div>
+		                      <a class="dropdown-item" n:href=":Admin:CategoriesM:default">Kategorie materiálů</a>
 		                      <a n:if="false" class="dropdown-item" n:href=":Admin:Products:default">Materiály</a>
 		                      <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item" n:href=":Admin:Attributes:default">Atributy</a>

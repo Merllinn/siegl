@@ -31,9 +31,10 @@ final class CategoryManager
         return $this->database->table(self::BASE);
     }
 
-    public function fetchDS($parent)
+    public function fetchDS($type, $parent)
     {
         $ret = $this->get();
+        $ret->where("type = ?", $type);
         if(!empty($parent)){
             $ret->where("parent = ?", $parent);
         }
@@ -85,16 +86,18 @@ final class CategoryManager
             ->fetch();
     }
 
-    public function getActiveList(){
+    public function getActiveList($type){
         $p = $this->get()
-            ->where("active", 1);
+            ->where("active", 1)
+        	->where("type = ?", $type);
 
         return $p->fetchPairs("id", "name");
     }
 
-    public function getActive(){
+    public function getActive($type){
         $p = $this->get()
-            ->where("active", 1);
+            ->where("active", 1)
+        	->where("type = ?", $type);
 
         return $p;
     }

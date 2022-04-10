@@ -108,6 +108,16 @@ final class AttributeManager
 
     }
 
+    public function getAllValues(){
+        $vals = $this->getV()
+            ->order("order");
+        $ret = array();
+        foreach($vals as $val){
+			$ret[$val->id] = $val;
+        }
+        return $ret;
+    }
+
     public function countValues($a){
         $ret = $this->getV()
         	->select("COUNT(id) AS count")

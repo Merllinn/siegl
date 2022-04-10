@@ -132,7 +132,7 @@ final class HomepagePresenter extends HomepageForms
     }
 
 
-    public function renderPage($id=""){
+    public function actionPage($id=""){
         $page = $this->template->page = $this->pageManager->findByAlias($id);
         $this->template->title = $page->title;
         $this->template->keywords = $page->seo_keywords;
@@ -144,6 +144,37 @@ final class HomepagePresenter extends HomepageForms
         }
         //$this->addBreadcrumbs($page->name, $this->link(":Front:Homepage:page", $id));
         $this->template->images = $this->pageManager->getPhotos($page->id);
+    }
+    
+    public function renderContainers(){
+    	$containers = $this->productManager->getByType(1);
+    	foreach($_GET as $key=>$val){
+			if(!empty($val) && $key[0]=="a"){
+				$attr = substr($key, 1, 9);
+				if($attr==1){
+					$containers->where("id IN (SELECT product FROM product_prices WHERE attributeValue=".$attr." AND priceFrom>0)");
+				}
+				else{
+					$attrPair = $attr."-".$val;
+					$containers->where("attributes LIKE '%".$attrPair."%'");
+				}
+			}
+			if($key=="t" && $val=="on"){
+				$containers->where("turbo = ?", true);
+			}
+    	}
+    	$this->template->containers = $containers;
+    	$this->template->attVals = $this->attributeManager->getAllValues();
+    }
+    public function getProductAttributeValues($source){
+		$values = $this->attributeManager->getAllValues();
+		$return = array();
+		$pairs = explode("|", $source);
+		foreach($pairs as $pair){
+			list($attr, $val) = explode("-", $pair);
+			$return[$attr] = $values[$val];
+		}
+		return $return;
     }
 
 

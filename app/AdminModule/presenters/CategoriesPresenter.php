@@ -11,6 +11,7 @@ class CategoriesPresenter extends BasePresenter
 {
     private $parent;
 	private $edited;
+	private $type=1;
 
 	public function startup(){
 		parent::startup();
@@ -80,7 +81,9 @@ class CategoriesPresenter extends BasePresenter
 		$form ->addText("name", "Jméno")
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno kategorie");
-		$form ->addUpload("img", "Obrázek");
+		$form ->addText("link", "Adresa")
+                ->setRequired(true)
+				->addRule(Form::FILLED, "Vyplňte adresu kategorie");
 		$form ->addTextArea("description", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
@@ -109,8 +112,8 @@ class CategoriesPresenter extends BasePresenter
 		if($form->isValid()){
 			try{
 				$values->parent = $this->parent;
-				$img = $values->img;
-				unset($values->img);
+				//$img = $values->img;
+				//unset($values->img);
 
 				if(!empty($this->edited)){
 					$this->categoryManager->update($values, $this->edited);
@@ -118,10 +121,12 @@ class CategoriesPresenter extends BasePresenter
 				}
 				else{
                     $values->alias = $this->makeAlias("category", $values->name, $this->edited);
+					$values->type = $this->type;
 					$categoryId = $this->categoryManager->add($values);
 
 				}
 				//upload image
+				/*
 	            if ($img->isOk()) {
             		$image = $img;
 					$ext = pathinfo($img->getSanitizedName(), PATHINFO_EXTENSION);
@@ -150,6 +155,7 @@ class CategoriesPresenter extends BasePresenter
 				//} else {
 	                //$this->flashMessage('Obrázek se nezdařilo nahrát na server.', 'warning');
 	            }
+	            */
 
 				$this->flashMessage("Kategorie byla uložena.");
 				$this->redirect(":Admin:Categories:default", $this->parent);
@@ -171,7 +177,7 @@ class CategoriesPresenter extends BasePresenter
     {
         $presenter = $this;
 
-        $source = $this->categoryManager->fetchDS($this->parent);
+        $source = $this->categoryManager->fetchDS($this->type, $this->parent);
 
         $grid = new DataGrid($this, $name);
         $grid->setDataSource($source);
@@ -192,18 +198,18 @@ class CategoriesPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
                 if($row->active){
 					if($this->user->identity->role==9){
-                    	return Html::el("a")->class("tabella_ajax")->href($presenter->link("deactivate!", $row->id))->setHtml(html::el("img")->src("/pujcovna/images/active.png")->class("action"));
+                    	return Html::el("a")->class("tabella_ajax")->href($presenter->link("deactivate!", $row->id))->setHtml(html::el("img")->src("/images/active.png")->class("action"));
 					}
 					else{
-                    	return Html::el("img")->src("/pujcovna/images/active.png")->class("action");
+                    	return Html::el("img")->src("/images/active.png")->class("action");
 					}
                 }
                 else{
 					if($this->user->identity->role==9){
-                    	return Html::el("a")->class("tabella_ajax")->href($presenter->link("activate!", $row->id))->setHtml(html::el("img")->src("/pujcovna/images/deactive.png")->class("action"));
+                    	return Html::el("a")->class("tabella_ajax")->href($presenter->link("activate!", $row->id))->setHtml(html::el("img")->src("/images/deactive.png")->class("action"));
 					}
 					else{
-                    	return Html::el("img")->src("/pujcovna/images/active.png")->class("deactive");
+                    	return Html::el("img")->src("/images/active.png")->class("deactive");
 					}
                 }
         });

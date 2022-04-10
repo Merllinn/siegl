@@ -1329,7 +1329,7 @@ section.top {
     }
 
     section.top.container-detail div.container {
-      max-width: 1115px; width: 100%;
+      max-width: 1120px; width: 100%;
     }
 
     body.containers::before,
@@ -2130,14 +2130,236 @@ div.container-content {
     vertical-align: bottom;
   }
 
-div.container-size img.silhouette {
-  width: auto; max-height: 100%;
+div.container-size {
+  width: 600px; height: 263px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  position: relative;
+}
+
+div.silhouette {
+  width: 90.85px; height: 263px;
   opacity: .5;
 }
 
-div.container-size img.container-image {
-  max-width: calc(100% - 200px);
+div.container-size .image {
+  max-width: calc(100% - 120.85px); width: 100%;
 }
+
+  div.container-size .image img {
+    width: auto; height: 100%;
+  }
+
+  div.silhouette,
+  div.container-size .image {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+    div.container-size .image {
+      margin-right: 0;
+      margin-left: auto;
+    }
+
+  div.silhouette img,
+  div.container-size .image img {
+    max-width: 100%;
+  }
+
+div.dimensions {
+  font-size: 0.75rem;
+  text-transform: lowercase;
+  position: absolute;
+  top: 0; right: 0;
+  width: calc(100% - 120.85px);
+  height: 100%;
+}
+
+  div.dimensions div {
+    position: absolute;
+    text-align: center;
+  }
+
+    div.container-4m3-6tun div.image {
+      height: 38.888%;
+    }
+
+  div.dimensions div::before,
+  div.dimensions div::after {
+    content: "";
+    background-color: #d9363d;
+    position: absolute;
+  }
+
+  /* width */
+
+  div.container-size div.width {
+    width: 35px; height: 95px;
+    left: 0; bottom: 0;
+    padding-top: 36px;
+    line-height: 1;
+  }
+
+    div.dimensions div.width::before,
+    div.dimensions div.width::after {
+      width: 2px; height: 0;
+    }
+
+      div.dimensions div.width::before,
+      div.dimensions div.width::after {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+        div.dimensions div.width::before {
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          animation-name: width-left-line-4m3-6tun;
+          animation-duration: .15s;
+          animation-delay: 1s;
+          animation-fill-mode: forwards;
+        }
+
+        div.dimensions div.width::after {
+          top: auto;
+          bottom: 0;
+          animation-name: width-right-line-4m3-6tun;
+          animation-duration: .15s;
+          animation-delay: 1s;
+          animation-fill-mode: forwards;
+        }
+
+    @keyframes width-left-line-4m3-6tun {
+        0%   {height: 0;}
+        100% {height: 30px;}
+    }
+
+    @keyframes width-right-line-4m3-6tun {
+        0%   {height: 0;}
+        100% {height: 30px;}
+    }
+
+  div.container-size div.width /* 4m3/6tun*/ {
+    left: 340px; bottom: 25px;
+  }
+
+  /* lenght */
+  
+  div.container-size div.lenght {
+    left: 0; bottom: 0;
+    padding-top: 0;
+    line-height: 1;
+  }
+
+  div.container-size.container-4m3-6tun div.width /* 4m3/6tun*/ {
+    left: 340px; bottom: 25px;
+  }
+
+  div.container-size.container-4m3-6tun div.lenght /* 4m3/6tun*/ {
+    width: 246px; height: 24px;
+    left: 86px; bottom: -13px;
+  }
+
+    div.dimensions div.lenght::before,
+    div.dimensions div.lenght::after {
+      width: 0; height: 2px;
+      left: 0; top: 22px;
+      transform: rotate(349.6deg);
+    }
+
+      div.dimensions div.lenght::before {
+        width: 0; height: 2px;
+        left: 0; top: 22px;
+        transform: rotate(349.6deg);
+        animation-name: lenght-left-line-4m3-6tun;
+        animation-duration: .15s;
+        animation-delay: 2s;
+        animation-fill-mode: forwards;
+      }
+
+      div.dimensions div.lenght::after {
+        top: -4px; left: auto; right: 0;
+        animation-name: lenght-right-line-4m3-6tun;
+        animation-duration: .15s;
+        animation-delay: 2s;
+        animation-fill-mode: forwards;
+      }
+
+    @keyframes lenght-left-line-4m3-6tun {
+        0%   {width: 0;}
+        100% {width: 100px;}
+    }
+
+    @keyframes lenght-right-line-4m3-6tun {
+        0%   {width: 0;}
+        100% {width: 100px;}
+    }
+
+  /* height */
+  
+  div.container-size div.height {
+    right: 0; bottom: 0;
+    padding-top: 0;
+    line-height: 1;
+  }
+
+  div.container-size.container-4m3-6tun div.width /* 4m3/6tun*/ {
+    left: 340px; bottom: 25px;
+  }
+
+  div.container-size.container-4m3-6tun div.lenght /* 4m3/6tun*/ {
+    width: 246px; height: 24px;
+    left: 86px; bottom: -13px;
+  }
+
+  div.container-size.container-4m3-6tun div.height /* 4m3/6tun*/ {
+    width: 95px; height: 24px;
+    right: 156px; bottom: 117px;
+  }
+
+    div.dimensions div.height::before,
+    div.dimensions div.height::after {
+      width: 0; height: 2px;
+      left: -14px; top: 12px;
+      transform: rotate(2deg);
+    }
+
+      div.dimensions div.height::before {
+        width: 0; height: 2px;
+        left: -14px; top: 12px;
+        transform: rotate(2deg);
+        animation-name: height-left-line-4m3-6tun;
+        animation-duration: .15s;
+        animation-delay: 1.5s;
+        animation-fill-mode: forwards;
+      }
+
+      div.dimensions div.height::after {
+        top: 16px; left: auto; right: -12px;
+        width: 0;
+        animation-name: height-right-line-4m3-6tun;
+        animation-duration: .15s;
+        animation-delay: 1.5s;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes height-left-line-4m3-6tun {
+          0%   {width: 0;}
+          100% {width: 38px;}
+      }
+
+      @keyframes height-right-line-4m3-6tun {
+          0%   {width: 0;}
+          100% {width: 35px;}
+      }
+
+  div.container-size strong {
+    display: block;
+    font-weight: 700;
+  }
 
 a.btn-manipulation {
   background-color: transparent;

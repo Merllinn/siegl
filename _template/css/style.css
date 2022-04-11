@@ -315,7 +315,8 @@ h2 {
     left: auto; right: -46px;
   }
 
-  .btn-arrow i {
+  .btn-arrow i,
+  div.street button i {
     position: absolute;
     right: -31px; top: 50%;
     transform: translateY(-50%);
@@ -329,7 +330,8 @@ h2 {
   }
 
     .btn-arrow:hover i,
-    label.select:hover::before {
+    label.select:hover::before,
+    div.street button:hover i {
       animation: step-end;
     }
 
@@ -786,7 +788,8 @@ section.slide {
   section.slide img.mosaic.left,
   section.slide img.mosaic.right,
   section.top img.mosaic.left,
-  section.top img.mosaic.right {
+  section.top img.mosaic.right,
+  section.top.order img.mosaic.left {
     position: absolute;
     top: 0; left: 0;
     mix-blend-mode: multiply;
@@ -812,6 +815,10 @@ section.slide {
       section.top img.left.aos-animate {
         opacity: .05;
       }
+
+        section.top.order img.left.aos-animate {
+          opacity: 1;
+        }
 
 div.map {
   margin-left: 128px;
@@ -1162,7 +1169,7 @@ section.blog .btn-white::after {
   background-color: #424242;
 }
 
-div.rectangle {
+section.blog div.rectangle {
   width: 832px; height: 300px;
   background-color: #004a39;
   position: absolute;
@@ -1170,7 +1177,7 @@ div.rectangle {
   transform: rotate(-7deg);
 }
 
-  div.rectangle::before {
+  section.blog div.rectangle::before {
     content: "";
     width: 1000px; height: 14px;
     background-color: #004a39;
@@ -1240,13 +1247,19 @@ div.video-container {
       top: 0;
     }
 
-section.products div.rectangle {
+section.products div.rectangle,
+section.container-detail div.rectangle {
   position: absolute;
   top: 682px; left: -10px;
   width: 285px; height: 15px;
   background-color: #d71921;
   transform: rotate(353deg) skew(352deg, 0deg);
   z-index: 2;
+}
+
+section.container-detail div.rectangle {
+  top: 1234px;
+  width: 232px;
 }
 
 /*!
@@ -2208,13 +2221,12 @@ div.dimensions {
 
       div.dimensions div.width::before,
       div.dimensions div.width::after {
-        top: 0;
         left: 50%;
         transform: translateX(-50%);
       }
 
         div.dimensions div.width::before {
-          top: 0;
+          bottom: 66px;
           left: 50%;
           transform: translateX(-50%);
           animation-name: width-left-line-4m3-6tun;
@@ -2224,8 +2236,7 @@ div.dimensions {
         }
 
         div.dimensions div.width::after {
-          top: auto;
-          bottom: 0;
+          top: 66px;
           animation-name: width-right-line-4m3-6tun;
           animation-duration: .15s;
           animation-delay: 1s;
@@ -2266,13 +2277,13 @@ div.dimensions {
     div.dimensions div.lenght::before,
     div.dimensions div.lenght::after {
       width: 0; height: 2px;
-      left: 0; top: 22px;
+      top: 22px;
       transform: rotate(349.6deg);
     }
 
       div.dimensions div.lenght::before {
         width: 0; height: 2px;
-        left: 0; top: 22px;
+        right: 145px; top: 22px;
         transform: rotate(349.6deg);
         animation-name: lenght-left-line-4m3-6tun;
         animation-duration: .15s;
@@ -2281,7 +2292,7 @@ div.dimensions {
       }
 
       div.dimensions div.lenght::after {
-        top: -4px; left: auto; right: 0;
+        top: -4px; left: 145px;
         animation-name: lenght-right-line-4m3-6tun;
         animation-duration: .15s;
         animation-delay: 2s;
@@ -2323,13 +2334,13 @@ div.dimensions {
     div.dimensions div.height::before,
     div.dimensions div.height::after {
       width: 0; height: 2px;
-      left: -14px; top: 12px;
+      right: 73px; top: 12px;
       transform: rotate(2deg);
     }
 
       div.dimensions div.height::before {
         width: 0; height: 2px;
-        left: -14px; top: 12px;
+        right: 73px; top: 12px;
         transform: rotate(2deg);
         animation-name: height-left-line-4m3-6tun;
         animation-duration: .15s;
@@ -2338,7 +2349,7 @@ div.dimensions {
       }
 
       div.dimensions div.height::after {
-        top: 16px; left: auto; right: -12px;
+        top: 16px; left: 70px; right: auto;
         width: 0;
         animation-name: height-right-line-4m3-6tun;
         animation-duration: .15s;
@@ -2455,6 +2466,13 @@ div.speed {
         background-color: #d71921;
       }
 
+div.speed img.do-60-minut {
+  position: absolute;
+  width: 127px;
+  top: -30px; right: -170px;
+  opacity: .1;
+}
+
 div.warrant {
   font-size: 1.875rem;
   font-weight: 300;
@@ -2492,6 +2510,95 @@ div.warrant {
     width: 64.66666667%;
   }
 
+}
+
+/*!
+* Order
+*/
+
+section.order h2 {
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: 300;
+  color: #004d3b;
+  margin-bottom: 20px;
+}
+
+div.street {
+  position: relative;
+}
+
+  div.input-group.street {
+    align-items: center;
+    max-width: 752px;
+    margin: 0 auto;
+  }
+
+  div.street label {
+    margin: 0;
+    margin-right: 17px;
+    font-size: 1.375rem;
+    color: #3f3f3f;
+  }
+
+    div.street label::after {
+      font-family: "Font Awesome 6 Free";
+      font-weight: 600;
+      content: "\f3c5";
+      color: #d71921;
+      font-size: 2.4375rem;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 20px;
+      margin-left: 30px;
+      line-height: 1;
+    }
+
+    div.street input {
+      border: 0;
+      border-radius: 0;
+      padding-left: 22px;
+      height: 46px;
+    }
+
+    div.street button {
+      width: 46px; height: 46px;
+      background-color: #004a39;
+      position: relative;
+    }
+
+      div.street button:hover,
+      div.street button:focus {
+        background-color: #d71921;
+      }
+
+      div.street button i {
+        right: 14px;
+      }
+
+    div.street::before {
+      content: "";
+      position: absolute;
+      left: 203px;
+      width: 8px; height: 46px;
+      background: url(../img/white-arrow.svg);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+div.street input.form-control::placeholder {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #424242;
+  text-transform: uppercase;
+}
+
+section.top.order p {
+  font-size: 1.375rem;
+  color: #3f3f3f;
+  text-align: center;
+  margin: 27px 0;
+  line-height: 1;
 }
 
 /*!

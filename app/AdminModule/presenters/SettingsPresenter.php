@@ -39,6 +39,7 @@ class SettingsPresenter extends BasePresenter
 		$form ->addText("title", "Titulek webu");
 		$form ->addCheckbox("production", "Produkční mód");
 		$form ->addText("gaCode", "GA kód");
+		$form ->addText("vat", "Sazba daně [%]");
 		$form->addGroup("SEO");
 		$form ->addTextArea("description", "Popis");
 		$form ->addTextArea("keywords", "Klíčová slova");

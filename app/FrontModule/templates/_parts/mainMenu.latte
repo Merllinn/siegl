@@ -6,7 +6,7 @@
 					    <a href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}">{$p->name_menu|noescape}</a>
 					    <div class="submenu {if !empty($p->layoutId) && in_array($p->layoutId, array(8, 9))!==false}two-columns{/if}">
 						    <ul n:if="count($children)>0">
-							    <li n:foreach="$children as $c" n:if="$c->active" class="rd-dropdown-item {if $c->id==$page->id}active{/if}">
+							    <li n:foreach="$children as $c" n:if="$c->active" class="rd-dropdown-item {if !empty($page) && $c->id==$page->id}active{/if}">
 								    <a class="rd-dropdown-link" href="{if $c->type=='1'}{$c->link}{else}{link :Front:Homepage:page $c->alias}{/if}">{$c->name_menu}</a>
 							    </li>
 						    </ul>

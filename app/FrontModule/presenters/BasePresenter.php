@@ -31,7 +31,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     public $basket;
     public $onlineSale = 0;
     
-    public $zones = 5;
+    public $zones = 8;
+    
+    public $vatSes;
 
     /** @var Model\CommonManager  @inject */
     public $commonManager;
@@ -100,7 +102,26 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             12=>$this->translator->translate("Prosinec")
         );
         */
+        
+        $this->vatSes = $this->getSession("vat");
+        if(!isset($this->vatSes->vat)){
+			$this->vatSes->vat = false;
+        }
+        $vat = new \Nette\Utils\ArrayHash();
+        $vat->isWith = $this->vatSes->vat;
+        $vat->koef = 1;
+        if($vat->isWith){
+			$vat->koef = 1 + ($this->settings->vat/100);
+        }
+        $this->template->vat = $vat;
 
+
+	}
+	
+	public function handleSetVat($isWith){
+		$this->vatSes = $this->getSession("vat");
+		$this->vatSes->vat = $isWith;
+		$this->redirect("this");
 	}
 
     public function beforeRender(){
@@ -194,6 +215,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         }
 
         $extension = pathinfo($imagePath, PATHINFO_EXTENSION);
+        if($extension=="svg"){
+			return $uploadPath . DIRECTORY_SEPARATOR . $image->file;
+        }
         $fileSize = filesize($uploadDir . DIRECTORY_SEPARATOR . $imagePath);
 
         $thumbImagePath = md5($width . $height . $imagePath . $fileSize) . '.' . $extension;

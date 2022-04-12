@@ -35,7 +35,7 @@
               <div n:if="$file->main==1" class="main"><i class="fas fa-star"></i></div>
               <a n:href="default $page, $file->id" title="Upravit" class="edit"><i class="fas fa-edit"></i></a>
               <a n:href="delete! $file->id" title="Smazat" class="delete"><i class="fas fa-trash-alt"></i></a>
-              <img src="{$file|thumb:150:150}" />
+              <img src="{$file|thumb:150:150}" width="150" height="150" />
           </div>
       </div>
 

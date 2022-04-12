@@ -51,7 +51,7 @@
                     <a href="#" title="Přejít na {=strtolower(strip_tags($sp->name))}">
                         <div class="service-icon">
                         	{var $mainImg = $presenter->pageManager->getMainPhoto($sp->id)}
-                            <img src="$mainImg|thumb:140:null" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
+                            <img src="{$mainImg|thumb:140:null}" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
                         </div>
                         {$sp->name|noescape}
                     </a>

@@ -24,7 +24,7 @@ class ProductsPresenter extends BasePresenter
 	public function startup(){
 		parent::startup();
 		$this->addBreadcrumbs("Kontejnery", $this->link(":Admin:Products:default"));
-		$this->categories = $this->categoryManager->getActiveList($this->type);
+		$this->categories = $this->categoryManager->getActiveList($this->productType);
 
 		if(!isset($this->filter)){
 			$this->filter = $this->getSession("productsFilter");
@@ -78,6 +78,12 @@ class ProductsPresenter extends BasePresenter
 			list($attrId, $attrVal) = explode("-", $attr);
 			$prodAttribs[$attrId] = $attrVal;
 		}
+		$details->category = array();
+		foreach(explode("|", $details->categories) as $cat){
+			if(!empty($cat)){
+				$details->category[] = (int)$cat;
+			}
+		}
 		$details->attributes = $prodAttribs;
 		$this["productForm"]->setDefaults($details);
 		$this->edited = $id;
@@ -123,11 +129,18 @@ class ProductsPresenter extends BasePresenter
 		//$form ->addHidden("id");
 		$form ->addText("name", "Jméno")
 				->addRule(Form::FILLED, "Vyplňte jméno produktu");
-		$form ->addTextArea("perex", "Zkrácený popis");
-		$form ->addTextArea("description", "Popis")
+		//$form ->addTextArea("perex", "Zkrácený popis");
+		$form ->addTextArea("description", "Jaký druh odpadu sem patří?")
 				->getControlPrototype()
 					->class("wysiwyg");
-        $form ->addMultiSelect("category", "Kategorie", $this->categories)
+		$form ->addText("width", "Šířka [m]")
+				->addRule(Form::FILLED, "Vyplňte šířku");
+		$form ->addText("length", "Délka [m]")
+				->addRule(Form::FILLED, "Vyplňte dělku");
+		$form ->addText("height", "Výška [m]")
+				->addRule(Form::FILLED, "Vyplňte výšku");
+        $form ->addMultiSelect("category", "Kategorie", $this->categories);
+		$form ->addText("alias", "Alias");
 				//->addRule(Form::FILLED, "Vyberte kategorii")
 				//->setPrompt("Vyberte kategorie")
 				;

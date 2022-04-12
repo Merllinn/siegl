@@ -2,8 +2,20 @@
 <html lang="cs" class="notouch yeswebp">
 
 	{include '_parts/head.latte'}
+	
+	{var $bodyClasses = array(
+		7 => "homepage",
+		8 => "containers",
+	)}
+	{var $bodyClass = ""}
+	{if !empty($page->layoutId) && !empty($bodyClasses[$page->layoutId])}
+		{php $bodyClass = $bodyClasses[$page->layoutId]}
+	{/if}
+	{if $presenter->action=='container'}
+		{php $bodyClass = "container-detail"}
+	{/if}
 
-	<body {if $page->layoutId==7}class="homepage"{/if}>
+	<body class="{$bodyClass}">
 		{include '_parts/header.latte'}
         <!-- ./header -->
         {foreach $flashes as $flash}

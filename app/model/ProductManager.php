@@ -90,7 +90,6 @@ final class ProductManager
     public function findByAlias($alias)
     {
         return $this->get()
-            ->select("pages.*, layout.view")
             ->where("alias", $alias)
             ->fetch();
     }

@@ -37,7 +37,8 @@ class PageGalleryPresenter extends BasePresenter
 
         $form ->addMultiUpload("img", "Soubor obrázku")
             ->setRequired(true)
-            ->addRule(Form::IMAGE, 'Soubor musí být JPG, JPEG, PNG nebo GIF.');
+            //->addRule(Form::IMAGE, 'Soubor musí být JPG, JPEG, PNG nebo GIF.')
+            ;
         /*
         $form ->addText("name", "Popisek obrázku")
             ->addRule(Form::FILLED);
@@ -86,16 +87,21 @@ class PageGalleryPresenter extends BasePresenter
                 foreach($values['img'] as $image){
                     if ($image->isOk()) {
                         $ext = pathinfo($image->getSanitizedName(), PATHINFO_EXTENSION);
-                        $name = $this->generateString(15);
-                        $fileName = $name.".".$ext;
-                        $tempFile = BASE_DIR."/data/temp/".$fileName;
-                        $origFile = BASE_DIR."/data/original/".$fileName;
-                        $image->move($tempFile);
+	                    $name = $this->generateString(15);
+	                    $fileName = $name.".".$ext;
+	                    $tempFile = BASE_DIR."/data/temp/".$fileName;
+	                    $origFile = BASE_DIR."/data/original/".$fileName;
+                        if($ext=="svg"){
+	                        $image->move($origFile);
+                        }
+                        else{
+	                        $image->move($tempFile);
 
-                        //resize and move
-                        $bigImage = Image::fromFile($tempFile);
-                        $bigImage->resize(1600, 1200, Image::SHRINK_ONLY);
-                        $bigImage->save($origFile);
+	                        //resize and move
+	                        $bigImage = Image::fromFile($tempFile);
+	                        $bigImage->resize(1600, 1200, Image::SHRINK_ONLY);
+	                        $bigImage->save($origFile);
+                        }
 
                         if(file_exists($tempFile))
                             unlink($tempFile);

@@ -166,6 +166,13 @@ final class HomepagePresenter extends HomepageForms
     	$this->template->containers = $containers;
     	$this->template->attVals = $this->attributeManager->getAllValues();
     }
+    public function actionContainer($id){
+    	$this->template->product = $container = $this->productManager->findByAlias($id);
+    	$this->template->attVals = $this->attributeManager->getAllValues();
+    	$this->template->paVals = $this->getProductAttributeValues($container->attributes);
+    	$this->template->mainImg = $this->productManager->getMainPhoto($container->id);
+	}
+	
     public function getProductAttributeValues($source){
 		$values = $this->attributeManager->getAllValues();
 		$return = array();

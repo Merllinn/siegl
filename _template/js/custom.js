@@ -62,4 +62,14 @@ $(document).ready(function() {
 
   Chocolat(document.querySelectorAll('.chocolat-parent .chocolat-image'), {})
 
+  $(function(){
+    $("#date input").datetimepicker({
+      language:'cs',
+      minuteStep: 30,
+      format: 'dd/mm/yyyy - hh:ii',
+      autoclose: true,
+      startDate: '+0d',
+    });
+  });
+
 });

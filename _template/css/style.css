@@ -1317,7 +1317,8 @@ section.top {
 }
 
   section.top.containers,
-  section.top.container-detail {
+  section.top.container-detail,
+  section.top.order {
     padding-bottom: 0;
     z-index: 2;
     position: relative;
@@ -1346,7 +1347,8 @@ section.top {
     }
 
     body.containers::before,
-    body.container-detail::before {
+    body.container-detail::before,
+    body.order::before {
       content: "";
       width: calc(100% + 400px);
       height: 863px;
@@ -1373,6 +1375,10 @@ section.top {
                 filter: grayscale(100%);
         -webkit-filter: grayscale(100%);
            -moz-filter: grayscale(100%);
+      }
+
+      body.order::before {
+        top: -151px;
       }
 
   section.top img.stripe {
@@ -1415,6 +1421,10 @@ label.select {
       margin-right: 26px;
     }
 
+    section.waste li.druh-odpadu {
+      margin-right: 70px;
+    }
+
     div.filter li::before {
       content: "";
       display: inline-block;
@@ -1444,6 +1454,15 @@ label.select {
       div.filter li.turbokontejner::before {
         width: 43px;
         background: url("../img/i_turbokontejner.png");
+      }
+
+      div.filter li.date::before {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 600;
+        content: "\f073";
+        font-size: 2.1875rem;
+        color: #d71921;
+        line-height: 1.2;
       }
 
       li.turbokontejner {
@@ -1576,6 +1595,21 @@ label.select {
         left: 50px;
       }
 
+      section.waste div.filter ul {
+        margin: 0 auto;
+        display: table;
+        padding-right: 46px;
+      }
+
+      section.waste div.filter li::after {
+        background: url(../img/gray-arrow.svg);
+        background-size: cover;
+      }
+
+        section.waste div.filter li.date::after {
+          left: 38px;
+        }
+
   label.select select {
     -webkit-appearance: none;
        -moz-appearance: none;
@@ -1596,6 +1630,33 @@ label.select {
     label.select select:hover {
       color: #004a39;
     }
+
+    section.waste label.select select {
+      background-color: #f2f2f2;
+      padding: 0 67px 0 21px;
+      width: calc(100% + 46px);
+    }
+
+    section.waste .form-control {
+      background-color: #f2f2f2;
+      border: 0;
+      border-radius: 0;
+      height: 46px;
+      font-weight: 700;
+      color: #424242;
+      text-align: center;
+      cursor: pointer;
+      width: calc(100% + 46px);
+      padding-right: 46px;
+    }
+
+      section.waste label.select::after {
+        right: -46px;
+      }
+
+      section.waste label.select::before {
+        right: -31px;
+      }
 
   select.select::-ms-expand {
     display: none;
@@ -2444,6 +2505,25 @@ div.waste-type {
       mix-blend-mode: multiply;
     }
 
+    body.order div.waste-type-rectangle {
+      background-color: #d71921;
+      top: 282px;
+    }
+
+      body.order div.waste-type-rectangle::before,
+      body.order div.waste-type-rectangle::after {
+        content: none;
+      }
+
+        body.order div.waste-type-rectangle::before {
+          content: "";
+          position: absolute;
+          top: 114px; left: 190px;
+          width: 237px; height: 15px;
+          background-color: #004a39;
+          transform: rotate(14deg) skew(188deg, 0deg);
+        }
+
 div.speed {
   margin-top: 110px;
 }
@@ -2593,13 +2673,49 @@ div.street input.form-control::placeholder {
   text-transform: uppercase;
 }
 
-section.top.order p {
+section.top.order {
+  background-color: #eaeaea;
+}
+
+p.desc {
   font-size: 1.375rem;
   color: #3f3f3f;
   text-align: center;
   margin: 27px 0;
   line-height: 1;
 }
+
+  p.desc.margin {
+    margin-top: 60px;
+  }
+
+section.map {
+  position: relative;
+  z-index: 2;
+}
+
+  section.map iframe {
+    -webkit-box-shadow: -2px 1px 15px 2px rgba(0,0,0,0.15); 
+            box-shadow: -2px 1px 15px 2px rgba(0,0,0,0.15);
+  }
+
+section.waste {
+  margin-top: 60px;
+}
+
+div.filter li.today::before {
+  content: none;
+}
+
+  div.filter li.today button {
+    padding: 11px 48px;
+    margin: 0;
+    background-color: #f2f2f2;
+    text-decoration: none;
+    font-weight: 700;
+    color: #424242;
+    text-transform: none;
+  }
 
 /*!
 * Footer

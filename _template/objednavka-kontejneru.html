@@ -205,7 +205,11 @@
                                 <input class="form-control" type="text" value="Jiné datum" readonly>
                             </label>
                         </li>
-                        <!-- ./jiné datum -->
+                        <!-- ./jine datum -->
+                        <li class="list-inline-item add-container">
+                            <button class="btn btn-primary">Přidat další kontejner</button>
+                        </li>
+                        <!-- ./pridat dalsi kontejner -->
                     </ul>
                 </form>
                 <!-- ./form -->
@@ -214,6 +218,129 @@
         </div>
     </section>
     <!-- ./waste -->
+    <section class="material">
+        <div class="container">
+            <h3 class="title underline">Potřebujete stavební materiál?</h3>
+            <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ano, potřebuji</a>
+        </div>
+        <div class="select-material">
+            <div class="container">
+                <h4>Vyberte typ materiálu</h4>
+                <form>
+                    <ul class="list-inline select-material">
+                        <li class="list-inline-item">
+                            <label for="pisek">
+                                <input id="pisek" type="radio" name="material" value="pisek">
+                                <img src="images/pisek.jpg" alt="Písek">
+                                <span>Písek</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="sterk">
+                                <input id="sterk" type="radio" name="material" value="pisek">
+                                <img src="images/sterk.jpg" alt="Štěrk">
+                                <span>Štěrk</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="recyklat">
+                                <input id="recyklat" type="radio" name="material" value="pisek">
+                                <img src="images/recyklat.jpg" alt="Recyklát">
+                                <span>Recyklát</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="beton">
+                                <input id="beton" type="radio" name="material" value="pisek">
+                                <img src="images/beton.jpg" alt="Beton">
+                                <span>Beton</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="kacirek">
+                                <input id="kacirek" type="radio" name="material" value="pisek">
+                                <img src="images/kacirek.jpg" alt="Kačírek">
+                                <span>Kačírek</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="zemina">
+                                <input id="zemina" type="radio" name="material" value="pisek">
+                                <img src="images/zemina.jpg" alt="Zemina">
+                                <span>Zemina</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="roughness">
+                        <h4>Zvolte typ a hrubost</h4>
+                        <ul class="list-unstyled">
+                            <li>
+                                <label for="pisek-kopany">
+                                    <input class="check" id="pisek-kopany" type="radio" name="hrubost" value="pisek-kopany">
+                                    <div class="image">
+                                        <img src="images/pisek.jpg" alt="Písek kopaný">
+                                    </div>
+                                    <div class="title">
+                                        <span>Písek kopaný</span>
+                                        <div class="description" style="display: block">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                        <label class="select">
+                                            <select aria-label="Zvolit hrubost">
+                                                <option selected disabled>Zvolit hrubost</option>
+                                                <option value="0-4">0 - 4 mm</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </label>
+                            </li>
+                            <li>
+                                <label for="pisek-ricni">
+                                    <input id="pisek-ricni" type="radio" name="hrubost" value="pisek-ricni">
+                                    <div class="image">
+                                        <img src="images/pisek.jpg" alt="Písek říční">
+                                    </div>
+                                    <div class="title">
+                                        <span>Písek říční</span>
+                                        <div class="description">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                            <li>
+                                <label for="pisek-zasypovy">
+                                    <input id="pisek-zasypovy" type="radio" name="hrubost" value="pisek-zasypovy">
+                                    <div class="image">
+                                        <img src="images/pisek.jpg" alt="Písek zásypový">
+                                        <div class="description">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                    <div class="title">
+                                        <span>Písek zásypový</span>
+                                        <div class="description">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- ./typ a hrubost -->
+                </form>
+            </div>
+        </div>
+        <!-- ./select material -->
+    </section>
+    <!-- ./material -->
+    <div class="total-price">
+        <span class="total">Celková cena</span>
+        <strong class="price">3 650 Kč</strong>
+        <span class="with-vat">4 350 Kč vč. DPH</span>
+    </div>
+    <!-- ./price -->
     <div class="waste-type-rectangle"></div>
     <footer>
         <div class="container">

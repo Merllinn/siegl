@@ -88,13 +88,24 @@ h2 {
     z-index: 1;
   }
 
+  h3.title {
+    text-align: center;
+    color: #424242;
+    font-size: 1.75rem;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+  }
+
   h1.underline,
-  h2.underline {
+  h2.underline,
+  h3.underline {
     margin-bottom: 25px;
   }
 
     h1.underline::after,
-    h2.underline::after {
+    h2.underline::after,
+    h3.underline::after {
       content: "";
       display: block;
       width: 120px; height: 5px;
@@ -303,7 +314,8 @@ h2 {
   }
 
 .btn-arrow::before,
-.btn-arrow::after {
+.btn-arrow::after,
+div.roughness label.select::before {
   content: "";
   position: absolute;
   left: -8px; top: 0;
@@ -340,6 +352,10 @@ h2 {
       right: -30px;
     }
 
+    .btn-add-material::after {
+      content: none;
+    }
+
 .btn-white,
 .btn-white:hover {
   background-color: #FFF;
@@ -358,7 +374,8 @@ h2 {
   color: #FFF;
 }
 
-  .btn-red::before {
+  .btn-red::before,
+  div.roughness label.select::before {
     background: url("../img/red-arrow.svg");
     background-size: cover;
   }
@@ -1456,14 +1473,19 @@ label.select {
         background: url("../img/i_turbokontejner.png");
       }
 
-      div.filter li.date::before {
+      div.filter li.date::before,
+      div.filter li.add-container::before {
         font-family: "Font Awesome 6 Free";
         font-weight: 600;
         content: "\f073";
-        font-size: 2.1875rem;
+        font-size: 1.75rem;
         color: #d71921;
-        line-height: 1.2;
+        line-height: 1.8;
       }
+
+        div.filter li.add-container::before {
+          content: "\f055";
+        }
 
       li.turbokontejner {
         height: 46px;
@@ -1595,6 +1617,10 @@ label.select {
         left: 50px;
       }
 
+      section.waste div.filter {
+        margin-bottom: 0;
+      }
+
       section.waste div.filter ul {
         margin: 0 auto;
         display: table;
@@ -1607,7 +1633,11 @@ label.select {
       }
 
         section.waste div.filter li.date::after {
-          left: 38px;
+          left: 32px;
+        }
+
+        section.waste div.filter li.add-container::after {
+          left: 32px;
         }
 
   label.select select {
@@ -1707,9 +1737,12 @@ label.select {
     text-decoration: underline;
     font-size: 1rem;
     font-weight: 300;
-    display: table;
     margin: 15px auto 0;
   }
+
+    div.filter button.btn-deselect {
+      display: table;
+    }
 
     div.filter button:hover,
     div.filter button:focus {
@@ -2672,6 +2705,14 @@ div.street input.form-control::placeholder {
   color: #424242;
   text-transform: uppercase;
 }
+  input.form-control {
+    transition: color .25s;
+  }
+
+  input.form-control:hover {
+    color: #004a39;
+    transition: color .25s;
+  }
 
 section.top.order {
   background-color: #eaeaea;
@@ -2681,12 +2722,17 @@ p.desc {
   font-size: 1.375rem;
   color: #3f3f3f;
   text-align: center;
-  margin: 27px 0;
-  line-height: 1;
+  margin: 22px 0;
+  line-height: 1.3;
 }
 
   p.desc.margin {
     margin-top: 60px;
+  }
+
+  p.desc strong {
+    font-weight: 800;
+    text-transform: uppercase;
   }
 
 section.map {
@@ -2707,14 +2753,205 @@ div.filter li.today::before {
   content: none;
 }
 
-  div.filter li.today button {
-    padding: 11px 48px;
+  div.filter li.today button,
+  li.add-container button {
+    padding: 11px 30px;
     margin: 0;
     background-color: #f2f2f2;
     text-decoration: none;
     font-weight: 700;
     color: #424242;
     text-transform: none;
+  }
+
+    div.filter li.today button:hover,
+    li.add-container button:hover {
+      color: #004a39;
+      background-color: #f2f2f2;
+    }
+
+li.add-container {
+  display: table;
+  margin: 40px auto 0 auto;
+}
+
+section.material {
+  margin-top: 70px;
+}
+
+.btn-add-material {
+  padding: 11px 27px 8px 27px;
+  font-size: 1.125rem;
+  display: table;
+  margin: 0 auto;
+}
+
+div.select-material {
+  background-color: #eaeaea;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 70px;
+}
+
+  div.select-material h4 {
+    font-size: 1.875rem;
+    margin-bottom: 2.8125rem;
+    font-weight: 300;
+    color: #004a39;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  ul.select-material {
+    margin: 0 auto;
+    max-width: 510px; width: 100%;
+    font-size: 1px;
+  }
+
+    ul.select-material li {
+      width: 33%;
+      text-align: center;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+    }
+
+      ul.select-material li:nth-child(1),
+      ul.select-material li:nth-child(2),
+      ul.select-material li:nth-child(3) {
+        margin-bottom: 50px;
+      }
+
+    ul.select-material .list-inline-item:not(:last-child) {
+      margin-right: 0;
+    }
+
+  ul.select-material li img {
+   width: 77px; height: 77px;
+   border: 3px solid #000;
+   display: block;
+   margin: 0 auto 13px auto;
+   transition: border .25s;
+  }
+
+ul.select-material [type=radio],
+div.roughness ul [type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+
+  ul.select-material [type=radio] + img {
+    cursor: pointer;
+  }
+
+  ul.select-material [type=radio]:checked ~ * {
+      -webkit-text-fill-color: #004a39;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #004a39;
+    color: #004a39;
+  }
+
+    ul.select-material [type=radio]:checked + img {
+      border: 3px solid #004a39;
+      transition: border .25s;
+    }
+
+div.roughness {
+  padding-top: 60px;
+}
+
+  div.roughness ul {
+    max-width: 670px; width: 100%;
+    margin: 0 auto;
+  }
+
+    div.roughness li:not(:last-child) {
+      margin-bottom: 40px;
+    }
+
+    div.roughness li span {
+      font-size: 1.25rem;
+      text-transform: uppercase;
+    }
+
+    div.roughness li>label {
+      display: flex;
+      flex-direction: row;
+    }
+
+      div.roughness div.image {
+        width: 77px;
+        margin-right: 25px;
+      }
+
+      div.roughness div.title {
+        width: calc(100% - 102px);
+        padding-top: 27px;
+        position: relative;
+      }
+
+      div.roughness div.description {
+        font-size: .875rem;
+        max-width: 300px; width: 100%;
+        margin-top: 15px;
+        display: none;
+      }
+
+        div.roughness div.description p {
+          margin: 0;
+          line-height: 1.3;
+          font-weight: 400;
+        }
+
+  div.roughness img {
+    width: 77px; height: 77px;
+    margin-right: 25px;
+  }
+
+div.roughness label.select {
+  position: absolute;
+  right: 0; bottom: 0;
+}
+
+  div.roughness label.select select {
+    background-color: #d71921;
+    color: #FFF;
+    padding-right: 27px;
+    text-transform: uppercase;
+  }
+
+    div.roughness label.select::before {
+      animation: none;
+      opacity: 1;
+    }
+
+    div.roughness label.select::after {
+      content: none;
+    }
+
+div.total-price {
+  text-align: center;
+  background-color: #d71921;
+  color: #FFF;
+  font-size: 2.0625rem;
+  font-weight: 400;
+  padding-top: 43px;
+  padding-bottom: 43px;
+}
+
+  div.total-price span:first-child {
+    text-transform: uppercase;
+    margin-right: 35px;
+  }
+
+  div.total-price span:last-child {
+    font-size: 1.40625rem;
+    margin-left: 35px;
+  }
+
+  div.total-price strong {
+    font-size: 2.8125rem;
+    font-weight: 700;
   }
 
 /*!

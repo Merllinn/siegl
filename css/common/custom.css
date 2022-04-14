@@ -1,0 +1,48 @@
+.adminGallery .fileBlock{
+    float: left;
+    position: relative;
+    margin: 0 15px 15px 0;
+    padding: 1px;
+    border: 1px solid #666;
+}
+.adminGallery .fileBlock a{
+    display: none;
+    padding: 3px;
+    color: #000;
+    position: absolute;
+    bottom: 10px;
+}
+.adminGallery .fileBlock a.delete{
+    right: 10px;
+}
+.adminGallery .fileBlock a.edit{
+    left: 40px;
+}
+.adminGallery .fileBlock a.setMain{
+    left: 10px;
+}
+.adminGallery .fileBlock div.main{
+    padding: 3px;
+    color: #000;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+.adminGallery .fileBlock p.title{
+    display: none;
+    padding: 3px;
+    background: #000;
+    position: absolute;
+    color: #fff;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+}
+.adminGallery .fileBlock:hover p.title,
+.adminGallery .fileBlock:hover a{
+    display: block;
+}
+
+.ui-sortable-helper {
+    display: table;
+}

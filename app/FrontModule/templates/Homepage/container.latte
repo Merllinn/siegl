@@ -1,0 +1,129 @@
+{layout ../@layout.latte}
+{block content}
+    <section class="top container-detail">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="sidebar">
+                        <h1>Kontejner <span>{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}</span></h1>
+                        <div class="sidebar-container">
+                            <table class="table">
+                                <tbody>
+                                    <tr data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="100">
+                                        <td>Objem:</td>
+                                        <td>{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape}</td>
+                                    </tr>
+                                    <tr data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="200">
+                                        <td>Nosnost:</td>
+                                        <td>{$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}</td>
+                                    </tr>
+                                    <tr data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="300">
+                                        <td>Rozměr:</td>
+                                        <td><abbr title="šířka x délka x výška">{$product->width} m x {$product->length} m x {$product->height} m</abbr></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- ./dimensions -->
+                            <div data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">
+                                <span class="pricelist">Ceník</span>
+                                <div class="sidebar-vat">
+                                    <span>zobrazit cenu</span>
+                                    <div class="form-check-container">
+                                        <div class="form-check"><input class="form-check-input" type="radio" name="dph" id="sDPH"{if $vat->isWith}checked{/if}><label class="form-check-label" for="sDPH"><a n:href="setVat! true">S DPH</a></label></div><div class="form-check"><input class="form-check-input" type="radio" name="dph" id="bezDPH" {if !$vat->isWith}checked{/if}><label class="form-check-label" for="bezDPH"><a n:href="setVat! false">Bez DPH</a></label></div>
+                                    </div>
+                                </div>
+                                <div class="accordion accordion-flush" id="{$product->alias}">
+		                            {var $prices = $presenter->productManager->getPrices($product->id)}
+		                            <div class="accordion-item" n:foreach="$prices as $price" n:if="$price->priceFrom>0">
+		                                <div class="accordion-header" id="container-{$price->id}">
+		                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}" aria-expanded="false" aria-controls="{$price->id}">
+		                                        <em>{$attVals[$price->attributeValue]->name}</em> <span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+		                                    </button>
+		                                </div>
+		                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#{$product->alias}">
+		                                    <div class="accordion-body">
+		                                        {$attVals[$price->attributeValue]->desc|noescape}
+		                                    </div>
+		                                </div>
+		                            </div>
+                                </div>
+                                <!-- ./prices -->
+                                <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-4m3-6tunModal" title="Vybrat a objednat kontejner" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">Objednat online <i class="fa-solid fa-angles-right"></i></button>
+                            <div class="or" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
+                                <span>Nebo</span>
+                                <span class="phone">602 20 30 44</span>
+                                <span>Po - Ne 6:00 - 22:00</span>
+                            </div>
+                            <div class="or demand" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
+                                <span>Nebo</span>
+                            </div>
+                            <a class="btn btn-primary btn-arrow btn-red" href="#" title="Zažádat o nevávaznou poptávku" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="550">Zadat poptávku <i class="fa-solid fa-angles-right"></i></a>
+                        </div>
+                        <!-- ./sidebar container -->
+                    </div>
+                </div>
+                <!-- ./sidebar -->
+                <div class="col-md-8">
+                    <div class="container-content chocolat-parent">
+                        <div class="container-size {$product->alias}">
+                            <div class="silhouette"><img src="{$basePath}/img/silhouette.png" alt="Silueta"></div>
+                            <div class="image"><img src="{$mainImg|thumb}" alt="Obrázek kontejneru"></div>
+                            <div class="dimensions">
+                                <div class="width" data-aos="fade-left" data-aos-duration="200" data-aos-delay="250" data-aos-easing="ease-in-sine"><strong>Výška</strong>{$product->height} m</div>
+                                <div class="height" data-aos="fade-down" data-aos-duration="200" data-aos-delay="350" data-aos-easing="ease-in-sine"><strong>Šířka</strong>{$product->width} m</div>
+                                <div class="lenght" data-aos="fade-up" data-aos-duration="200" data-aos-delay="450" data-aos-easing="ease-in-sine"><strong>Délka</strong>{$product->length} m</div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <a class="btn btn-primary btn-manipulation chocolat-image" href="{$basePath}/images/manipulace.jpeg" title="Zobrazit prostor pro manipulaci" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="100" data-aos-easing="linear" data-aos-delay="2200">Zobrazit prostor pro manipulaci <i class="fa-solid fa-magnifying-glass"></i></a>
+                        <div class="waste-type" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="400">
+                            <h2>
+                                Jaký druh odpadu sem patří?
+                            </h2>
+                            <p>
+                                {$product->description|noescape}
+                            </p>
+                        </div>
+                        <!-- ./waste type -->
+                        <div class="speed" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
+                            <h2 class="title underline">Jak rychle vám kontejner přistavíme?</h2>
+                            <label class="select">
+                                <select aria-label="Vyberte část Prahy">
+                                    <option selected disabled>Vyberte část Prahy</option>
+                                    <option value="praha-1">Praha 1</option>
+                                    <option value="praha-2">Praha 2</option>
+                                    <option value="praha-3">Praha 3</option>
+                                    <option value="praha-4">Praha 4</option>
+                                    <option value="praha-5">Praha 5</option>
+                                </select>
+                            </label>
+                            <div class="warrant">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        Garantujeme čas přistavení do <span class="number">1 - 4</span> <strong>hodin</strong>
+                                    </li>
+                                    <li>
+                                        Turbokontejner s přistavením do <span class="number">60</span> <strong>minut</strong>
+                                        <span class="turbo">(pouze telefonicky Po - Pá: 6:00 - 17:00)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- ./speed -->
+                    </div>
+                    <!-- ./container content -->
+                </div>
+            </div>
+            <!-- ./row -->
+            <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
+        </div>
+        <!-- ./filter -->
+        <img class="mosaic left" src="{$basePath}/img/mosaic_s6.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+        <div class="rectangle"></div>
+    </section>
+    <!-- ./top -->
+    <div class="waste-type-rectangle"></div>
+{/block}

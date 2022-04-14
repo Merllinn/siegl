@@ -5,3 +5,33 @@
         </div>
         {control productPriceForm}
 {/block}
+
+{block scripts}
+	<script>
+	
+		var elementClass = "col-1";
+		$(document).ready(function(){
+			$(".isUsed").parents("."+elementClass).removeClass(elementClass).addClass("col-12")
+			showHideInputs();
+		});
+		$(document).ready(function(){
+			$(".isUsed").change(function(){
+				showHideInputs();
+			});
+			showHideInputs();
+		});
+		
+		function showHideInputs(){
+			$(".isUsed").each(function(){
+				var row = $(this).closest(".row");
+				if ($(this).is(':checked')) {
+					console.log("show");
+					row.find("."+elementClass).show();
+				}
+				else{
+					row.find("."+elementClass).hide();
+				}
+			});
+		}
+	</script>
+{/block}

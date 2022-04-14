@@ -100,6 +100,7 @@ class ProductsPresenter extends BasePresenter
 				if(empty($details[$prRow->attributeValue])){
 					$details[$prRow->attributeValue] = array();
 				}
+				$details[$prRow->attributeValue]["used"] = true;
 				for($i=1;$i<=$this->zones;$i++){
 					$key = "price".$i;
 					$details[$prRow->attributeValue][$i] = $prRow->$key;
@@ -221,8 +222,9 @@ class ProductsPresenter extends BasePresenter
 			foreach($paValues as $paValId=>$paValVal){
 				$form->addGroup($pa->name." - ".$paValVal);
 				$container = $form->addContainer($paValId);
+				$container->addCheckbox("used", "Používá se")->getControlPrototype()->class("isUsed");
 				for($i=1;$i<=$this->zones;$i++){
-					$container->addText($i, "Zóna ".$i);
+					$container->addText($i, "Zóna ".$i." [Kč]");
 				}
 			}
 		}
@@ -231,6 +233,10 @@ class ProductsPresenter extends BasePresenter
 		$form->addSubmit("submit", "Uložit ceny")->getControlPrototype()->class("btn btn-primary");
 
 		$form->onSuccess[] = [$this, 'saveProductPrices'];
+
+		$renderer = $form->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div class=row';
+		$renderer->wrappers['pair']['container'] = 'div class=col-1';
 
 		return $form;
 	}
@@ -247,20 +253,24 @@ class ProductsPresenter extends BasePresenter
 					$paValues = $this->attributeManager->getValuesArr($pa->id);
 					foreach($paValues as $paValId=>$paValVal){
 						$prices = $values->$paValId;
-						$minPrice = 999999;
-						$maxPrice = 000000;
-						$dataPrices = array(
-							"product" => $this->edited,
-							"attributeValue" => $paValId,
-						);
-						for($i=1;$i<=$this->zones;$i++){
-							$dataPrices["price".$i] = $prices[$i];
-							$minPrice = min($minPrice, $prices[$i]);
-							$maxPrice = max($maxPrice, $prices[$i]);
+						if($prices["used"]){
+							$minPrice = 999999;
+							$maxPrice = 000000;
+							$dataPrices = array(
+								"product" => $this->edited,
+								"attributeValue" => $paValId,
+							);
+							for($i=1;$i<=$this->zones;$i++){
+								if($prices[$i]>0){
+									$dataPrices["price".$i] = $prices[$i];
+									$minPrice = min($minPrice, $prices[$i]);
+									$maxPrice = max($maxPrice, $prices[$i]);
+								}
+							}
+							$dataPrices["priceFrom"] = $minPrice;
+							$dataPrices["priceTo"] = $maxPrice;
+							$this->productManager->savePrices($dataPrices);
 						}
-						$dataPrices["priceFrom"] = $minPrice;
-						$dataPrices["priceTo"] = $maxPrice;
-						$this->productManager->savePrices($dataPrices);
 					}
 
 				}
@@ -347,9 +357,9 @@ class ProductsPresenter extends BasePresenter
         //$this->fullCats = $this->models->categories->fetchFullInfo();
 
         $grid = new DataGrid($this, $name);
-        if(!empty($this->filter->category)){
+        //if(!empty($this->filter->category)){
             $source->order("order");
-        }
+        //}
         $grid->setDataSource($source);
 
 

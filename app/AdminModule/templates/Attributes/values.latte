@@ -8,7 +8,7 @@
         <a class="btn btn-primary" n:href=":Admin:Attributes:addValue $attribute->id" n:if="$user->identity->role==9"><i class="fas fa-plus"></i> Přidat hodnotu</a>
       </div>
 
-	  <div class="sortable table-responsive" data-action="{link sort!}">
+	  <div class="sortable table-responsive" data-action="{link sortValues!}">
 	  	{control values}
 	  </div>
 

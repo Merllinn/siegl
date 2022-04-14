@@ -136,7 +136,7 @@ $().ready(function(){
    $( ".sortable tbody" ).sortable({
 		update : function (event, ui) {
 			var sortEl = $(this);
-			var action = sortEl.data("action");
+			var action = sortEl.closest(".sortable").data("action");
 			$.get(action, {
 				'items': sortEl.sortable("toArray", {
 					attribute:"data-id"

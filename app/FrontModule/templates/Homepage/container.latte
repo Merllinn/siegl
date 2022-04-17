@@ -34,10 +34,16 @@
                                 </div>
                                 <div class="accordion accordion-flush" id="{$product->alias}">
 		                            {var $prices = $presenter->productManager->getPrices($product->id)}
-		                            <div class="accordion-item" n:foreach="$prices as $price" n:if="$price->priceFrom>0">
+		                            <div class="accordion-item" n:foreach="$prices as $price">
 		                                <div class="accordion-header" id="container-{$price->id}">
 		                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}" aria-expanded="false" aria-controls="{$price->id}">
-		                                        <em>{$attVals[$price->attributeValue]->name}</em> <span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+		                                        <em>{$attVals[$price->attributeValue]->name}</em>
+		                                        {if $price->type==1}
+                                        			<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+		                                        {/if}
+		                                        {if $price->type==2}
+                                        			<span class="price">{$price->text}</span>
+		                                        {/if}
 		                                    </button>
 		                                </div>
 		                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#{$product->alias}">

@@ -46,3 +46,13 @@
 .ui-sortable-helper {
     display: table;
 }
+
+select.inline{
+	display: inline-block;
+	width: 75px;
+}
+
+div.radio{
+	display: inline-block;
+	margin-right: 15px;
+}

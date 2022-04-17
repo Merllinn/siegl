@@ -1,9 +1,12 @@
+{block buttons}
+        <a class="btn btn-primary" n:href="add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat materiál</a>
+{/block}
+
 {block content}
 
 
       <div class="head">
         <h1 class="title">Správa materiálů</h1>
-        <a class="btn btn-primary" n:href="add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat materiál</a>
         <div class="clearfix"></div>
       </div>
 

@@ -166,6 +166,23 @@ final class HomepagePresenter extends HomepageForms
     	$this->template->containers = $containers;
     	$this->template->attVals = $this->attributeManager->getAllValues();
     }
+    public function renderMaterials(){
+    	$containers = $this->productManager->getByType(2);
+    	foreach($_GET as $key=>$val){
+			if(!empty($val) && $key[0]=="a"){
+				$attr = substr($key, 1, 9);
+				if($attr==1){
+					$containers->where("id IN (SELECT product FROM product_prices WHERE attributeValue=".$attr." AND priceFrom>0)");
+				}
+				else{
+					$attrPair = $attr."-".$val;
+					$containers->where("attributes LIKE '%".$attrPair."%'");
+				}
+			}
+    	}
+    	$this->template->containers = $containers;
+    	$this->template->attVals = $this->attributeManager->getAllValues();
+    }
     public function actionContainer($id){
     	$this->template->product = $container = $this->productManager->findByAlias($id);
     	$this->template->attVals = $this->attributeManager->getAllValues();
@@ -178,8 +195,10 @@ final class HomepagePresenter extends HomepageForms
 		$return = array();
 		$pairs = explode("|", $source);
 		foreach($pairs as $pair){
-			list($attr, $val) = explode("-", $pair);
-			$return[$attr] = $values[$val];
+			if(!empty($pair)){
+				list($attr, $val) = explode("-", $pair);
+				$return[$attr] = $values[$val];
+			}
 		}
 		return $return;
     }

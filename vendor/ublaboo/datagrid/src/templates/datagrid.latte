@@ -385,34 +385,39 @@
 						{if $control->isPaginated() || $filter_active}
 							<tr n:block="pagination">
 								<td colspan="{$control->getColumnsCount()}" n:if="!$control->isTreeView()" class="row-grid-bottom">
-									<div class="col-items">
-										<small class="text-muted" n:if="$control->isPaginated()">
-											({var $paginator = $control['paginator']->getPaginator()}
+									<div class="row">
+										<div class="col-sm-12 col-md-3">
+											<small class="text-muted" n:if="$control->isPaginated()">
+												({var $paginator = $control['paginator']->getPaginator()}
 
-											{if $control->getPerPage() === 'all'}
-												{='ublaboo_datagrid.items'|translate}: {='ublaboo_datagrid.all'|translate}
-											{else}
-												{='ublaboo_datagrid.items'|translate}: {$paginator->getOffset() > 0 ? $paginator->getOffset() + 1 : ($paginator->getItemCount() > 0 ? 1 : 0)} - {sizeof($rows) + $paginator->getOffset()}
-												{='ublaboo_datagrid.from'|translate} {$paginator->getItemCount()}
-											{/if})
-										</small>
-									</div>
-									<div class="col-pagination text-center">
-										{**
-										* Pagination
-										*}
-										{control paginator}
-									</div>
-									<div class="col-per-page text-right">
-										{**
-										* Items per page form (display only beside paginated grido)
-										*}
-										<a n:if="$filter_active" n:href="resetFilter!" class="ajax btn btn-danger btn-sm reset-filter">{='ublaboo_datagrid.reset_filter'|translate}</a>
-										{if $control->isPaginated()}
-											{input $filter['per_page'], data-autosubmit-per-page => TRUE, class => 'form-control input-sm form-control-sm'}
-											{*input $filter['per_page_submit'], class => 'datagrid-per-page-submit'*}
-											{input $filter['per_page_submit'], class => 'btn btn-default'}
-										{/if}
+												{if $control->getPerPage() === 'all'}
+													{='ublaboo_datagrid.items'|translate}: {='ublaboo_datagrid.all'|translate}
+												{else}
+													{='ublaboo_datagrid.items'|translate}: {$paginator->getOffset() > 0 ? $paginator->getOffset() + 1 : ($paginator->getItemCount() > 0 ? 1 : 0)} - {sizeof($rows) + $paginator->getOffset()}
+													{='ublaboo_datagrid.from'|translate} {$paginator->getItemCount()}
+												{/if})
+											</small>
+										</div>
+										<div class="col-sm-12 col-md-6 text-center">
+											{**
+											* Pagination
+											*}
+											{control paginator}
+										</div>
+										<div class="col-sm-12 col-md-3 text-right">
+											{**
+											* Items per page form (display only beside paginated grido)
+											*}
+											<label>
+												<a n:if="$filter_active" n:href="resetFilter!" class="ajax btn btn-danger btn-sm reset-filter">{='ublaboo_datagrid.reset_filter'|translate}</a>
+												{if $control->isPaginated()}
+													{input $filter['per_page'], data-autosubmit-per-page => TRUE, class => 'form-control input-sm form-control-sm selectpicker inline'}
+													na stránku
+													{*input $filter['per_page_submit'], class => 'datagrid-per-page-submit'*}
+													{input $filter['per_page_submit'], class => 'btn btn-default'}
+												{/if}
+											</label>
+										</div>
 									</div>
 								</td>
 							</tr>

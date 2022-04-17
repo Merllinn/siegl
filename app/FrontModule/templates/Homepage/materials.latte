@@ -6,8 +6,8 @@
             <div class="filter">
                 <form action="{link this}" method="get">
                     <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-                        {var $contAttr = $presenter->attributeManager->getForCont()}
-                        {var attrTypes = array(1=>"druh-odpadu",2=>"objem",3=>"nosnost")}
+                        {var $contAttr = $presenter->attributeManager->getForMaterial()}
+                        {var attrTypes = array(4=>"typ-hrubost")}
                         <li class="list-inline-item {$attrTypes[$attr->id]}" n:foreach="$contAttr as $attr">
                             <label class="select">
 	                            <select name="a{$attr->id}" class="form-select" aria-label="{$attr->name}" onchange="submit(this);">
@@ -18,14 +18,6 @@
                             </label>
                         </li>
                         <!-- ./druh odpadu -->
-                        <li class="list-inline-item turbokontejner">
-                            <div class="form-check">
-                                <label class="form-check-label" for="turbokontejner">
-                                    Turbokontejner
-                                </label>
-                                <input name="t" class="form-check-input" type="checkbox" {if !empty($_GET["t"])}checked="checked"{/if} id="turbokontejner" onchange="submit(this);">
-                            </div>
-                        </li>
                         <!-- ./turbokontejner -->
                         <li class="list-inline-item vat">
                             <div class="form-check"><input class="form-check-input" type="radio" name="dph" id="sDPH"{if $vat->isWith}checked{/if}><label class="form-check-label" for="sDPH"><a n:href="setVat! true">S DPH</a></label></div><div class="form-check"><input class="form-check-input" type="radio" name="dph" id="bezDPH" {if !$vat->isWith}checked{/if}><label class="form-check-label" for="bezDPH"><a n:href="setVat! false">Bez DPH</a></label></div>
@@ -48,7 +40,7 @@
                 <div class="col-md-4" n:foreach="$containers as $container">
     				{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
                     <div class="col-container">
-                        <h2><a n:href=":Front:Homepage:container $container->alias">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a></h2>
+                        <h2>{$container->name}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</h2>
                         {var $mainImg = $presenter->productManager->getMainPhoto($container->id)}
                         <div class="container-image">
                             <img src="{$mainImg|thumb}" alt="{$container->name}">
@@ -65,6 +57,7 @@
                                         {if $price->type==2}
                                         	<span class="price">{$price->text}</span>
                                         {/if}
+
                                     </button>
                                 </div>
                                 <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}">
@@ -76,8 +69,7 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
-                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></a>
-                        <a class="container-detail" n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                        <a class="btn btn-primary btn-arrow btn-red" href="#" title="Vybrat a objednat kontejner">Vybrat materiál <i class="fa-solid fa-angles-right"></i></a>
                     </div>
                     <!-- ./col container -->
                 </div>

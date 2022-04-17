@@ -75,8 +75,10 @@ class MaterialsPresenter extends BasePresenter
 		$attributes = explode("|", $details->attributes);
 		$prodAttribs = array();
 		foreach($attributes as $attr){
-			list($attrId, $attrVal) = explode("-", $attr);
-			$prodAttribs[$attrId] = $attrVal;
+			if(!empty($attr)){
+				list($attrId, $attrVal) = explode("-", $attr);
+				$prodAttribs[$attrId] = $attrVal;
+			}
 		}
 		$details->category = array();
 		foreach(explode("|", $details->categories) as $cat){
@@ -100,11 +102,10 @@ class MaterialsPresenter extends BasePresenter
 				if(empty($details[$prRow->attributeValue])){
 					$details[$prRow->attributeValue] = array();
 				}
-				$details[$prRow->attributeValue]["used"] = true;
-				for($i=1;$i<=$this->zones;$i++){
-					$key = "price".$i;
-					$details[$prRow->attributeValue][$i] = $prRow->$key;
-				}
+				$details[$prRow->attributeValue]["used"] = $prRow->type;
+				$details[$prRow->attributeValue]["text"] = $prRow->text;
+				$details[$prRow->attributeValue]["priceFrom"] = $prRow->priceFrom;
+				$details[$prRow->attributeValue]["priceTo"] = $prRow->priceTo;
 			}
 		}
 		$this["productPriceForm"]->setDefaults($details);
@@ -130,7 +131,7 @@ class MaterialsPresenter extends BasePresenter
 		//$form ->addHidden("id");
 		$form ->addText("name", "Jméno")
 				->addRule(Form::FILLED, "Vyplňte jméno produktu");
-		//$form ->addTextArea("perex", "Zkrácený popis");
+		$form ->addText("perex", "Podnázev");
 		/*
 		$form ->addTextArea("description", "Jaký druh odpadu sem patří?")
 				->getControlPrototype()
@@ -147,7 +148,6 @@ class MaterialsPresenter extends BasePresenter
 				//->addRule(Form::FILLED, "Vyberte kategorii")
 				//->setPrompt("Vyberte kategorie")
 				;
-		$form->addCheckbox("turbo", "Turbokontejner");
         /*
         $form ->addTextArea("technical", "Technická specifikace")
 				->getControlPrototype()
@@ -224,10 +224,10 @@ class MaterialsPresenter extends BasePresenter
 			foreach($paValues as $paValId=>$paValVal){
 				$form->addGroup($pa->name." - ".$paValVal);
 				$container = $form->addContainer($paValId);
-				$container->addCheckbox("used", "Používá se")->getControlPrototype()->class("isUsed");
-				for($i=1;$i<=$this->zones;$i++){
-					$container->addText($i, "Zóna ".$i." [Kč]");
-				}
+				$container->addRadioList("used", "", array("" =>"Nepoužívá se", "1"=>"Ceny", "2"=>"Text"))->getControlPrototype()->class("isUsed");
+				$container->addText("priceFrom", "Cena od");
+				$container->addText("priceTo", "Cena do");
+				$container->addText("text", "Text")->getControlPrototype()->class("priceText");
 			}
 		}
 
@@ -256,21 +256,23 @@ class MaterialsPresenter extends BasePresenter
 					foreach($paValues as $paValId=>$paValVal){
 						$prices = $values->$paValId;
 						if($prices["used"]){
-							$minPrice = 999999;
-							$maxPrice = 000000;
-							$dataPrices = array(
-								"product" => $this->edited,
-								"attributeValue" => $paValId,
-							);
-							for($i=1;$i<=$this->zones;$i++){
-								if($prices[$i]>0){
-									$dataPrices["price".$i] = $prices[$i];
-									$minPrice = min($minPrice, $prices[$i]);
-									$maxPrice = max($maxPrice, $prices[$i]);
-								}
+							if($prices["used"]==1){
+								$dataPrices = array(
+									"product" => $this->edited,
+									"attributeValue" => $paValId,
+									"type" => $prices["used"],
+									"priceFrom" => str_replace(" ", "", $prices["priceFrom"]),
+									"priceTo" => str_replace(" ", "", $prices["priceTo"]),
+								);
 							}
-							$dataPrices["priceFrom"] = $minPrice;
-							$dataPrices["priceTo"] = $maxPrice;
+							if($prices["used"]==2){
+								$dataPrices = array(
+									"product" => $this->edited,
+									"attributeValue" => $paValId,
+									"type" => $prices["used"],
+									"text" => $prices["text"],
+								);
+							}
 							$this->productManager->savePrices($dataPrices);
 						}
 					}
@@ -369,13 +371,15 @@ class MaterialsPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
                 $photo = $presenter->productManager->getMainPhoto($row->id);
                 if($photo){
-                        return html::el("img")->src($presenter->thumb($photo, 100, 100));
+                        return html::el("img")->src($presenter->thumb($photo, 150, null));
                     }
                     else{
                         return "";
                     }
         });
         $grid->addColumnText('name', 'Název');
+        
+        $grid->addColumnText('perex', 'Podnázev');
 
         $grid->addColumnText("category","Kategorie")
         ->setRenderer(function($row) use ($presenter) {
@@ -394,16 +398,6 @@ class MaterialsPresenter extends BasePresenter
 
         // add columns
         $grid->addColumnText("alias", "Alias");
-
-        $grid->addColumnText('turbo', 'Turbokontejner')
-            ->setRenderer(function($row) use ($presenter) {
-                if($row->turbo){
-                	return "ano";
-                }
-                else{
-                	return "ne";
-                }
-        });
 
         $grid->addColumnText('active', 'Aktivní')
             ->setRenderer(function($row) use ($presenter) {

@@ -11,7 +11,8 @@
 	
 		var elementClass = "col-1";
 		$(document).ready(function(){
-			$(".isUsed").parents("."+elementClass).removeClass(elementClass).addClass("col-12")
+			$(".isUsed").parents("."+elementClass).removeClass(elementClass).addClass("col-12 switcher")
+			$(".priceText").parents("."+elementClass).removeClass(elementClass).addClass("col-4 text")
 			showHideInputs();
 		});
 		$(document).ready(function(){
@@ -24,12 +25,18 @@
 		function showHideInputs(){
 			$(".isUsed").each(function(){
 				var row = $(this).closest(".row");
-				if ($(this).is(':checked')) {
-					console.log("show");
+				var checkedVal = row.find("input:checked").val();
+				if (checkedVal=="" || typeof checkedVal === "undefined") {
+					row.find("."+elementClass).hide();
+					row.find(".col-4.text").hide();
+				}
+				if (checkedVal=="1") {
+					row.find(".col-4.text").hide();
 					row.find("."+elementClass).show();
 				}
-				else{
+				if (checkedVal=="2") {
 					row.find("."+elementClass).hide();
+					row.find(".col-4.text").show();
 				}
 			});
 		}

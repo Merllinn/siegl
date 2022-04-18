@@ -1565,7 +1565,12 @@ label.select {
       }
 
         li.vat::before {
-          content: none !important
+          content: none !important;
+        }
+
+        li.vat a {
+          color: #424242;
+          text-decoration: none;
         }
 
         li.vat div {
@@ -1594,6 +1599,10 @@ label.select {
             color: #FFF;
             transition: background .25s;
           }
+
+            li.vat input[type="radio"]:checked ~ label a {
+              color: #FFF !important;
+            }
 
     div.filter li::after {
       content: "";
@@ -2152,12 +2161,21 @@ div.sidebar-vat {
     transition: all .25s;
   }
 
+    div.sidebar-vat label a {
+      color: #3c3c3c;
+      text-decoration: none;
+    }
+
     div.sidebar-vat input[type="radio"]:checked ~ label {
       color: #FFF;
       background-color: #d71921;
       font-weight: 600;
       transition: all .25s;
     }
+
+      div.sidebar-vat input[type="radio"]:checked ~ label a {
+        color: #FFF;
+      }
 
   div.sidebar-vat span {
     text-transform: none;
@@ -2953,6 +2971,121 @@ div.total-price {
     font-size: 2.8125rem;
     font-weight: 700;
   }
+
+div.amount {
+  font-size: 1.625rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 60px;
+}
+
+  div.amount div {
+    display: inline-block;
+  }
+
+  div.amount input.form-control {
+    width: auto;
+    display: inline-block;
+    border: 0;
+    border-radius: 0;
+  }
+
+  div.amount span {
+    cursor:pointer;
+  }
+
+  .minus,
+  .plus {
+    width: 50px;
+    height: 50px;
+    background: #004a39;
+    color: #ffffff87;
+    display: inline-block;
+    vertical-align: middle;
+    transition: color .25s;
+  }
+
+    .minus::before,
+    .plus::before {
+      content: "";
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1.95;
+      font-weight: 500;
+    }
+
+      .minus::before {
+        content: "-";
+      }
+
+      .plus::before {
+        content: "+";
+      }
+
+    .minus:hover,
+    .plus:hover {
+      color: #FFF;
+      transition: color .25s;
+    }
+
+  div.amount input#amount,
+  div.amount input.material-quantity {
+    width: 55px;
+  }
+
+  span.material-quantity {
+    text-transform: lowercase;
+    margin-left: 5px;
+    cursor: text !important;
+  }
+
+  div.amount input {
+    height: 50px;
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  div.amount label {
+    margin-right: 35px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  span.tons {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    margin-left: 10px;
+    cursor: text !important;
+  }
+
+  div.tons-price {
+    font-size: 1.625rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+    div.tons-price::before {
+      content: "";
+      display: block;
+      max-width: 570px; width: 100%; height: 2px;
+      margin: 40px auto 30px auto;
+      background-color: #424242;
+    }
+
+    div.tons-price i {
+      font-style: normal;
+      text-transform: lowercase;
+    }
+
+    div.tons-price i.kc {
+      text-transform: capitalize;
+    }
 
 /*!
 * Footer

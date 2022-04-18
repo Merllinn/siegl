@@ -2,7 +2,7 @@
 <html lang="cs" class="notouch yeswebp">
 <head>
     <meta charset="utf-8">
-    <title>Kontejnery a ceny - Siegl kontejnery</title>
+    <title>Objednávka kontejneru - Siegl kontejnery</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -329,6 +329,12 @@
                         </ul>
                     </div>
                     <!-- ./typ a hrubost -->
+                    <div class="amount">
+                        <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+                    </div>
+                    <div class="tons-price">
+                        Cena za 1 tunu je <strong>1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
+                    </div>
                 </form>
             </div>
         </div>
@@ -341,6 +347,70 @@
         <span class="with-vat">4 350 Kč vč. DPH</span>
     </div>
     <!-- ./price -->
+    <div class="order-form">
+        <div class="container">
+            <nav>
+                <div class="nav nav-tabs" id="nav-order-form" role="tablist">
+                    Jsem
+                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabOrderForm">
+                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                    Fyzická osoba
+                </div>
+                <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="ic">IČ</label>
+                            <input type="text" class="form-control" id="ic">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="jmeno">Jméno</label>
+                            <input type="name" class="form-control" id="jmeno">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="prijmeni">Příjmení</label>
+                            <input type="surname" class="form-control" id="prijmeni">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="email">E-mail</label>
+                            <input type="email" class="form-control" id="email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="telefon">Telefon</label>
+                            <input type="phone" class="form-control" id="telefon">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="poznamka">Poznámka</label>
+                            <textarea class="form-control" id="poznamka" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <input class="form-check-input" type="checkbox" value="" id="fakturacni-adresa">
+                            <label class="form-check-label" for="fakturacni-adresa">
+                                Fakturační adresa je jiná než adresa přistavení
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ./form -->
     <div class="waste-type-rectangle"></div>
     <footer>
         <div class="container">

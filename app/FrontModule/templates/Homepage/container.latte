@@ -56,7 +56,7 @@
                                 <!-- ./prices -->
                                 <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
                             </div>
-                            <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-4m3-6tunModal" title="Vybrat a objednat kontejner" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">Objednat online <i class="fa-solid fa-angles-right"></i></button>
+                            <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-{$product->alias}Modal" title="Vybrat a objednat kontejner" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">Objednat online <i class="fa-solid fa-angles-right"></i></button>
                             <div class="or" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
                                 <span>Nebo</span>
                                 <span class="phone">602 20 30 44</span>
@@ -132,4 +132,78 @@
     </section>
     <!-- ./top -->
     <div class="waste-type-rectangle"></div>
+{/block}
+
+{block modals}
+     {var $container = $product}
+     <div class="modal" id="container-{$container->alias}Modal" tabindex="-1" aria-labelledby="container-3m3-3tunyLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <h2>{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</h2>
+                <div class="modal-body">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
+                    <form>
+                    	<input type="hidden" name="container" value="{$container->id}" />
+                    	{var $prices = $presenter->productManager->getPrices($container->id)}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        Druh odpadu
+                                    </td>
+                                    <td>
+                                        Cena kontejneru
+                                    </td>
+                                    <td>
+                                        Počet
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr n:foreach="$prices as $price">
+                                    <td>
+                                        <input type="checkbox" class="form-check-input" name="prices[$price->id]" {first}checked{/first}> <a data-bs-toggle="collapse" href="#container-{$container->alias}{$price->id}" role="button" aria-expanded="false" aria-controls="container-{$container->alias}{$price->id}" title="Co sem patří a nepatří?">{$attVals[$price->attributeValue]->name}</a>
+                                        <div class="collapse type-description" id="container-{$container->alias}{$price->id}">
+                                            {$attVals[$price->attributeValue]->desc|noescape}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {if $price->type==1}
+                                        	{$price->priceFrom*$vat->koef|number:0:',':' '} <em>Kč</em>{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} <em>Kč</em>{/if}
+                                        {/if}
+                                        {if $price->type==2}
+                                        	{$price->text}
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <label class="select">
+                                            <select name="amounts[$price->id]">
+                                                <option n:for="$i=1;$i<=5;$i++" value="{$i}">{$i}</option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a n:if="false" class="btn btn-primary btn-arrow btn-white btn-cancel" href="#" title="Objednat kontejner">Zrušit <i class="fa-solid fa-xmark"></i></a>
+                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Objednat kontejner">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">
+                                        <button class="btn btn-primary btn-arrow btn-red" title="Objednat kontejner">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-rectangle">
+            <img class="stripe" src="{$basePath}/img/stripe-modal.png" alt="Obrázek pruhů">
+            <img class="cars" src="{$basePath}/img/cars-modal.png" alt="Obrázek Siegl aut">
+        </div>
+    </div>
 {/block}

@@ -1,9 +1,12 @@
+{block buttons}
+        <a class="btn btn-primary" n:href=":Admin:Products:add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat kontejner</a>
+{/block}
+
 {block content}
 
 
       <div class="head">
         <h1 class="title">Správa kontejnerů</h1>
-        <a class="btn btn-primary" n:href=":Admin:Products:add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat kontejner</a>
         <div class="clearfix"></div>
       </div>
 

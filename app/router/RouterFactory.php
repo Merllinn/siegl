@@ -22,7 +22,7 @@ final class RouterFactory
 		$router = new RouteList();
         //$router[] = new Route('index.php', 'Front:Homepage:default');
         $router[] = $admin = new RouteList('Admin');
-        $admin[] = new Route('admin/<presenter>/<action>', array('presenter' => 'Homepage','action' => 'default','lang' => 'cz'));;
+        $admin[] = new Route('admin/<presenter>/<action>', array('presenter' => 'Homepage','action' => 'default','lang' => 'cz'));
 
         $router[] = $front = new RouteList('Front');
         $front[] = new Route('prihlasit', array('presenter' => 'Homepage','action' => 'login', 'lang'=>'cz'));

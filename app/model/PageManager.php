@@ -64,7 +64,8 @@ final class PageManager
     {
         return $this->get()
             ->where("active = ?", true)
-            ->where("parent = ?", $parent);
+            ->where("parent = ?", $parent)
+            ->order("order");
     }
 
     public function add($values)

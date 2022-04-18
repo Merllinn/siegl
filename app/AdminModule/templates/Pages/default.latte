@@ -1,9 +1,12 @@
+{block buttons}
+            <a class="btn btn-primary" n:href=":Admin:Pages:add 0, !empty($parent)?$parent->id:''" n:if="$user->identity->role==9"><i class="fas fa-file"></i> Přidat stránku</a>
+    	  	<a class="btn btn-primary" n:href=":Admin:Pages:add 1, !empty($parent)?$parent->id:''"><i class="fas fa-link"></i> Přidat odkaz</a>
+{/block}
+
 {block content}
 
           <div class="head">
             <h1 class="title">Správa menu{if !empty($parent)} - podstránky "{$parent->name}"{/if}</h1>
-    	  	<a class="btn btn-primary" n:href=":Admin:Pages:add 1, !empty($parent)?$parent->id:''"><i class="fas fa-plus"></i> Přidat odkaz</a>
-            <a class="btn btn-primary" n:href=":Admin:Pages:add 0, !empty($parent)?$parent->id:''" n:if="$user->identity->role==9"><i class="fas fa-plus"></i> Přidat stránku</a>
             <div class="clearfix"></div>
           </div>
 

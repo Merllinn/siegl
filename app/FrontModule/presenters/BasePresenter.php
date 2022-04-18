@@ -191,11 +191,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
        );
 
        if(empty($image->file)){
-		   echo "Neexistující obrázek:";
+       		$imagePath = '../obrazek-neni-k-dispozici.png';
+		   //echo "Neexistující obrázek:";
 		   //var_dump($image);
 		   //die();
        }
-       $imagePath = $image->file;
+       else{
+       		$imagePath = $image->file;
+       }
        if(($width==null || $height==null) && $method=="EXACT"){
            $method="FIT";
        }

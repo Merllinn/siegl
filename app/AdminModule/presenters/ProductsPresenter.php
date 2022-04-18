@@ -100,6 +100,8 @@ class ProductsPresenter extends BasePresenter
 				if(empty($details[$prRow->attributeValue])){
 					$details[$prRow->attributeValue] = array();
 				}
+				$details[$prRow->attributeValue]["used"] = $prRow->type;
+				$details[$prRow->attributeValue]["text"] = $prRow->text;
 				for($i=1;$i<=$this->zones;$i++){
 					$key = "price".$i;
 					$details[$prRow->attributeValue][$i] = $prRow->$key;
@@ -129,7 +131,7 @@ class ProductsPresenter extends BasePresenter
 		//$form ->addHidden("id");
 		$form ->addText("name", "Jméno")
 				->addRule(Form::FILLED, "Vyplňte jméno produktu");
-		//$form ->addTextArea("perex", "Zkrácený popis");
+		$form ->addText("perex", "Podnázev");
 		$form ->addTextArea("description", "Jaký druh odpadu sem patří?")
 				->getControlPrototype()
 					->class("wysiwyg");
@@ -159,7 +161,11 @@ class ProductsPresenter extends BasePresenter
 		$attributes = $form->addContainer("attributes");
 		foreach($productAttributes as $pa){
 			$paValues = $this->attributeManager->getValuesArr($pa->id);
-			$attributes->addSelect($pa->id, $pa->name, $paValues);
+			$attrName = $pa->name;
+			if(!empty($pa->unit)){
+				$attrName.=" [".strip_tags($pa->unit)."]";
+			}
+			$attributes->addSelect($pa->id, $attrName, $paValues);
 		}
 
 		$form->addGroup(NULL);
@@ -221,9 +227,11 @@ class ProductsPresenter extends BasePresenter
 			foreach($paValues as $paValId=>$paValVal){
 				$form->addGroup($pa->name." - ".$paValVal);
 				$container = $form->addContainer($paValId);
+				$container->addRadioList("used", "", array("" =>"Nepoužívá se", "1"=>"Ceny", "2"=>"Text"))->getControlPrototype()->class("isUsed");
 				for($i=1;$i<=$this->zones;$i++){
-					$container->addText($i, "Zóna ".$i);
+					$container->addText($i, "Zóna ".$i." [Kč]");
 				}
+				$container->addText("text", "Text")->getControlPrototype()->class("priceText");
 			}
 		}
 
@@ -231,6 +239,10 @@ class ProductsPresenter extends BasePresenter
 		$form->addSubmit("submit", "Uložit ceny")->getControlPrototype()->class("btn btn-primary");
 
 		$form->onSuccess[] = [$this, 'saveProductPrices'];
+
+		$renderer = $form->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div class=row';
+		$renderer->wrappers['pair']['container'] = 'div class=col-1';
 
 		return $form;
 	}
@@ -247,20 +259,31 @@ class ProductsPresenter extends BasePresenter
 					$paValues = $this->attributeManager->getValuesArr($pa->id);
 					foreach($paValues as $paValId=>$paValVal){
 						$prices = $values->$paValId;
-						$minPrice = 999999;
-						$maxPrice = 000000;
-						$dataPrices = array(
-							"product" => $this->edited,
-							"attributeValue" => $paValId,
-						);
-						for($i=1;$i<=$this->zones;$i++){
-							$dataPrices["price".$i] = $prices[$i];
-							$minPrice = min($minPrice, $prices[$i]);
-							$maxPrice = max($maxPrice, $prices[$i]);
+						if($prices["used"]){
+							$minPrice = 999999;
+							$maxPrice = 000000;
+							$dataPrices = array(
+								"product" => $this->edited,
+								"attributeValue" => $paValId,
+								"type" => $prices["used"],
+							);
+							if($prices["used"]==1){
+								for($i=1;$i<=$this->zones;$i++){
+									if($prices[$i]>0){
+										$newPrice = str_replace(" ", "", $prices[$i]);
+										$dataPrices["price".$i] = $newPrice;
+										$minPrice = min($minPrice, $newPrice);
+										$maxPrice = max($maxPrice, $newPrice);
+									}
+								}
+								$dataPrices["priceFrom"] = $minPrice;
+								$dataPrices["priceTo"] = $maxPrice;
+							}
+							if($prices["used"]==2){
+								$dataPrices["text"] = $prices["text"];
+							}
+							$this->productManager->savePrices($dataPrices);
 						}
-						$dataPrices["priceFrom"] = $minPrice;
-						$dataPrices["priceTo"] = $maxPrice;
-						$this->productManager->savePrices($dataPrices);
 					}
 
 				}
@@ -347,9 +370,9 @@ class ProductsPresenter extends BasePresenter
         //$this->fullCats = $this->models->categories->fetchFullInfo();
 
         $grid = new DataGrid($this, $name);
-        if(!empty($this->filter->category)){
+        //if(!empty($this->filter->category)){
             $source->order("order");
-        }
+        //}
         $grid->setDataSource($source);
 
 
@@ -357,13 +380,15 @@ class ProductsPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
                 $photo = $presenter->productManager->getMainPhoto($row->id);
                 if($photo){
-                        return html::el("img")->src($presenter->thumb($photo, 100, 100));
+                        return html::el("img")->src($presenter->thumb($photo, 150, null));
                     }
                     else{
                         return "";
                     }
         });
         $grid->addColumnText('name', 'Název');
+        
+        $grid->addColumnText('perex', 'Podnázev');
 
         $grid->addColumnText("category","Kategorie")
         ->setRenderer(function($row) use ($presenter) {

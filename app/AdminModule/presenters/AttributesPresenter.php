@@ -204,7 +204,9 @@ class AttributesPresenter extends BasePresenter
 
         $grid->addColumnText('name', 'Název');
         
-        $grid->addColumnText('unit', 'Jednotka');
+        $grid->addColumnText('unit', 'Jednotka')
+            ->setTemplateEscaping(false);
+
 
         $grid->addColumnText('type', 'Typ')
             ->setRenderer(function($row) use ($presenter) {

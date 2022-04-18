@@ -1,0 +1,37 @@
+{block buttons}
+        <a class="btn btn-primary" n:href="add"><i class="fas fa-plus" n:if="$user->identity->role==9"></i> Přidat materiál</a>
+{/block}
+
+{block content}
+
+
+      <div class="head">
+        <h1 class="title">Správa materiálů</h1>
+        <div class="clearfix"></div>
+      </div>
+
+      <div class="filter">
+        {form filterForm}
+          <div class="row">
+            <div class="col">
+        	   {input fulltext, style=>'width:300px;'}
+            </div>
+            <div class="col">
+        	   {input active}
+            </div>
+        	 {*input noPhoto}{label noPhoto, style=>'top: 4px;' /*}
+        	 <div class="col">
+            {input submit}
+          </div>
+          <div class="col" style="padding-top: 0">
+        	 {input reset}
+          </div>
+        </div>
+        {/form}
+      </div>
+
+      <div class="sortable" data-action="{link sort!}">
+	    {control products}
+      </div>
+
+{/block}

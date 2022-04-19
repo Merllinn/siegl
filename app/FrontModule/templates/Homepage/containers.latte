@@ -7,7 +7,7 @@
                 <form action="{link this}" method="get">
                     <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         {var $contAttr = $presenter->attributeManager->getForCont()}
-                        {var attrTypes = array(1=>"druh-odpadu",2=>"objem",3=>"nosnost")}
+                        {var $attrTypes = array(1=>"druh-odpadu",2=>"objem",3=>"nosnost")}
                         <li class="list-inline-item {$attrTypes[$attr->id]}" n:foreach="$contAttr as $attr">
                             <label class="select">
 	                            <select name="a{$attr->id}" class="form-select" aria-label="{$attr->name}" onchange="submit(this);">
@@ -136,8 +136,8 @@
                 <h2>{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</h2>
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zavřít"></button>
-                    <form>
-                    	<input type="hidden" name="container" value="{$container->id}" />
+                    {form addToOrderForm}
+                    	{input isContainer, value=>"1"}
                     	{var $prices = $presenter->productManager->getPrices($container->id)}
                         <table class="table">
                             <thead>
@@ -157,7 +157,7 @@
                             <tbody>
                                 <tr n:foreach="$prices as $price">
                                     <td>
-                                        <input type="checkbox" class="form-check-input" name="prices[$price->id]" {first}checked{/first}> <a data-bs-toggle="collapse" href="#container-{$container->alias}{$price->id}" role="button" aria-expanded="false" aria-controls="container-{$container->alias}{$price->id}" title="Co sem patří a nepatří?">{$attVals[$price->attributeValue]->name}</a>
+                                        <input type="checkbox" class="form-check-input" name="prices[{$price->id}]" {first}checked{/first}> <a data-bs-toggle="collapse" href="#container-{$container->alias}{$price->id}" role="button" aria-expanded="false" aria-controls="container-{$container->alias}{$price->id}" title="Co sem patří a nepatří?">{$attVals[$price->attributeValue]->name}</a>
                                         <div class="collapse type-description" id="container-{$container->alias}{$price->id}">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
@@ -172,14 +172,14 @@
                                     </td>
                                     <td>
                                         <label class="select">
-                                            <select name="amounts[$price->id]">
+                                            <select name="amounts[{$price->id}]">
                                                 <option n:for="$i=1;$i<=5;$i++" value="{$i}">{$i}</option>
                                             </select>
                                         </label>
                                     </td>
                                     <td>
-                                        <a n:if="false" class="btn btn-primary btn-arrow btn-white btn-cancel" href="#" title="Objednat kontejner">Zrušit <i class="fa-solid fa-xmark"></i></a>
-                                        <a class="btn btn-primary btn-arrow btn-white" href="#" title="Objednat kontejner">Vybrat <i class="fa-solid fa-angles-right"></i></a>
+                                        <a class="btn btn-primary btn-arrow btn-white btn-cancel cancelRow" href="#" title="Objednat kontejner">Zrušit <i class="fa-solid fa-xmark"></i></a>
+                                        <a class="btn btn-primary btn-arrow btn-white includeRow" href="#" title="Objednat kontejner">Vybrat <i class="fa-solid fa-angles-right"></i></a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -191,7 +191,7 @@
                                 </tr>
                             </tfoot>
                         </table>
-                    </form>
+                    {/form}
                 </div>
             </div>
         </div>
@@ -200,4 +200,41 @@
             <img class="cars" src="{$basePath}/img/cars-modal.png" alt="Obrázek Siegl aut">
         </div>
     </div>
+{/block}
+{block scripts}
+    <script>
+    	$(document).ready(function(){
+			$(".modal .form-check-input").on("change", function(){
+				synchButtons();
+			});
+			
+			$(".includeRow").on("click", function(e){
+				e.preventDefault();
+				$(this).closest("tr").find(".form-check-input").prop('checked', true);
+				synchButtons();
+			});
+			$(".cancelRow").on("click", function(e){
+				e.preventDefault();
+				$(this).closest("tr").find(".form-check-input").prop('checked', false);
+				synchButtons();
+			});
+			
+			synchButtons();
+    	});
+    	
+    	function synchButtons(){
+			$(".modal .form-check-input").each(function(){
+				var checked = $(this).is(':checked');
+				var row = $(this).closest("tr");
+				if(checked){
+					row.find(".cancelRow").show();
+					row.find(".includeRow").hide();
+				}
+				else{
+					row.find(".cancelRow").hide();
+					row.find(".includeRow").show();
+				}
+			});
+    	}
+    </script>
 {/block}

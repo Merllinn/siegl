@@ -21,7 +21,7 @@ session:
     expiration: 14 days
     savePath: "%tempDir%/sessions"
     autoStart: true
-    name: polatisk
+    name: siegl
 
 extensions:
     bulkgate: BulkGate\Message\Bridges\MessageDI\MessageExtension

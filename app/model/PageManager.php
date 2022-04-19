@@ -95,6 +95,14 @@ final class PageManager
             ->fetch();
     }
 
+    public function findByLayout($layout)
+    {
+        return $this->get()
+            ->select("pages.*")
+            ->where("layoutId", $layout)
+            ->fetch();
+    }
+
     public function find($id)
     {
         return $this->get()

@@ -62,7 +62,8 @@ final class ProductManager
     {
         return $this->get()
             ->where("type = ?", $type)
-            ->where("active = ?", true);
+            ->where("active = ?", true)
+            ->order("order");
     }
 
 
@@ -220,6 +221,13 @@ final class ProductManager
     public function savePrices($values)
     {
         $this->getPr()->insert($values);
+    }
+
+    public function findPrice($id)
+    {
+        return $this->getPr()
+        ->where("id", $id)
+        ->fetch();
     }
 
     public function getPrices($id)

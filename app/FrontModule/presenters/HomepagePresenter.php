@@ -9,7 +9,7 @@ use Nette\Utils\Html;
 
 final class HomepagePresenter extends HomepageForms
 {
-
+	
     public function actionApprove($id, $branch=1){
     	$this->orderManager->update(array("branch"=>$branch), $id);
 		$this->approveOrder($id);
@@ -17,13 +17,15 @@ final class HomepagePresenter extends HomepageForms
 	}
 
     public function renderOrder(){
-		$this->template->items = $this->basket->items;
-		$this->template->products = $this->basket->products;
-		$this->template->itemNames = $this->basket->itemNames;
-		$this->template->sizesS = $this->basket->sizes;
-		$this->template->materialsS = $this->basket->materials;
-		$this->template->amountsS = $this->basket->amounts;
-		$this->template->borders = $this->basket->borders;
+		$this->template->containers = $this->basket->containers;
+		$this->template->attVals = $this->attributeManager->getAllValues();
+	}
+	
+	public function handleAddNextContainer(){
+		$containers = $this->basket->containers;
+		$containers[] = new \Nette\Utils\ArrayHash();
+		$this->basket->containers = $containers;
+		$this->redrawControl("orderContainers");
 	}
 
     public function renderOrder2(){
@@ -369,6 +371,47 @@ final class HomepagePresenter extends HomepageForms
             catch(DibiDriverException $e){
                 $this->flashMessage($e->getMessage(), "error");
             }
+        }
+    }
+    
+    public function createComponentAddToOrderForm(){
+        $form = new Form();
+
+        $form ->addHidden("isContainer", "");
+        
+        $form->onSuccess[] = [$this, 'createOrder'];
+
+        return $form;
+    }
+
+
+    /** callback for page form
+    *
+    * @param Form data from page form
+    * @return void
+    */
+    public function createOrder(Form $form){
+        $values = $form->getValues();
+	   	$request = $this->getHttpRequest();
+	   	$amounts = $request->getPost("amounts");
+	   	$prices = $request->getPost("prices");
+        if($values->isContainer=="1"){
+	        $items = array();
+	        foreach($prices as $priceId=>$value){
+				if($value=="on"){
+					$amount = $amounts[$priceId];
+					for($i=1;$i<=$amount;$i++){
+						$price = $this->productManager->findPrice($priceId);
+						$item = new \Nette\Utils\ArrayHash();
+						$item->price = $this->rowToArray($price);
+						$items[] = $item;
+					}
+				}
+	        }
+	        $this->basket->containers = $items;
+            
+            $containerOrderPage = $this->pageManager->findByLayout(11);
+            $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);
         }
     }
     

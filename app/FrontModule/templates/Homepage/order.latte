@@ -1,291 +1,211 @@
 {layout ../@layout.latte}
 {block content}
-		<style>
-			.filesList{
-				display: flex;
-			}
-			.filesList .fileItem{
-				margin: 10px;
-				width:25%;
-				text-align: center;
-			}
-		</style>
-      <div class="container login-page">
-          <h1 class="title">Objednávka tisku</h1>
-			{if empty($items)}
-				<p>Objednávka neobsahuje žádné fotky</p>
-			{else}
-				<div class="orderItems">
-					<div class="order-setup">
-						<ul class="list-inline">
-							<li class="list-inline-item">
-								<span class="title">Označit</span>
-								<a href="" class="checkAll btn btn-sm btn-primary"><i class="fas fa-check"></i> vše</a> <a href="" class="checkNone btn btn-sm btn-secondary"><i class="fas fa-times"></i> nic</a>
-							</li>
-							<li class="list-inline-item">
-								<span class="title">Označené</span>
-								<ul class="list-inline">
-									<li class="list-inline-item">
-										<select name="sizeMulti" class="form-control selectpicker sizeSelectMulti">
-											<option value="">Nastavit rozměr</option>
-											<option n:foreach="$sizes as $sizeId=>$size" value="{$sizeId}">{$size["name"]}</option>
-										</select>
-									</li>
-									<li class="list-inline-item">
-										<select name="materialMulti" class="form-control selectpicker materialSelectMulti">
-											<option value="">Nastavit typ papíru</option>
-											<option n:foreach="$materials as $materialId=>$material" value="{$materialId}">{$material}</option>
-										</select>
-									</li>
-									<li class="list-inline-item">
-										<select name="borderMulti" class="form-control selectpicker borderSelectMulti">
-											<option value="">Nastavit rámeček</option>
-											<option value="1">Přidat</option>
-											<option value="0">Odebrat</option>
-										</select>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-					<p class="alert alert-success actionMessage" style="display: none;"></p>
-					<div class="table-responsive">
-						<table class="table table-order">
-							<thead>
-								<tr>
-									<th>Označit</th>
-									<th>Fotka</th>
-									<th>Množství</th>
-									<th>Rozměr</th>
-									<th>Cena/ks</th>
-									<th>Typ papíru</th>
-									<th>Rámeček</th>
-									<th>Možnosti</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr n:foreach="$items as $itemId=>$item" data-id="{$itemId}" class="dataRow {$items[$itemId]}-{$sizesS[$itemId]}-{$materialsS[$itemId]}" data-unique="{$items[$itemId]}-{$sizesS[$itemId]}-{$materialsS[$itemId]}">
-									<td class="check">
-										<input type="checkbox" class="fileCheck" name="files[{$item}]" value="{$item}" />
-									</td>
-									<td class="photo-thumbnail chocolat-parent {if !empty($borders[$itemId])}framed{/if}">
-										<a class="chocolat-image" href="https://drive.google.com/thumbnail?id={$item}&sz=w{1600}-h{1200}" style="border: 1px solid  #ddd;display: inline-block;"><img src="https://drive.google.com/thumbnail?id={$item}" title="" width="150" style="{if !empty($borders[$itemId])}border: 5px solid #FFF;{/if}"></a>
-										{*<br>{if !empty($itemNames[$item])}{$itemNames[$item]}{/if}*}
-									</td>
-									<td class="amounts">
-										<input type="number" name="amounts[{$itemId}]" class="form-control amountInput" value="{if !empty($amountsS[$itemId])}{$amountsS[$itemId]}{else}1{/if}" />
-									</td>
-									<td class="sizes">
-										<select name="sizes[{$itemId}]" class="form-control selectpicker sizeSelect">
-											<option n:foreach="$sizes as $sizeId=>$size" value="{$sizeId}" data-price="{$size["price"]}" {if !empty($sizesS[$itemId]) && $sizesS[$itemId]==$sizeId}selected='selected'{/if}>{$size["name"]}</option>
-										</select>
-									</td>
-									<td class="price">
-										<span class="rowPrice"></span> Kč
-									</td>
-									<td class="materials">
-										<select name="materials[{$itemId}]" class="form-control selectpicker materialSelect">
-											<option n:foreach="$materials as $materialId=>$material" value="{$materialId}" {if !empty($materialsS[$itemId]) && $materialsS[$itemId]==$materialId}selected='selected'{/if}>{$material}</option>
-										</select>
-									</td>
-									<td class="borders">
-										<a class="border" n:href="setBorder! $itemId" n:if="empty($borders[$itemId])"></a>
-										<a n:href="setBorder! $itemId" n:if="empty($borders[$itemId])"><input type="checkbox" /></a>
-										<a class="border" n:href="setBorder! $itemId, false" n:if="!empty($borders[$itemId])"></a>
-										<a n:href="setBorder! $itemId, false" n:if="!empty($borders[$itemId])"><input type="checkbox" checked="checked" /></a>
-									</td>
-									<td class="remove">
-										<a n:href="duplicateToOrder! $itemId" class="btn btn-sm btn-primary"><i class="fas fa-clone"></i> duplikovat</a>
-										{*<a n:href="addToOrder! $item" class="btn btn-sm btn-primary"><i class="fas fa-clone"></i> duplikovat</a>*}
-										<a n:href="removeFromOrder! $itemId" class="btn btn-danger"><i class="fas fa-times"></i></a>
-									</td>
-								</tr>
-								<tr n:foreach="$products as $itemId=>$product" data-id="{$itemId}" data-price="{$product->price_vat}" class="dataRow productRow">
-									<td class="check">
-										<input type="checkbox" class="fileCheck" name="products[{$item}]" value="{$itemId}" />
-									</td>
-									<td class="photo-thumbnail chocolat-parent">
-										{var $img = $presenter->productManager->getMainPhoto($product->id)}
-										<img n:if="!empty($img)" src="{$img|thumb:100:null}" title="{$product->name}" width="100">
-									</td>
-									<td class="amounts">
-										<input type="number" name="amountsInputs[{$itemId}]" class="form-control amountInputProducts" value="{$product->amount}" />
-									</td>
-									<td class="sizes">
-										<strong>{$product->name}</strong>
-									</td>
-									<td class="price">
-										{$product->price_vat|number:0:',':' '} Kč
-									</td>
-									<td class="materials"></td>
-									<td class="borders"></td>
-									<td class="remove">
-										<a n:href="removeProductFromOrder! $itemId" class="btn btn-danger"><i class="fas fa-times"></i></a>
-									</td>
-								</tr>
-							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="8">
-										Celková cena: <span class="totalPrice"></span> Kč
-									</td>
-								</tr
-							</tfoot>
-						</table>
-					</div>
-				</div>
-			{/if}
-		</div>
-		<div class="album-meta step-2">
-			<div class="container">
-				<ul class="list-inline">
-					<li class="list-inline-item">
-						<a n:href=":Front:Homepage:album" class="btn btn-primary"><i class="fas fa-chevron-left"></i> Zpět na přehled objednávky</a>
-					</li>
-					<li class="list-inline-item">
-						<a n:href=":Front:Homepage:order2" class="btn btn-primary btn-pink continueOrder">Pokračovat v objednávce tisku <i class="fas fa-chevron-right"></i></a>
-					</li>
-				</ul>
-				<div class="container"></div>
-			</div>
-		</div>
-      </div>
-      <!-- ./container -->
-
-{/block}
-
-{block scripts}
-    <script>
-        $(document).ready(function(){
-			$(".checkAll").click(function(e){
-				e.preventDefault();
-				$(".fileCheck").prop("checked", true);
-			});
-			$(".checkNone").click(function(e){
-				e.preventDefault();
-				$(".fileCheck").prop("checked", false);
-			});
-			$("select.sizeSelectMulti").change(function(e){
-				e.preventDefault();
-				var size = $("select.sizeSelectMulti").val();
-				var sizeText = $("select.sizeSelectMulti option:selected").html();
-				$(".fileCheck").each(function(){
-					if($(this).prop("checked")==true){
-						if(size!=""){
-							$(this).closest("tr").find("select.sizeSelect").selectpicker('val', size);
-						}
-					}
-				});
-				$(".sizeSelectMulti").selectpicker('val', "");
-				$(".actionMessage").html("Označeným fotografiím byl nastaven rozměr "+sizeText).show();
-				updatePrices();
-			});
-			$("select.materialSelectMulti").change(function(e){
-				e.preventDefault();
-				var material = $("select.materialSelectMulti").val();
-				var materialText = $("select.materialSelectMulti option:selected").html();
-				$(".fileCheck").each(function(){
-					if($(this).prop("checked")==true){
-						if(material!=""){
-							$(this).closest("tr").find("select.materialSelect").selectpicker('val', material);
-						}
-					}
-				});
-				$(".materialSelectMulti").selectpicker('val', "");
-				$(".actionMessage").html("Označeným fotografiím byl nastaven materiál "+materialText).show();
-				updatePrices();
-			});
-			$("select.borderSelectMulti").change(function(e){
-				e.preventDefault();
-				var border = $("select.borderSelectMulti").val();
-				var link = {link setBorders!}
-				$(".fileCheck").each(function(){
-					if($(this).prop("checked")==true){
-						var itemId = $(this).closest("tr").data("id");
-						link = link + "&items[]="+itemId;
-					}
-				});
-				link = link + "&set="+border;
-				$.get(link);
-			});
-			$("select, input.amountInput").change(function(){
-				updatePrices();
-			});
-			$("input.amountInput").keyup(function(){
-				updatePrices();
-			});
-			$("select, input.amountInputProducts").change(function(){
-				updatePrices();
-			});
-			$("input.amountInputProducts").keyup(function(){
-				updatePrices();
-			});
-			$(".continueOrder").click(function(e){
-				e.preventDefault();
-				return checkOrder();
-			});
-
-			function updatePrices(){
-				var totalPrice= 0;
-				var link = {link updateOrder!}
-				$("select.sizeSelect").each(function(){
-					var selectedOption = $(this).find("option:selected");
-					var amount = parseInt($(this).parents("tr").find(".amountInput").val());
-					$(this).parents("tr").find(".rowPrice").html(selectedOption.data("price"));
-					//price = price + parseInt($(this).closest("tr").data("price"));
-					totalPrice += parseInt(selectedOption.data("price")) * amount;
-					link = link + "&sizes["+$(this).parents("tr").data("id")+"]="+$(this).val();
-				});
-				$(".productRow").each(function(){
-					var amount = parseInt($(this).find(".amountInputProducts").val());
-					totalPrice += parseInt($(this).data("price")) * amount;
-				});
-				$("select.materialSelect").each(function(){
-					link = link + "&materials["+$(this).parents("tr").data("id")+"]="+$(this).val();
-				});
-				$(".amountInput").each(function(){
-					link = link + "&amounts["+$(this).parents("tr").data("id")+"]="+$(this).val();
-				});
-				$(".amountInputProducts").each(function(){
-					link = link + "&amountsProducts["+$(this).parents("tr").data("id")+"]="+$(this).val();
-				});
-				$(".totalPrice").html(totalPrice.toLocaleString());
-				$.get(link);
-
-			}
-			updatePrices();
-			
-			function checkOrder(){
-				var hasDuplicity = false;
-				$(".dataRow").each(function(){
-					var unique = $(this).data("unique");
-					if($(".dataRow."+unique).length > 1){
-						hasDuplicity = true;
-					}
-				});
-				if(hasDuplicity){
-						var dialog = $('<p>V objednávce jsou duplicitní fotky ve stejném rozměru a typu papíru. Chcete je sloučit a sečíst množství?</p>').dialog({
-						    height: "auto",
-						    width: "auto",
-		                    buttons: {
-		                        "Ano": function() { 
-                        			location.href = {link mergeRows!};
-		                        },
-		                        "Ne":  function() { 
-                        			dialog.dialog('close');
-                        			location.href = $(".continueOrder").attr("href");
-		                        },
-		                        "Zrušit":  function() {
-		                            dialog.dialog('close');
-		                            return false;
-		                        }
-		                    }				
-						});
-				}
-				else{
-					location.href = $(".continueOrder").attr("href");
-				}
-			}
-		});
-    </script>
+    <section class="top order">
+        <div class="container">
+            <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Objednávka kontejneru</h1>
+            <h2>Místo přistavení kontejneru</h2>
+            <form>
+                <div class="input-group street">
+                    <label for="vase-ulice" class="form-label">Zadejte ulici</label>
+                    <input type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice">
+                    <button class="btn btn-primary" type="button"><i class="fa-solid fa-angles-right"></i></button>
+                </div>
+            </form>
+            <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
+        </div>
+        <img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+    </section>
+    <!-- ./top -->
+    <section class="map">
+        <div class="container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d20473.424626247688!2d14.4231077!3d50.1016737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1scs!2scz!4v1649750514915!5m2!1scs!2scz" width="100%" height="680" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+    <section class="waste">
+        <div class="container">
+            <h1 class="title underline">Druh odpadu a velikost kontejneru</h1>
+            <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
+            <div class="filter">
+            	{snippet orderContainers}
+                <form>
+                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
+	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                    		{var $attr = $presenter->attributeManager->find(1)}
+	                        <li class="list-inline-item druh-odpadu">
+	                            <label class="select">
+		                            <select name="type[{$index}]" class="form-select" aria-label="{$attr->name}">
+		                                <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
+		                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
+		                                <option n:foreach="$values as $key=>$val"  {if !empty($container->price->attributeValue) && $container->price->attributeValue==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+		                            </select>
+	                            </label>
+	                        </li>
+	                        <!-- ./druh odpadu -->
+	                        {var $products = $presenter->productManager->getByType(1)}
+	                        <li class="list-inline-item objem">
+	                            <label class="select">
+		                            <select name="container{$index}" class="form-select" aria-label="Kontejner">
+		                                <option {if empty($container->price->product)}selected="selected"{/if} value="">Vyberte velikost kontejneru</option>
+		                                <option n:foreach="$products as $product"  {if !empty($container->price->product) && $container->price->product==$product->id}selected="selected"{/if} value="{$product->id}">
+		                                	{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
+		                                	{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
+		                                </option>
+		                            </select>
+	                            </label>
+	                        </li>
+	                        <!-- ./velikost kontejneru -->
+	                    </ul>
+	                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
+	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                        <li class="list-inline-item today">
+	                            <button class="btn btn-primary">Dnes</button>
+	                        </li>
+	                        <!-- ./dnes -->
+	                        <li class="list-inline-item date" id="date">
+	                            <label class="select">
+	                                <input class="form-control" type="text" value="Jiné datum" readonly>
+	                            </label>
+	                        </li>
+	                        <!-- ./jine datum -->
+	                        {last}
+	                        <li class="list-inline-item add-container">
+	                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
+	                        </li>
+	                        {/last}
+	                        <!-- ./pridat dalsi kontejner -->
+	                    </ul>
+                    </div>
+                </form>
+                {/snippet}
+                <!-- ./form -->
+            </div>
+            <!-- ./filter -->
+        </div>
+    </section>
+    <!-- ./waste -->
+    <section class="material">
+        <div class="container">
+            <h3 class="title underline">Potřebujete stavební materiál?</h3>
+            <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ano, potřebuji</a>
+        </div>
+        <div class="select-material">
+            <div class="container">
+                <h4>Vyberte typ materiálu</h4>
+                <form>
+                    <ul class="list-inline select-material">
+                        <li class="list-inline-item">
+                            <label for="pisek">
+                                <input id="pisek" type="radio" name="material" value="pisek">
+                                <img src="images/pisek.jpg" alt="Písek">
+                                <span>Písek</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="sterk">
+                                <input id="sterk" type="radio" name="material" value="pisek">
+                                <img src="images/sterk.jpg" alt="Štěrk">
+                                <span>Štěrk</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="recyklat">
+                                <input id="recyklat" type="radio" name="material" value="pisek">
+                                <img src="images/recyklat.jpg" alt="Recyklát">
+                                <span>Recyklát</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="beton">
+                                <input id="beton" type="radio" name="material" value="pisek">
+                                <img src="images/beton.jpg" alt="Beton">
+                                <span>Beton</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="kacirek">
+                                <input id="kacirek" type="radio" name="material" value="pisek">
+                                <img src="images/kacirek.jpg" alt="Kačírek">
+                                <span>Kačírek</span>
+                            </label>
+                        </li>
+                        <li class="list-inline-item">
+                            <label for="zemina">
+                                <input id="zemina" type="radio" name="material" value="pisek">
+                                <img src="images/zemina.jpg" alt="Zemina">
+                                <span>Zemina</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="roughness">
+                        <h4>Zvolte typ a hrubost</h4>
+                        <ul class="list-unstyled">
+                            <li>
+                                <label for="pisek-kopany">
+                                    <input class="check" id="pisek-kopany" type="radio" name="hrubost" value="pisek-kopany">
+                                    <div class="image">
+                                        <img src="images/pisek.jpg" alt="Písek kopaný">
+                                    </div>
+                                    <div class="title">
+                                        <span>Písek kopaný</span>
+                                        <div class="description" style="display: block">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                        <label class="select">
+                                            <select aria-label="Zvolit hrubost">
+                                                <option selected disabled>Zvolit hrubost</option>
+                                                <option value="0-4">0 - 4 mm</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </label>
+                            </li>
+                            <li>
+                                <label for="pisek-ricni">
+                                    <input id="pisek-ricni" type="radio" name="hrubost" value="pisek-ricni">
+                                    <div class="image">
+                                        <img src="images/pisek.jpg" alt="Písek říční">
+                                    </div>
+                                    <div class="title">
+                                        <span>Písek říční</span>
+                                        <div class="description">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                            <li>
+                                <label for="pisek-zasypovy">
+                                    <input id="pisek-zasypovy" type="radio" name="hrubost" value="pisek-zasypovy">
+                                    <div class="image">
+                                        <img src="images/pisek.jpg" alt="Písek zásypový">
+                                        <div class="description">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                    <div class="title">
+                                        <span>Písek zásypový</span>
+                                        <div class="description">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- ./typ a hrubost -->
+                </form>
+            </div>
+        </div>
+        <!-- ./select material -->
+    </section>
+    <!-- ./material -->
+    <div class="total-price">
+        <span class="total">Celková cena</span>
+        <strong class="price">3 650 Kč</strong>
+        <span class="with-vat">4 350 Kč vč. DPH</span>
+    </div>
+    <!-- ./price -->
+    <div class="waste-type-rectangle"></div>
 {/block}

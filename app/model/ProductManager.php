@@ -233,7 +233,8 @@ final class ProductManager
     public function getPrices($id)
     {
         return $this->getPr()
-        ->where("product", $id);
+        ->where("product", $id)
+        ->order("attributeValue.order");
     }
 
     public function getPricesStr($id)

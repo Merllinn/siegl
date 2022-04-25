@@ -226,7 +226,7 @@ class MaterialsPresenter extends BasePresenter
 				$form->addGroup($pa->name." - ".$paValVal);
 				$container = $form->addContainer($paValId);
 				$container->addRadioList("used", "", array("" =>"Nepoužívá se", "1"=>"Ceny", "2"=>"Text"))->getControlPrototype()->class("isUsed");
-				$container->addText("koef", "Koeficient [m3 -> t]")->setDefaultValue(1);
+				$container->addText("koef", "Koeficient [t -> m3]")->setDefaultValue(1);
 				$container["koef"]->getControlPrototype()->class("koeficient");
 				$container->addText("priceFrom", "Cena od");
 				$container->addText("priceTo", "Cena do");

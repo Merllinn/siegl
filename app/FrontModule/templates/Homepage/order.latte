@@ -1,14 +1,18 @@
 {layout ../@layout.latte}
 {block content}
+	<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvbrT0aEtXB5ZsAZUMRHhKxKTE8ocIlKA&callback=initMap&v=weekly&libraries=places"
+      defer
+    ></script>
     <section class="top order">
         <div class="container">
             <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Objednávka kontejneru</h1>
             <h2>Místo přistavení kontejneru</h2>
-            <form>
+            <form class="orderform">
                 <div class="input-group street">
                     <label for="vase-ulice" class="form-label">Zadejte ulici</label>
-                    <input type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice">
-                    <button class="btn btn-primary" type="button"><i class="fa-solid fa-angles-right"></i></button>
+                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice">
+                    <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
             </form>
             <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
@@ -19,7 +23,7 @@
     <!-- ./top -->
     <section class="map">
         <div class="container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d20473.424626247688!2d14.4231077!3d50.1016737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1scs!2scz!4v1649750514915!5m2!1scs!2scz" width="100%" height="680" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        	<div id="map" style="width:100%; height:680px;"></div>
         </div>
     </section>
     <section class="waste">
@@ -29,7 +33,7 @@
             <div class="filter">
             	{snippet orderContainers}
                 <form>
-                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
+                    <div class="oneContainer" n:if="!empty($containers)" n:foreach="$containers as $index=>$container">
 	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                     		{var $attr = $presenter->attributeManager->find(1)}
 	                        <li class="list-inline-item druh-odpadu">
@@ -91,8 +95,8 @@
         <div class="container">
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
             <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if}>Ano, potřebuji</a>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if empty($materials)}style="display: none;"{/if}>Ne, nepotřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
         </div>
         <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
             <div class="container">
@@ -114,7 +118,7 @@
                         {var $prices = $presenter->productManager->getPrices($mat->id)}
                         <ul class="list-unstyled">
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class=" {if !empty($materials[0]->price) && $price->id == $materials[0]->price}selected{/if}">
-                                <label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}">
+                                <label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}" data-price="{$price->priceFrom}" data-koef="{$price->koef}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta" value="{$price->id}">
                                     <div class="image">
                                 		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
@@ -139,6 +143,12 @@
                         </ul>
                     </div>
                     <!-- ./typ a hrubost -->
+                    <div class="amount" style="display: none;">
+                        <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control materialWeight" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+                    </div>
+                    <div class="tons-price" style="display: none;">
+                        Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
+                    </div>
                 </form>
             </div>
         </div>
@@ -151,12 +161,105 @@
         <span class="with-vat">4 350 Kč vč. DPH</span>
     </div>
     <!-- ./price -->
+    <div class="order-form">
+        <div class="container">
+            <nav>
+                <div class="nav nav-tabs" id="nav-order-form" role="tablist">
+                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabOrderForm">
+                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                    Fyzická osoba
+                </div>
+                <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                    <div class="row row-ic">
+                        <div class="form-group col-md-12">
+                            <label for="ic">IČ</label><input type="text" class="form-control" id="ic"><button class="btn btn-primary">Načíst údaje</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            <label for="jmeno">Jméno</label>
+                            <input type="name" class="form-control" id="jmeno">
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            <label for="prijmeni">Příjmení</label>
+                            <input type="surname" class="form-control" id="prijmeni">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            <label for="email">E-mail</label>
+                            <input type="email" class="form-control" id="email">
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            <label for="telefon">Telefon</label>
+                            <input type="phone" class="form-control" id="telefon">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+                            <label for="poznamka">Poznámka</label>
+                            <textarea class="form-control" id="poznamka" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+                                <input class="form-check-input" type="checkbox" value="" id="fakturacni-adresa">
+                                <label class="form-check-label" for="fakturacni-adresa">
+                                    Fakturační adresa je jiná než adresa přistavení
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 send-order">
+                            <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-navigation">
+            <div class="container">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" title="Typy odpadů">Typy odpadů</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" title="Aktuálně">Aktuálně</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- ./form -->
     <div class="waste-type-rectangle"></div>
 {/block}
 
 {block scripts}
     <script>
     	$(document).ready(function(){
+			var materialPrice = 0;
+			var materialKoef = 1;
+			{if !empty($materials[0]->priceObj)}
+				materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
+				materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
+				$(".materialPrice").html(materialPrice.toLocaleString());
+				$(".material-quantity").val(Math.round($(".materialWeight").val()*materialKoef));
+				$(".amount").show();
+				$(".tons-price").show();
+			{/if}
+			
 			$(".updateValue").change(function(){
 				var link = $(this).data("link");
 				link = link + "&val=" + $(this).val();
@@ -165,6 +268,9 @@
 			$(".triggerMaterial").click(function(e){
 				e.preventDefault()
 				$(".changeMaterial").toggle();
+				if($(this).data("link")!=""){
+					$.get($(this).data("link"));
+				}
 			});
 			$(".typePick").change(function(){
 				var type = $(this).val();
@@ -183,6 +289,9 @@
 					}
 				});
 			});
+			$(".materialWeight").change(function(){
+				$(".material-quantity").val(Math.round($(this).val()*materialKoef));
+			});
 			$(".pickMaterial").click(function(e){
 				e.preventDefault()
 				var link = $(this).data("link");
@@ -190,15 +299,88 @@
 				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
 				$(".roughness").hide();
 				$(".roughness.mat"+matId).show();
+				$(".amount").hide();
+				$(".tons-price").hide();
 				$.get(link);
 			});
 			$(".pickVariant").click(function(e){
 				e.preventDefault()
 				var link = $(this).data("link");
 				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
+				materialPrice = parseInt($(this).data("price"));
+				materialKoef = parseFloat($(this).data("koef"));
+				$(".materialPrice").html(materialPrice.toLocaleString());
+				$(".material-quantity").val(Math.round($(".materialWeight").val()*materialKoef));
+				$(".amount").show();
+				$(".tons-price").show();
 				$.get(link);
 			});
 		});
+		
+		function initMap() {
+			var center = { lat: 50.1025735, lng: 14.4273201 };
+			var mapEl = document.getElementById("map");
+			var geocoder = new google.maps.Geocoder();
+			var map = new google.maps.Map(
+			   mapEl,
+			  {
+			    zoom: 14.21,
+			    center: center,
+			  }
+			);
+			
+			var input = document.getElementById('searchTextField');
+  			new google.maps.places.Autocomplete(input);
+  			var marker
+  			
+  			$("#searchTextField").keypress(function(event){
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+  				if(keycode == '13'){
+					event.preventDefault();
+					geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
+						if (status == google.maps.GeocoderStatus.OK) {
+							setMarker(results[0].geometry.location, $("#searchTextField").val());
+					    } 
+					}); 				
+				}
+  			});
+  			$(".setAddress").click(function(e){
+				e.preventDefault();
+				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						setMarker(results[0].geometry.location, $("#searchTextField").val());
+				    } 
+				}); 				
+  			});
+  			map.addListener("click", (mapsMouseEvent) => {
+    		  var ll = mapsMouseEvent.latLng;
+    		  geocoder
+    		  	.geocode({ location: ll })
+    		  	.then((response) => {
+    		  		if (response.results[0]) {
+    		  			$("#searchTextField").val(response.results[0].formatted_address);
+						  setMarker(ll, response.results[0].formatted_address);
+					}else{
+						$("#searchTextField").val("nenalezeno");
+					}
+					
+    		  	});
+    		});
+    		
+    		function setMarker(latLn, caption){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			  marker = new google.maps.Marker({
+				position: latLn,
+				map,
+				title: caption,
+			  });
+    		}
+
+
+		}
+
 		
 		
     </script>

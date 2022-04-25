@@ -40,10 +40,18 @@ final class HomepagePresenter extends HomepageForms
 		//$this->redirect("this");
 	}
 
+	public function handleUnuseMaterial(){
+		$this->basket->materials = array();
+		//$this->redrawControl("orderContainers");
+		//$this->redirect("this");
+	}
+
 	public function handleSetMaterialVariant($var){
 		$materials = $this->basket->materials;
 		$material = $materials[0];
 		$material->price = $var;
+		$priceObj = $this->productManager->findPrice($var);
+		$material->priceObj = $this->rowToArray($priceObj);
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
 		//$this->redrawControl("orderContainers");

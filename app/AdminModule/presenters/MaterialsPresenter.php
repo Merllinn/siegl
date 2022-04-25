@@ -102,6 +102,7 @@ class MaterialsPresenter extends BasePresenter
 				if(empty($details[$prRow->attributeValue])){
 					$details[$prRow->attributeValue] = array();
 				}
+				$details[$prRow->attributeValue]["koef"] = $prRow->koef;
 				$details[$prRow->attributeValue]["used"] = $prRow->type;
 				$details[$prRow->attributeValue]["text"] = $prRow->text;
 				$details[$prRow->attributeValue]["priceFrom"] = $prRow->priceFrom;
@@ -225,6 +226,8 @@ class MaterialsPresenter extends BasePresenter
 				$form->addGroup($pa->name." - ".$paValVal);
 				$container = $form->addContainer($paValId);
 				$container->addRadioList("used", "", array("" =>"Nepoužívá se", "1"=>"Ceny", "2"=>"Text"))->getControlPrototype()->class("isUsed");
+				$container->addText("koef", "Koeficient [m3 -> t]")->setDefaultValue(1);
+				$container["koef"]->getControlPrototype()->class("koeficient");
 				$container->addText("priceFrom", "Cena od");
 				$container->addText("priceTo", "Cena do");
 				$container->addText("text", "Text")->getControlPrototype()->class("priceText");
@@ -258,6 +261,7 @@ class MaterialsPresenter extends BasePresenter
 						if($prices["used"]){
 							if($prices["used"]==1){
 								$dataPrices = array(
+									"koef" => str_replace(",", ".", $prices["koef"]),
 									"product" => $this->edited,
 									"attributeValue" => $paValId,
 									"type" => $prices["used"],
@@ -267,6 +271,7 @@ class MaterialsPresenter extends BasePresenter
 							}
 							if($prices["used"]==2){
 								$dataPrices = array(
+									"koef" => str_replace(",", ".", $prices["koef"]),
 									"product" => $this->edited,
 									"attributeValue" => $paValId,
 									"type" => $prices["used"],

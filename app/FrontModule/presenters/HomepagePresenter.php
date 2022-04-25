@@ -18,6 +18,7 @@ final class HomepagePresenter extends HomepageForms
 
     public function renderOrder(){
 		$this->template->containers = $this->basket->containers;
+		$this->template->materials = $this->basket->materials;
 		$this->template->attVals = $this->attributeManager->getAllValues();
 	}
 	
@@ -25,7 +26,36 @@ final class HomepagePresenter extends HomepageForms
 		$containers = $this->basket->containers;
 		$containers[] = new \Nette\Utils\ArrayHash();
 		$this->basket->containers = $containers;
-		$this->redrawControl("orderContainers");
+		//$this->redrawControl("orderContainers");
+		$this->redirect("this");
+	}
+
+	public function handleSetMaterial($mat){
+		$materials = $this->basket->materials;
+		$material = new \Nette\Utils\ArrayHash();
+		$material->product = $mat;
+		$materials[0] = $material;
+		$this->basket->materials = $materials;
+		//$this->redrawControl("orderContainers");
+		//$this->redirect("this");
+	}
+
+	public function handleSetMaterialVariant($var){
+		$materials = $this->basket->materials;
+		$material = $materials[0];
+		$material->price = $var;
+		$materials[0] = $material;
+		$this->basket->materials = $materials;
+		//$this->redrawControl("orderContainers");
+		//$this->redirect("this");
+	}
+
+	public function handleRemoveFromOrder($index){
+		$containers = $this->basket->containers;
+		unset($containers[$index]);
+		$this->basket->containers = $containers;
+		//$this->redrawControl("orderContainers");
+		$this->redirect("this");
 	}
 
     public function renderOrder2(){
@@ -403,6 +433,8 @@ final class HomepagePresenter extends HomepageForms
 					for($i=1;$i<=$amount;$i++){
 						$price = $this->productManager->findPrice($priceId);
 						$item = new \Nette\Utils\ArrayHash();
+						$item->type = $price->attributeValue;
+						$item->product = $price->product;
 						$item->price = $this->rowToArray($price);
 						$items[] = $item;
 					}
@@ -415,20 +447,12 @@ final class HomepagePresenter extends HomepageForms
         }
     }
     
-    public function handleSetBorder($itemId, $set=true){
-		$borders = $this->basket->borders;
-		$borders[$itemId] = $set;
-		$this->basket->borders = $borders;		
-		$this->redirect("this");
-    }
-
-    public function handleSetBorders(array $items, $set=true){
-		$borders = $this->basket->borders;
-		foreach($items as $itemId){
-			$borders[$itemId] = $set;
-		}
-		$this->basket->borders = $borders;		
-		$this->redirect("this");
+    public function handleSetBasketVal($index, $name, $val){
+		$items = $this->basket->containers;
+		$items[$index]->$name = $val;
+		$this->basket->containers = $items;
+		
+		//$this->redirect("this");
     }
 
     public function createComponentUpload(){

@@ -34,10 +34,10 @@
                     		{var $attr = $presenter->attributeManager->find(1)}
 	                        <li class="list-inline-item druh-odpadu">
 	                            <label class="select">
-		                            <select name="type[{$index}]" class="form-select" aria-label="{$attr->name}">
+		                            <select name="type[{$index}]" data-link={link setBasketVal! $index, "type"} class="form-select updateValue typePick" aria-label="{$attr->name}">
 		                                <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
 		                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
-		                                <option n:foreach="$values as $key=>$val"  {if !empty($container->price->attributeValue) && $container->price->attributeValue==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+		                                <option n:foreach="$values as $key=>$val"  {if !empty($container->type) && $container->type==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
 		                            </select>
 	                            </label>
 	                        </li>
@@ -45,9 +45,9 @@
 	                        {var $products = $presenter->productManager->getByType(1)}
 	                        <li class="list-inline-item objem">
 	                            <label class="select">
-		                            <select name="container{$index}" class="form-select" aria-label="Kontejner">
-		                                <option {if empty($container->price->product)}selected="selected"{/if} value="">Vyberte velikost kontejneru</option>
-		                                <option n:foreach="$products as $product"  {if !empty($container->price->product) && $container->price->product==$product->id}selected="selected"{/if} value="{$product->id}">
+		                            <select name="container{$index}"data-link={link setBasketVal! $index, "product"}  class="form-select updateValue productPick" aria-label="Kontejner">
+		                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
+		                                <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
 		                                	{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
 		                                	{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
 		                                </option>
@@ -64,10 +64,13 @@
 	                        <!-- ./dnes -->
 	                        <li class="list-inline-item date" id="date">
 	                            <label class="select">
-	                                <input class="form-control" type="text" value="Jiné datum" readonly>
+	                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Jiné datum" readonly>
 	                            </label>
 	                        </li>
 	                        <!-- ./jine datum -->
+	                        <li class="list-inline-item">
+	                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat kontejner</a></button>
+	                        </li>
 	                        {last}
 	                        <li class="list-inline-item add-container">
 	                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
@@ -88,107 +91,48 @@
         <div class="container">
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
             <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if}>Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if empty($materials)}style="display: none;"{/if}>Ne, nepotřebuji</a>
         </div>
-        <div class="select-material">
+        <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
             <div class="container">
                 <h4>Vyberte typ materiálu</h4>
                 <form>
                     <ul class="list-inline select-material">
-                        <li class="list-inline-item">
-                            <label for="pisek">
-                                <input id="pisek" type="radio" name="material" value="pisek">
-                                <img src="images/pisek.jpg" alt="Písek">
-                                <span>Písek</span>
-                            </label>
-                        </li>
-                        <li class="list-inline-item">
-                            <label for="sterk">
-                                <input id="sterk" type="radio" name="material" value="pisek">
-                                <img src="images/sterk.jpg" alt="Štěrk">
-                                <span>Štěrk</span>
-                            </label>
-                        </li>
-                        <li class="list-inline-item">
-                            <label for="recyklat">
-                                <input id="recyklat" type="radio" name="material" value="pisek">
-                                <img src="images/recyklat.jpg" alt="Recyklát">
-                                <span>Recyklát</span>
-                            </label>
-                        </li>
-                        <li class="list-inline-item">
-                            <label for="beton">
-                                <input id="beton" type="radio" name="material" value="pisek">
-                                <img src="images/beton.jpg" alt="Beton">
-                                <span>Beton</span>
-                            </label>
-                        </li>
-                        <li class="list-inline-item">
-                            <label for="kacirek">
-                                <input id="kacirek" type="radio" name="material" value="pisek">
-                                <img src="images/kacirek.jpg" alt="Kačírek">
-                                <span>Kačírek</span>
-                            </label>
-                        </li>
-                        <li class="list-inline-item">
-                            <label for="zemina">
-                                <input id="zemina" type="radio" name="material" value="pisek">
-                                <img src="images/zemina.jpg" alt="Zemina">
-                                <span>Zemina</span>
+                        {var $allMaterials = $presenter->productManager->getByType(2)}
+                        <li class="list-inline-item {if !empty($materials) && $mat->id == $materials[0]->product}selected{/if}" n:foreach="$allMaterials as $mat">
+                            <label class="pickMaterial" for="material{$mat->id}" data-mat="{$mat->id}" data-link="{link setMaterial! $mat->id}">
+                                <input id="material{$mat->id}" type="radio" name="material" value="{$mat->id}">
+                                {var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
+                                <img src="{$matImg|thumb}" alt="{$mat->name}">
+                                <span>{$mat->name}</span>
                             </label>
                         </li>
                     </ul>
-                    <div class="roughness">
-                        <h4>Zvolte typ a hrubost</h4>
+                    <div class="roughness mat{$mat->id}" n:foreach="$allMaterials as $mat" {if empty($materials) || $mat->id != $materials[0]->product}style="display: none;"{/if}>
+                        <h4>Zvolte typ / hrubost</h4>
+                        {var $prices = $presenter->productManager->getPrices($mat->id)}
                         <ul class="list-unstyled">
-                            <li>
-                                <label for="pisek-kopany">
-                                    <input class="check" id="pisek-kopany" type="radio" name="hrubost" value="pisek-kopany">
+                            <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class=" {if !empty($materials[0]->price) && $price->id == $materials[0]->price}selected{/if}">
+                                <label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}">
+                                    <input class="check" id="price-{$price->id}" type="radio" name="varianta" value="{$price->id}">
                                     <div class="image">
-                                        <img src="images/pisek.jpg" alt="Písek kopaný">
+                                		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
+                                        <img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}">
                                     </div>
                                     <div class="title">
-                                        <span>Písek kopaný</span>
+                                        <span>{$attVals[$price->attributeValue]->name}</span>
                                         <div class="description" style="display: block">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                            {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
+                                        {*
                                         <label class="select">
                                             <select aria-label="Zvolit hrubost">
                                                 <option selected disabled>Zvolit hrubost</option>
                                                 <option value="0-4">0 - 4 mm</option>
                                             </select>
                                         </label>
-                                    </div>
-                                </label>
-                            </li>
-                            <li>
-                                <label for="pisek-ricni">
-                                    <input id="pisek-ricni" type="radio" name="hrubost" value="pisek-ricni">
-                                    <div class="image">
-                                        <img src="images/pisek.jpg" alt="Písek říční">
-                                    </div>
-                                    <div class="title">
-                                        <span>Písek říční</span>
-                                        <div class="description">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
-                                    </div>
-                                </label>
-                            </li>
-                            <li>
-                                <label for="pisek-zasypovy">
-                                    <input id="pisek-zasypovy" type="radio" name="hrubost" value="pisek-zasypovy">
-                                    <div class="image">
-                                        <img src="images/pisek.jpg" alt="Písek zásypový">
-                                        <div class="description">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
-                                    </div>
-                                    <div class="title">
-                                        <span>Písek zásypový</span>
-                                        <div class="description">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        </div>
+                                        *}
                                     </div>
                                 </label>
                             </li>
@@ -208,4 +152,54 @@
     </div>
     <!-- ./price -->
     <div class="waste-type-rectangle"></div>
+{/block}
+
+{block scripts}
+    <script>
+    	$(document).ready(function(){
+			$(".updateValue").change(function(){
+				var link = $(this).data("link");
+				link = link + "&val=" + $(this).val();
+				$.get(link);
+			});
+			$(".triggerMaterial").click(function(e){
+				e.preventDefault()
+				$(".changeMaterial").toggle();
+			});
+			$(".typePick").change(function(){
+				var type = $(this).val();
+				$(this).closest("ul").find(".productPick option").each(function(){
+					if($(this).data("types")=="all"){
+						$(this).show();
+					}
+					else if($(this).data("types").indexOf(type)>-1){
+						$(this).show();
+					}
+					else{
+						$(this).hide();
+						if($(this).is(':selected')){
+							$(this).closest("select").val("");
+						}
+					}
+				});
+			});
+			$(".pickMaterial").click(function(e){
+				e.preventDefault()
+				var link = $(this).data("link");
+				var matId = $(this).data("mat");
+				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
+				$(".roughness").hide();
+				$(".roughness.mat"+matId).show();
+				$.get(link);
+			});
+			$(".pickVariant").click(function(e){
+				e.preventDefault()
+				var link = $(this).data("link");
+				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
+				$.get(link);
+			});
+		});
+		
+		
+    </script>
 {/block}

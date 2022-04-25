@@ -13,6 +13,7 @@
 		$(document).ready(function(){
 			$(".isUsed").parents("."+elementClass).removeClass(elementClass).addClass("col-12 switcher")
 			$(".priceText").parents("."+elementClass).removeClass(elementClass).addClass("col-4 text")
+			$(".koeficient").parents("."+elementClass).removeClass(elementClass).addClass("col-2 koeficient")
 			showHideInputs();
 		});
 		$(document).ready(function(){
@@ -29,14 +30,17 @@
 				if (checkedVal=="" || typeof checkedVal === "undefined") {
 					row.find("."+elementClass).hide();
 					row.find(".col-4.text").hide();
+					row.find(".koeficient").hide();
 				}
 				if (checkedVal=="1") {
 					row.find(".col-4.text").hide();
 					row.find("."+elementClass).show();
+					row.find(".koeficient").show();
 				}
 				if (checkedVal=="2") {
 					row.find("."+elementClass).hide();
 					row.find(".col-4.text").show();
+					row.find(".koeficient").show();
 				}
 			});
 		}

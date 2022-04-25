@@ -236,6 +236,17 @@ final class ProductManager
         ->where("product", $id);
     }
 
+    public function getPricesStr($id)
+    {
+        $ret = $this->getPr()
+        ->where("product", $id);
+        $priceRet = "";
+        foreach($ret as $row){
+			$priceRet .= "|".$row->attributeValue."|";
+        }
+        return $priceRet;
+    }
+
     public function deletePrices($id)
     {
         $this->getPr()

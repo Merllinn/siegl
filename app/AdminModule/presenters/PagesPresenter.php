@@ -109,7 +109,7 @@ class PagesPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
                 $photo = $presenter->pageManager->getMainPhoto($row->id);
                 if($photo){
-                        return html::el("img")->src($presenter->thumb($photo, 100, 100));
+                        return html::el("img")->src($presenter->thumb($photo, 100, 100))->width("100");
                     }
                     else{
                         return "";

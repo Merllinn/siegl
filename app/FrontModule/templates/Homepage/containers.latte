@@ -8,7 +8,9 @@
                     <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         {var $contAttr = $presenter->attributeManager->getForCont()}
                         {var $attrTypes = array(1=>"druh-odpadu",2=>"objem",3=>"nosnost")}
+                        {var $usedFilter = false}
                         <li class="list-inline-item {$attrTypes[$attr->id]}" n:foreach="$contAttr as $attr">
+                            {if !empty($_GET["a".$attr->id])}{php $usedFilter = true}{/if}
                             <label class="select">
 	                            <select name="a{$attr->id}" class="form-select" aria-label="{$attr->name}" onchange="submit(this);">
 	                                <option {if empty($_GET["a".$attr->id])}selected="selected"{/if} value="">{$attr->name}</option>
@@ -19,6 +21,7 @@
                         </li>
                         <!-- ./druh odpadu -->
                         <li class="list-inline-item turbokontejner">
+                            {if !empty($_GET["t"])}{php $usedFilter = true}{/if}
                             <div class="form-check">
                                 <label class="form-check-label" for="turbokontejner">
                                     Turbokontejner
@@ -32,7 +35,7 @@
                         </li>
                         <!-- ./dph -->
                     </ul>
-                    <a n:href=":Front:Homepage:page $page->alias"><button class="btn btn-primary btn-deselect" data-aos="fade-in" data-aos-duration="200" data-aos-delay="300">Zrušit výběr</button></a>
+                    <button class="btn btn-primary btn-deselect" data-aos="fade-in" data-aos-duration="200" data-aos-delay="300"><a n:href=":Front:Homepage:page $page->alias" n:if="$usedFilter">Zrušit výběr</a></button>
                 </form>
                 <!-- ./form -->
             </div>
@@ -57,7 +60,7 @@
                             {var $prices = $presenter->productManager->getPrices($container->id)}
                             <div class="accordion-item" n:foreach="$prices as $price">
                                 <div class="accordion-header" id="container-{$price->id}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}" aria-expanded="false" aria-controls="{$price->id}">
+                                    <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
                                         <em>{$attVals[$price->attributeValue]->name}</em>
                                         {if $price->type==1}
                                         	<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
@@ -67,7 +70,7 @@
                                         {/if}
                                     </button>
                                 </div>
-                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}">
+                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}" n:if="!empty($attVals[$price->attributeValue]->desc)">
                                     <div class="accordion-body">
                                         {$attVals[$price->attributeValue]->desc|noescape}
                                     </div>
@@ -157,8 +160,8 @@
                             <tbody>
                                 <tr n:foreach="$prices as $price">
                                     <td>
-                                        <input type="checkbox" class="form-check-input" name="prices[{$price->id}]" {first}checked{/first}> <a data-bs-toggle="collapse" href="#container-{$container->alias}{$price->id}" role="button" aria-expanded="false" aria-controls="container-{$container->alias}{$price->id}" title="Co sem patří a nepatří?">{$attVals[$price->attributeValue]->name}</a>
-                                        <div class="collapse type-description" id="container-{$container->alias}{$price->id}">
+                                        <input type="checkbox" class="form-check-input" name="prices[{$price->id}]"> <a {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" href="#container-{$container->alias}{$price->id}"{/if} role="button" aria-expanded="false" aria-controls="container-{$container->alias}{$price->id}" title="Co sem patří a nepatří?">{$attVals[$price->attributeValue]->name}</a>
+                                        <div class="collapse type-description" id="container-{$container->alias}{$price->id}" n:if="!empty($attVals[$price->attributeValue]->desc)">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
                                     </td>

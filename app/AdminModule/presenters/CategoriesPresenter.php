@@ -182,16 +182,6 @@ class CategoriesPresenter extends BasePresenter
         $grid = new DataGrid($this, $name);
         $grid->setDataSource($source);
 
-        $grid->addColumnText('img', 'Obrázek')
-            ->setRenderer(function($row) use ($presenter) {
-                $photo = $presenter->categoryManager->getMainPhoto($row->id);
-                if($photo){
-                        return html::el("img")->src($presenter->thumb($photo, 100, 100));
-                    }
-                    else{
-                        return "";
-                    }
-        });
         $grid->addColumnText('name', 'Název');
 
         $grid->addColumnText('active', 'Aktivní')

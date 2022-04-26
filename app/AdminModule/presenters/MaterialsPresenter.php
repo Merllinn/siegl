@@ -177,7 +177,6 @@ class MaterialsPresenter extends BasePresenter
 
 	public function saveProduct(Form $form){
 		$values = $form->getValues();
-		$values->alias = $this->makeAlias("products", $values->name, $this->edited);
 
 		if($form->isValid()){
 			try{
@@ -196,7 +195,7 @@ class MaterialsPresenter extends BasePresenter
 				}
 				else{
 					if(empty($values->alias)){
-						$values->alias = \Nette\Utils\Strings::webalize($values->name);
+						$values->alias = $this->makeAlias("products", $values->name, $this->edited);
 					}
 					$values->created = new \nette\utils\DateTime();
                     //$values->vat_id = 1;

@@ -230,70 +230,54 @@ final class OrderManager
             ->fetch();
     }
 
-    public function saveOrder($ses, $sizesList){
+    public function saveOrder($ses, $pm, $settings){
 
         $this->database->beginTransaction();
 
         //save order
 		$order = $ses->order;
 		$order->date = new \Nette\Utils\DateTime();
+		$order->street = $ses->address;
         $orderId = $this->add($order);
 
-        $items = $ses->items;
-        $products = $ses->products;
-        $itemNames = $ses->itemNames;
-        $sizes = $ses->sizes;
+        $containers = $ses->containers;
         $materials = $ses->materials;
-        $amounts = $ses->amounts;
-        $albums = $ses->albums;
-        $borders = $ses->borders;
 
         $totalPice = 0;
 
-        //save items
-        foreach($items as $itemId => $item){
-            $itemData = array(
-                "orderId"		=>$orderId,
-                "fileId"     	=>$item,
-                "fileName"     	=>$itemNames[$item],
-                "folderId"     	=>$albums[$item],
-                "amount"        =>$amounts[$itemId],
-                "size"          =>$sizes[$itemId],
-                "material"      =>$materials[$itemId],
-                "border"      	=>(empty($borders[$itemId])?false:true),
-                "price"         =>$sizesList[$sizes[$itemId]]["price"],
-                "priceTotal"    =>$sizesList[$sizes[$itemId]]["price"]*$amounts[$itemId],
-            );
-            $this->addItem($itemData);
-            $totalPice += ($sizesList[$sizes[$itemId]]["price"]*$amounts[$itemId]);
-        }
-        //save products
-        foreach($products as $itemId => $item){
+        //save containers
+        foreach($containers as $container){
+            $product = $pm->find($container->product);
+            $price = $pm->findPrice($container->price->id);
             $itemData = array(
                 "order_id"		=>$orderId,
-                "products_id"   =>$itemId,
-                "quantity"      =>$item->amount,
-                "name"          =>$item->name,
-                "price"         =>$item->price,
-                "price_vat"     =>$item->price_vat,
+                "products_id"   =>$container->product,
+                "quantity"      =>1,
+                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+                "price"         =>$price->priceFrom,
+                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
             );
             $this->addProduct($itemData);
-            $totalPice += $item->price_vat*$item->amount;
+            $totalPice += $price->priceFrom;
         }
-        $totalPice += $order->paymentPrice;
-        $totalPice += $order->deliveryPrice;
+        //save containers
+        foreach($materials as $material){
+            $product = $pm->find($material->product);
+            $price = $pm->findPrice($material->priceObj->id);
+            $itemData = array(
+                "order_id"		=>$orderId,
+                "products_id"   =>$material->product,
+                "quantity"      =>$material->amount,
+                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+                "price"         =>$price->priceFrom,
+                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
+            );
+            $this->addProduct($itemData);
+            $totalPice += $price->priceFrom * $material->amount;
+        }
+        //$totalPice += $order->paymentPrice;
+        //$totalPice += $order->deliveryPrice;
 		$updateData = array("price"=>$totalPice);
-        if(!empty($ses->voucher)){
-			$updateData["voucherCode"] = $ses->voucher->code;
-			if(!empty($ses->voucher->sale)){
-				$updateData["voucherSale"] = $ses->voucher->sale;
-			}
-			elseif(!empty($ses->voucher->salePercent)){
-				$updateData["voucherSale"] = $totalPice*($ses->voucher->salePercent/100);
-			}
-			$updateData["voucherSale"] = round(min($totalPice, $updateData["voucherSale"]));
-			$updateData["price"] -= $updateData["voucherSale"];
-        }
         $this->update($updateData, $orderId);
 
         $this->database->commit();

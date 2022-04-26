@@ -130,19 +130,9 @@ class OrdersForms extends BasePresenter
         $form = new Form();
 
         //$form->getElementPrototype()->class("form-inline");
-        $branches = array(""=>"všechny pobočky");
-        foreach($this->branchesSimple as $key=>$val){
-			$branches[$key] = $val." nebo nevyplněno";
-        }
 
         $form->addText("reserver", "Jméno nebo příjmení zákazníka")
             ->getControlPrototype()->class("form-control");
-        $form->addSelect("branch", "Pobočka", $branches)
-            ->getControlPrototype()->class("form-control");
-        //$form["branch"]->setPrompt("všechny pobočky");
-        $form->addSelect("delivery", "Doprava", $this->deliveries)
-            ->getControlPrototype()->class("form-control");
-        $form["delivery"]->setPrompt("všechny dopravy");
 
         $form->addSubmit("submit", "Filtruj")->getControlPrototype()->class("btn btn-primary");
         $form->addSubmit("reset", "Zobraz vše")->getControlPrototype()->class("btn btn-light");

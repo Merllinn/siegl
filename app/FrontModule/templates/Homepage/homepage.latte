@@ -47,11 +47,11 @@
             <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">Odvezeme odpad i suť, přivezeme písek a jiný stavební materiál,<br>vykopeme bazén, zlikvidujeme černou skládku…</p>
             <div class="row">
             	{var $subpages = $presenter->pageManager->getActiveByParent($page->id)}
-                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50" n:foreach="$subpages as $sp">
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
                     <a href="#" title="Přejít na {=strtolower(strip_tags($sp->name))}">
                         <div class="service-icon">
                         	{var $mainImg = $presenter->pageManager->getMainPhoto($sp->id)}
-                            <img src="{$mainImg|thumb:140:null}" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
+                            <img src="{$mainImg|thumb:140:null}" class="img-service-{$sp->id}" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
                         </div>
                         {$sp->name|noescape}
                     </a>

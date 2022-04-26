@@ -17,6 +17,7 @@ final class HomepagePresenter extends HomepageForms
 	}
 
     public function renderOrder(){
+		$this->template->address = $this->basket->address;
 		$this->template->containers = $this->basket->containers;
 		$this->template->materials = $this->basket->materials;
 		$this->template->attVals = $this->attributeManager->getAllValues();
@@ -54,6 +55,20 @@ final class HomepagePresenter extends HomepageForms
 		$material->priceObj = $this->rowToArray($priceObj);
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
+		//$this->redrawControl("orderContainers");
+		//$this->redirect("this");
+	}
+	public function handleSetMaterialAmount($amount){
+		$materials = $this->basket->materials;
+		$material = $materials[0];
+		$material->amount = $amount;
+		$materials[0] = $material;
+		$this->basket->materials = $materials;
+		//$this->redrawControl("orderContainers");
+		//$this->redirect("this");
+	}
+	public function handleSetAddress($a){
+		$this->basket->address = $a;
 		//$this->redrawControl("orderContainers");
 		//$this->redirect("this");
 	}
@@ -304,20 +319,26 @@ final class HomepagePresenter extends HomepageForms
     public function createComponentOrderForm(){
         $form = new Form();
 
-        $form ->addText("name", "Jméno *")
+        $form ->addText("ic", "IČ")
+                ->getControlPrototype()->class("form-control");
+        $form ->addText("name", "Jméno")
                 ->getControlPrototype()->class("form-control");
         $form["name"]->addRule(Form::FILLED, "Vyplňte jméno");
-        $form ->addText("surname", "Příjmení *")
+        $form ->addText("surname", "Příjmení")
                 ->getControlPrototype()->class("form-control");
         $form["surname"]->addRule(Form::FILLED, "Vyplňte příjmení");
         $form ->addText("email", "E-mail")
                 ->getControlPrototype()->class("form-control");
         $form["email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
-        $form ->addText("phone", "Telefonní číslo *")
+        $form ->addText("phone", "Telefonní číslo")
                 ->getControlPrototype()->class("form-control");
         $form["phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
         $form ->addText("street", "Ulice a číslo popisné *")
                 ->getControlPrototype()->class("form-control");
+
+        $form ->addTextArea("note", "Poznámka", 30, 5)
+                ->getControlPrototype()->class("form-control");
+        /*
         $form["street"]->addRule(Form::FILLED, "Vyplňte ulici a číslo popisné");
         $form ->addText("city", "Město *")
                 ->getControlPrototype()->class("form-control");
@@ -325,10 +346,10 @@ final class HomepagePresenter extends HomepageForms
         $form ->addText("zip", "PSČ *")
                 ->getControlPrototype()->class("form-control");
         $form["zip"]->addRule(Form::FILLED, "Vyplňte PSČ");
+        */
 
-        $form ->addTextArea("note", "Poznámka", 30, 2)
-                ->getControlPrototype()->class("form-control");
 
+        /*
         $form -> addCheckbox("different_delivery", "Přejete si odeslat zboží na jinou adresu?")
                 ->getControlPrototype()->class("differentDelivery form-check-input");
         $form["different_delivery"]->getLabelPrototype()->class("form-check-label");
@@ -351,16 +372,9 @@ final class HomepagePresenter extends HomepageForms
         $form["delivery_zip"]
         	->addConditionOn($form['different_delivery'], Form::EQUAL, TRUE)
         	->addRule(Form::FILLED, "Vyplňte PSČ");
+        */
 
-		$deliveries = array();
-		foreach($this->deliveries as $id=>$name){
-			$price = !empty($this->deliveryPrices[$id])?$this->deliveryPrices[$id]:0;
-			$deliveries[$id] = $name." - ".$price." Kč";
-		}
-        $form->addRadioList("delivery", "", $deliveries)
-                ->getControlPrototype()->class("form-check-input");
-        $form["delivery"]->addRule(Form::FILLED, "Vyberte způsob dopravy");
-
+		/*
 		$payments = array();
 		foreach($this->payments as $id=>$name){
 			$price = !empty($this->paymentPrices[$id])?$this->paymentPrices[$id]:0;
@@ -369,12 +383,11 @@ final class HomepagePresenter extends HomepageForms
         $form->addRadioList("payment", "", $payments)
                 ->getControlPrototype()->class("form-check-input");
         $form["payment"]->addRule(Form::FILLED, "Vyberte způsob platby");
+        */
 
-        $form -> addCheckbox("framing", "Pošlete mi nabídku rámování")
-                ->getControlPrototype()->class("form-check-input");
-        $form["different_delivery"]->getLabelPrototype()->class("form-check-label");
+        //$form["different_delivery"]->getLabelPrototype()->class("form-check-label");
 
-        $form->addSubmit("submit", "Dokončit objednávku")->getControlPrototype()->class("btn btn-primary");
+        $form->addSubmit("submit", "Odeslat objednávku")->getControlPrototype()->class("btn btn-primary btn-arrow btn-white");
 
         $form->onSuccess[] = [$this, 'saveOrder'];
 
@@ -397,14 +410,37 @@ final class HomepagePresenter extends HomepageForms
         if($form->isValid()){
             try{
                 $values->date = new \nette\utils\DateTime();
+				/*
 				if(!empty($values->payment)){
 					$values->paymentPrice = (!empty($this->paymentPrices[$values->payment])?$this->paymentPrices[$values->payment]:0);
 				}
 				if(!empty($values->delivery)){
 					$values->deliveryPrice = (!empty($this->deliveryPrices[$values->delivery])?$this->deliveryPrices[$values->delivery]:0);
 				}
+				*/
                 $this->basket->order = $values;
-                $this->redirect(":Front:Homepage:summary");
+
+				$orderId = $this->orderManager->saveOrder($this->basket, $this->productManager, $this->settings);
+
+				//$this->basket->remove();
+
+				$order = $this->orderManager->find($orderId);
+
+				$products = $this->orderManager->findOrderProducts($orderId);
+
+				$data = array(
+					"order" => $order,
+					"products" => $products,
+					//"deliveries" => $this->deliveries,
+					//"payments" => $this->payments,
+				);
+
+				//TODO generate mail
+				//$this->sendMailFromTemplate("orderStatus1.latte", $data, $order->email, "Potvrzení objednávky kontejneru");
+				$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
+
+
+                $this->redirect(":Front:Homepage:page");
             }
             catch(DibiDriverException $e){
                 $this->flashMessage($e->getMessage(), "error");

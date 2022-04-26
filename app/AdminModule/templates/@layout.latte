@@ -190,8 +190,8 @@
 		                      Obsah
 		                    </a>
 		                    <div class="dropdown-menu" aria-labelledby="catalogDropdown">
-		                    	<a class="nav-link" n:href=":Admin:Pages:default">Správa stránek</a>
-		                    	<a class="nav-link" n:href=":Admin:Pages:default 1">Správa služeb na úvodní stránce</a>
+		                    	<a class="dropdown-item" n:href=":Admin:Pages:default">Správa stránek</a>
+		                    	<a class="dropdown-item" n:href=":Admin:Pages:default 1">Správa služeb na HP</a>
 		                    </div>
 		                </li>
 		                <li class="nav-item dropdown">
@@ -207,6 +207,9 @@
 		                      <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item" n:href=":Admin:Attributes:default">Atributy</a>
 		                    </div>
+		                </li>
+		                <li class="nav-item {ifCurrent :Admin:Orders:default}active{/ifCurrent}">
+		                    <a class="nav-link" n:href=":Admin:Orders:default">Objednávky</a>
 		                </li>
 		                <li class="nav-item {ifCurrent :Admin:Pages:default}active{/ifCurrent}">
 		                    <a class="nav-link" n:href=":Admin:Languages:translates 'cz'">Textové konstanty</a>
@@ -225,9 +228,6 @@
 		                      <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item" n:href=":Admin:Projects:add">Vytvořit zakázku</a>
 		                    </div>
-		                </li>
-		                <li class="nav-item {ifCurrent :Admin:Orders:default}active{/ifCurrent}">
-		                    <a class="nav-link" n:href=":Admin:Orders:default">Objednávky tisku</a>
 		                </li>
 		                <li class="nav-item dropdown"n:if="false">
 		                    <a class="nav-link dropdown-toggle" href="#" id="reservationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

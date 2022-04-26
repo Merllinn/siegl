@@ -11,7 +11,7 @@
             <form class="orderform">
                 <div class="input-group street">
                     <label for="vase-ulice" class="form-label">Zadejte ulici</label>
-                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice">
+                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
                     <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
             </form>
@@ -144,7 +144,7 @@
                     </div>
                     <!-- ./typ a hrubost -->
                     <div class="amount" style="display: none;">
-                        <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control materialWeight" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+                        <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
                     </div>
                     <div class="tons-price" style="display: none;">
                         Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
@@ -161,8 +161,12 @@
         <span class="with-vat">4 350 Kč vč. DPH</span>
     </div>
     <!-- ./price -->
+    {form orderForm}
     <div class="order-form">
         <div class="container">
+            <ul class="errors" n:if="$form->hasErrors()">
+				<li n:foreach="$form->errors as $error">{$error}</li>
+			</ul>
             <nav>
                 <div class="nav nav-tabs" id="nav-order-form" role="tablist">
                     <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
@@ -171,54 +175,55 @@
             </nav>
             <div class="tab-content" id="nav-tabOrderForm">
                 <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
-                    Fyzická osoba
                 </div>
                 <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
                     <div class="row row-ic">
                         <div class="form-group col-md-12">
-                            <label for="ic">IČ</label><input type="text" class="form-control" id="ic"><button class="btn btn-primary">Načíst údaje</button>
+	                        {label ic /}
+	                        {input ic}
+							<button class="btn btn-primary">Načíst údaje</button>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 arrow">
-                            <label for="jmeno">Jméno</label>
-                            <input type="name" class="form-control" id="jmeno">
-                        </div>
-                        <div class="form-group col-md-6 arrow">
-                            <label for="prijmeni">Příjmení</label>
-                            <input type="surname" class="form-control" id="prijmeni">
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 arrow">
+                        {label name /}
+                        {input name}
+                    </div>
+                    <div class="form-group col-md-6 arrow">
+                        {label surname /}
+                        {input surname}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 arrow">
+                        {label email /}
+                        {input email}
+                    </div>
+                    <div class="form-group col-md-6 arrow">
+                        {label phone /}
+                        {input phone}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12 arrow note">
+                        {label note /}
+                        {input note}
+                    </div>
+                </div>
+                <div class="row billing-address">
+                    <div class="form-group col-md-12">
+                        <div class="billing-address">
+                            <input class="form-check-input" type="checkbox" value="" id="fakturacni-adresa">
+                            <label class="form-check-label" for="fakturacni-adresa">
+                                Fakturační adresa je jiná než adresa přistavení
+                            </label>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 arrow">
-                            <label for="email">E-mail</label>
-                            <input type="email" class="form-control" id="email">
-                        </div>
-                        <div class="form-group col-md-6 arrow">
-                            <label for="telefon">Telefon</label>
-                            <input type="phone" class="form-control" id="telefon">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12 arrow note">
-                            <label for="poznamka">Poznámka</label>
-                            <textarea class="form-control" id="poznamka" rows="5"></textarea>
-                        </div>
-                    </div>
-                    <div class="row billing-address">
-                        <div class="form-group col-md-12">
-                            <div class="billing-address">
-                                <input class="form-check-input" type="checkbox" value="" id="fakturacni-adresa">
-                                <label class="form-check-label" for="fakturacni-adresa">
-                                    Fakturační adresa je jiná než adresa přistavení
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12 send-order">
-                            <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12 send-order">
+                        <button class="btn btn-primary btn-arrow btn-white" onclick="submit(this);">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -242,6 +247,7 @@
             </div>
         </div>
     </div>
+    {/form}
     <!-- ./form -->
     <div class="waste-type-rectangle"></div>
 {/block}
@@ -291,6 +297,8 @@
 			});
 			$(".materialWeight").change(function(){
 				$(".material-quantity").val(Math.round($(this).val()*materialKoef));
+				var link = {link setMaterialAmount!} + "&amount=" + $(this).val();
+				$.get(link);
 			});
 			$(".pickMaterial").click(function(e){
 				e.preventDefault()
@@ -315,6 +323,13 @@
 				$(".tons-price").show();
 				$.get(link);
 			});
+			
+			if($("#searchTextField").val() != ""){
+				$(".setAddress").trigger("click");
+			}
+			if($(".materialWeight").val() != 1){
+				$(".materialWeight").trigger("change");
+			}
 		});
 		
 		function initMap() {
@@ -340,6 +355,7 @@
 					geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
 						if (status == google.maps.GeocoderStatus.OK) {
 							setMarker(results[0].geometry.location, $("#searchTextField").val());
+							map.setCenter(results[0].geometry.location);
 					    } 
 					}); 				
 				}
@@ -349,6 +365,7 @@
 				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
 						setMarker(results[0].geometry.location, $("#searchTextField").val());
+						map.setCenter(results[0].geometry.location);
 				    } 
 				}); 				
   			});
@@ -376,6 +393,8 @@
 				map,
 				title: caption,
 			  });
+			  var link = {link setAddress!} + "&a=" + caption;
+			  $.get(link);
     		}
 
 

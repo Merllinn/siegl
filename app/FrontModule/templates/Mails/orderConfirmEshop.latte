@@ -3,79 +3,24 @@
     </p>
 
     <p>
-        byla přijata nová objednávka tisku fotek.
+        byla přijata nová objednávka kontejneru.
     </p>
 
 	<h4>Položky objednávky</h4>
 	{var $totalPrice = 0}
 	<table>
 		<thead>
-			<th>Položka</th>
-			<th>Rámeček</th>
-			<th>Zakázka</th>
-			<th>Složka</th>
-			<th>Pobočka</th>
+			<th>Název</th>
 			<th>Množství</th>
-			<th>Velikost</th>
-			<th>Typ papíru</th>
 			<th>Cena/ks</th>
 			<th>Cena celkem</th>
 		</thead>
 		<tbody>
-		<tr n:foreach="$items as $itemId=>$item" data-id="{$itemId}">
-			{var $album = $albums[$item->folderId]}
-			<td>
-				<img src="https://drive.google.com/thumbnail?authuser=0&id={$item->fileId}" title="" width="50" />
-				<br>{$item->fileName}
-                {var $meta = $presenter->getGfile($item->fileId)->getImageMediaMetadata()}
-                <br>{$meta->getWidth()}x{$meta->getHeight()}px
-			</td>
-			<td>
-				{if !empty($item->border)}
-					ANO
-				{else}
-					NE
-				{/if}
-			</td>
-			<td>
-				{$album->id}{if $album->custom} - uživatelská{/if}
-			</td>
-			<td>
-				{$album->folder}
-			</td>
-			<td>
-				{if !empty($album->branch)}
-					{$branches[$album->branch]}
-				{/if}
-			</td>
-			<td>
-				{$item->amount} ks
-			</td>
-			<td>
-				{$sizes[$item->size]["name"]}
-			</td>
-			<td>
-				{$materials[$item->material]}
-			</td>
-			<td>
-				{$item->price} Kč
-			</td>
-			<td>
-				{$item->priceTotal} Kč
-			</td>
-		</tr>
 		<tr n:foreach="$products as $itemId=>$product" data-id="{$itemId}">
-			<td>
-				{var $img = $presenter->productManager->getMainPhoto($product->products_id)}
-				<img n:if="!empty($img)" src="https://polagraph.cz{$img|thumb:100:null}" title="{$product->name}" width="100">
-			</td>
-			<td></td>
 			<td colspan="3"><strong>{$product->name}</strong></td>
 			<td>
-				{$product->quantity} ks
+				{$product->quantity}
 			</td>
-			<td></td>
-			<td></td>
 			<td>
 				{$product->price_vat|number:0:',':' '} Kč
 			</td>
@@ -83,41 +28,17 @@
 				{$product->price_vat*$product->quantity|number:0:',':' '} Kč
 			</td>
 		</tr>
-		<tr n:if="!empty($order->voucherSale)">
-			<td colspan="5">
-				Slevový kupón: <strong>{$order->voucherCode}</strong>
-			</td>
-			<td>
-				-{$order->voucherSale} Kč
-			</td>
-		</tr>
 		<tr>
-			<td colspan="5">
-				Způsob dopravy: <strong>{$order->delivery}</strong>
-			</td>
-			<td>
-				{$order->deliveryPrice} Kč
-			</td>
-		</tr>
-		<tr>
-			<td colspan="5">
-				Způsob platby: <strong>{$order->payment}</strong>
-			</td>
-			<td>
-				{$order->paymentPrice} Kč
-			</td>
-		</tr>
-		<tr>
-			<td colspan="5">Celková cena:</td>
+			<td colspan="3">Celková cena:</td>
 			<td >{$order->price|number:0:',':' '} Kč</td>
 		</tr>
 		</tbody>
 	</table>
 
-	<h4>Rámování</h4>
-	<p>Požadavek na nabídku rámování: {if $order->framing}ANO{else}NE{/if}</p>
+	<h4>Místo přistavení</h4>
+	{$order->street}
 	
-	<h4>Fakturační údaje</h4>
+	<h4>Údaje o zákazníkovi</h4>
     <table>
 		<tbody>
 			<tr>
@@ -136,48 +57,9 @@
 				<th>Telefon</th>
 				<td>{$order->phone}</td>
 			</tr>
-			<tr>
-				<th>Adresa</th>
-				<td>{$order->street}</td>
-			</tr>
-			<tr>
-				<th>Město</th>
-				<td>{$order->city}</td>
-			</tr>
-			<tr>
-				<th>PSČ</th>
-				<td>{$order->zip}</td>
-			</tr>
 			<tr n:if="!empty($order->note)">
 				<th>Poznáka</th>
 				<td>{$order->note|breaklines|noescape}</td>
 			</tr>
 		</tbody>
     </table>
-
-    {if $order->different_delivery}
-	<h4>Doručovací údaje</h4>
-    <table>
-		<tbody>
-			<tr n:if="!empty($order->delivery_name)">
-				<th>Jméno</th>
-				<td>{$order->delivery_name}</td>
-			</tr>
-			<tr>
-				<th>Adresa</th>
-				<td>{$order->delivery_street}</td>
-			</tr>
-			<tr>
-				<th>Město</th>
-				<td>{$order->delivery_city}</td>
-			</tr>
-			<tr>
-				<th>PSČ</th>
-				<td>{$order->delivery_zip}</td>
-			</tr>
-		</tbody>
-    </table>
-    {/if}
-
-    <a n:foreach="$branches as $branch=>$branchName" n:href="//:Front:Homepage:approve $order->id, $branch"><button>Schválit tisk objednávky - {$branchName}</button></a>
-

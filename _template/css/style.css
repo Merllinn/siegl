@@ -3311,11 +3311,11 @@ div.order-form {
 
     div.order-form .arrow input.form-control,
     div.order-form textarea.form-control {
-      width: calc(100% - 185px);
+      width: calc(100% - 120px);
     }
 
       div.order-form textarea.form-control {
-        width: calc(100% - 185px);
+        width: calc(100% - 120px);
         border-radius: 0;
         border: 0;
         display: inline-block;
@@ -3331,7 +3331,7 @@ div.order-form {
           content: "";
           width: 8px; height: 86px;
           position: absolute;
-          left: 189px; top: 46px;
+          left: 124px; top: 46px;
           background-color: #FFF;
         }
 
@@ -3345,7 +3345,7 @@ div.order-form {
 
     div.order-form .arrow label,
     .row-ic label {
-      width: 165px;
+      width: 100px;
       margin-right: 15px;
       padding-top: 10px;
       text-align: right;
@@ -3374,7 +3374,7 @@ div.row.billing-address {
 }
 
 div.row div.billing-address {
-  padding-left: 175px;
+  padding-left: 112px;
   position: relative;
 }
 

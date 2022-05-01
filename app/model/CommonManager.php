@@ -15,7 +15,8 @@ final class CommonManager
 	const
 		SETTINGS = 'settings',
 		SIZES = 'sizes',
-		SLIDER = 'slider';
+		SLIDER = 'slider',
+		ZONES = 'zones';
 
 
 	/** @var Nette\Database\Context */
@@ -96,6 +97,44 @@ final class CommonManager
     public function findSize($id)
     {
 		return $this->getSizes()
+		->where("id", $id)
+        ->fetch();
+    }
+
+
+    public function getZones()
+    {
+        return $this->database->table(self::ZONES);
+    }
+
+    public function getActiveZones()
+    {
+        return $this->getZones()
+        	->where("active", true);
+    }
+
+	public function addZone($values)
+	{
+			$this->getZones()->insert($values);
+	}
+
+	public function updateZone($values, $id)
+	{
+			$this->getZones()
+			->where("id", $id)
+			->update($values);
+	}
+
+	public function deleteZone($id)
+	{
+		$this->getZones()
+		->where("id", $id)
+		->delete();
+	}
+
+    public function findZone($id)
+    {
+		return $this->getZones()
 		->where("id", $id)
         ->fetch();
     }

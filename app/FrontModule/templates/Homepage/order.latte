@@ -33,7 +33,8 @@
             <div class="filter">
             	{snippet orderContainers}
                 <form>
-                    <div class="oneContainer" n:if="!empty($containers)" n:foreach="$containers as $index=>$container">
+                	{if !empty($containers)}
+                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
 	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                     		{var $attr = $presenter->attributeManager->find(1)}
 	                        <li class="list-inline-item druh-odpadu">
@@ -83,6 +84,7 @@
 	                        <!-- ./pridat dalsi kontejner -->
 	                    </ul>
                     </div>
+                    {/if}
                 </form>
                 {/snippet}
                 <!-- ./form -->
@@ -155,11 +157,13 @@
         <!-- ./select material -->
     </section>
     <!-- ./material -->
-    <div class="total-price">
+    {snippet orderprice}
+    <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
         <span class="total">Celková cena</span>
-        <strong class="price">3 650 Kč</strong>
-        <span class="with-vat">4 350 Kč vč. DPH</span>
+        <strong class="price">{$basket->price|number:0:",":" "} Kč</strong>
+        <span class="with-vat">{$basket->priceVat|number:0:",":" "} Kč vč. DPH</span>
     </div>
+    {/snippet}
     <!-- ./price -->
     {form orderForm}
     <div class="order-form">
@@ -223,7 +227,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12 send-order">
-                        <button class="btn btn-primary btn-arrow btn-white" onclick="submit(this);">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
+                        <button class="btn btn-primary btn-arrow btn-white sendOrderButton" onclick="submit(this);">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -257,6 +261,9 @@
     	$(document).ready(function(){
 			var materialPrice = 0;
 			var materialKoef = 1;
+			var checkWeight = true;
+			var checkAddress = true;
+			
 			{if !empty($materials[0]->priceObj)}
 				materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
 				materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
@@ -296,9 +303,29 @@
 				});
 			});
 			$(".materialWeight").change(function(){
-				$(".material-quantity").val(Math.round($(this).val()*materialKoef));
-				var link = {link setMaterialAmount!} + "&amount=" + $(this).val();
+				var matWeight = parseInt($(this).val());
+				var matVolume = Math.round(matWeight*materialKoef);
+				var maxWeight = parseInt($(".total-price").data("weight"));
+				var maxVolume = parseInt($(".total-price").data("weight"));
+				$(".material-quantity").val(Math.round(matWeight*materialKoef));
+				var link = {link setMaterialAmount!} + "&amount=" + matWeight;
 				$.get(link);
+
+				if(matWeight>maxWeight){
+					window.checkWeight = false;
+					enableDisableOrder();
+					alert("Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.");
+				}
+				else if(matVolume>maxVolume){
+					window.checkWeight = false;
+					enableDisableOrder();
+					alert("Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.");
+				}
+				else{
+					window.checkWeight = true;
+					enableDisableOrder();
+				}
+				
 			});
 			$(".pickMaterial").click(function(e){
 				e.preventDefault()
@@ -330,6 +357,19 @@
 			if($(".materialWeight").val() != 1){
 				$(".materialWeight").trigger("change");
 			}
+			
+			function enableDisableOrder(){
+				sendOrderButton = $(".sendOrderButton");
+				var orderValid = true;
+				if(window.checkWeight==false) orderValid = false;
+				if(window.checkAddress==false) orderValid = false;
+				if(orderValid){
+					sendOrderButton.removeClass("disabled");
+				}	
+				else{
+					sendOrderButton.addClass("disabled");
+				}	
+			}
 		});
 		
 		function initMap() {
@@ -344,30 +384,79 @@
 			  }
 			);
 			
+            google.maps.Polygon.prototype.Contains = function (point) {
+                var crossings = 0,
+                    path = this.getPath();
+                // for each edge
+                for (var i = 0; i < path.getLength() ; i++) {
+                    var a = path.getAt(i),
+                        j = i + 1;
+                    if (j >= path.getLength()) {
+                        j = 0;
+                    }
+                    var b = path.getAt(j);
+                    if (rayCrossesSegment(point, a, b)) {
+                        crossings++;
+                    }
+                }
+                // odd number of crossings?
+                return (crossings % 2 == 1);
+                function rayCrossesSegment(point, a, b) {
+                    var px = point.lng(),
+                        py = point.lat(),
+                        ax = a.lng(),
+                        ay = a.lat(),
+                        bx = b.lng(),
+                        by = b.lat();
+                    if (ay > by) {
+                        ax = b.lng();
+                        ay = b.lat();
+                        bx = a.lng();
+                        by = a.lat();
+                    }
+                    if (py == ay || py == by) py += 0.00000001;
+                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
+                    if (px < Math.min(ax, bx)) return true;
+                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
+                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
+                    return (blue >= red);
+                }
+            };			
+			
 			var input = document.getElementById('searchTextField');
-  			new google.maps.places.Autocomplete(input);
+			/*
+			const center = { lat: 50.064192, lng: -130.605469 };
+			// Create a bounding box with sides ~10km away from the center point
+			const defaultBounds = {
+			    north: center.lat + 0.1,
+			    south: center.lat - 0.1,
+			    east: center.lng + 0.1,
+			    west: center.lng - 0.1,
+			};
+			*/
+			const acoptions = {
+			    //bounds: defaultBounds,
+			    componentRestrictions: { country: "cz" },
+			    fields: ["address_components", "geometry"],
+			    strictBounds: false,
+			    //types: ["establishment"],
+			};
+  			new google.maps.places.Autocomplete(input, acoptions);
   			var marker
   			
   			$("#searchTextField").keypress(function(event){
 				var keycode = (event.keyCode ? event.keyCode : event.which);
   				if(keycode == '13'){
 					event.preventDefault();
-					geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
-						if (status == google.maps.GeocoderStatus.OK) {
-							setMarker(results[0].geometry.location, $("#searchTextField").val());
-							map.setCenter(results[0].geometry.location);
-					    } 
-					}); 				
+					checkPickedAddress();
 				}
+  			});
+  			$("#searchTextField").change(function(){
+				checkPickedAddress();
   			});
   			$(".setAddress").click(function(e){
 				e.preventDefault();
-				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
-					if (status == google.maps.GeocoderStatus.OK) {
-						setMarker(results[0].geometry.location, $("#searchTextField").val());
-						map.setCenter(results[0].geometry.location);
-				    } 
-				}); 				
+				checkPickedAddress();
   			});
   			map.addListener("click", (mapsMouseEvent) => {
     		  var ll = mapsMouseEvent.latLng;
@@ -376,7 +465,7 @@
     		  	.then((response) => {
     		  		if (response.results[0]) {
     		  			$("#searchTextField").val(response.results[0].formatted_address);
-						  setMarker(ll, response.results[0].formatted_address);
+    		  			validateAddress(response.results[0],false);
 					}else{
 						$("#searchTextField").val("nenalezeno");
 					}
@@ -384,6 +473,58 @@
     		  	});
     		});
     		
+    		function checkPickedAddress(){
+				var inZone = false;
+				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						{foreach $zones as $zone}
+							if(zone{$zone->id} != null && zone{$zone->id}.Contains(results[0].geometry.location)){
+								inZone = true;
+							}
+						{/foreach}
+						validateAddress(results[0],inZone);
+					} 
+				}); 				
+    		}
+    		
+    		function validateAddress(result, inZone){
+					var inPrague = false;
+					sendOrderButton = $(".sendOrderButton");
+					var i;
+					for (i = 0; i < result.address_components.length; ++i) {
+						if(result.address_components[i].short_name == "Hlavní město Praha"){
+							inPrague = true;
+						}
+					}
+					if(inZone){
+						setMarker(result.geometry.location, $("#searchTextField").val());
+						map.setCenter(result.geometry.location);
+						window.checkAddress = true;
+						enableDisableOrder();
+					}
+					else if(inPrague){
+						$("#searchTextField").val("");
+						unsetMarker();
+						alert({_'ADRESA_MIMO_ZONU'});
+						window.checkAddress = false;
+						enableDisableOrder();
+					}
+					else{
+						$("#searchTextField").val("");
+						unsetMarker();
+						alert({_'ADRESA_MIMO_PRAHU'});
+						window.checkAddress = false;
+						enableDisableOrder();
+					}
+				
+    		}
+    		
+    		function unsetMarker(){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			}
+			
     		function setMarker(latLn, caption){
 			  if(typeof  marker !== "undefined"){
 				marker.setMap(null);
@@ -396,7 +537,60 @@
 			  var link = {link setAddress!} + "&a=" + caption;
 			  $.get(link);
     		}
+    		
+    		//Draw zones polygons
+    		{foreach $zones as $zone}
+				const zone{$zone->id}Coords = [
+				    {var $points = explode(chr(10), $zone->points)}
+				    {foreach $points as $zonePoint}
+			    		{var $pArray = explode(',', $zonePoint)}
+			    		{var $latC = trim($pArray[0])}
+			    		{var $lngC = trim($pArray[1])}
+			    		{ lat: {$latC|noescape}, lng: {$lngC|noescape} },
+				    {/foreach}
+				];
 
+				const zone{$zone->id} = new google.maps.Polygon({
+				    paths: zone{$zone->id}Coords,
+				    strokeColor: "#ff0000",
+				    strokeOpacity: 0.8,
+				    strokeWeight: 2,
+				    fillColor: "#ff0000",
+				    fillOpacity: 0.35,
+				});
+
+				zone{$zone->id}.setMap(map);
+				
+  				zone{$zone->id}.addListener("click", (mapsMouseEvent) => {
+    			  var ll = mapsMouseEvent.latLng;
+    			  geocoder
+    		  		.geocode({ location: ll })
+    		  		.then((response) => {
+    		  			if (response.results[0]) {
+    		  				$("#searchTextField").val(response.results[0].formatted_address);
+							validateAddress(response.results[0],true);
+						}else{
+							$("#searchTextField").val("nenalezeno");
+						}
+						
+    		  		});
+    			});
+			
+    		{/foreach}
+    		
+			function enableDisableOrder(){
+				sendOrderButton = $(".sendOrderButton");
+				var orderValid = true;
+				if(window.checkWeight==false) orderValid = false;
+				if(window.checkAddress==false) orderValid = false;
+				if(orderValid){
+					sendOrderButton.removeClass("disabled");
+				}	
+				else{
+					sendOrderButton.addClass("disabled");
+				}	
+			}
+    		
 
 		}
 

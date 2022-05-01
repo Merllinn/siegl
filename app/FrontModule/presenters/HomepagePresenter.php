@@ -17,17 +17,19 @@ final class HomepagePresenter extends HomepageForms
 	}
 
     public function renderOrder(){
+		$this->template->basket = $this->basket;
 		$this->template->address = $this->basket->address;
 		$this->template->containers = $this->basket->containers;
 		$this->template->materials = $this->basket->materials;
 		$this->template->attVals = $this->attributeManager->getAllValues();
+		$this->template->zones = $this->commonManager->getActiveZones();
 	}
 	
 	public function handleAddNextContainer(){
 		$containers = $this->basket->containers;
 		$containers[] = new \Nette\Utils\ArrayHash();
 		$this->basket->containers = $containers;
-		//$this->redrawControl("orderContainers");
+		$this->recalculateBasket();
 		$this->redirect("this");
 	}
 
@@ -37,39 +39,42 @@ final class HomepagePresenter extends HomepageForms
 		$material->product = $mat;
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
-		//$this->redrawControl("orderContainers");
+		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
 
 	public function handleUnuseMaterial(){
 		$this->basket->materials = array();
-		//$this->redrawControl("orderContainers");
+		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
 
 	public function handleSetMaterialVariant($var){
 		$materials = $this->basket->materials;
 		$material = $materials[0];
+		$material->amount = 1;
 		$material->price = $var;
 		$priceObj = $this->productManager->findPrice($var);
 		$material->priceObj = $this->rowToArray($priceObj);
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
-		//$this->redrawControl("orderContainers");
+		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
 	public function handleSetMaterialAmount($amount){
 		$materials = $this->basket->materials;
-		$material = $materials[0];
-		$material->amount = $amount;
-		$materials[0] = $material;
-		$this->basket->materials = $materials;
-		//$this->redrawControl("orderContainers");
+		if(!empty($materials[0])){
+			$material = $materials[0];
+			$material->amount = $amount;
+			$materials[0] = $material;
+			$this->basket->materials = $materials;
+		}
+		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
 	public function handleSetAddress($a){
 		$this->basket->address = $a;
-		//$this->redrawControl("orderContainers");
+		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
 
@@ -77,7 +82,7 @@ final class HomepagePresenter extends HomepageForms
 		$containers = $this->basket->containers;
 		unset($containers[$index]);
 		$this->basket->containers = $containers;
-		//$this->redrawControl("orderContainers");
+		$this->recalculateBasket();
 		$this->redirect("this");
 	}
 
@@ -330,7 +335,7 @@ final class HomepagePresenter extends HomepageForms
         $form ->addText("email", "E-mail")
                 ->getControlPrototype()->class("form-control");
         $form["email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
-        $form ->addText("phone", "Telefonní číslo")
+        $form ->addText("phone", "Telefon")
                 ->getControlPrototype()->class("form-control");
         $form["phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
         $form ->addText("street", "Ulice a číslo popisné *")
@@ -406,6 +411,10 @@ final class HomepagePresenter extends HomepageForms
     */
     public function saveOrder(Form $form){
         $values = $form->getValues();
+        
+        if(count($this->basket->containers)==0){
+			$form->addError("Objednávka neobsahuje žádné kontejnery");
+        }
 
         if($form->isValid()){
             try{
@@ -422,7 +431,7 @@ final class HomepagePresenter extends HomepageForms
 
 				$orderId = $this->orderManager->saveOrder($this->basket, $this->productManager, $this->settings);
 
-				//$this->basket->remove();
+				$this->basket->remove();
 
 				$order = $this->orderManager->find($orderId);
 
@@ -486,6 +495,8 @@ final class HomepagePresenter extends HomepageForms
 	        }
 	        $this->basket->containers = $items;
             
+			$this->recalculateBasket();
+
             $containerOrderPage = $this->pageManager->findByLayout(11);
             $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);
         }
@@ -501,7 +512,7 @@ final class HomepagePresenter extends HomepageForms
 
     public function createComponentUpload(){
         $form = new Form();
-
+        
         $form ->addMultiUpload("img", "Soubor obrázku")
             ->setRequired(true)
             ->addRule(Form::MIME_TYPE, 'Požadovaný soubor musí být ve formátu JPG nebo TIFF.', 'image/jpeg,image/tiff')

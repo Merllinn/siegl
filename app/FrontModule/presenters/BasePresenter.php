@@ -408,26 +408,43 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function recalculateBasket(){
         $totalPrice = 0;
+        $weightAttr = 3;
+        $volumeAttr = 2;
+        $totalWeight = 0;
+        $totalVolume = 0;
 
-        //calculate photos price
-        $totalPrice += $this->basket->price;
+		foreach($this->basket->containers as $container){
+			if(!empty($container->price)){
+				$totalPrice += $container->price->priceFrom;
+				$prod = $this->productManager->find($container->product);
+				foreach(explode("|", $prod->attributes) as $aKey){
+					list($key, $val) = explode("-", $aKey);
+					if($key==$weightAttr){
+						$aVal = $this->attributeManager->findValue($val);
+						$totalWeight += (int)$aVal->name;
+					}
+					if($key==$volumeAttr){
+						$aVal = $this->attributeManager->findValue($val);
+						$totalVolume += (int)$aVal->name;
+					}
+				}
+			}
+		}
+		foreach($this->basket->materials as $material){
+			if(!empty($material->priceObj))
+			$totalPrice += $material->priceObj->priceFrom * $material->amount;
+		}
+        
+        $this->basket->price = $totalPrice;
+        $this->basket->maxWeight = $totalWeight;
+        $this->basket->maxVolume = $totalVolume;
 
-        //calculate products price
-        $totalPrice += $this->basket->itemsPrice;
-
-        //calculate voucher sale
-        $sale = 0;
-        if(!empty($this->basket->voucher)){
-            if($this->basket->voucher->sale>0){
-                $sale = $this->basket->voucher->sale;
-            }
-            elseif($this->basket->voucher->salePercent>0){
-                $sale = $totalPrice*($this->basket->voucher->salePercent/100);
-            }
-        }
-        $this->basket->voucherSale = $sale;
-
-        $this->basket->totalPrice = $totalPrice;
+		$vatKoef = 1 + ($this->settings->vat/100);
+        $this->basket->priceVat = ($this->basket->price * $vatKoef);
+        
+        $this->template->basket = $this->basket;
+        
+        $this->redrawControl("orderprice");
 
 
     }

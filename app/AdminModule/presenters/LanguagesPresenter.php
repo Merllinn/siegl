@@ -180,7 +180,7 @@ class LanguagesPresenter extends BasePresenter
 		
 		$cont = $form->addContainer("translates");
 		foreach($texts as $text){
-			$cont ->addText($text->id, $text->key, 50, 1);
+			$cont ->addText($text->id, $text->key);
 		}
 		
 		$form->addSubmit("submit", "Uložit texty")->getControlPrototype()->class("btn btn-primary");

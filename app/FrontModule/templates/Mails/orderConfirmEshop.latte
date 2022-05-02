@@ -5,42 +5,94 @@
     <p>
         byla přijata nová objednávka kontejneru.
     </p>
+    
+    {var $containers = array()}
+    {var $materials = array()}
+    {foreach $products as $itemId=>$product}
+    	{if $product->type==1}
+    		{php $containers[$itemId] = $product}
+    	{/if}
+    	{if $product->type==2}
+    		{php $materials[$itemId] = $product}
+    	{/if}
+    {/foreach}
 
-	<h4>Položky objednávky</h4>
-	{var $totalPrice = 0}
+	{if count($containers)>0}
+		<h4>Kontejnery</h4>
+		<table>
+			<thead>
+				<th>Název</th>
+				<th>Termín</th>
+				<th>Cena/ks</th>
+				<th>Cena celkem</th>
+			</thead>
+			<tbody>
+			<tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
+				<td><strong>{$product->name}</strong></td>
+				<td>{$product->term}</td>
+				<td>
+					{$product->price|number:0:',':' '} Kč
+				</td>
+				<td>
+					{$product->price*$product->quantity|number:0:',':' '} Kč
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	{/if}
+	{if count($materials)>0}
+		<h4>Materiál</h4>
+		<table>
+			<thead>
+				<th>Název</th>
+				<th>Množství</th>
+				<th>Cena/ks</th>
+				<th>Cena celkem</th>
+			</thead>
+			<tbody>
+			<tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
+				<td><strong>{$product->name}</strong></td>
+				<td>
+					{$product->quantity} tun
+				</td>
+				<td>
+					{$product->price|number:0:',':' '} Kč
+				</td>
+				<td>
+					{$product->price*$product->quantity|number:0:',':' '} Kč
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	{/if}
+	<h4>Cena</h4>
 	<table>
-		<thead>
-			<th>Název</th>
-			<th>Množství</th>
-			<th>Cena/ks</th>
-			<th>Cena celkem</th>
-		</thead>
 		<tbody>
-		<tr n:foreach="$products as $itemId=>$product" data-id="{$itemId}">
-			<td colspan="3"><strong>{$product->name}</strong></td>
-			<td>
-				{$product->quantity}
-			</td>
-			<td>
-				{$product->price_vat|number:0:',':' '} Kč
-			</td>
-			<td>
-				{$product->price_vat*$product->quantity|number:0:',':' '} Kč
-			</td>
-		</tr>
-		<tr>
-			<td colspan="3">Celková cena:</td>
-			<td >{$order->price|number:0:',':' '} Kč</td>
-		</tr>
+			<tr>
+				<td colspan="3">Celková cena bez DPH:</td>
+				<td >{$order->price|number:0:',':' '} Kč</td>
+			</tr>
+			<tr>
+				<td colspan="3">Celková cena s DPH:</td>
+				<td >{$order->price*(1 + ($settings->vat/100))|number:0:',':' '} Kč</td>
+			</tr>
 		</tbody>
 	</table>
 
 	<h4>Místo přistavení</h4>
 	{$order->street}
 	
-	<h4>Údaje o zákazníkovi</h4>
+	<h4>Údaje o {if !empty($order->ic)}firemním {/if}zákazníkovi</h4>
     <table>
 		<tbody>
+			<tr n:if="!empty($order->ic)">
+				<th>IČ</th>
+				<td>{$order->ic}</td>
+			</tr>
+			<tr n:if="!empty($order->company_name)">
+				<th>Název společnosti</th>
+				<td>{$order->company_name}</td>
+			</tr>
 			<tr>
 				<th>Jméno</th>
 				<td>{$order->name}</td>
@@ -58,8 +110,25 @@
 				<td>{$order->phone}</td>
 			</tr>
 			<tr n:if="!empty($order->note)">
-				<th>Poznáka</th>
+				<th>Poznámka</th>
 				<td>{$order->note|breaklines|noescape}</td>
 			</tr>
+			{if $order->different_delivery}
+				<tr>
+					<th colspan="2">Jiná adresa dodání</th>
+				</tr>
+				<tr n:if="!empty($order->delivery_street)">
+					<th>Adresa</th>
+					<td>{$order->delivery_street}</td>
+				</tr>
+				<tr n:if="!empty($order->delivery_city)">
+					<th>Město</th>
+					<td>{$order->delivery_city}</td>
+				</tr>
+				<tr n:if="!empty($order->delivery_zip)">
+					<th>PS</th>
+					<td>{$order->delivery_zip}</td>
+				</tr>
+			{/if}
 		</tbody>
     </table>

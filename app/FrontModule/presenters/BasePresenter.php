@@ -413,26 +413,30 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $totalWeight = 0;
         $totalVolume = 0;
 
-		foreach($this->basket->containers as $container){
-			if(!empty($container->price)){
-				$totalPrice += $container->price->priceFrom;
-				$prod = $this->productManager->find($container->product);
-				foreach(explode("|", $prod->attributes) as $aKey){
-					list($key, $val) = explode("-", $aKey);
-					if($key==$weightAttr){
-						$aVal = $this->attributeManager->findValue($val);
-						$totalWeight += (int)$aVal->name;
-					}
-					if($key==$volumeAttr){
-						$aVal = $this->attributeManager->findValue($val);
-						$totalVolume += (int)$aVal->name;
+		if(!empty($this->basket->containers)){
+			foreach($this->basket->containers as $container){
+				if(!empty($container->price)){
+					$totalPrice += $container->price->priceFrom;
+					$prod = $this->productManager->find($container->product);
+					foreach(explode("|", $prod->attributes) as $aKey){
+						list($key, $val) = explode("-", $aKey);
+						if($key==$weightAttr){
+							$aVal = $this->attributeManager->findValue($val);
+							$totalWeight += (int)$aVal->name;
+						}
+						if($key==$volumeAttr){
+							$aVal = $this->attributeManager->findValue($val);
+							$totalVolume += (int)$aVal->name;
+						}
 					}
 				}
 			}
 		}
-		foreach($this->basket->materials as $material){
-			if(!empty($material->priceObj))
-			$totalPrice += $material->priceObj->priceFrom * $material->amount;
+		if(!empty($this->basket->materials)){
+			foreach($this->basket->materials as $material){
+				if(!empty($material->priceObj))
+				$totalPrice += $material->priceObj->priceFrom * $material->amount;
+			}
 		}
         
         $this->basket->price = $totalPrice;
@@ -679,6 +683,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         foreach($data as $var=>$vals){
         	$template->$var = $vals;
         }
+        $template->settings = $this->settings;
 
         //send mail
         $mail = new Message;

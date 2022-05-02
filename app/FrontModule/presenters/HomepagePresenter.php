@@ -15,6 +15,10 @@ final class HomepagePresenter extends HomepageForms
 		$this->approveOrder($id);
         $this->redirect(":Front:Homepage:page", "");
 	}
+	
+	public function renderSubpages(){
+		$this->template->subpages = $this->pageManager->getActiveByParent($this->template->page->id);
+	}
 
     public function renderOrder(){
 		$this->template->basket = $this->basket;
@@ -324,44 +328,28 @@ final class HomepagePresenter extends HomepageForms
     public function createComponentOrderForm(){
         $form = new Form();
 
-        $form ->addText("ic", "IČ")
-                ->getControlPrototype()->class("form-control");
+        //PERSONAL
         $form ->addText("name", "Jméno")
                 ->getControlPrototype()->class("form-control");
-        $form["name"]->addRule(Form::FILLED, "Vyplňte jméno");
+        //$form["name"]->addRule(Form::FILLED, "Vyplňte jméno");
         $form ->addText("surname", "Příjmení")
                 ->getControlPrototype()->class("form-control");
-        $form["surname"]->addRule(Form::FILLED, "Vyplňte příjmení");
+        //$form["surname"]->addRule(Form::FILLED, "Vyplňte příjmení");
         $form ->addText("email", "E-mail")
                 ->getControlPrototype()->class("form-control");
-        $form["email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
+        //$form["email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
         $form ->addText("phone", "Telefon")
                 ->getControlPrototype()->class("form-control");
-        $form["phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
-        $form ->addText("street", "Ulice a číslo popisné *")
-                ->getControlPrototype()->class("form-control");
+        //$form["phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
 
         $form ->addTextArea("note", "Poznámka", 30, 5)
                 ->getControlPrototype()->class("form-control");
-        /*
-        $form["street"]->addRule(Form::FILLED, "Vyplňte ulici a číslo popisné");
-        $form ->addText("city", "Město *")
-                ->getControlPrototype()->class("form-control");
-        $form["city"]->addRule(Form::FILLED, "Vyplňte město");
-        $form ->addText("zip", "PSČ *")
-                ->getControlPrototype()->class("form-control");
-        $form["zip"]->addRule(Form::FILLED, "Vyplňte PSČ");
-        */
 
-
-        /*
+		//different delivery personal
         $form -> addCheckbox("different_delivery", "Přejete si odeslat zboží na jinou adresu?")
                 ->getControlPrototype()->class("differentDelivery form-check-input");
         $form["different_delivery"]->getLabelPrototype()->class("form-check-label");
 
-        $form ->addText("delivery_name", "Jméno")
-                ->getControlPrototype()->class("form-control");
-        $form["delivery_name"];
         $form ->addText("delivery_street", "Ulice a číslo popisné")
                 ->getControlPrototype()->class("form-control");
         $form["delivery_street"]
@@ -377,20 +365,49 @@ final class HomepagePresenter extends HomepageForms
         $form["delivery_zip"]
         	->addConditionOn($form['different_delivery'], Form::EQUAL, TRUE)
         	->addRule(Form::FILLED, "Vyplňte PSČ");
-        */
 
-		/*
-		$payments = array();
-		foreach($this->payments as $id=>$name){
-			$price = !empty($this->paymentPrices[$id])?$this->paymentPrices[$id]:0;
-			$payments[$id] = $name." - ".$price." Kč";
-		}
-        $form->addRadioList("payment", "", $payments)
-                ->getControlPrototype()->class("form-check-input");
-        $form["payment"]->addRule(Form::FILLED, "Vyberte způsob platby");
-        */
+        //COMPANY
+        $form ->addText("ic", "IČ")
+                ->getControlPrototype()->class("form-control idField");
+        $form ->addText("bussiness_name", "Jméno")
+                ->getControlPrototype()->class("form-control");
+        //$form["bussiness_name"]->addRule(Form::FILLED, "Vyplňte jméno");
+        $form ->addText("bussiness_surname", "Příjmení")
+                ->getControlPrototype()->class("form-control");
+        //$form["bussiness_surname"]->addRule(Form::FILLED, "Vyplňte příjmení");
+        $form ->addText("bussiness_email", "E-mail")
+                ->getControlPrototype()->class("form-control");
+        //$form["bussiness_email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
+        $form ->addText("bussiness_phone", "Telefon")
+                ->getControlPrototype()->class("form-control");
+        //$form["bussiness_phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
 
-        //$form["different_delivery"]->getLabelPrototype()->class("form-check-label");
+        $form ->addTextArea("bussiness_note", "Poznámka", 30, 5)
+                ->getControlPrototype()->class("form-control");
+        $form ->addText("bussiness_company", "Název firmy")
+                ->getControlPrototype()->class("form-control");
+
+		//different delivery company
+        $form -> addCheckbox("bussiness_different_delivery", "Přejete si odeslat zboží na jinou adresu?")
+                ->getControlPrototype()->class("differentDeliveryBussiness form-check-input");
+        $form["bussiness_different_delivery"]->getLabelPrototype()->class("form-check-label");
+
+        $form ->addText("bussiness_delivery_street", "Ulice a číslo popisné")
+                ->getControlPrototype()->class("form-control");
+        $form["bussiness_delivery_street"]
+        	->addConditionOn($form['bussiness_different_delivery'], Form::EQUAL, TRUE)
+        	->addRule(Form::FILLED, "Vyplňte ulici a číslo popisné");
+        $form ->addText("bussiness_delivery_city", "Město")
+                ->getControlPrototype()->class("form-control");
+        $form["bussiness_delivery_city"]
+        	->addConditionOn($form['bussiness_different_delivery'], Form::EQUAL, TRUE)
+        	->addRule(Form::FILLED, "Vyplňte město");
+        $form ->addText("bussiness_delivery_zip", "PSČ")
+                ->getControlPrototype()->class("form-control");
+        $form["bussiness_delivery_zip"]
+        	->addConditionOn($form['bussiness_different_delivery'], Form::EQUAL, TRUE)
+        	->addRule(Form::FILLED, "Vyplňte PSČ");
+
 
         $form->addSubmit("submit", "Odeslat objednávku")->getControlPrototype()->class("btn btn-primary btn-arrow btn-white");
 
@@ -449,7 +466,7 @@ final class HomepagePresenter extends HomepageForms
 				$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
 
 
-                $this->redirect(":Front:Homepage:page");
+                $this->redirect(":Front:Homepage:page", "dekujeme-za-objednavku");
             }
             catch(DibiDriverException $e){
                 $this->flashMessage($e->getMessage(), "error");

@@ -88,16 +88,16 @@ $(document).ready(function() {
     return false;
   });
 
-  $('#fakturacni-adresa').change(function() {
-    if ($('#fakturacni-adresa').prop('checked')) {
+  $('.differentDelivery').change(function() {
+    if ($('.differentDelivery').prop('checked')) {
       $('#billing-information').show( "slow" );
     } else {
       $('#billing-information').hide( "slow" );
     }
   });
 
-  $('#business-customer-fakturacni-adresa').change(function() {
-    if ($('#business-customer-fakturacni-adresa').prop('checked')) {
+  $('.differentDeliveryBussiness').change(function() {
+    if ($('.differentDeliveryBussiness').prop('checked')) {
       $('#business-customer-billing-information').show( "slow" );
     } else {
       $('#business-customer-billing-information').hide( "slow" );

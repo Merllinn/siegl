@@ -1,0 +1,10 @@
+{layout page.latte}
+{block subcontent}
+	<div class="row">
+		<div class="col-4" n:foreach="$subpages as $sp">
+			<h2>{$sp->name}</h2>
+			{$sp->content|noescape}
+			<a href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}">Detail stránky</a>
+		</div>
+	</div>
+{/block}

@@ -39,6 +39,11 @@ class OrdersPresenter extends OrdersForms
         $this->prepareOrders();
     }
 
+    public function actionDetail($id){
+		$this->template->order = $this->orderManager->find($id);
+		$this->template->products = $this->orderManager->findOrderProducts($id);
+	}
+
     public function actionAdd(){
         $this->setView("addEdit");
     }
@@ -121,22 +126,6 @@ class OrdersPresenter extends OrdersForms
                 return html::el("a")->href($presenter->link(":Admin:Orders:edit", $row->id))->setHtml($row->customer)->title("Upravit");
         });
 
-        $grid->addColumnText('products', 'Produkty')
-        	->setSortable()->setSortableResetPagination()
-            ->setRenderer(function($row) use ($presenter) {
-                $products = $this->orderManager->findOrderProducts($row->id);
-                $el = Html::el("span");
-                $i = 1;
-                if(count($products)>0){
-                    $productsList = array();
-                    foreach($products as $product){
-                    	$el->insert($i++, $product->name);    
-                    	$el->insert($i++, Html::el("br"));    
-                    }
-                }
-                return $el;
-        });
-
         $grid->addColumnText('note', 'Poznámka')
             ->setRenderer(function($row) use ($presenter) {
                 $el = Html::el("span");
@@ -150,17 +139,24 @@ class OrdersPresenter extends OrdersForms
                 return $el;
         });
 
-        $grid->addColumnText('price', 'Cena')
+        $grid->addColumnText('price', 'Cena bez DPH')
             ->setRenderer(function($row) use ($presenter) {
                 $el = Html::el("span");
                 $el->insert(0, number_format($row->price, 0, ',', ' ')." Kč");
                 return $el;
         });
 
+        $grid->addColumnText('price_vat', 'Cena s DPH')
+            ->setRenderer(function($row) use ($presenter) {
+                $el = Html::el("span");
+                $el->insert(0, number_format($row->price_vat, 0, ',', ' ')." Kč");
+                return $el;
+        });
+
         $grid->addColumnText('tools', 'Nástroje')
             ->setRenderer(function($row) use ($presenter) {
                 $el = Html::el("span");
-                //$el->insert(4, html::el("a")->class("btn btn-mini btn-danger")->href($presenter->link("delete!", $row->id))->setHtml(html::el("i")->class("fas fa-trash-alt"))->title(" Smazat"));;
+                $el->insert(4, html::el("a")->class("btn btn-mini")->href($presenter->link("detail", $row->id))->setHtml(html::el("i")->class("fas fa-edit"))->title(" Smazat"));;
                 return $el;
         });
 

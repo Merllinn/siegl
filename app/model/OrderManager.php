@@ -238,12 +238,36 @@ final class OrderManager
 		$order = $ses->order;
 		$order->date = new \Nette\Utils\DateTime();
 		$order->street = $ses->address;
+        //resolve company
+        $mapArray = array(
+        	"bussiness_name" => "name",
+        	"bussiness_surname"=>"surname",
+        	"bussiness_email"=>"email",
+        	"bussiness_phone"=>"phone",
+        	"bussiness_note"=>"note",
+        	"bussiness_company"=>"company_name",
+        	"bussiness_different_delivery"=>"different_delivery",
+        	"bussiness_delivery_street"=>"delivery_street",
+        	"bussiness_delivery_city"=>"delivery_city",
+        	"bussiness_delivery_zip"=>"delivery_zip",
+        );
+        foreach($mapArray as $source=>$target){
+        	if(!empty($order->$source)){
+				$order->$target = $order->$source;
+        	}
+        	unset($order->$source);
+			
+        }
+        $order->price = $ses->price;
+        $order->price_vat = ($ses->price * (1 + ($settings->vat/100)));
+        
+        //save order
         $orderId = $this->add($order);
-
+        
         $containers = $ses->containers;
         $materials = $ses->materials;
 
-        $totalPice = 0;
+        //$totalPice = 0;
 
         //save containers
         foreach($containers as $container){
@@ -252,13 +276,15 @@ final class OrderManager
             $itemData = array(
                 "order_id"		=>$orderId,
                 "products_id"   =>$container->product,
+                "term"   		=>$container->term,
                 "quantity"      =>1,
+                "type"			=>1,
                 "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
                 "price"         =>$price->priceFrom,
                 "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
             );
             $this->addProduct($itemData);
-            $totalPice += $price->priceFrom;
+            //$totalPice += $price->priceFrom;
         }
         //save containers
         foreach($materials as $material){
@@ -268,17 +294,18 @@ final class OrderManager
                 "order_id"		=>$orderId,
                 "products_id"   =>$material->product,
                 "quantity"      =>$material->amount,
+                "type"			=>2,
                 "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
                 "price"         =>$price->priceFrom,
                 "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
             );
             $this->addProduct($itemData);
-            $totalPice += $price->priceFrom * $material->amount;
+            //$totalPice += $price->priceFrom * $material->amount;
         }
         //$totalPice += $order->paymentPrice;
         //$totalPice += $order->deliveryPrice;
-		$updateData = array("price"=>$totalPice);
-        $this->update($updateData, $orderId);
+		//$updateData = array("price"=>$totalPice);
+        //$this->update($updateData, $orderId);
 
         $this->database->commit();
 

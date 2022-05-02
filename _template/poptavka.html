@@ -2,7 +2,7 @@
 <html lang="cs" class="notouch yeswebp">
 <head>
     <meta charset="utf-8">
-    <title>Objednávka kontejneru - Siegl kontejnery</title>
+    <title>Poptávka - Siegl kontejnery</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +44,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
 </head>
-<body class="order">
+<body class="demand">
     <header>
         <div class="container">
             <div class="logo">
@@ -67,11 +67,11 @@
         </div>
         <nav class="main-navigation">
             <ul>
-                <li class="submenu"><a class="active" href="kontejnery.html" title="Přejít na kontejnery a ceny"><span>Kontejnery</span></a>
+                <li class="submenu"><a href="kontejnery.html" title="Přejít na kontejnery a ceny"><span>Kontejnery</span></a>
                     <div class="submenu two-columns">
                         <ul>
                             <li><a href="kontejnery.html" title="Přejít na ceník kontejnerů">Ceník</a></li>
-                            <li><a class="active" href="objednavka-kontejneru.html" title="Přejít na objednávku">Objednávka</a></li>
+                            <li><a href="objednavka-kontejneru.html" title="Přejít na objednávku">Objednávka</a></li>
                             <li><a href="#" title="Přejít na poptávku">Poptávka</a></li>
                             <li><a href="#" title="Přejít na mapu a čas přistavení">Mapa a čas přistavení</a></li>
                             <li><a href="#" title="Přejít na akce">Akce</a></li>
@@ -118,7 +118,7 @@
                     </div>
                 </li>
                 <li><a href="#" title="Přejít na objednávku"><span>Objednávka</span></a></li>
-                <li><a href="poptavka.html" title="Přejít na poptávku"><span>Poptávka</span></a></li>
+                <li><a href="poptavka.html" class="active" title="Přejít na poptávku"><span>Poptávka</span></a></li>
                 <li class="submenu"><a href="#" title="Přejít na o nás"><span>O nás</span></a>
                     <div class="submenu">
                         <ul>
@@ -139,8 +139,12 @@
     <!-- ./header -->
     <section class="top order">
         <div class="container">
-            <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Objednávka kontejneru</h1>
-            <h2>Místo přistavení kontejneru</h2>
+            <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Poptávka</h1>
+            <p class="desc">
+                Poptávka pro stavební firmy a velkoodběratele.<br>
+                Individuální nabídku zpracujeme v pracovní dny do 24 hodin.
+            </p>
+            <h2>Lokalita stavby</h2>
             <form>
                 <div class="input-group street">
                     <label for="vase-ulice" class="form-label">Zadejte ulici</label>
@@ -161,10 +165,16 @@
     </section>
     <section class="waste">
         <div class="container">
-            <h1 class="title underline">Druh odpadu a velikost kontejneru</h1>
+            <h1 class="title underline">Rozsah zakázky</h1>
             <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
             <div class="filter">
                 <form>
+                    <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <label for="describe">Popište:</label>
+                        <textarea class="form-control" id="describe" rows="7"></textarea>
+                    </div>
+                    <p class="desc">Nebo zadejte druh odpadu a velikost kontejneru</p>
                     <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item druh-odpadu">
                             <label class="select">
@@ -193,20 +203,22 @@
                             </label>
                         </li>
                         <!-- ./velikost kontejneru -->
-                    </ul>
-                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
-                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-                        <li class="list-inline-item today">
-                            <button class="btn btn-primary">Dnes</button>
-                        </li>
-                        <!-- ./dnes -->
-                        <li class="list-inline-item date" id="date">
+                        <li class="list-inline-item pocet-kontejneru">
+                            Přibližný počet kontejnerů/den
                             <label class="select">
-                                <input class="form-control" type="text" value="Jiné datum" readonly>
+                                <select aria-label="Pocet">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
                             </label>
                         </li>
-                        <!-- ./jine datum -->
-                        <li class="list-inline-item add-container"><button class="btn btn-primary">Přidat další kontejner</button></li>
+                        <!-- ./priblizny pocet kontejneru -->
+                    </ul>
+                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                        <li class="list-inline-item add-container"><button class="btn btn-primary"><a class="ajax">Přidat další kontejner</a></button></li>
                         <!-- ./pridat dalsi kontejner -->
                     </ul>
                 </form>
@@ -220,10 +232,9 @@
     <section class="material">
         <div class="container">
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
-            <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ano, potřebuji</a>
         </div>
-        <div class="select-material">
+        <div class="select-material" style="display: none">
             <div class="container margin">
                 <h4>Vyberte typ materiálu</h4>
                 <form>
@@ -285,12 +296,6 @@
                                         <div class="description" style="display: block">
                                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                                         </div>
-                                        <label class="select">
-                                            <select aria-label="Zvolit hrubost">
-                                                <option selected disabled>Zvolit hrubost</option>
-                                                <option value="0-4">0 - 4 mm</option>
-                                            </select>
-                                        </label>
                                     </div>
                                 </label>
                             </li>
@@ -331,9 +336,6 @@
                     <div class="amount">
                         <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
                     </div>
-                    <div class="tons-price">
-                        Cena za 1 tunu je <strong>1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
-                    </div>
                 </form>
             </div>
         </div>
@@ -342,12 +344,71 @@
         <img class="mosaic right" src="img/mosaic_s9.png" alt="Obrázek mozaiky">
     </section>
     <!-- ./material -->
-    <div class="total-price">
-        <span class="total">Celková cena</span>
-        <strong class="price">3 650 Kč</strong>
-        <span class="with-vat">4 350 Kč vč. DPH</span>
+    <section class="something-else">
+        <div class="container">
+            <h3 class="title underline">
+                Potřebujete něco dalšího?
+            </h3>
+            <div class="row">
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50">
+                    <div class="service-icon">
+                        <img src="img/i_kontejnery-na-odpad.svg" alt="Ikona kontejnerů na odpad">
+                    </div>
+                    Prodej a dovoz <span>zeminy</span>
+                    <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+                    <div class="service-icon">
+                        <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+                    </div>
+                    Odvoz a likvidace <span>po demolicích</span>
+                    <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+                    <div class="service-icon">
+                        <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+                    </div>
+                    <span>Zemní a výkopové</span> práce
+                    <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+                </div>
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+                    <div class="service-icon">
+                        <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+                    </div>
+                    <span>Výkopy bazénů</span> na klíč
+                    <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ./something else -->
+    <div class="term">
+        <div class="container">
+            <h2 class="title underline">Termín realizace</h2>
+            <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                <li class="list-inline-item date-from" id="date-from">
+                    Od
+                    <label class="select">
+                        <input class="form-control" type="text" value="" readonly>
+                    </label>
+                </li>
+                <!-- ./od -->
+                <li class="list-inline-item date-to" id="date-to">
+                    Do
+                    <label class="select">
+                        <input class="form-control" type="text" value="" readonly>
+                    </label>
+                </li>
+                <!-- ./od -->
+                <li class="list-inline-item weekend">
+                    Práce včetně víkendu
+                    <button class="btn btn-primary btn-arrow btn-white active">Ano</button>
+                </li>
+                <!-- ./od -->
+            </ul>
+        </div>
     </div>
-    <!-- ./price -->
+    <!-- ./term -->
     <div class="order-form">
         <div class="container">
             <nav>

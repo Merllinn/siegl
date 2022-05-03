@@ -1,9 +1,12 @@
 {layout ../@layout.latte}
 {block content}
-	<h1>{$page->name}</h1>
-	<section  class="slide">
-    	{block subcontent}
-        	{$page->content|noescape}
-      	{/block}
-    </section>
+	<article class="article">
+		<h1 class="title underline">{$page->name}</h1>
+		<div class="container">
+			{block subcontent}
+		    	{$page->content|noescape}
+		    	{$page->content_continuation|noescape}
+		  	{/block}
+		</div>
+	</article>
 {/block}

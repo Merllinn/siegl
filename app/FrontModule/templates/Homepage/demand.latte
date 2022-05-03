@@ -1,6 +1,444 @@
-{layout page.latte}
-{block subcontent}
-	<div class="row">
-			{$page->content|noescape}
+{layout ../@layout.latte}
+{block content}
+	<section class="top order">
+	    <div class="container">
+	        <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Poptávka</h1>
+	        <p class="desc">
+	            Poptávka pro stavební firmy a velkoodběratele.<br>
+	            Individuální nabídku zpracujeme v pracovní dny do 24 hodin.
+	        </p>
+	        <h2>Lokalita stavby</h2>
+	        <form>
+	            <div class="input-group street">
+	                <label for="vase-ulice" class="form-label">Zadejte ulici</label>
+	                <input type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice">
+	                <button class="btn btn-primary" type="button"><i class="fa-solid fa-angles-right"></i></button>
+	            </div>
+	        </form>
+	        <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
+	    </div>
+	    <img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	    <img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	</section>
+	<!-- ./top -->
+	<section class="map">
+	    <div class="container">
+	        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d20473.424626247688!2d14.4231077!3d50.1016737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1scs!2scz!4v1649750514915!5m2!1scs!2scz" width="100%" height="680" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+	    </div>
+	</section>
+	<section class="waste">
+	    <div class="container">
+	        <h1 class="title underline">Rozsah zakázky</h1>
+	        <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
+	        <div class="filter">
+	            <form>
+	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                    <i class="fa-solid fa-pen-to-square"></i>
+	                    <label for="describe">Popište:</label>
+	                    <textarea class="form-control" id="describe" rows="7"></textarea>
+	                </div>
+	                <p class="desc">Nebo zadejte druh odpadu a velikost kontejneru</p>
+	                <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                    <li class="list-inline-item druh-odpadu">
+	                        <label class="select">
+	                            <select aria-label="Druh odpadu">
+	                                <option selected disabled>Vyberte druh odpadu</option>
+	                                <option value="sut">Suť</option>
+	                                <option value="odpad">Odpad</option>
+	                                <option value="zemina">Zemina</option>
+	                                <option value="drevo">Dřevo</option>
+	                                <option value="zivice">Živice</option>
+	                            </select>
+	                        </label>
+	                    </li>
+	                    <!-- ./druh odpadu -->
+	                    <li class="list-inline-item objem">
+	                        <label class="select">
+	                            <select aria-label="Objem">
+	                                <option selected disabled>Vyberte velikost kontejneru</option>
+	                                <option value="3-m3">3 m&sup3</option>
+	                                <option value="4-m3">4 m&sup3</option>
+	                                <option value="9-m3">9 m&sup3</option>
+	                                <option value="10-m3">10 m&sup3</option>
+	                                <option value="15-m3">15 m&sup3</option>
+	                                <option value="40-m3">40 m&sup3</option>
+	                            </select>
+	                        </label>
+	                    </li>
+	                    <!-- ./velikost kontejneru -->
+	                    <li class="list-inline-item pocet-kontejneru">
+	                        Přibližný počet kontejnerů/den
+	                        <label class="select">
+	                            <select aria-label="Pocet">
+	                                <option value="1">1</option>
+	                                <option value="2">2</option>
+	                                <option value="3">3</option>
+	                                <option value="4">4</option>
+	                                <option value="5">5</option>
+	                            </select>
+	                        </label>
+	                    </li>
+	                    <!-- ./priblizny pocet kontejneru -->
+	                </ul>
+	                <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                    <li class="list-inline-item add-container"><button class="btn btn-primary"><a class="ajax">Přidat další kontejner</a></button></li>
+	                    <!-- ./pridat dalsi kontejner -->
+	                </ul>
+	            </form>
+	            <!-- ./form -->
+	        </div>
+	        <!-- ./filter -->
+	    </div>
+	    <img class="mosaic left" src="{$basePath}/img/mosaic_s8.png" alt="Obrázek mozaiky">
+	</section>
+	<!-- ./waste -->
+	<section class="material">
+	    <div class="container">
+	        <h3 class="title underline">Potřebujete stavební materiál?</h3>
+	        <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ano, potřebuji</a>
+	    </div>
+	    <div class="select-material" style="display: none">
+	        <div class="container margin">
+	            <h4>Vyberte typ materiálu</h4>
+	            <form>
+	                <ul class="list-inline select-material">
+	                    <li class="list-inline-item">
+	                        <label for="pisek">
+	                            <input id="pisek" type="radio" name="material" value="pisek">
+	                            <img src="images/pisek.jpg" alt="Písek">
+	                            <span>Písek</span>
+	                        </label>
+	                    </li>
+	                    <li class="list-inline-item">
+	                        <label for="sterk">
+	                            <input id="sterk" type="radio" name="material" value="pisek">
+	                            <img src="images/sterk.jpg" alt="Štěrk">
+	                            <span>Štěrk</span>
+	                        </label>
+	                    </li>
+	                    <li class="list-inline-item">
+	                        <label for="recyklat">
+	                            <input id="recyklat" type="radio" name="material" value="pisek">
+	                            <img src="images/recyklat.jpg" alt="Recyklát">
+	                            <span>Recyklát</span>
+	                        </label>
+	                    </li>
+	                    <li class="list-inline-item">
+	                        <label for="beton">
+	                            <input id="beton" type="radio" name="material" value="pisek">
+	                            <img src="images/beton.jpg" alt="Beton">
+	                            <span>Beton</span>
+	                        </label>
+	                    </li>
+	                    <li class="list-inline-item">
+	                        <label for="kacirek">
+	                            <input id="kacirek" type="radio" name="material" value="pisek">
+	                            <img src="images/kacirek.jpg" alt="Kačírek">
+	                            <span>Kačírek</span>
+	                        </label>
+	                    </li>
+	                    <li class="list-inline-item">
+	                        <label for="zemina">
+	                            <input id="zemina" type="radio" name="material" value="pisek">
+	                            <img src="images/zemina.jpg" alt="Zemina">
+	                            <span>Zemina</span>
+	                        </label>
+	                    </li>
+	                </ul>
+	                <div class="roughness">
+	                    <h4>Zvolte typ a hrubost</h4>
+	                    <ul class="list-unstyled">
+	                        <li>
+	                            <label for="pisek-kopany">
+	                                <input class="check" id="pisek-kopany" type="radio" name="hrubost" value="pisek-kopany">
+	                                <div class="image">
+	                                    <img src="images/pisek.jpg" alt="Písek kopaný">
+	                                </div>
+	                                <div class="title">
+	                                    <span>Písek kopaný</span>
+	                                    <div class="description" style="display: block">
+	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+	                                    </div>
+	                                </div>
+	                            </label>
+	                        </li>
+	                        <li>
+	                            <label for="pisek-ricni">
+	                                <input id="pisek-ricni" type="radio" name="hrubost" value="pisek-ricni">
+	                                <div class="image">
+	                                    <img src="images/pisek.jpg" alt="Písek říční">
+	                                </div>
+	                                <div class="title">
+	                                    <span>Písek říční</span>
+	                                    <div class="description">
+	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+	                                    </div>
+	                                </div>
+	                            </label>
+	                        </li>
+	                        <li>
+	                            <label for="pisek-zasypovy">
+	                                <input id="pisek-zasypovy" type="radio" name="hrubost" value="pisek-zasypovy">
+	                                <div class="image">
+	                                    <img src="images/pisek.jpg" alt="Písek zásypový">
+	                                    <div class="description">
+	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+	                                    </div>
+	                                </div>
+	                                <div class="title">
+	                                    <span>Písek zásypový</span>
+	                                    <div class="description">
+	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+	                                    </div>
+	                                </div>
+	                            </label>
+	                        </li>
+	                    </ul>
+	                </div>
+	                <!-- ./typ a hrubost -->
+	                <div class="amount">
+	                    <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+	    <!-- ./select material -->
+	    <img class="mosaic left" src="{$basePath}/img/mosaic_s10.png" alt="Obrázek mozaiky">
+	    <img class="mosaic right" src="{$basePath}/img/mosaic_s9.png" alt="Obrázek mozaiky">
+	</section>
+	<!-- ./material -->
+	<section class="something-else">
+	    <div class="container">
+	        <h3 class="title underline">
+	            Potřebujete něco dalšího?
+	        </h3>
+	        <div class="row">
+	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50">
+	                <div class="service-icon">
+	                    <img src="img/i_kontejnery-na-odpad.svg" alt="Ikona kontejnerů na odpad">
+	                </div>
+	                Prodej a dovoz <span>zeminy</span>
+	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+	            </div>
+	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+	                <div class="service-icon">
+	                    <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+	                </div>
+	                Odvoz a likvidace <span>po demolicích</span>
+	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+	            </div>
+	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+	                <div class="service-icon">
+	                    <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+	                </div>
+	                <span>Zemní a výkopové</span> práce
+	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+	            </div>
+	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
+	                <div class="service-icon">
+	                    <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
+	                </div>
+	                <span>Výkopy bazénů</span> na klíč
+	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+	<!-- ./something else -->
+	<div class="term">
+	    <div class="container">
+	        <h2 class="title underline">Termín realizace</h2>
+	        <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	            <li class="list-inline-item date-from" id="date-from">
+	                Od
+	                <label class="select">
+	                    <input class="form-control" type="text" value="" readonly>
+	                </label>
+	            </li>
+	            <!-- ./od -->
+	            <li class="list-inline-item date-to" id="date-to">
+	                Do
+	                <label class="select">
+	                    <input class="form-control" type="text" value="" readonly>
+	                </label>
+	            </li>
+	            <!-- ./od -->
+	            <li class="list-inline-item weekend">
+	                Práce včetně víkendu
+	                <button class="btn btn-primary btn-arrow btn-white active">Ano</button>
+	            </li>
+	            <!-- ./od -->
+	        </ul>
+	    </div>
 	</div>
+	<!-- ./term -->
+	<div class="order-form">
+	    <div class="container">
+	        <nav>
+	            <div class="nav nav-tabs" id="nav-order-form" role="tablist">
+	                <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+	                <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+	            </div>
+	        </nav>
+	        <div class="tab-content" id="nav-tabOrderForm">
+	            <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+	                <div class="row">
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="jmeno">Jméno</label>
+	                        <input type="name" class="form-control" id="jmeno">
+	                    </div>
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="prijmeni">Příjmení</label>
+	                        <input type="surname" class="form-control" id="prijmeni">
+	                    </div>
+	                </div>
+	                <div class="row">
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="email">E-mail</label>
+	                        <input type="email" class="form-control" id="email">
+	                    </div>
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="telefon">Telefon</label>
+	                        <input type="phone" class="form-control" id="telefon">
+	                    </div>
+	                </div>
+	                <div class="row">
+	                    <div class="form-group col-md-12 arrow note">
+	                        <label for="poznamka">Poznámka</label>
+	                        <textarea class="form-control" id="poznamka" rows="5"></textarea>
+	                    </div>
+	                </div>
+	                <div class="row billing-address">
+	                    <div class="form-group col-md-12">
+	                        <div class="billing-address">
+	                            <input class="form-check-input" type="checkbox" value="" id="fakturacni-adresa">
+	                            <label id="fakturacni-adresa" class="form-check-label" for="fakturacni-adresa">
+	                                Fakturační adresa je jiná než adresa přistavení
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div id="billing-information" style="display: none">
+	                    <div class="row">
+	                        <div class="form-group col-md-12 arrow">
+	                            <label for="ulice-cislo-popisne">Ulice a číslo popisné</label>
+	                            <input type="text" class="form-control" id="ulice-cislo-popisne">
+	                        </div>
+	                    </div>
+	                    <div class="row">
+	                        <div class="form-group col-md-6 arrow">
+	                            <label for="mesto">Město</label>
+	                            <input type="text" class="form-control" id="mesto">
+	                        </div>
+	                        <div class="form-group col-md-6 arrow">
+	                            <label for="psc">PSČ</label>
+	                            <input type="text" class="form-control" id="psc">
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="row row-send-order">
+	                    <div class="form-group col-md-12 send-order">
+	                        <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+	                <div class="row row-ic">
+	                    <div class="form-group col-md-12">
+	                        <label for="ic">IČ</label><input type="text" class="form-control" id="ic"><button class="btn btn-primary">Načíst údaje</button>
+	                    </div>
+	                </div>
+	                <div class="row">
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="business-customer-jmeno">Jméno</label>
+	                        <input type="name" class="form-control" id="business-customer-jmeno">
+	                    </div>
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="business-customer-prijmeni">Příjmení</label>
+	                        <input type="surname" class="form-control" id="business-customer-prijmeni">
+	                    </div>
+	                </div>
+	                <div class="row">
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="business-customer-email">E-mail</label>
+	                        <input type="email" class="form-control" id="business-customer-email">
+	                    </div>
+	                    <div class="form-group col-md-6 arrow">
+	                        <label for="business-customer-telefon">Telefon</label>
+	                        <input type="phone" class="form-control" id="business-customer-telefon">
+	                    </div>
+	                </div>
+	                <div class="row">
+	                    <div class="form-group col-md-12 arrow note">
+	                        <label for="business-customer-poznamka">Poznámka</label>
+	                        <textarea class="form-control" id="business-customer-poznamka" rows="5"></textarea>
+	                    </div>
+	                </div>
+	                <div class="row row-firm-name">
+	                    <div class="form-group col-md-12 arrow">
+	                        <label for="business-customer-nazev-firmy">Název firmy</label>
+	                        <input type="text" class="form-control" id="business-customer-nazev-firmy">
+	                    </div>
+	                </div>
+	                <div class="row billing-address">
+	                    <div class="form-group col-md-12">
+	                        <div class="billing-address">
+	                            <input class="form-check-input" type="checkbox" value="" id="business-customer-fakturacni-adresa">
+	                            <label id="business-customer-fakturacni-adresa" class="form-check-label" for="business-customer-fakturacni-adresa">
+	                                Fakturační adresa je jiná než adresa přistavení
+	                            </label>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div id="business-customer-billing-information" style="display: none">
+	                    <div class="row">
+	                        <div class="form-group col-md-12 arrow">
+	                            <label for="business-customer-ulice-cislo-popisne">Ulice a číslo popisné</label>
+	                            <input type="text" class="form-control" id="business-customer-ulice-cislo-popisne">
+	                        </div>
+	                    </div>
+	                    <div class="row">
+	                        <div class="form-group col-md-6 arrow">
+	                            <label for="business-customer-mesto">Město</label>
+	                            <input type="text" class="form-control" id="business-customer-mesto">
+	                        </div>
+	                        <div class="form-group col-md-6 arrow">
+	                            <label for="business-customer-psc">PSČ</label>
+	                            <input type="text" class="form-control" id="business-customer-psc">
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="row row-send-order">
+	                    <div class="form-group col-md-12 send-order">
+	                        <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	        <img class="car" src="img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
+	        <img class="stripe" src="img/stripe.png" alt="Obrázek pruhů">
+	    </div>
+	    <div class="bottom-navigation">
+	        <div class="container">
+	            <ul class="list-inline">
+	                <li class="list-inline-item">
+	                    <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
+	                </li>
+	                <li class="list-inline-item">
+	                    <a href="#" title="Typy odpadů">Typy odpadů</a>
+	                </li>
+	                <li class="list-inline-item">
+	                    <a href="#" title="Aktuálně">Aktuálně</a>
+	                </li>
+	                <li class="list-inline-item">
+	                    <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
+	                </li>
+	            </ul>
+	        </div>
+	    </div>
+	    <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
+	    <div class="rectangle"></div>
+	</div>
+	<!-- ./form -->
+	<div class="waste-type-rectangle"></div>
 {/block}

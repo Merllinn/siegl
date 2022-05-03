@@ -29,22 +29,22 @@
     <section class="demand">
         <div class="container">
             <div class="calculation" data-aos="fade" data-aos-duration="300" data-aos-delay="50">
-                <h2>Kalkulace do 24 hodin</h2>
+                <h2>{_'KALKULACE_DO_24_HODIN'}</h2>
                 <ul class="list-inline">
-                    <li class="list-inline-item">množstevní slevy</li>
-                    <li class="list-inline-item">individuální férové ceny</li>
+                    <li class="list-inline-item">{_'MNOZSTEVNI_SLEVY'}</li>
+                    <li class="list-inline-item">{_'INDIVIDUALNI_FEROVE_CENY'}</li>
                 </ul>
             </div>
             <!-- ./calculation -->
-            <a class="btn btn-primary btn-arrow btn-white" href="#" title="Přejít na poptávku" data-aos="fade-right" data-aos-duration="250" data-aos-easing="linear" data-aos-delay="200">Zadat poptávku <i class="fa-solid fa-angles-right"></i></a>
+            <a class="btn btn-primary btn-arrow btn-white" href="/poptavka" title="Přejít na poptávku" data-aos="fade-right" data-aos-duration="250" data-aos-easing="linear" data-aos-delay="200">Zadat poptávku <i class="fa-solid fa-angles-right"></i></a>
             <div class="clearfix"></div>
         </div>
     </section>
     <!-- ./demand -->
     <section class="services">
         <div class="container">
-            <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Rozsah služeb</h2>
-            <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">Odvezeme odpad i suť, přivezeme písek a jiný stavební materiál,<br>vykopeme bazén, zlikvidujeme černou skládku…</p>
+            <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">{_'ROZSAH_SLUZEB'}</h2>
+            <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">{_'ODVEZEME_ODPAD_I_SUT'}<br>{_'VYKOPEME_BAZEN'}</p>
             <div class="row">
             	{var $subpages = $presenter->pageManager->getActiveByParent($page->id)}
                 <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
@@ -57,14 +57,14 @@
                     </a>
                 </div>
             </div>
-            <a class="btn btn-primary btn-arrow btn-red" href="#" title="Přejít na další služby" data-aos="fade" data-aos-duration="150" data-aos-delay="250">Další služby <i class="fa-solid fa-angles-right"></i></a>
+            <a class="btn btn-primary btn-arrow btn-red" href="/sluzby" title="Přejít na další služby" data-aos="fade" data-aos-duration="150" data-aos-delay="250">Další služby <i class="fa-solid fa-angles-right"></i></a>
         </div>
     </section>
     <!-- ./services -->
     <section class="blog">
         <div class="container">
-            <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Siegl blog</h2>
-            <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">Rady, tipy, názory...</p>
+            <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">{_'SIEGL_BLOG'}</h2>
+            <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">{_'RADY_TIPY_NAZORY'}</p>
             <div class="row">
                 <div class="col-md-4" data-aos="fade-in" data-aos-duration="250" data-aos-delay="50">
                     <div class="blog-post">

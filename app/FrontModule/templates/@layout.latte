@@ -4,10 +4,14 @@
 	{include '_parts/head.latte'}
 	
 	{var $bodyClasses = array(
+		1 => "page",
 		7 => "homepage",
 		8 => "containers",
 		9 => "materials",
 		11 => "order",
+		12 => "subpages",
+		13 => "demand",
+		14 => "order",
 	)}
 	{var $bodyClass = ""}
 	{if !empty($page->layoutId) && !empty($bodyClasses[$page->layoutId])}

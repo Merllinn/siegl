@@ -2,14 +2,14 @@ parameters:
 
 database:
 	app:
-	    dsn: 'mysql:host=127.0.0.1;dbname=tp-siegl'
-	    user: root
-	    password: 
+	    dsn: 'mysql:host=127.0.0.1;dbname=25597_siegl'
+	    user: 25597_49447
+	    password: WIkHbZ61
 	    options:
 	        lazy: yes
 #	web:
 #	    dsn: 'mysql:host=127.0.0.1;dbname=tp-polagraph-eshop'
-#	    user: root
+#	    user: 
 #	    password: 
 #	    options:
 #	        lazy: yes

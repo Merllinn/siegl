@@ -10,7 +10,7 @@
             <h2>Místo přistavení kontejneru</h2>
             <form class="orderform">
                 <div class="input-group street">
-                    <label for="vase-ulice" class="form-label">Zadejte ulici</label>
+                    <label for="searchTextField" class="form-label">Zadejte ulici</label>
                     <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
                     <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
@@ -63,56 +63,45 @@
 	                    </ul>
 	                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
 	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-	                        {*
 	                        <li class="list-inline-item today">
 	                            <button class="btn btn-primary">Dnes</button>
 	                        </li>
-	                        *}
 	                        <!-- ./dnes -->
-	                        <li class="list-inline-item date dateField">
+	                        <li class="list-inline-item date" id="date">
 	                            <label class="select">
-	                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
-	                            </label>
-	                        </li>
-	                        <li class="list-inline-item timefield">
-	                            <label class="select">
-	                                <select name="time[{{$index}]">
-	                                	<option value="">Čas přistavení</option>
-	                                	<option value="{$i}" n:for="$i=0;$i<=23;$i++">{=str_pad($i,2,'0',STR_PAD_LEFT)}:00 - {=str_pad($i+1,2,'0',STR_PAD_LEFT)}:00</option>
-	                                </select>
-	                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
+	                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Jiné datum" readonly>
 	                            </label>
 	                        </li>
 	                        <!-- ./jine datum -->
-	                        <li class="list-inline-item">
-	                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat kontejner</a></button>
+	                        <li class="list-inline-item remove-container">
+	                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
 	                        </li>
-	                        {last}
-	                        <li class="list-inline-item add-container">
-	                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
-	                        </li>
-	                        {/last}
-	                        <!-- ./pridat dalsi kontejner -->
 	                    </ul>
                     </div>
                     {/if}
+                    <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                        <li class="list-inline-item add-container">
+                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
+                        </li>
+                    </ul>
                 </form>
                 {/snippet}
                 <!-- ./form -->
             </div>
             <!-- ./filter -->
         </div>
+        <img class="mosaic left" src="{$basePath}/img/mosaic_s8.png" alt="Obrázek mozaiky">
     </section>
     <!-- ./waste -->
     <section class="material">
         <div class="container">
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
             <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
         </div>
         <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
-            <div class="container">
+            <div class="container margin">
                 <h4>Vyberte typ materiálu</h4>
                 <form>
                     <ul class="list-inline select-material">
@@ -166,6 +155,8 @@
             </div>
         </div>
         <!-- ./select material -->
+        <img class="mosaic left" src="{$basePath}/img/mosaic_s10.png" alt="Obrázek mozaiky">
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s9.png" alt="Obrázek mozaiky">
     </section>
     <!-- ./material -->
     {snippet orderprice}
@@ -220,14 +211,13 @@
                         <div class="form-group col-md-12">
                             <div class="billing-address">
                                 {input different_delivery}
-								{label different_delivery}
-                                {/label}
+								{label different_delivery}{/label}
                             </div>
                         </div>
                     </div>
                     <div id="billing-information" style="display: none">
                         <div class="row">
-                            <div class="form-group col-md-12 arrow">
+                            <div class="form-group col-md-12 arrow delivery-street">
 	                            {label delivery_street/}
 	                            {input delivery_street}
                             </div>
@@ -277,7 +267,7 @@
                         </div>
                     </div>
                     <div class="row row-firm-name">
-                        <div class="form-group col-md-12 arrow">
+                        <div class="form-group col-md-12 arrow company">
 	                        {label bussiness_company/}
 	                        {input bussiness_company}
                         </div>
@@ -286,14 +276,13 @@
                         <div class="form-group col-md-12">
                             <div class="billing-address">
 		                        {input bussiness_different_delivery}
-		                        {label bussiness_different_delivery}
-                                {/label}
+		                        {label bussiness_different_delivery}{/label}
                             </div>
                         </div>
                     </div>
                     <div id="business-customer-billing-information" style="display: none">
                         <div class="row">
-                            <div class="form-group col-md-12 arrow">
+                            <div class="form-group col-md-12 arrow delivery-street">
 		                        {label bussiness_delivery_street/}
 		                        {input bussiness_delivery_street}
                             </div>
@@ -656,7 +645,7 @@
 				    strokeOpacity: 0.8,
 				    strokeWeight: 2,
 				    fillColor: {$color},
-				    fillOpacity: 0.5,
+				    fillOpacity: 0.35,
 				});
 
 				zone{$zone->id}.setMap(map);

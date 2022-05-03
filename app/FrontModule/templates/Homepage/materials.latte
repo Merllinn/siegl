@@ -95,7 +95,7 @@
                         Množstevní slevy
                     </li>
                 </ul>
-                <a class="btn btn-primary btn-arrow btn-white" href="#" title="Poptat přistavení kontejneru">Poptávka <i class="fa-solid fa-angles-right"></i></a>
+                <a class="btn btn-primary btn-arrow btn-white" href="/poptavka" title="Poptat přistavení kontejneru">Poptávka <i class="fa-solid fa-angles-right"></i></a>
             </div>
             <!-- ./calculation -->
         </div>
@@ -183,7 +183,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="4">
-                                        {if $vat->isWith}s{else}bez{/if} DPH<br><br>
+                                        <span class="vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH za 1 tunu</span>
                                         <button class="btn btn-primary btn-arrow btn-red" title="Objednat kontejner">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
                                     </td>
                                 </tr>

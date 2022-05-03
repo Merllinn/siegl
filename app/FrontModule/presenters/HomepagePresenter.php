@@ -527,7 +527,13 @@ final class HomepagePresenter extends HomepageForms
     public function handleSetBasketVal($index, $name, $val){
 		$items = $this->basket->containers;
 		$items[$index]->$name = $val;
-		$items[$index]->price = $this->rowToArray($this->productManager->findActualPrice($items[$index]->product, $items[$index]->type));
+		$price = $this->productManager->findActualPrice($items[$index]->product, $items[$index]->type);
+		if($price){
+			$items[$index]->price = $this->rowToArray($price);
+		}
+		else{
+			$items[$index]->price = null;
+		}
 		$this->basket->containers = $items;
 		$this->recalculateBasket();
     }

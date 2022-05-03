@@ -156,7 +156,7 @@ class OrdersPresenter extends OrdersForms
         $grid->addColumnText('tools', 'Nástroje')
             ->setRenderer(function($row) use ($presenter) {
                 $el = Html::el("span");
-                $el->insert(4, html::el("a")->class("btn btn-mini")->href($presenter->link("detail", $row->id))->setHtml(html::el("i")->class("fas fa-edit"))->title(" Smazat"));;
+                $el->insert(4, html::el("a")->class("btn btn-mini btn-primary")->href($presenter->link("detail", $row->id))->setHtml(html::el("i")->class("fas fa-search"))->title(" Detail objednávky"));;
                 return $el;
         });
 

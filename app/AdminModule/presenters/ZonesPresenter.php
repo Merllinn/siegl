@@ -62,12 +62,23 @@ class ZonesPresenter extends BasePresenter
         $grid->setDataSource($source);
 
         $grid->addColumnText('name', 'Název');
+        $grid->addColumnText('lead', 'Doba přistavení [h]');
         /*
         $grid->addColumnText('role', 'Role')
             ->setRenderer(function($row) use ($presenter) {
                     return $presenter->roles[$row->role];
         });
         */
+
+        $grid->addColumnText('color', 'Barva')
+            ->setRenderer(function($row) use ($presenter) {
+            	if(!empty($row->color)){
+					return html::el("span")->style("color: $row->color;")->setHtml($row->color);
+            	}
+            	else{
+					return "";
+            	}
+        });
 
         $grid->addColumnText('active', 'Aktivní')
             ->setRenderer(function($row) use ($presenter) {
@@ -112,6 +123,8 @@ class ZonesPresenter extends BasePresenter
 
 		$form ->addText("name", "Název")
 				->addRule(Form::FILLED, "Vyplňte název");
+		$form ->addText("color", "Barva (např. #FC14D2)");
+		$form ->addText("lead", "Doba přistavení [h]");
 		$form ->addTextarea("points", "Body hranice (souřadnice na jeden řádek)")
 				->addRule(Form::FILLED, "Vyplňte hranici");
         /*
@@ -140,7 +153,7 @@ class ZonesPresenter extends BasePresenter
 
 		if($form->isValid()){
 			try{
-
+				$values->lead = str_replace(",", ".", $values->lead);
 				if($this->editedId){
 					//update existing
 					$this->commonManager->updateZone($values, $this->editedId);

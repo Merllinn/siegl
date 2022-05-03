@@ -63,13 +63,24 @@
 	                    </ul>
 	                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
 	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                        {*
 	                        <li class="list-inline-item today">
 	                            <button class="btn btn-primary">Dnes</button>
 	                        </li>
+	                        *}
 	                        <!-- ./dnes -->
-	                        <li class="list-inline-item date" id="date">
+	                        <li class="list-inline-item date dateField">
 	                            <label class="select">
-	                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Jiné datum" readonly>
+	                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
+	                            </label>
+	                        </li>
+	                        <li class="list-inline-item timefield">
+	                            <label class="select">
+	                                <select name="time[{{$index}]">
+	                                	<option value="">Čas přistavení</option>
+	                                	<option value="{$i}" n:for="$i=0;$i<=23;$i++">{=str_pad($i,2,'0',STR_PAD_LEFT)}:00 - {=str_pad($i+1,2,'0',STR_PAD_LEFT)}:00</option>
+	                                </select>
+	                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
 	                            </label>
 	                        </li>
 	                        <!-- ./jine datum -->
@@ -210,7 +221,6 @@
                             <div class="billing-address">
                                 {input different_delivery}
 								{label different_delivery}
-                                    Fakturační adresa je jiná než adresa přistavení
                                 {/label}
                             </div>
                         </div>
@@ -277,7 +287,6 @@
                             <div class="billing-address">
 		                        {input bussiness_different_delivery}
 		                        {label bussiness_different_delivery}
-                                    Fakturační adresa je jiná než adresa přistavení
                                 {/label}
                             </div>
                         </div>
@@ -546,7 +555,7 @@
     		  	.then((response) => {
     		  		if (response.results[0]) {
     		  			$("#searchTextField").val(response.results[0].formatted_address);
-    		  			validateAddress(response.results[0],false);
+    		  			validateAddress(response.results[0]);
 					}else{
 						$("#searchTextField").val("nenalezeno");
 					}
@@ -555,23 +564,27 @@
     		});
     		
     		function checkPickedAddress(){
-				var inZone = false;
 				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
 					if (status == google.maps.GeocoderStatus.OK) {
-						{foreach $zones as $zone}
-							if(zone{$zone->id} != null && zone{$zone->id}.Contains(results[0].geometry.location)){
-								inZone = true;
-							}
-						{/foreach}
-						validateAddress(results[0],inZone);
+						validateAddress(results[0]);
 					} 
 				}); 				
     		}
     		
-    		function validateAddress(result, inZone){
+    		function validateAddress(result){
 					var inPrague = false;
+					var inZone = false;
+					var activeZone = 0;
 					sendOrderButton = $(".sendOrderButton");
 					var i;
+					
+					{foreach $zones as $zone}
+						if(zone{$zone->id} != null && zone{$zone->id}.Contains(result.geometry.location)){
+							inZone = true;
+							var activeZone = {$zone->id};
+						}
+					{/foreach}
+					
 					for (i = 0; i < result.address_components.length; ++i) {
 						if(result.address_components[i].short_name == "Hlavní město Praha"){
 							inPrague = true;
@@ -597,6 +610,8 @@
 						window.checkAddress = false;
 						enableDisableOrder();
 					}
+					var link = {link setBasketZone!} + "&z=" + activeZone;
+					$.get(link);
 				
     		}
     		
@@ -631,13 +646,17 @@
 				    {/foreach}
 				];
 
+				{var $color = "#333333"};
+				{if !empty($zone->color)}
+					{php $color = $zone->color}
+				{/if}
 				const zone{$zone->id} = new google.maps.Polygon({
 				    paths: zone{$zone->id}Coords,
-				    strokeColor: "#ff0000",
+				    strokeColor: {$color},
 				    strokeOpacity: 0.8,
 				    strokeWeight: 2,
-				    fillColor: "#ff0000",
-				    fillOpacity: 0.35,
+				    fillColor: {$color},
+				    fillOpacity: 0.5,
 				});
 
 				zone{$zone->id}.setMap(map);
@@ -649,7 +668,7 @@
     		  		.then((response) => {
     		  			if (response.results[0]) {
     		  				$("#searchTextField").val(response.results[0].formatted_address);
-							validateAddress(response.results[0],true);
+							validateAddress(response.results[0]);
 						}else{
 							$("#searchTextField").val("nenalezeno");
 						}

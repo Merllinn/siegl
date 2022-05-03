@@ -81,6 +81,11 @@ final class HomepagePresenter extends HomepageForms
 		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
+    public function handleSetBasketZone($z){
+		$this->basket->zone = $z;
+		$this->recalculateBasket();
+    }
+
 
 	public function handleRemoveFromOrder($index){
 		$containers = $this->basket->containers;
@@ -346,7 +351,7 @@ final class HomepagePresenter extends HomepageForms
                 ->getControlPrototype()->class("form-control");
 
 		//different delivery personal
-        $form -> addCheckbox("different_delivery", "Přejete si odeslat zboží na jinou adresu?")
+        $form -> addCheckbox("different_delivery", "Fakturační adresa je jiná než adresa přistavení")
                 ->getControlPrototype()->class("differentDelivery form-check-input");
         $form["different_delivery"]->getLabelPrototype()->class("form-check-label");
 
@@ -388,7 +393,7 @@ final class HomepagePresenter extends HomepageForms
                 ->getControlPrototype()->class("form-control");
 
 		//different delivery company
-        $form -> addCheckbox("bussiness_different_delivery", "Přejete si odeslat zboží na jinou adresu?")
+        $form -> addCheckbox("bussiness_different_delivery", "Fakturační adresa je jiná než adresa přistavení")
                 ->getControlPrototype()->class("differentDeliveryBussiness form-check-input");
         $form["bussiness_different_delivery"]->getLabelPrototype()->class("form-check-label");
 
@@ -522,9 +527,9 @@ final class HomepagePresenter extends HomepageForms
     public function handleSetBasketVal($index, $name, $val){
 		$items = $this->basket->containers;
 		$items[$index]->$name = $val;
+		$items[$index]->price = $this->rowToArray($this->productManager->findActualPrice($items[$index]->product, $items[$index]->type));
 		$this->basket->containers = $items;
-		
-		//$this->redirect("this");
+		$this->recalculateBasket();
     }
 
     public function createComponentUpload(){

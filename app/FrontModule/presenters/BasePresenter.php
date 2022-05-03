@@ -412,11 +412,24 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $volumeAttr = 2;
         $totalWeight = 0;
         $totalVolume = 0;
+        $zone = $this->basket->zone;
 
 		if(!empty($this->basket->containers)){
 			foreach($this->basket->containers as $container){
 				if(!empty($container->price)){
-					$totalPrice += $container->price->priceFrom;
+					$price = $this->productManager->findActualPrice($container->product, $container->type);
+					if(empty($zone)){
+						$totalPrice += $price->priceFrom;
+					}
+					else{
+						$zoneField = "price".$zone;
+						if(!empty($price->$zoneField)){
+							$totalPrice += $price->$zoneField;
+						}
+						else{
+							$totalPrice += $price->priceFrom;
+						}
+					}
 					$prod = $this->productManager->find($container->product);
 					foreach(explode("|", $prod->attributes) as $aKey){
 						list($key, $val) = explode("-", $aKey);

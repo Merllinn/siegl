@@ -230,6 +230,14 @@ final class ProductManager
         ->fetch();
     }
 
+    public function findActualPrice($product, $value)
+    {
+        return $this->getPr()
+        ->where("product", $product)
+        ->where("attributeValue", $value)
+        ->fetch();
+    }
+
     public function getPrices($id)
     {
         return $this->getPr()

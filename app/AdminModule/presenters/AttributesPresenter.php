@@ -91,7 +91,7 @@ class AttributesPresenter extends BasePresenter
 
 	public function actionDeleteValue($id){
 		$details = $this->attributeManager->findValue($id);
-		$this->attributeManager->delete($id);
+		$this->attributeManager->deleteValue($id);
 		$this->redirect("values", $details->attribute);
 	}
 

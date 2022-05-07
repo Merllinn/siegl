@@ -63,10 +63,10 @@ $(document).ready(function() {
   Chocolat(document.querySelectorAll('.chocolat-parent .chocolat-image'), {})
 
   $(function(){
-    $(".datefield input").datetimepicker({
+    $(".dateField input").datetimepicker({
       language:'cs',
       minuteStep: 30,
-      format: 'dd/mm/yyyy - hh:ii',
+      format: 'dd/mm/yyyy',
       autoclose: true,
       startDate: '+0d',
     });

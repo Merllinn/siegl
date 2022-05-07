@@ -40,6 +40,10 @@ class SettingsPresenter extends BasePresenter
 		$form ->addCheckbox("production", "Produkční mód");
 		$form ->addText("gaCode", "GA kód");
 		$form ->addText("vat", "Sazba daně [%]");
+		$form->addGroup("Příplatky");
+		$form ->addTextArea("holidays", "Svátky ve formátu [dd.mm.], jeden na řádek", 30, 10);
+		$form ->addText("holidayPrice", "Příplatek za svátek a víkend");
+		$form ->addText("betonPrice", "Příplatek za beton (15.11. - 15. 3.) / m3");
 		$form->addGroup("SEO");
 		$form ->addTextArea("description", "Popis");
 		$form ->addTextArea("keywords", "Klíčová slova");

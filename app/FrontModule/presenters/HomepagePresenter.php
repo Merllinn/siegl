@@ -83,6 +83,11 @@ final class HomepagePresenter extends HomepageForms
 	}
     public function handleSetBasketZone($z){
 		$this->basket->zone = $z;
+		$zoneObj = $this->commonManager->findZone($z);
+		if($zoneObj){
+			$this->basket->zoneObj = $this->rowToArray($zoneObj);
+		}
+		$this->redrawControl("orderContainers");
 		$this->recalculateBasket();
     }
 
@@ -527,15 +532,23 @@ final class HomepagePresenter extends HomepageForms
     public function handleSetBasketVal($index, $name, $val){
 		$items = $this->basket->containers;
 		$items[$index]->$name = $val;
-		$price = $this->productManager->findActualPrice($items[$index]->product, $items[$index]->type);
-		if($price){
-			$items[$index]->price = $this->rowToArray($price);
+		if($name=="term"){
+			unset($items[$index]->time);
 		}
-		else{
-			$items[$index]->price = null;
+		if(!empty($items[$index]->product) && !empty($items[$index]->type)){
+			$price = $this->productManager->findActualPrice($items[$index]->product, $items[$index]->type);
+			if($price){
+				$items[$index]->price = $this->rowToArray($price);
+			}
+			else{
+				$items[$index]->price = null;
+			}
 		}
 		$this->basket->containers = $items;
 		$this->recalculateBasket();
+		if(in_array($name, array("term"))!==false){
+			$this->redrawControl("orderContainers");
+		}
     }
 
     public function createComponentUpload(){

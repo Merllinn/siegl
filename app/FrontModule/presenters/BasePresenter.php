@@ -413,6 +413,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $totalWeight = 0;
         $totalVolume = 0;
         $zone = $this->basket->zone;
+        $holidays = explode(chr(10), $this->settings->holidays);
+        $weekendPrice = 0;
 
 		if(!empty($this->basket->containers)){
 			foreach($this->basket->containers as $container){
@@ -443,6 +445,16 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 						}
 					}
 				}
+				//detect term and test weekend and holiday
+				if(!empty($container->term)){
+					$TS = strToTime($container->term);
+					if(array_search(date("d.m.", $TS), $holidays)!==false){
+						$weekendPrice += $this->settings->holidayPrice;
+					}
+					else if(date("N", $TS)>=6){
+						$weekendPrice += $this->settings->holidayPrice;
+					}
+				}
 			}
 		}
 		if(!empty($this->basket->materials)){
@@ -452,6 +464,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 			}
 		}
         
+        $this->basket->weekendPrice = $weekendPrice;
         $this->basket->price = $totalPrice;
         $this->basket->maxWeight = $totalWeight;
         $this->basket->maxVolume = $totalVolume;
@@ -715,6 +728,19 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function rowToArray($row){
         return Nette\Utils\ArrayHash::from($row->toArray());
+    }
+    
+    public function timeToMinutes($time){
+		$delimiters = [':', '.'];
+		$str = 'foo! bar? baz.';
+		$time = str_replace($delimiters, $delimiters[0], $time); // 'foo. bar. baz.'
+		$times = explode($delimiters[0], $time);
+		$minutes = 0;
+		$hours = (int)$times[0];
+		if(!empty($times[1])){
+			$minutes = (int)$times[1];
+		}
+		return (60*$hours) + $minutes;
     }
 
 

@@ -63,6 +63,7 @@ class ZonesPresenter extends BasePresenter
 
         $grid->addColumnText('name', 'Název');
         $grid->addColumnText('lead', 'Doba přistavení [h]');
+        $grid->addColumnText('deadline', 'Objednávky do');
         /*
         $grid->addColumnText('role', 'Role')
             ->setRenderer(function($row) use ($presenter) {
@@ -74,6 +75,16 @@ class ZonesPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
             	if(!empty($row->color)){
 					return html::el("span")->style("color: $row->color;")->setHtml($row->color);
+            	}
+            	else{
+					return "";
+            	}
+        });
+
+        $grid->addColumnText('orderTimes', 'Objednací časy')
+            ->setRenderer(function($row) use ($presenter) {
+            	if(!empty($row->orderTimes)){
+					return html::el("span")->setHtml(nl2br($row->orderTimes));
             	}
             	else{
 					return "";
@@ -125,8 +136,11 @@ class ZonesPresenter extends BasePresenter
 				->addRule(Form::FILLED, "Vyplňte název");
 		$form ->addText("color", "Barva (např. #FC14D2)");
 		$form ->addText("lead", "Doba přistavení [h]");
+		$form ->addText("deadline", "Do kdy lze poslat objednávku [hh:mm]");
 		$form ->addTextarea("points", "Body hranice (souřadnice na jeden řádek)")
 				->addRule(Form::FILLED, "Vyplňte hranici");
+		$form ->addTextarea("orderTimes", "Rezervační časy [hh:mm - hh:mm] (jeden na řádek)")
+				->addRule(Form::FILLED, "Vyplňte časy");
         /*
         $form->addSelect("role", "Role", $this->roles)
                 ->setPrompt("vyberte roli")

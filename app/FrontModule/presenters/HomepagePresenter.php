@@ -44,6 +44,7 @@ final class HomepagePresenter extends HomepageForms
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
 		$this->recalculateBasket();
+		$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
 
@@ -56,13 +57,19 @@ final class HomepagePresenter extends HomepageForms
 	public function handleSetMaterialVariant($var){
 		$materials = $this->basket->materials;
 		$material = $materials[0];
-		$material->amount = 1;
 		$material->price = $var;
 		$priceObj = $this->productManager->findPrice($var);
 		$material->priceObj = $this->rowToArray($priceObj);
+		if($material->product==$this->settings->betonProduct){
+			$material->amount = 1/$priceObj->koef;
+		}
+		else{
+			$material->amount = 1;
+		}
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
 		$this->recalculateBasket();
+		$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
 	public function handleSetMaterialAmount($amount){

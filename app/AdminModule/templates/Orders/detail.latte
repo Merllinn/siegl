@@ -125,6 +125,14 @@
 				<h4>Cena</h4>
 				<table class="table table-striped">
 					<tbody>
+						<tr n:if="$order->weekendPrice>0">
+							<td colspan="3">{_'PRIPLATEK_VIKEND_SVATEK'}:</td>
+							<td >{$order->weekendPrice|number:0:',':' '} Kč</td>
+						</tr>
+						<tr n:if="$order->betonPrice>0">
+							<td colspan="3">{_'PRIPLATEK_BETON'}:</td>
+							<td >{$order->betonPrice|number:0:',':' '} Kč</td>
+						</tr>
 						<tr>
 							<td colspan="3">Celková cena bez DPH:</td>
 							<td >{$order->price|number:0:',':' '} Kč</td>

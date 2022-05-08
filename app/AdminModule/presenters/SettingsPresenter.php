@@ -43,6 +43,7 @@ class SettingsPresenter extends BasePresenter
 		$form->addGroup("Příplatky");
 		$form ->addTextArea("holidays", "Svátky ve formátu [dd.mm.], jeden na řádek", 30, 10);
 		$form ->addText("holidayPrice", "Příplatek za svátek a víkend");
+		$form ->addText("betonProduct", "Beton (ID materiálu)");
 		$form ->addText("betonPrice", "Příplatek za beton (15.11. - 15. 3.) / m3");
 		$form->addGroup("SEO");
 		$form ->addTextArea("description", "Popis");

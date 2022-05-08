@@ -63,7 +63,9 @@ $(document).ready(function() {
   Chocolat(document.querySelectorAll('.chocolat-parent .chocolat-image'), {})
 
   $(function(){
-    $(".dateField input").datetimepicker({
+    $("#date input,#date-from input,#date-to input").datetimepicker({
+      pickTime: false,
+      minView: 2,
       language:'cs',
       minuteStep: 30,
       format: 'dd/mm/yyyy',
@@ -72,9 +74,10 @@ $(document).ready(function() {
     });
   });
 
+  /*
   $('.minus').click(function () {
-    var $input = $(this).parent().find('input#amount');
-    var count = parseInt($input.val()) - 1;
+    var $input = $(this).parent().find('input.amountField');
+    var count = parseFloat($input.val()) - 0.5;
     count = count < 1 ? 1 : count;
     $input.val(count);
     $input.change();
@@ -82,22 +85,23 @@ $(document).ready(function() {
   });
   
   $('.plus').click(function () {
-    var $input = $(this).parent().find('input#amount');
-    $input.val(parseInt($input.val()) + 1);
+    var $input = $(this).parent().find('input.amountField');
+    $input.val(parseFloat($input.val()) + 0.5);
     $input.change();
     return false;
   });
+  */
 
-  $('.differentDelivery').change(function() {
-    if ($('.differentDelivery').prop('checked')) {
+  $('#fakturacni-adresa').change(function() {
+    if ($('#fakturacni-adresa').prop('checked')) {
       $('#billing-information').show( "slow" );
     } else {
       $('#billing-information').hide( "slow" );
     }
   });
 
-  $('.differentDeliveryBussiness').change(function() {
-    if ($('.differentDeliveryBussiness').prop('checked')) {
+  $('#business-customer-fakturacni-adresa').change(function() {
+    if ($('#business-customer-fakturacni-adresa').prop('checked')) {
       $('#business-customer-billing-information').show( "slow" );
     } else {
       $('#business-customer-billing-information').hide( "slow" );

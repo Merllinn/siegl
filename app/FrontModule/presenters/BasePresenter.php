@@ -415,6 +415,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $zone = $this->basket->zone;
         $holidays = explode(chr(10), $this->settings->holidays);
         $weekendPrice = 0;
+        $betonPrice = 0;
 
 		if(!empty($this->basket->containers)){
 			foreach($this->basket->containers as $container){
@@ -447,11 +448,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 				}
 				//detect term and test weekend and holiday
 				if(!empty($container->term)){
-					$TS = strToTime($container->term);
-					if(array_search(date("d.m.", $TS), $holidays)!==false){
+					$dateTime = \Nette\Utils\DateTime::createFromFormat("d/m/Y", $container->term);
+					if(array_search($dateTime->format("d.m."), $holidays)!==false){
 						$weekendPrice += $this->settings->holidayPrice;
 					}
-					else if(date("N", $TS)>=6){
+					else if($dateTime->format("N")>=6){
 						$weekendPrice += $this->settings->holidayPrice;
 					}
 				}
@@ -459,13 +460,31 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		}
 		if(!empty($this->basket->materials)){
 			foreach($this->basket->materials as $material){
-				if(!empty($material->priceObj))
-				$totalPrice += $material->priceObj->priceFrom * $material->amount;
+				if(!empty($material->priceObj)){
+					$totalPrice += $material->priceObj->priceFrom * $material->amount;
+
+					//text beton extra pay
+					if($material->product == $this->settings->betonProduct){
+						//test date
+						$year = date("Y");
+						$startYear = strtotime($year."-01-01");
+						$endYear = strtotime($year."-12-31");
+						$startRange = strtotime($year."-11-15");
+						$endRange = strtotime($year."-05-15");
+						//$endRange = strtotime($year."-03-15");
+						$now = time();
+						if(($startYear <= $now && $now <= $endRange) || ($startRange <= $now && $now <= $endYear)){
+							$m3Amount = round($material->amount * $material->priceObj->koef, 2);
+							$betonPrice += $this->settings->betonPrice * $m3Amount;
+						}
+					}
+				}
 			}
 		}
         
         $this->basket->weekendPrice = $weekendPrice;
-        $this->basket->price = $totalPrice;
+        $this->basket->betonPrice = $betonPrice;
+        $this->basket->price = $totalPrice + $weekendPrice;
         $this->basket->maxWeight = $totalWeight;
         $this->basket->maxVolume = $totalVolume;
 
@@ -701,6 +720,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
 	public function sendMailFromTemplate($templateFile, $data, $email, $subject, $attachments = null){
         $template = $this->createTemplate();
+        $template->setTranslator($this->translator);
         $presenter = $this;
         $template->addFilter('thumb', function($image, $width=null, $height=null, $method = "EXACT") use ($presenter){
             return $presenter->thumb($image, $width, $height, $method);

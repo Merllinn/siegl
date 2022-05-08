@@ -260,6 +260,8 @@ final class OrderManager
         }
         $order->price = $ses->price;
         $order->price_vat = ($ses->price * (1 + ($settings->vat/100)));
+        $order->weekendPrice = $ses->weekendPrice;
+        $order->betonPrice = $ses->betonPrice;
         
         //save order
         $orderId = $this->add($order);
@@ -276,7 +278,7 @@ final class OrderManager
             $itemData = array(
                 "order_id"		=>$orderId,
                 "products_id"   =>$container->product,
-                "term"   		=>$container->term,
+                "term"   		=>$container->term . " " . $container->time,
                 "quantity"      =>1,
                 "type"			=>1,
                 "name"          =>$product->name." - ".$price->ref("attributeValue")->name,

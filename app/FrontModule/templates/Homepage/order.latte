@@ -35,9 +35,11 @@
                 <form>
                 	{if !empty($containers)}
                     {var $zoneTimes = array()}
-                    {foreach explode(chr(10), $basket->zoneObj->orderTimes) as $orderTime}
-                    	{php $zoneTimes[$orderTime] = $orderTime}
-                    {/foreach}
+                    {if !empty($basket->zoneObj)}
+	                    {foreach explode(chr(10), $basket->zoneObj->orderTimes) as $orderTime}
+                    		{php $zoneTimes[$orderTime] = $orderTime}
+	                    {/foreach}
+                    {/if}
                     {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
                     <div class="oneContainer" n:foreach="$containers as $index=>$container">
 	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
@@ -128,6 +130,8 @@
 						      minuteStep: 30,
 						      format: 'dd/mm/yyyy',
 						      autoclose: true,
+                              pickTime: false,
+                              minView: 2,
 						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
 						      	startDate: '+0d',
 						      {else}
@@ -203,12 +207,104 @@
                         </ul>
                     </div>
                     <!-- ./typ a hrubost -->
+                    {snippet matamount}
                     <div class="amount" style="display: none;">
-                        <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+                        <label for="amount">Množství materiálu</label>
+                        {if !empty($materials[0]->product) && $materials[0]->product!=$settings->betonProduct}
+	                        <div class="number">
+                        		<span class="minus"></span>
+                        		<input class="amountField form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}">
+                        		<span class="plus"></span>
+	                        </div>
+	                        <span class="tons">tun =</span>
+	                        <input class="form-control material-quantity" type="text" value="" readonly>
+	                        <span class="material-quantity">m<sup>3</sup></span>
+                        {/if}
+                        {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
+	                        <div class="number">
+                        		<span class="minus"></span>
+	                        	<input class="amountField form-control material-quantity" type="text" value="1">
+                        		<span class="plus"></span>
+	                        </div>
+	                        <span class="material-quantity">m<sup>3</sup> =</span>
+                        	<input class="form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount|number:2}{/if}" readonly>
+	                        <span class="tons">tun</span>
+                        {/if}
                     </div>
                     <div class="tons-price" style="display: none;">
                         Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
                     </div>
+                    <script>
+					$(document).ready(function(){
+						var materialKoef = 1;
+						{if !empty($materials[0]->priceObj)}
+							materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
+							materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
+							$(".materialPrice").html(materialPrice.toLocaleString());
+							$(".material-quantity").val(($(".materialWeight").val()*materialKoef).toFixed(2));
+							$(".amount").show();
+							$(".tons-price").show();
+						{/if}
+			
+					  $('.minus').click(function () {
+					    var $input = $(this).parent().find('input.amountField');
+					    var count = parseFloat($input.val()) - 0.5;
+					    count = count < 1 ? 1 : count;
+					    $input.val(count);
+					    $input.change();
+					    return false;
+					  });
+					  
+					  $('.plus').click(function () {
+					    var $input = $(this).parent().find('input.amountField');
+					    $input.val(parseFloat($input.val()) + 0.5);
+					    $input.change();
+					    return false;
+					  });
+						$(".materialWeight").change(function(){
+							var thisVal = parseFloat($(this).val().replace(",", "."));
+							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+							$(this).val(correctedVal);
+							var matWeight = $(this).val();
+							$(".material-quantity").val((matWeight*materialKoef).toFixed(2));
+							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
+							$.get(link);
+
+						});
+						$(".material-quantity").change(function(){
+							var thisVal = parseFloat($(this).val().replace(",", "."));
+							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+							$(this).val(correctedVal);
+							var matWeight = $(this).val()/materialKoef;
+							$(".materialWeight").val(matWeight.toFixed(2));
+							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
+							$.get(link);
+
+						});
+						function checkMaterialAmount(){
+							var matWeight = parseFloat($(".materialWeight").val());
+							var matVolume = Math.round(matWeight*materialKoef);
+							var maxWeight = parseInt($(".total-price").data("weight"));
+							var maxVolume = parseInt($(".total-price").data("volume"));
+							if(matWeight>maxWeight){
+								window.checkWeight = false;
+								enableDisableOrder();
+								alert("Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.");
+							}
+							else if(matVolume>maxVolume){
+								window.checkWeight = false;
+								enableDisableOrder();
+								alert("Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.");
+							}
+							else{
+								window.checkWeight = true;
+								enableDisableOrder();
+							}
+						}
+					  
+					});
+                    </script>
+                    {/snippet}
                 </form>
             </div>
         </div>
@@ -220,6 +316,7 @@
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
         <p class="weekend" n:if="$basket->weekendPrice>0">{_'PRIPLATEK_VIKEND_SVATEK'}: {$basket->weekendPrice|number:0:",":" "} Kč</p>
+        <p class="beton" n:if="$basket->betonPrice>0">{_'PRIPLATEK_BETON'}: {$basket->betonPrice|number:0:",":" "} Kč</p>
         <span class="total">Celková cena</span>
         <strong class="price">{$basket->price|number:0:",":" "} Kč</strong>
         <span class="with-vat">{$basket->priceVat|number:0:",":" "} Kč vč. DPH</span>
@@ -398,18 +495,8 @@
     <script>
     	$(document).ready(function(){
 			var materialPrice = 0;
-			var materialKoef = 1;
 			var checkWeight = true;
 			var checkAddress = true;
-			
-			{if !empty($materials[0]->priceObj)}
-				materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
-				materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
-				$(".materialPrice").html(materialPrice.toLocaleString());
-				$(".material-quantity").val(Math.round($(".materialWeight").val()*materialKoef));
-				$(".amount").show();
-				$(".tons-price").show();
-			{/if}
 			
 			$(".updateValue").change(function(){
 				var link = $(this).data("link");
@@ -439,31 +526,6 @@
 						}
 					}
 				});
-			});
-			$(".materialWeight").change(function(){
-				var matWeight = parseInt($(this).val());
-				var matVolume = Math.round(matWeight*materialKoef);
-				var maxWeight = parseInt($(".total-price").data("weight"));
-				var maxVolume = parseInt($(".total-price").data("weight"));
-				$(".material-quantity").val(Math.round(matWeight*materialKoef));
-				var link = {link setMaterialAmount!} + "&amount=" + matWeight;
-				$.get(link);
-
-				if(matWeight>maxWeight){
-					window.checkWeight = false;
-					enableDisableOrder();
-					alert("Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.");
-				}
-				else if(matVolume>maxVolume){
-					window.checkWeight = false;
-					enableDisableOrder();
-					alert("Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.");
-				}
-				else{
-					window.checkWeight = true;
-					enableDisableOrder();
-				}
-				
 			});
 			$(".pickMaterial").click(function(e){
 				e.preventDefault()

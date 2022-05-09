@@ -458,8 +458,8 @@ header {
   font-weight: 400;
   text-transform: uppercase;
   color: #FFF;
-  z-index: 4;
-  position: absolute;
+  z-index: 6;
+  position: fixed;
   top: 0;
   width: 100%;
 }
@@ -616,7 +616,7 @@ header img.mosaic {
 header.fixed {
   position: fixed;
   top: 0; left: 0;
-  z-index: 9;
+  z-index: 5;
 }
 
   header.fixed::before {
@@ -638,6 +638,7 @@ header.fixed {
       position: absolute;
       left: 0; top: 0;
       text-align: center;
+      z-index: 5;
       -webkit-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2); 
               box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2);
     }

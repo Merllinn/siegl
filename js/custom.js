@@ -60,6 +60,17 @@ $(document).ready(function() {
     })
   })
 
+  $(window).scroll(function() {
+    var yPos = ( $(window).scrollTop() );
+    if(yPos > 104) {
+      $("header.header").hide();
+      $("header.fixed").fadeIn( "fast");
+    } else {
+      $("header.header").show();
+      $("header.fixed").fadeOut( "fast" );
+    }
+  });
+
   Chocolat(document.querySelectorAll('.chocolat-parent .chocolat-image'), {})
 
   $(function(){

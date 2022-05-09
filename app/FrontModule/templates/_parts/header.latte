@@ -1,4 +1,4 @@
-	<header>
+	<header class="header">
         <div class="container">
             <div class="logo">
                 <a n:href=":Front:Homepage:page ''" title="Přejít na úvodní stránku"><img src="{$basePath}/img/logo.svg" alt="Logo Siegl kontejnery"></a>
@@ -24,3 +24,21 @@
         <!-- ./main navigation -->
         <img n:if="!empty($page->layoutId) && $page->layoutId==7" class="mosaic" src="{$basePath}/img/mosaic_s1.png" alt="Obrázek mozaiky">
     </header>
+    <!-- ./header -->
+    <header class="fixed">
+        <div class="container">
+            <div class="logo">
+                <a n:href=":Front:Homepage:page ''" title="Přejít na úvodní stránku"><img src="{$basePath}/img/logo.svg" alt="Logo Siegl kontejnery"></a>
+            </div>
+            <!-- ./logo -->
+            <div class="order">
+                <a href="/objednavka" title="Přejít na objednávku">Objednávejte</a> online nebo na {_'OBJEDNAVEJTE_NA'} {_'OTEVIRACI_DOBA'}
+            </div>
+            <!-- ./order -->
+            <nav class="main-navigation">
+                {include 'mainMenu.latte'}
+            </nav>
+            <!-- ./main navigation -->
+        </div>
+    </header>
+    <!-- ./fixed header -->

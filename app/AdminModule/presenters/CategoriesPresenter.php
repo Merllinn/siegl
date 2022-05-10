@@ -78,18 +78,19 @@ class CategoriesPresenter extends BasePresenter
 	public function createComponentCategoryForm(){
 		$form = new Form();
 
+		$attVals = $this->attributeManager->getValuesArr(1);
 		$form ->addText("name", "Jméno")
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno kategorie");
-		$form ->addText("link", "Adresa")
-                ->setRequired(true)
-				->addRule(Form::FILLED, "Vyplňte adresu kategorie");
+		$form ->addText("link", "Adresa (pokud má odkazovat mimo web)");
+		$form ->addText("alias", "Alias");
+		$form ->addSelect("attVal", "Druh odpadu kategorie", $attVals)
+			->setPrompt("Vyberte druh odpadu kategorie");
 		$form ->addTextArea("description", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
 		/*
 		$form ->addText("name_long", "Dlouhé jméno");
-		$form ->addText("alias", "Alias");
 		$form ->addTextArea("seo_description", "SEO description");
 		$form ->addText("seo_keywords", "SEO keywords");
         */
@@ -183,6 +184,7 @@ class CategoriesPresenter extends BasePresenter
         $grid->setDataSource($source);
 
         $grid->addColumnText('name', 'Název');
+        $grid->addColumnText('alias', 'Alias');
 
         $grid->addColumnText('active', 'Aktivní')
             ->setRenderer(function($row) use ($presenter) {

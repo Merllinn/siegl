@@ -144,6 +144,23 @@
 							link = link + "&val=" + $(this).val();
 							$.get(link);
 						});
+						$(".typePick").change(function(){
+							var type = $(this).val();
+							$(this).closest("ul").find(".productPick option").each(function(){
+								if($(this).data("types")=="all"){
+									$(this).show();
+								}
+								else if($(this).data("types").indexOf(type)>-1){
+									$(this).show();
+								}
+								else{
+									$(this).hide();
+									if($(this).is(':selected')){
+										$(this).closest("select").val("");
+									}
+								}
+							});
+						});
 					    
 				    });
                 </script>
@@ -213,7 +230,7 @@
                         {if !empty($materials[0]->product) && $materials[0]->product!=$settings->betonProduct}
 	                        <div class="number">
                         		<span class="minus"></span>
-                        		<input class="amountField form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}">
+                        		<input class="amountField form-control materialWeight changeable" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}">
                         		<span class="plus"></span>
 	                        </div>
 	                        <span class="tons">tun =</span>
@@ -223,7 +240,7 @@
                         {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
 	                        <div class="number">
                         		<span class="minus"></span>
-	                        	<input class="amountField form-control material-quantity" type="text" value="1">
+	                        	<input class="amountField form-control material-quantity changeable" type="text" value="1">
                         		<span class="plus"></span>
 	                        </div>
 	                        <span class="material-quantity">m<sup>3</sup> =</span>
@@ -261,7 +278,7 @@
 					    $input.change();
 					    return false;
 					  });
-						$(".materialWeight").change(function(){
+						$(".materialWeight.changeable").change(function(){
 							var thisVal = parseFloat($(this).val().replace(",", "."));
 							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
 							$(this).val(correctedVal);
@@ -271,7 +288,7 @@
 							$.get(link);
 
 						});
-						$(".material-quantity").change(function(){
+						$(".material-quantity.changeable").change(function(){
 							var thisVal = parseFloat($(this).val().replace(",", "."));
 							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
 							$(this).val(correctedVal);
@@ -510,23 +527,6 @@
 					$.get($(this).data("link"));
 				}
 			});
-			$(".typePick").change(function(){
-				var type = $(this).val();
-				$(this).closest("ul").find(".productPick option").each(function(){
-					if($(this).data("types")=="all"){
-						$(this).show();
-					}
-					else if($(this).data("types").indexOf(type)>-1){
-						$(this).show();
-					}
-					else{
-						$(this).hide();
-						if($(this).is(':selected')){
-							$(this).closest("select").val("");
-						}
-					}
-				});
-			});
 			$(".pickMaterial").click(function(e){
 				e.preventDefault()
 				var link = $(this).data("link");
@@ -570,6 +570,43 @@
 					sendOrderButton.addClass("disabled");
 				}	
 			}
+			function readFromAres(){
+				var ic=$(".idField");
+				if(ic.val()==""){
+					alert("Vyplňte IČO");
+				}
+				else{
+					var buttonText = $(".loadAres").text();
+					$(".loadAres").html(buttonText + ' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+     				//$(".loadAres").removeClass("btn-primary");
+				   $.ajax({
+					url: {link :Front:Homepage:ares},
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					data: "ico="+ic.val(),
+					cache: false,
+					success: function(d) {
+					 data = d.data;
+					 if (data.stav == 'ok') {
+					  //$('input[name=dic]').val(data.dic);
+					  $('input[name=bussiness_company]').val(data.firma);
+					  //$('input[name=address]').val(data.ulice);
+					  //$('input[name=city]').val(data.mesto);
+					  //$('input[name=zip]').val(data.psc);
+					 } else {
+					  alert(data.stav);
+					 }
+     				//$(".loadAres").addClass("btn-primary");
+     				$(".loadAres").html(buttonText);
+					},
+				   });
+   				}
+			}
+            $(".loadAres").click(function(e){
+                e.preventDefault();
+                readFromAres();
+            });
+			
 		});
 		
 		function initMap() {

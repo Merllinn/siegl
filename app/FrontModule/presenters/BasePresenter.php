@@ -762,6 +762,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		}
 		return (60*$hours) + $minutes;
     }
-
+    
 
 }

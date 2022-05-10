@@ -95,27 +95,50 @@
                         <!-- ./waste type -->
                         <div class="speed" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
                             <h2 class="title underline">Jak rychle vám kontejner přistavíme?</h2>
+                            {var $deliveries = explode(chr(10), $settings->deliveries)}
                             <label class="select">
-                                <select aria-label="Vyberte část Prahy">
-                                    <option selected disabled>Vyberte část Prahy</option>
-                                    <option value="praha-1">Praha 1</option>
-                                    <option value="praha-2">Praha 2</option>
-                                    <option value="praha-3">Praha 3</option>
-                                    <option value="praha-4">Praha 4</option>
-                                    <option value="praha-5">Praha 5</option>
+                                <select class="deliverySelect" aria-label="Vyberte část Prahy">
+                                    <option selected disabled value="">Vyberte část Prahy</option>
+                                    {foreach $deliveries as $index=>$delivery}
+                                    	{var $deliveryParts = explode("|", $delivery)}
+                                    	<option value="oblast-{$index}" data-term="{$deliveryParts[1]}" data-termunit="{$deliveryParts[2]}" data-turboterm="{$deliveryParts[3]}" data-turbounit="{$deliveryParts[4]}">{$deliveryParts[0]}</option>
+                                    {/foreach}
                                 </select>
                             </label>
-                            <div class="warrant">
+                            <div class="warrant deliveryBlock" style="display: none;">
                                 <ul class="list-unstyled">
                                     <li>
-                                        Garantujeme čas přistavení do <span class="number">1 - 4</span> <strong>hodin</strong>
+                                        Garantujeme čas přistavení do <span class="number standardDelivery">1 - 4</span> <strong class="standardUnit">hodin</strong>
                                     </li>
                                     <li>
-                                        Turbokontejner s přistavením do <span class="number">60</span> <strong>minut</strong>
+                                        Turbokontejner s přistavením do <span class="number turbodelivery">60</span> <strong class="turbounit">minut</strong>
                                         <span class="turbo">(pouze telefonicky Po - Pá: 6:00 - 17:00)</span>
                                     </li>
                                 </ul>
                             </div>
+                            <script>
+                            	$(document).ready(function(){
+									$(".deliverySelect").change(function(){
+										changeDelivery();
+									});
+									
+									changeDelivery();
+									
+									function changeDelivery(){
+										if($(".deliverySelect option:selected").val()!=""){
+											var selOption = $(".deliverySelect option:selected");
+											$(".standardDelivery").text(selOption.data("term"));
+											$(".standardUnit").text(selOption.data("termunit"));
+											$(".turbodelivery").text(selOption.data("turboterm"));
+											$(".turbounit").text(selOption.data("turbounit"));
+											$(".deliveryBlock").show();
+										}
+										else{
+											$(".deliveryBlock").hide();
+										}
+									}
+                            	});
+                            </script>
                         </div>
                         <!-- ./speed -->
                     </div>

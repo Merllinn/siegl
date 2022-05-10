@@ -67,8 +67,14 @@ final class CategoryManager
     public function findByAlias($alias)
     {
         return $this->get()
-            ->select("pages.*, layout.view")
             ->where("alias", $alias)
+            ->fetch();
+    }
+
+    public function findByAttrVal($av)
+    {
+        return $this->get()
+            ->where("attVal", $av)
             ->fetch();
     }
 

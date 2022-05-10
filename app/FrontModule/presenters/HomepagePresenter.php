@@ -103,6 +103,9 @@ final class HomepagePresenter extends HomepageForms
 		$containers = $this->basket->containers;
 		unset($containers[$index]);
 		$this->basket->containers = $containers;
+		if(count($containers)==0){
+			$this->basket->materials = null;
+		}
 		$this->recalculateBasket();
 		$this->redirect("this");
 	}
@@ -214,20 +217,48 @@ final class HomepagePresenter extends HomepageForms
 
 
     public function actionPage($id=""){
-        $page = $this->template->page = $this->pageManager->findByAlias($id);
-        $this->template->title = $page->title;
-        $this->template->keywords = $page->seo_keywords;
-        $this->template->description = $page->seo_description;
-        $this->setview($page->view);
-        if($page->parent){
-            $parent = $this->pageManager->find($page->parent);
-            //$this->addBreadcrumbs($parent->name, $this->link(":Front:Homepage:page", $parent->alias));
+        //detect product or category
+        $product = $this->productManager->findByAlias($id);
+        $category = $this->categoryManager->findByAlias($id);
+        if($product && $product->type==1){
+			$this->setview("container");
         }
-        //$this->addBreadcrumbs($page->name, $this->link(":Front:Homepage:page", $id));
-        $this->template->images = $this->pageManager->getPhotos($page->id);
+        else if($category){
+			if($category->type==1){
+				$this->setview("containers");
+			}
+			else{
+				$this->setview("materials");
+			}
+        }
+        else{
+	        $page = $this->template->page = $this->pageManager->findByAlias($id);
+	        $this->template->title = $page->title;
+	        $this->template->keywords = $page->seo_keywords;
+	        $this->template->description = $page->seo_description;
+	        $this->setview($page->view);
+	        if($page->parent){
+	            $parent = $this->pageManager->find($page->parent);
+	            //$this->addBreadcrumbs($parent->name, $this->link(":Front:Homepage:page", $parent->alias));
+	        }
+	        //$this->addBreadcrumbs($page->name, $this->link(":Front:Homepage:page", $id));
+	        $this->template->images = $this->pageManager->getPhotos($page->id);
+        }
     }
     
-    public function renderContainers(){
+    public function renderContainers($id=""){
+	    $page = $this->template->page = $this->pageManager->findByLayout(8);
+	    $this->template->title = $page->title;
+	    $this->template->keywords = $page->seo_keywords;
+	    $this->template->description = $page->seo_description;
+
+	    if(!empty($id)){
+			$category = $this->categoryManager->findByAlias($id);
+			if(!empty($category->attVal)){
+				$_GET["a1"] = $category->attVal;
+			}
+	    }
+    	
     	$containers = $this->productManager->getByType(1);
     	foreach($_GET as $key=>$val){
 			if(!empty($val) && $key[0]=="a"){
@@ -247,7 +278,12 @@ final class HomepagePresenter extends HomepageForms
     	$this->template->containers = $containers;
     	$this->template->attVals = $this->attributeManager->getAllValues();
     }
-    public function renderMaterials(){
+    public function renderMaterials($id=""){
+	    $page = $this->template->page = $this->pageManager->findByLayout(9);
+	    $this->template->title = $page->title;
+	    $this->template->keywords = $page->seo_keywords;
+	    $this->template->description = $page->seo_description;
+
     	$containers = $this->productManager->getByType(2);
     	foreach($_GET as $key=>$val){
 			if(!empty($val) && $key[0]=="a"){
@@ -264,7 +300,8 @@ final class HomepagePresenter extends HomepageForms
     	$this->template->containers = $containers;
     	$this->template->attVals = $this->attributeManager->getAllValues();
     }
-    public function actionContainer($id){
+    public function renderContainer($id){
+    	$this->template->bodyClassPage = "container-detail";
     	$this->template->product = $container = $this->productManager->findByAlias($id);
     	$this->template->attVals = $this->attributeManager->getAllValues();
     	$this->template->paVals = $this->getProductAttributeValues($container->attributes);
@@ -793,5 +830,34 @@ final class HomepagePresenter extends HomepageForms
 
 		$this->redirect("order2");
     }
+    
+    public function actionAres($ico){
+        define('ARES','http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=');
+        $file = @file_get_contents(ARES.$ico);
+        if ($file) $xml = @simplexml_load_string($file);
+        $a = array();
+        if ($xml) {
+         $ns = $xml->getDocNamespaces();
+         $data = $xml->children($ns['are']);
+         $el = $data->children($ns['D'])->VBAS;
+         if (strval($el->ICO) == $ico) {
+          $a['ico']     = strval($el->ICO);
+          $a['dic']     = strval($el->DIC);
+          $a['firma']     = strval($el->OF);
+          $a['ulice']    = strval($el->AA->NU).' '.strval($el->AA->CO);
+          $a['mesto']    = strval($el->AA->N);
+          $a['psc']        = strval($el->AA->PSC);
+          $a['zeme']    = strval($el->AA->NS);
+          $a['stav']     = 'ok';
+         } else
+          $a['stav']     = 'IČ firmy nebylo nalezeno';
+        } else
+         $a['stav']     = 'Databáze ARES není dostupná';
+        $this->payload->data = $a;
+        $this->sendPayload();
+        $this->terminate();
+    }
+
+    
 
 }

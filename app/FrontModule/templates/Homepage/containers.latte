@@ -12,10 +12,17 @@
                         <li class="list-inline-item {$attrTypes[$attr->id]}" n:foreach="$contAttr as $attr">
                             {if !empty($_GET["a".$attr->id])}{php $usedFilter = true}{/if}
                             <label class="select">
-	                            <select name="a{$attr->id}" class="form-select" aria-label="{$attr->name}" onchange="submit(this);">
-	                                <option {if empty($_GET["a".$attr->id])}selected="selected"{/if} value="">{$attr->name}</option>
+	                            <select name="a{$attr->id}" class="form-select filterFormField attr{$attr->id}" aria-label="{$attr->name}" >
+	                                <option {if empty($_GET["a".$attr->id])}selected="selected"{/if} value="" {if $attr->id==1}data-cat="kontejnery"{/if}>{$attr->name}</option>
 	                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
-	                                <option n:foreach="$values as $key=>$val"  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+									{foreach $values as $key=>$val}
+		                                {var $catAttr = $presenter->categoryManager->findByAttrVal($key)}
+		                                {if $catAttr}
+		                                	<option  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}" data-cat="{$catAttr->alias}">{$val} {$attr->unit|noescape}</option>
+		                                {else}
+		                                	<option  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+		                                {/if}
+	                                {/foreach}
 	                            </select>
                             </label>
                         </li>
@@ -26,7 +33,7 @@
                                 <label class="form-check-label" for="turbokontejner">
                                     Turbokontejner
                                 </label>
-                                <input name="t" class="form-check-input" type="checkbox" {if !empty($_GET["t"])}checked="checked"{/if} id="turbokontejner" onchange="submit(this);">
+                                <input name="t" class="form-check-input filterFormField turboField" type="checkbox" {if !empty($_GET["t"])}checked="checked"{/if} id="turbokontejner">
                             </div>
                         </li>
                         <!-- ./turbokontejner -->
@@ -37,6 +44,47 @@
                     </ul>
                     <button class="btn btn-primary btn-deselect" data-aos="fade-in" data-aos-duration="200" data-aos-delay="300"><a n:href=":Front:Homepage:page $page->alias" n:if="$usedFilter">Zrušit výběr</a></button>
                 </form>
+                <script>
+                	$(document).ready(function(){
+						$(".filterFormField").change(function(e){
+							e.preventDefault();
+							var baselink = "";
+							var link = "";
+							if($(".filterFormField.attr1 option:selected").data("cat")!=""){
+								baselink = "/" + $(".filterFormField.attr1 option:selected").data("cat");
+							}
+							else if($(".filterFormField.attr1 option:selected").attr("value")!=""){
+								link = link + "?a1=" + $(".filterFormField.attr1 option:selected").attr("value");
+							}
+							if($(".filterFormField.attr2 option:selected").attr("value")!=""){
+								if(link.length==0){
+									link = link + "?a2=" + $(".filterFormField.attr2 option:selected").attr("value");
+								}
+								else{
+									link = link + "&a2=" + $(".filterFormField.attr2 option:selected").attr("value");
+								}
+							}
+							if($(".filterFormField.attr3 option:selected").attr("value")!=""){
+								if(link.length==0){
+									link = link + "?a3=" + $(".filterFormField.attr3 option:selected").attr("value");
+								}
+								else{
+									link = link + "&a3=" + $(".filterFormField.attr3 option:selected").attr("value");
+								}
+							}
+							if($(".filterFormField.turboField").prop('checked')){
+								if(link.length==0){
+									link = link + "?t=on";
+								}
+								else{
+									link = link + "&t=on";
+								}
+							}
+							location.href=baselink+link;
+							
+						});
+                	});
+                </script>
                 <!-- ./form -->
             </div>
             <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">

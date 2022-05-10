@@ -82,12 +82,13 @@ class CategoriesMPresenter extends BasePresenter
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno kategorie");
 		//$form ->addUpload("img", "Obrázek");
+		$form ->addText("link", "Adresa (pokud má odkazovat mimo web)");
+		$form ->addText("alias", "Alias");
 		$form ->addTextArea("description", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
 		/*
 		$form ->addText("name_long", "Dlouhé jméno");
-		$form ->addText("alias", "Alias");
 		$form ->addTextArea("seo_description", "SEO description");
 		$form ->addText("seo_keywords", "SEO keywords");
         */
@@ -181,6 +182,7 @@ class CategoriesMPresenter extends BasePresenter
         $grid->setDataSource($source);
 
         $grid->addColumnText('name', 'Název');
+        $grid->addColumnText('alias', 'Alias');
 
         $grid->addColumnText('active', 'Aktivní')
             ->setRenderer(function($row) use ($presenter) {
@@ -207,9 +209,9 @@ class CategoriesMPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
                 $photos = $presenter->productManager->countPhotos($row->id);
                 $el = Html::el("span");
-                $el->insert(0, html::el("a")->class("btn btn-mini")->href($presenter->link(":Admin:Categories:edit", $row->id))->setHtml(html::el("i")->class("fas fa-edit"))->title(" Upravit"));
+                $el->insert(0, html::el("a")->class("btn btn-mini")->href($presenter->link("edit", $row->id))->setHtml(html::el("i")->class("fas fa-edit"))->title(" Upravit"));
                 $el->insert(1, " ");
-                $el->insert(2, html::el("a")->class("btn btn-mini btn-danger")->href($presenter->link(":Admin:Categories:delete", $row->id))->setHtml(html::el("i")->class("fas fa-trash-alt"))->title(" Smazat"));;
+                $el->insert(2, html::el("a")->class("btn btn-mini btn-danger")->href($presenter->link("delete", $row->id))->setHtml(html::el("i")->class("fas fa-trash-alt"))->title(" Smazat"));;
                 return $el;
         });
 		}

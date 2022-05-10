@@ -14,7 +14,8 @@
 						    	{var $categories = $presenter->categoryManager->getActive(1)}
 							    <ul class="products" n:if="count($categories)>0">
 								    <li n:foreach="$categories as $cat">
-									    <a class="rd-dropdown-link" href="{$cat->link}">{$cat->name}</a>
+									    <a class="rd-dropdown-link external" href="{$cat->link}" n:if="!empty($cat->link)">{$cat->name}</a>
+									    <a class="rd-dropdown-link" n:href=":Front:Homepage:page $cat->alias" n:if="empty($cat->link)">{$cat->name}</a>
 								    </li>
 							    </ul>
 						    {/if}
@@ -22,7 +23,8 @@
 						    	{var $categoriesM = $presenter->categoryManager->getActive(2)}
 							    <ul class="products" n:if="count($categoriesM)>0">
 								    <li n:foreach="$categoriesM as $cat">
-									    <a class="rd-dropdown-link" href="{$cat->link}">{$cat->name}</a>
+									    <a class="rd-dropdown-link external" href="{$cat->link}" n:if="!empty($cat->link)">{$cat->name}</a>
+									    <a class="rd-dropdown-link" n:href=":Front:Homepage:page $cat->alias" n:if="empty($cat->link)">{$cat->name}</a>
 								    </li>
 							    </ul>
 						    {/if}

@@ -17,8 +17,8 @@
 	{if !empty($page->layoutId) && !empty($bodyClasses[$page->layoutId])}
 		{php $bodyClass = $bodyClasses[$page->layoutId]}
 	{/if}
-	{if $presenter->action=='container'}
-		{php $bodyClass = "container-detail"}
+	{if !empty($bodyClassPage)}
+		{php $bodyClass = $bodyClassPage}
 	{/if}
 	
 	<body class="{$bodyClass}">

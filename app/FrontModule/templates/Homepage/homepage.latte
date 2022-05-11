@@ -48,7 +48,7 @@
             <div class="row">
             	{var $subpages = $presenter->pageManager->getActiveByParent($page->id)}
                 <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
-                    <a href="#" title="Přejít na {=strtolower(strip_tags($sp->name))}">
+                    <a href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}" title="Přejít na {=strtolower(strip_tags($sp->name))}">
                         <div class="service-icon">
                         	{var $mainImg = $presenter->pageManager->getMainPhoto($sp->id)}
                             <img src="{$mainImg|thumb:140:null}" class="img-service-{$sp->id}" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
@@ -110,24 +110,7 @@
                 </video>
             </a>
         </div>
-        <div class="bottom-navigation">
-            <div class="container">
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Typy odpadů">Typy odpadů</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Aktuálně">Aktuálně</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        {include '../_parts/footerMenu.latte', class=>''}
         <!-- ./bottom navigation -->
     </section>
     <!-- ./video -->

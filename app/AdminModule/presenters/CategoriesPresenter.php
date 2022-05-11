@@ -15,7 +15,7 @@ class CategoriesPresenter extends BasePresenter
 
 	public function startup(){
 		parent::startup();
-		$this->addBreadcrumbs("Kategorie", $this->link(":Admin:Categories:default"));
+		$this->addBreadcrumbs("Kategorie kontejnerů", $this->link(":Admin:Categories:default"));
 	}
 
 	public function actionDefault($parent=null){
@@ -31,6 +31,7 @@ class CategoriesPresenter extends BasePresenter
 	public function actionAdd($parent=null){
 		$this->setView("addEdit");
 		$this->parent = $parent;
+		$this->addBreadcrumbs("Přidání kategorie", $this->link(":Admin:Categories:add", $parent));
 	}
 
 	public function actionEdit($id, $parent){
@@ -39,6 +40,7 @@ class CategoriesPresenter extends BasePresenter
 		$pageDetails = $this->categoryManager->find($id);
 		$this["categoryForm"]->setDefaults($pageDetails);
 		$this->setView("addEdit");
+		$this->addBreadcrumbs("Úprava kategorie ".$pageDetails->name, $this->link(":Admin:Categories:edit", [$id, $parent]));
 	}
 
 	public function actionDelete($id){
@@ -79,22 +81,27 @@ class CategoriesPresenter extends BasePresenter
 		$form = new Form();
 
 		$attVals = $this->attributeManager->getValuesArr(1);
+		$form->addGroup("Základní údaje");
 		$form ->addText("name", "Jméno")
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno kategorie");
 		$form ->addText("link", "Adresa (pokud má odkazovat mimo web)");
-		$form ->addText("alias", "Alias");
 		$form ->addSelect("attVal", "Druh odpadu kategorie", $attVals)
 			->setPrompt("Vyberte druh odpadu kategorie");
 		$form ->addTextArea("description", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
+		$form->addGroup("SEO (pro vyhledávače)");
+		$form ->addText("alias", "Alias (do adresy)");
+		$form ->addText("title", "Titulek stránky");
+		$form ->addTextArea("seo_description", "SEO popis");
 		/*
 		$form ->addText("name_long", "Dlouhé jméno");
 		$form ->addTextArea("seo_description", "SEO description");
 		$form ->addText("seo_keywords", "SEO keywords");
         */
 
+		$form->addGroup(NULL);
 		$form->addSubmit("submit", "Uložit kategorii")->getControlPrototype()->class("btn btn-primary");
 
 		$form->onSuccess[] = [$this, 'saveCategory'];
@@ -116,6 +123,9 @@ class CategoriesPresenter extends BasePresenter
 				//$img = $values->img;
 				//unset($values->img);
 
+				if(empty($values->title)){
+					$values->title = $values->name;
+				}
 				if(!empty($this->edited)){
 					$this->categoryManager->update($values, $this->edited);
 					$categoryId = $this->edited;

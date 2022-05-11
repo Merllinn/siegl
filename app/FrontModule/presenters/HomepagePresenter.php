@@ -254,6 +254,10 @@ final class HomepagePresenter extends HomepageForms
 
 	    if(!empty($id)){
 			$category = $this->categoryManager->findByAlias($id);
+		    if($category){
+			    $this->template->title = $category->title;
+			    $this->template->description = $category->seo_description;
+		    }
 			if(!empty($category->attVal)){
 				$_GET["a1"] = $category->attVal;
 			}
@@ -284,6 +288,14 @@ final class HomepagePresenter extends HomepageForms
 	    $this->template->keywords = $page->seo_keywords;
 	    $this->template->description = $page->seo_description;
 
+	    if(!empty($id)){
+			$category = $this->categoryManager->findByAlias($id);
+		    if($category){
+			    $this->template->title = $category->title;
+			    $this->template->description = $category->seo_description;
+		    }
+	    }
+
     	$containers = $this->productManager->getByType(2);
     	foreach($_GET as $key=>$val){
 			if(!empty($val) && $key[0]=="a"){
@@ -306,6 +318,8 @@ final class HomepagePresenter extends HomepageForms
     	$this->template->attVals = $this->attributeManager->getAllValues();
     	$this->template->paVals = $this->getProductAttributeValues($container->attributes);
     	$this->template->mainImg = $this->productManager->getMainPhoto($container->id);
+	    $this->template->title = $container->title;
+	    $this->template->description = $container->seo_description;
 	}
 	
     public function getProductAttributeValues($source){

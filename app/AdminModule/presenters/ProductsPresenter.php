@@ -67,6 +67,7 @@ class ProductsPresenter extends BasePresenter
 
 	public function actionAdd(){
 		$this->setView("addEdit");
+		$this->addBreadcrumbs("Přidání kontejneru", $this->link(":Admin:Products:add"));
 	}
 
 	public function actionEdit($id){
@@ -88,6 +89,7 @@ class ProductsPresenter extends BasePresenter
 		$this["productForm"]->setDefaults($details);
 		$this->edited = $id;
 		$this->setView("addEdit");
+		$this->addBreadcrumbs("Úprava kontejneru ".$details->name, $this->link(":Admin:Products:edit", $id));
 	}
 
 	public function actionPrices($id){
@@ -109,6 +111,7 @@ class ProductsPresenter extends BasePresenter
 			}
 		}
 		$this["productPriceForm"]->setDefaults($details);
+		$this->addBreadcrumbs("Správa cen kontejneru ".$this->template->details->name, $this->link(":Admin:Products:prices", $id));
 	}
 
 	public function actionDelete($id){
@@ -142,7 +145,7 @@ class ProductsPresenter extends BasePresenter
 		$form ->addText("height", "Výška [m]")
 				->addRule(Form::FILLED, "Vyplňte výšku");
         $form ->addMultiSelect("category", "Kategorie", $this->categories);
-		$form ->addText("alias", "Alias");
+
 				//->addRule(Form::FILLED, "Vyberte kategorii")
 				//->setPrompt("Vyberte kategorie")
 				;
@@ -168,6 +171,11 @@ class ProductsPresenter extends BasePresenter
 			$attributes->addSelect($pa->id, $attrName, $paValues);
 		}
 
+		$form->addGroup("SEO (pro vyhledávače)");
+		$form ->addText("alias", "Alias (do adresy)");
+		$form ->addText("title", "Titulek stránky");
+		$form ->addTextArea("seo_description", "SEO popis");
+
 		$form->addGroup(NULL);
 		$form->addSubmit("submit", "Uložit produkt")->getControlPrototype()->class("btn btn-primary");
 
@@ -192,6 +200,9 @@ class ProductsPresenter extends BasePresenter
 					$attrs[] = $attrId."-".$attrVal;
 				}
 				$values->attributes = implode("|", $attrs);
+				if(empty($values->title)){
+					$values->title = $values->name;
+				}
 				if($this->edited){
 					$this->productManager->update($values, $this->edited);
 				}

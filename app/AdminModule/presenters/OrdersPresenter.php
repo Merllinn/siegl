@@ -20,6 +20,7 @@ class OrdersPresenter extends OrdersForms
         $this->fromPage = $this->getSession("ordersPage");
 
         $this->filter = $this->getSession("ordersFilter");
+		$this->addBreadcrumbs("Objednávky", $this->link(":Admin:Orders:default"));
 
 }
 
@@ -42,6 +43,7 @@ class OrdersPresenter extends OrdersForms
     public function actionDetail($id){
 		$this->template->order = $this->orderManager->find($id);
 		$this->template->products = $this->orderManager->findOrderProducts($id);
+		$this->addBreadcrumbs("Detail objednávky ".$id, $this->link(":Admin:Orders:detail", $id));
 	}
 
     public function actionAdd(){

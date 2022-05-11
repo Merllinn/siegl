@@ -45,6 +45,18 @@ select:focus,
   box-shadow: none !important;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #FFF inset !important;
+}
+
 label,
 select {
   cursor: pointer;
@@ -636,7 +648,7 @@ header.fixed {
       padding: 18px;
       max-width: 155px; width: 100%;
       position: absolute;
-      left: 0; top: 0;
+      left: 12px; top: 0;
       text-align: center;
       z-index: 5;
       -webkit-box-shadow: 3px 1px 3px -1px rgba(0,0,0,0.2); 
@@ -692,12 +704,21 @@ header.fixed {
           border-bottom: 1px solid #FFF;
         }
 
+          header.fixed nav a.active,
+          header.fixed nav a.active span {
+                                color: #FFF;
+              -webkit-text-fill-color: #FFF;
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: #FFF;
+          }
+
         header.fixed nav a::before {
           background-color: #FFF;
         }
 
       header.fixed nav li.submenu>a::after {
         top: 15px;
+        color: #FFF;
       }
 
       header.fixed nav li.submenu>a:hover::after,
@@ -1606,7 +1627,8 @@ label.select {
       margin-right: 26px;
     }
 
-      div.filter li.date {
+      div.filter li.dateField,
+      div.filter li.timefield {
         margin-right: 46px;
       }
 
@@ -1676,6 +1698,7 @@ label.select {
       }
 
       div.filter li.date::before,
+      div.filter li.timefield::before,
       div.filter li.add-container::before,
       li.remove-container::before {
         font-family: "Font Awesome 6 Free";
@@ -1688,6 +1711,10 @@ label.select {
 
         div.filter li.add-container::before {
           content: "\f055";
+        }
+
+        div.filter li.timefield::before {
+          content: "\f017";
         }
 
         div.filter li.remove-container::before {
@@ -1885,6 +1912,10 @@ label.select {
 
         section.waste div.filter li.date::after {
           left: 32px;
+        }
+
+        div.filter li.timefield::after {
+          left: 35px;
         }
 
         section.waste div.filter li.add-container::after {
@@ -3141,7 +3172,8 @@ div.filter li.today::before {
   content: none;
 }
 
-  li.remove-container {
+  li.remove-container,
+  li.timefield {
     margin-left: 26px;
   }
 
@@ -3605,7 +3637,8 @@ div.order-form {
         font-size: 1.125rem;
       }
 
-        .row-ic button:hover {
+        .row-ic button:hover,
+        .row-ic button.btn-primary:focus {
           background-color: #004a39;
         }
 

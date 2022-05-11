@@ -105,7 +105,7 @@
                                     {/foreach}
                                 </select>
                             </label>
-                            <div class="warrant deliveryBlock" style="display: none;">
+                            <div class="warrant deliveryBlock">
                                 <ul class="list-unstyled">
                                     <li>
                                         Garantujeme čas přistavení do <span class="number standardDelivery">1 - 4</span> <strong class="standardUnit">hodin</strong>
@@ -132,9 +132,6 @@
 											$(".turbodelivery").text(selOption.data("turboterm"));
 											$(".turbounit").text(selOption.data("turbounit"));
 											$(".deliveryBlock").show();
-										}
-										else{
-											$(".deliveryBlock").hide();
 										}
 									}
                             	});
@@ -216,7 +213,7 @@
                                 <tr>
                                     <td colspan="4">
                                         <span class="vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
-                                        <button class="btn btn-primary btn-arrow btn-red" title="Objednat kontejner">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
+                                        <button class="btn btn-primary btn-arrow btn-red orderButton disabled" title="Objednat kontejner">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -253,18 +250,26 @@
     	});
     	
     	function synchButtons(){
+			var disabled = true;
 			$(".modal .form-check-input").each(function(){
 				var checked = $(this).is(':checked');
 				var row = $(this).closest("tr");
 				if(checked){
 					row.find(".cancelRow").show();
 					row.find(".includeRow").hide();
+					disabled = false;
 				}
 				else{
 					row.find(".cancelRow").hide();
 					row.find(".includeRow").show();
 				}
 			});
+			if(disabled){
+				$(".orderButton").addClass("disabled");
+			}
+			else{
+				$(".orderButton").removeClass("disabled");
+			}
     	}
     </script>
 {/block}

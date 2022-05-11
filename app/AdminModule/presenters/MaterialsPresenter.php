@@ -67,6 +67,7 @@ class MaterialsPresenter extends BasePresenter
 
 	public function actionAdd(){
 		$this->setView("addEdit");
+		$this->addBreadcrumbs("Přidání materiálu", $this->link(":Admin:Materials:add"));
 	}
 
 	public function actionEdit($id){
@@ -90,6 +91,7 @@ class MaterialsPresenter extends BasePresenter
 		$this["productForm"]->setDefaults($details);
 		$this->edited = $id;
 		$this->setView("addEdit");
+		$this->addBreadcrumbs("Úprava materiálu ".$details->name, $this->link(":Admin:Materials:edit", $id));
 	}
 
 	public function actionPrices($id){
@@ -110,6 +112,7 @@ class MaterialsPresenter extends BasePresenter
 			}
 		}
 		$this["productPriceForm"]->setDefaults($details);
+		$this->addBreadcrumbs("Správa cen materiálu ".$this->template->details->name, $this->link(":Admin:Materials:prices", $id));
 	}
 
 	public function actionDelete($id){
@@ -145,7 +148,6 @@ class MaterialsPresenter extends BasePresenter
 				->addRule(Form::FILLED, "Vyplňte výšku");
 		*/
         $form ->addMultiSelect("category", "Kategorie", $this->categories);
-		$form ->addText("alias", "Alias");
 				//->addRule(Form::FILLED, "Vyberte kategorii")
 				//->setPrompt("Vyberte kategorie")
 				;
@@ -165,6 +167,11 @@ class MaterialsPresenter extends BasePresenter
 			$paValues = $this->attributeManager->getValuesArr($pa->id);
 			$attributes->addSelect($pa->id, $pa->name, $paValues);
 		}
+
+		$form->addGroup("SEO (pro vyhledávače)");
+		$form ->addText("alias", "Alias (do adresy)");
+		$form ->addText("title", "Titulek stránky");
+		$form ->addTextArea("seo_description", "SEO popis");
 
 		$form->addGroup(NULL);
 		$form->addSubmit("submit", "Uložit produkt")->getControlPrototype()->class("btn btn-primary");
@@ -190,6 +197,9 @@ class MaterialsPresenter extends BasePresenter
 					$attrs[] = $attrId."-".$attrVal;
 				}
 				$values->attributes = implode("|", $attrs);
+				if(empty($values->title)){
+					$values->title = $values->name;
+				}
 				if($this->edited){
 					$this->productManager->update($values, $this->edited);
 				}

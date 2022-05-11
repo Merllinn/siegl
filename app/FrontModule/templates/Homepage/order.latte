@@ -112,6 +112,8 @@
 		                    </ul>
 	                    {/if}
                     </div>
+                    {else}
+                    	<p>Objednávka je prázdná. Přidejte alespoň jeden kontejner.</p>
                     {/if}
                     <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item add-container">
@@ -121,6 +123,12 @@
                 </form>
                 <script {*n:if="$presenter->isAjax()"*}>
 				    $(function(){
+						var checkWeight = true;
+						window.checkAddress = false;
+						{if !empty($address)}
+							window.checkAddress = true;
+						{/if}
+
 					    AOS.init({
 							once: true
 						});
@@ -161,6 +169,22 @@
 								}
 							});
 						});
+						
+						function enableDisableOrder(){
+							sendOrderButton = $(".sendOrderButton");
+							var orderValid = true;
+							if(window.checkWeight==false) orderValid = false;
+							if(window.checkAddress==false) orderValid = false;
+							var containerCount = $(".oneContainer").length;
+							if(containerCount==0) orderValid = false;
+							if(orderValid){
+								sendOrderButton.removeClass("disabled");
+							}	
+							else{
+								sendOrderButton.addClass("disabled");
+							}	
+						}
+						
 					    
 				    });
                 </script>
@@ -253,6 +277,10 @@
                     </div>
                     <script>
 					$(document).ready(function(){
+						window.checkAddress = false;
+						{if !empty($address)}
+							window.checkAddress = true;
+						{/if}
 						var materialKoef = 1;
 						{if !empty($materials[0]->priceObj)}
 							materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
@@ -285,6 +313,7 @@
 							var matWeight = $(this).val();
 							$(".material-quantity").val((matWeight*materialKoef).toFixed(2));
 							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
+							checkMaterialAmount();
 							$.get(link);
 
 						});
@@ -295,6 +324,7 @@
 							var matWeight = $(this).val()/materialKoef;
 							$(".materialWeight").val(matWeight.toFixed(2));
 							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
+							checkMaterialAmount();
 							$.get(link);
 
 						});
@@ -318,6 +348,22 @@
 								enableDisableOrder();
 							}
 						}
+
+						function enableDisableOrder(){
+							sendOrderButton = $(".sendOrderButton");
+							var orderValid = true;
+							if(window.checkWeight==false) orderValid = false;
+							if(window.checkAddress==false) orderValid = false;
+							var containerCount = $(".oneContainer").length;
+							if(containerCount==0) orderValid = false;
+							if(orderValid){
+								sendOrderButton.removeClass("disabled");
+							}	
+							else{
+								sendOrderButton.addClass("disabled");
+							}	
+						}
+						
 					  
 					});
                     </script>
@@ -482,24 +528,7 @@
             <img class="car" src="{$basePath}/img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
             <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
         </div>
-        <div class="bottom-navigation">
-            <div class="container">
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Typy odpadů">Typy odpadů</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Aktuálně">Aktuálně</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        {include '../_parts/footerMenu.latte', class=>''}
         <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
         <div class="rectangle"></div>
     </div>
@@ -512,8 +541,6 @@
     <script>
     	$(document).ready(function(){
 			var materialPrice = 0;
-			var checkWeight = true;
-			var checkAddress = true;
 			
 			$(".updateValue").change(function(){
 				var link = $(this).data("link");
@@ -558,18 +585,6 @@
 				$(".materialWeight").trigger("change");
 			}
 			
-			function enableDisableOrder(){
-				sendOrderButton = $(".sendOrderButton");
-				var orderValid = true;
-				if(window.checkWeight==false) orderValid = false;
-				if(window.checkAddress==false) orderValid = false;
-				if(orderValid){
-					sendOrderButton.removeClass("disabled");
-				}	
-				else{
-					sendOrderButton.addClass("disabled");
-				}	
-			}
 			function readFromAres(){
 				var ic=$(".idField");
 				if(ic.val()==""){
@@ -830,6 +845,8 @@
 				var orderValid = true;
 				if(window.checkWeight==false) orderValid = false;
 				if(window.checkAddress==false) orderValid = false;
+				var containerCount = $(".oneContainer").length;
+				if(containerCount==0) orderValid = false;
 				if(orderValid){
 					sendOrderButton.removeClass("disabled");
 				}	

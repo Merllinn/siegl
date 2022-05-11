@@ -100,24 +100,7 @@
             <!-- ./calculation -->
         </div>
         <!-- ./container -->
-        <div class="bottom-navigation background">
-            <div class="container">
-                <ul class="list-inline">
-                    <li class="list-inline-item">
-                        <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Typy odpadů">Typy odpadů</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Aktuálně">Aktuálně</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        {include '../_parts/footerMenu.latte', class=>'background'}
         <!-- ./bottom navigation -->
         <div class="rectangle"></div>
         <!-- ./rectangle -->
@@ -184,7 +167,7 @@
                                 <tr>
                                     <td colspan="4">
                                         <span class="vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH za 1 tunu</span>
-                                        <button class="btn btn-primary btn-arrow btn-red" title="Objednat kontejner">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
+                                        <button class="btn btn-primary btn-arrow btn-red orderButton disabled" title="Objednat kontejner">Přejít do objednávky <i class="fa-solid fa-angles-right"></i></button>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -221,18 +204,26 @@
     	});
     	
     	function synchButtons(){
+			var disabled = true;
 			$(".modal .form-check-input").each(function(){
 				var checked = $(this).is(':checked');
 				var row = $(this).closest("tr");
 				if(checked){
 					row.find(".cancelRow").show();
 					row.find(".includeRow").hide();
+					disabled = false;
 				}
 				else{
 					row.find(".cancelRow").hide();
 					row.find(".includeRow").show();
 				}
 			});
+			if(disabled){
+				$(".orderButton").addClass("disabled");
+			}
+			else{
+				$(".orderButton").removeClass("disabled");
+			}
     	}
     </script>
 {/block}

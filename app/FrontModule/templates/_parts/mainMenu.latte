@@ -3,11 +3,11 @@
             {var $children = $presenter->pageManager->getActiveByParent($p->id)}
                 <li class="{if count($children)>0}submenu{/if} {*if !empty($page) && ($page->id==$p->id || (!empty($page->parent) && $p->id==$page->parent))}active{/if*}">
 				    {if count($children)>0}
-					    <a href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}" class="{if !empty($page) && ($p->id==$page->id) || (!empty($page->parent) && $p->id==$page->parent)}active{/if}"><span>{$p->name_menu|noescape}</span></a>
+					    <a title="{$p->hover}" href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}" class="{if !empty($page) && ($p->id==$page->id) || (!empty($page->parent) && $p->id==$page->parent)}active{/if}"><span>{$p->name_menu|noescape}</span></a>
 					    <div class="submenu {if !empty($p->layoutId) && in_array($p->layoutId, array(8, 9))!==false}two-columns{/if}">
 						    <ul n:if="count($children)>0">
 							    <li n:foreach="$children as $c" n:if="$c->active" class="rd-dropdown-item">
-								    <a class="{if !empty($page) && $c->id==$page->id}active{/if} {if $c->type=='1' && substr($c->link, 0, 4)=="http"}external{/if}" href="{if $c->type=='1'}{$c->link}{else}{link :Front:Homepage:page $c->alias}{/if}">{$c->name_menu}</a>
+								    <a title="{$c->hover}" class="{if !empty($page) && $c->id==$page->id}active{/if} {if $c->type=='1' && substr($c->link, 0, 4)=="http"}external{/if}" href="{if $c->type=='1'}{$c->link}{else}{link :Front:Homepage:page $c->alias}{/if}">{$c->name_menu}</a>
 							    </li>
 						    </ul>
 						    {if !empty($p->layoutId) && $p->layoutId == 8}
@@ -30,7 +30,7 @@
 						    {/if}
 					    </div>
 				    {else}
-					    <a {if $p->outside}target="_blank"{/if} href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}" class="{if !empty($page) && ($p->id==$page->id)}active{/if}"><span>{$p->name_menu|noescape}</span></a>
+					    <a title="{$p->hover}" {if $p->outside}target="_blank"{/if} href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}" class="{if !empty($page) && ($p->id==$page->id)}active{/if}"><span>{$p->name_menu|noescape}</span></a>
 				    {/if}
 			    </li>
             {/foreach}

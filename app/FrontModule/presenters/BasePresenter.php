@@ -80,6 +80,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->basket = $this->getSession("basket");
 
         $this->template->topPages = $this->pageManager->get()->where("location = ?", 0)->where("active = ?", true)->where("parent IS NULL");
+        $this->template->bottomPages = $this->pageManager->get()->where("location = ?", 1)->where("active = ?", true)->where("parent IS NULL");
 
         \Nette\Application\UI\Form::extensionMethod('addMultiUpload', function(\Nette\Application\UI\Form $form, $name, $label = NULL) {
             $form[$name] = new \Nette\Forms\Controls\MultiUploadControl($label);

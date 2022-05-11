@@ -12,7 +12,7 @@ class PagesPresenter extends BasePresenter
 	public $type;
 	private $id=null;
 	private $parent = null;
-	public $locations = array("0"=>"Hlavní menu");
+	public $locations = array("0"=>"Hlavní menu", "1"=>"Patička");
 
 	public function startup(){
 		parent::startup();
@@ -29,6 +29,7 @@ class PagesPresenter extends BasePresenter
 	}
 
 	public function actionAdd($id, $parent=""){
+		$this->addBreadcrumbs("Přidání stránky", $this->link(":Admin:Pages:add"));
 		$this->type = $id;
 		$this->parent = $parent;
 		$this->setView("addEdit");
@@ -41,6 +42,7 @@ class PagesPresenter extends BasePresenter
 		$this->parent = $pageDetails->parent;
 		$this["pageForm"]->setDefaults($pageDetails);
 		$this->setView("addEdit");
+		$this->addBreadcrumbs("Úprava stránky ".$pageDetails->name, $this->link(":Admin:Pages:edit", [$id, $type]));
 	}
 
     public function handleSetType($id, $type){
@@ -103,6 +105,7 @@ class PagesPresenter extends BasePresenter
 
         $grid = new DataGrid($this, $name);
         $grid->setDataSource($source);
+        $grid->setPagination(FALSE);
         //$grid->setSortable(true);
 
         $grid->addColumnText('img', 'Obrázek')
@@ -206,6 +209,7 @@ class PagesPresenter extends BasePresenter
 			$form ->addText("name_menu", "Název v menu");
 			$form->addGroup("SEO (pro vyhledávače)");
 			$form ->addText("alias", "Alias (do adresy)");
+			$form ->addText("hover", "Titulek při najetí");
 			$form ->addText("title", "Titulek stránky");
 			$form ->addText("seo_keywords", "SEO klíčová slova");
 			$form ->addTextArea("seo_description", "SEO popis");

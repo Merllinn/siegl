@@ -605,9 +605,11 @@
 					 if (data.stav == 'ok') {
 					  //$('input[name=dic]').val(data.dic);
 					  $('input[name=bussiness_company]').val(data.firma);
-					  //$('input[name=address]').val(data.ulice);
-					  //$('input[name=city]').val(data.mesto);
-					  //$('input[name=zip]').val(data.psc);
+					  if($('input[name=bussiness_different_delivery]').prop('checked')){
+						  $('input[name=bussiness_delivery_street]').val(data.ulice);
+						  $('input[name=bussiness_delivery_city]').val(data.mesto);
+						  $('input[name=bussiness_delivery_zip]').val(data.psc);
+					  }
 					 } else {
 					  alert(data.stav);
 					 }

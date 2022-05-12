@@ -61,6 +61,12 @@ $(document).ready(function() {
   })
 
   $(window).scroll(function() {
+  	  resolveHeader();
+  });
+  
+  resolveHeader();
+  
+  function resolveHeader(){
     var yPos = ( $(window).scrollTop() );
     if(yPos > 104) {
       $("header.header").hide();
@@ -69,7 +75,7 @@ $(document).ready(function() {
       $("header.header").show();
       $("header.fixed").fadeOut( "fast" );
     }
-  });
+  }
 
   Chocolat(document.querySelectorAll('.chocolat-parent .chocolat-image'), {})
 

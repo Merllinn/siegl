@@ -17,7 +17,7 @@ final class HomepagePresenter extends HomepageForms
 	}
 	
 	public function renderSubpages(){
-		$this->template->subpages = $this->pageManager->getActiveByParent($this->template->page->id);
+		$this->template->subpages = $this->pageManager->getInSubpagesByParent($this->template->page->id);
 	}
 
     public function renderOrder(){

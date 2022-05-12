@@ -90,6 +90,26 @@ class PagesPresenter extends BasePresenter
 		}
 	}
 
+	public function handleActivateS($id){
+		try{
+			$this->pageManager->update(array("inSubpages"=>1), $id);
+			$this->redirect("this");
+		}
+		catch(DibiDriverException $e){
+			$this->flashMessage($e->getMessage());
+		}
+	}
+
+	public function handleDeactivateS($id){
+		try{
+			$this->pageManager->update(array("inSubpages"=>0), $id);
+			$this->redirect("this");
+		}
+		catch(DibiDriverException $e){
+			$this->flashMessage($e->getMessage());
+		}
+	}
+
     /**
      * Make table of pages
      *
@@ -137,7 +157,7 @@ class PagesPresenter extends BasePresenter
             });
         }
 
-        $grid->addColumnText('active', 'Aktivní')
+        $grid->addColumnText('active', 'V menu')
             ->setRenderer(function($row) use ($presenter) {
                 if($row->active){
 					if($this->user->identity->role==9){
@@ -150,6 +170,26 @@ class PagesPresenter extends BasePresenter
                 else{
 					if($this->user->identity->role==9){
                     	return Html::el("a")->class("")->href($presenter->link("activate!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/deactive.png")->class("action"));
+					}
+					else{
+                    	return Html::el("img")->src(FOLDER."/images/active.png")->class("deactive");
+					}
+                }
+        });
+
+        $grid->addColumnText('inSubpages', 'V rozcestníku')
+            ->setRenderer(function($row) use ($presenter) {
+                if($row->inSubpages){
+					if($this->user->identity->role==9){
+                    	return Html::el("a")->class("")->href($presenter->link("deactivateS!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/active.png")->class("action"));
+					}
+					else{
+                    	return Html::el("img")->src(FOLDER."/images/active.png")->class("action");
+					}
+                }
+                else{
+					if($this->user->identity->role==9){
+                    	return Html::el("a")->class("")->href($presenter->link("activateS!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/deactive.png")->class("action"));
 					}
 					else{
                     	return Html::el("img")->src(FOLDER."/images/active.png")->class("deactive");

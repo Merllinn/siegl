@@ -13,7 +13,7 @@
                             {if !empty($_GET["a".$attr->id])}{php $usedFilter = true}{/if}
                             <label class="select">
 	                            <select name="a{$attr->id}" class="form-select filterFormField attr{$attr->id}" aria-label="{$attr->name}" >
-	                                <option {if empty($_GET["a".$attr->id])}selected="selected"{/if} value="" {if $attr->id==1}data-cat="kontejnery"{/if}>{$attr->name}</option>
+	                                <option {if empty($_GET["a".$attr->id])}selected="selected"{/if} value="" {if $attr->id==1}data-cat="kontejnery.htm"{/if}>{$attr->name}</option>
 	                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
 									{foreach $values as $key=>$val}
 		                                {var $catAttr = $presenter->categoryManager->findByAttrVal($key)}

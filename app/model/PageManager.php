@@ -68,6 +68,14 @@ final class PageManager
             ->order("order");
     }
 
+    public function getInSubpagesByParent($parent)
+    {
+        return $this->get()
+            ->where("inSubpages = ?", true)
+            ->where("parent = ?", $parent)
+            ->order("order");
+    }
+
     public function add($values)
     {
         $this->get()->insert($values);

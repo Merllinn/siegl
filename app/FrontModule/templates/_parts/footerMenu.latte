@@ -1,13 +1,11 @@
-		<ul>
-		<div class="bottom-navigation {$class}">
-            <div class="container">
-                <ul class="list-inline">
-		            {foreach $bottomPages as $p}
-		                <li class="list-inline-item">
-							<a {if $p->outside}target="_blank"{/if} href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}">{$p->name_menu|noescape}</a>
-					    </li>
-		            {/foreach}
-                </ul>
-            </div>
+	<div class="bottom-navigation {$class}">
+        <div class="container">
+            <ul class="list-inline">
+	            {foreach $bottomPages as $p}
+	                <li class="list-inline-item">
+						<a {if $p->outside}target="_blank"{/if} href="{if $p->type=="1"}{$p->link}{else}{link :Front:Homepage:page $p->alias}{/if}">{$p->name_menu|noescape}</a>
+				    </li>
+	            {/foreach}
+            </ul>
         </div>
-		</ul>
+    </div>

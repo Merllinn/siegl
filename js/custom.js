@@ -69,11 +69,11 @@ $(document).ready(function() {
   function resolveHeader(){
     var yPos = ( $(window).scrollTop() );
     if(yPos > 104) {
-      $("header.header").hide();
-      $("header.fixed").fadeIn( "fast");
+      $("header.header").fadeOut(200);
+      $("header.fixed").fadeIn(200);
     } else {
-      $("header.header").show();
-      $("header.fixed").fadeOut( "fast" );
+      $("header.header").fadeIn(200);
+      $("header.fixed").fadeOut(200);
     }
   }
 

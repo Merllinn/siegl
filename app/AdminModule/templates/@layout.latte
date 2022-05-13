@@ -40,7 +40,7 @@
 	<!-- Header start -->
 	<header class="header">
 		<div class="logo-wrapper">
-			<a n:href=":Admin:Pages:default" class="logo">
+			<a href="https://siegl.qpt.cz" target="_blank" class="logo">
 				<img src="{$basePath}/img/logo-white.svg" alt="Siegl logo" />
 			</a>
 			<a n:if="false" href="#" class="quick-links-btn" data-toggle="tooltip" data-placement="right" title="" data-original-title="Quick Links">
@@ -185,25 +185,19 @@
 				</button>
 				<div class="collapse navbar-collapse" id="WafiAdminNavbar">
 		            <ul class="navbar-nav mr-auto">
-		                <li class="nav-item dropdown">
-		                    <a class="nav-link dropdown-toggle {ifCurrent :Admin:Pages:default}active-page{/ifCurrent}" href="#" id="catalogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		                      Obsah
-		                    </a>
-		                    <div class="dropdown-menu" aria-labelledby="catalogDropdown">
-		                    	<a class="dropdown-item {ifCurrent :Admin:Pages:default 0}active-page{/ifCurrent}" n:href=":Admin:Pages:default">Správa stránek</a>
-		                    	<a class="dropdown-item {ifCurrent :Admin:Pages:default 1}active-page{/ifCurrent}" n:href=":Admin:Pages:default 1">Správa služeb</a>
-		                    </div>
+		            	<li class="nav-item">
+		                    <a class="nav-link {ifCurrent :Admin:Pages:default}active-page{/ifCurrent}" n:href=":Admin:Pages:default">Stránky</a>
 		                </li>
 		                <li class="nav-item dropdown">
 		                    <a class="nav-link dropdown-toggle {ifCurrent :Admin:Categories:default}active-page{/ifCurrent}{ifCurrent :Admin:Products:default}active-page{/ifCurrent}{ifCurrent :Admin:CategoriesM:default}active-page{/ifCurrent}{ifCurrent :Admin:Materials:default}active-page{/ifCurrent}{ifCurrent :Admin:Attributes:default}active-page{/ifCurrent}" href="#" id="catalogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		                      Katalog
 		                    </a>
 		                    <div class="dropdown-menu" aria-labelledby="catalogDropdown">
-		                      <a class="dropdown-item {ifCurrent :Admin:Categories:default}active-page{/ifCurrent}" n:href=":Admin:Categories:default">Kategorie kontejnerů</a>
-		                      <a class="dropdown-item {ifCurrent :Admin:Products:default}active-page{/ifCurrent}" n:href=":Admin:Products:default">Kontejnery</a>
+		                    	<a class="dropdown-item {ifCurrent :Admin:Products:default}active-page{/ifCurrent}" n:href=":Admin:Products:default">Kontejnery</a>
+		                    	<a class="dropdown-item {ifCurrent :Admin:Materials:default}active-page{/ifCurrent}" n:href=":Admin:Materials:default">Materiály</a>
 		                      <div class="dropdown-divider"></div>
+		                      <a class="dropdown-item {ifCurrent :Admin:Categories:default}active-page{/ifCurrent}" n:href=":Admin:Categories:default">Kategorie kontejnerů</a>
 		                      <a class="dropdown-item {ifCurrent :Admin:CategoriesM:default}active-page{/ifCurrent}" n:href=":Admin:CategoriesM:default">Kategorie materiálů</a>
-		                      <a class="dropdown-item {ifCurrent :Admin:Materials:default}active-page{/ifCurrent}" n:href=":Admin:Materials:default">Materiály</a>
 		                      <div class="dropdown-divider"></div>
 		                      <a class="dropdown-item {ifCurrent :Admin:Attributes:default}active-page{/ifCurrent}" n:href=":Admin:Attributes:default">Atributy</a>
 		                    </div>
@@ -212,13 +206,19 @@
 		                    <a class="nav-link {ifCurrent :Admin:Orders:default}active-page{/ifCurrent}" n:href=":Admin:Orders:default">Objednávky</a>
 		                </li>
 		                <li class="nav-item">
-		                    <a class="nav-link {ifCurrent :Admin:Languages:translates 'cz'}active-page{/ifCurrent}" n:href=":Admin:Languages:translates 'cz'">Textové konstanty</a>
+		                    <a class="nav-link {ifCurrent :Admin:Orders:default}active-page{/ifCurrent}" n:href=":Admin:Orders:default">Poptávky</a>
 		                </li>
 		                <li class="nav-item">
 		                    <a class="nav-link {ifCurrent :Admin:Zones:default}active-page{/ifCurrent}" n:href=":Admin:Zones:default">Zóny</a>
 		                </li>
 		                <li class="nav-item">
 		                    <a class="nav-link {ifCurrent :Admin:Admins:default}active-page{/ifCurrent}" n:href=":Admin:Admins:default">Správci</a>
+		                </li>
+		                <li class="nav-item">
+		                    <a class="nav-link {ifCurrent :Admin:Pages:default 1}active-page{/ifCurrent}" n:href=":Admin:Pages:default 1">Služby (boxy)</a>
+		                </li>
+		                <li class="nav-item">
+		                    <a class="nav-link {ifCurrent :Admin:Languages:translates 'cz'}active-page{/ifCurrent}" n:href=":Admin:Languages:translates 'cz'">Textové konstanty</a>
 		                </li>
 		                
 						{*
@@ -348,7 +348,7 @@
 
 
 			<!-- Footer start -->
-			<footer class="main-footer">© Siegl {=date("Y")}</footer>
+			<footer class="main-footer">© SIEGL s.r.o. {=date("Y")}</footer>
 			<!-- Footer end -->
 			
 

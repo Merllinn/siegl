@@ -223,25 +223,18 @@
                         {var $prices = $presenter->productManager->getPrices($mat->id)}
                         <ul class="list-unstyled">
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class=" {if !empty($materials[0]->price) && $price->id == $materials[0]->price}selected{/if}">
-                                <label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}" data-price="{$price->priceFrom}" data-koef="{$price->koef}">
+                                <div class="image chocolat-parent">
+                            		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
+                                    <a href="{$matImg|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                </div>
+                            	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}" data-price="{$price->priceFrom}" data-koef="{$price->koef}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta" value="{$price->id}">
-                                    <div class="image">
-                                		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                        <img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}">
-                                    </div>
                                     <div class="title">
                                         <span>{$attVals[$price->attributeValue]->name}</span>
                                         <div class="description" style="display: block">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
-                                        {*
-                                        <label class="select">
-                                            <select aria-label="Zvolit hrubost">
-                                                <option selected disabled>Zvolit hrubost</option>
-                                                <option value="0-4">0 - 4 mm</option>
-                                            </select>
-                                        </label>
-                                        *}
+                                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu">Vybrat</a>
                                     </div>
                                 </label>
                             </li>
@@ -253,9 +246,7 @@
                         <label for="amount">Množství materiálu</label>
                         {if !empty($materials[0]->product) && $materials[0]->product!=$settings->betonProduct}
 	                        <div class="number">
-                        		<span class="minus"></span>
-                        		<input class="amountField form-control materialWeight changeable" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}">
-                        		<span class="plus"></span>
+                        		<span class="minus"></span><input class="amountField form-control materialWeight changeable" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
 	                        </div>
 	                        <span class="tons">tun =</span>
 	                        <input class="form-control material-quantity" type="text" value="" readonly>
@@ -263,9 +254,7 @@
                         {/if}
                         {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
 	                        <div class="number">
-                        		<span class="minus"></span>
-	                        	<input class="amountField form-control material-quantity changeable" type="text" value="1">
-                        		<span class="plus"></span>
+                        		<span class="minus"></span><input class="amountField form-control material-quantity changeable" type="text" value="1"><span class="plus"></span>
 	                        </div>
 	                        <span class="material-quantity">m<sup>3</sup> =</span>
                         	<input class="form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount|number:2}{/if}" readonly>

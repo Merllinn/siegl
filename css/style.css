@@ -791,7 +791,8 @@ nav a {
   a.active span,
   a.active,
   div.submenu li a:hover,
-  nav li.submenu.active span {
+  nav li.submenu.active span,
+  header.fixed div.submenu a.active {
     color: #424242;
       -webkit-text-fill-color: #424242;
     -webkit-text-stroke-width: 1px;
@@ -800,7 +801,8 @@ nav a {
   }
 
     a.active span,
-    a.active {
+    a.active,
+    header.fixed div.submenu a.active {
       border-bottom: 0;
     }
 
@@ -2005,6 +2007,20 @@ label.select {
       section.waste label.select::before {
         right: -31px;
       }
+
+  div.roughness .btn-arrow {
+    position: absolute;
+    right: 0; bottom: 0;
+    font-size: 1rem;
+    line-height: 46px;
+    height: 46px;
+    padding: 0 21px;
+    font-weight: 600;
+  }
+
+    div.roughness .btn-arrow::after {
+      content: none;
+    }
 
   select.select::-ms-expand {
     display: none;
@@ -3319,6 +3335,25 @@ div.roughness ul [type=radio] {
       transition: all .25s;
     }
 
+ul.select-material .btn-arrow {
+  font-size: .875rem;
+  line-height: 35px;
+  height: 35px;
+  padding: 0 16px;
+  font-weight: 600;
+  display: table;
+  margin: 5px auto 0 auto;
+}
+
+  ul.select-material .btn-arrow::before {
+    width: 5px; height: 35px;
+    left: -5px;
+  }
+
+  ul.select-material .btn-arrow::after {
+    content: none;
+  }
+
 div.roughness {
   padding-top: 60px;
 }
@@ -3352,10 +3387,15 @@ div.roughness {
       div.roughness div.image {
         width: 77px;
         margin-right: 25px;
+        float: left;
       }
 
+        div.roughness div.image a {
+          display: inline-block;
+        }
+
       div.roughness div.title {
-        width: calc(100% - 102px);
+        width: 100%;
         padding-top: 27px;
         position: relative;
       }
@@ -3398,6 +3438,11 @@ div.roughness label.select {
     div.roughness label.select::after {
       content: none;
     }
+
+div.roughness div.amount {
+  font-size: 1rem;
+  margin-top: 30px;
+}
 
 li.weekend,
 li.beton {
@@ -3459,8 +3504,21 @@ div.amount {
   }
 
   div.amount span {
-    cursor:pointer;
+    cursor: pointer;
   }
+
+  input.amountField,
+  input.materialWeight {
+    max-width: 75px;
+  }
+
+    input.amountField:disabled,
+    input.amountField[readonly],
+    input.materialWeight:disabled,
+    input.materialWeight[readonly] {
+      max-width: 75px;
+      background-color: #FFF;
+    }
 
   .minus,
   .plus {
@@ -3496,9 +3554,18 @@ div.amount {
       transition: color .25s;
     }
 
+    div.roughness div.amount .minus::before {
+      margin-top: 4px;
+    }
+
+    div.roughness div.amount .plus::before {
+      margin-top: 5px;
+    }
+
   div.amount input#amount,
   div.amount input.material-quantity {
-    width: 55px;
+    width: 75px;
+    background-color: #FFF;
   }
 
   span.material-quantity {

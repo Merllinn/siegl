@@ -95,9 +95,9 @@
 	<section class="material">
 	    <div class="container">
 	        <h3 class="title underline">Potřebujete stavební materiál?</h3>
-	        <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ano, potřebuji</a>
+	        <button class="btn btn-primary btn-arrow btn-red btn-add-material" title="Přidat materiály k objednávce">Ne, potřebuji</a>
 	    </div>
-	    <div class="select-material" style="display: none">
+	    <div class="select-material">
 	        <div class="container margin">
 	            <h4>Vyberte typ materiálu</h4>
 	            <form>
@@ -108,6 +108,7 @@
 	                            <img src="images/pisek.jpg" alt="Písek">
 	                            <span>Písek</span>
 	                        </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento materiál">Vybrat</a>
 	                    </li>
 	                    <li class="list-inline-item">
 	                        <label for="sterk">
@@ -115,6 +116,7 @@
 	                            <img src="images/sterk.jpg" alt="Štěrk">
 	                            <span>Štěrk</span>
 	                        </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Změnit výběr materiálu">Změnit</a>
 	                    </li>
 	                    <li class="list-inline-item">
 	                        <label for="recyklat">
@@ -122,6 +124,7 @@
 	                            <img src="images/recyklat.jpg" alt="Recyklát">
 	                            <span>Recyklát</span>
 	                        </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento materiál">Vybrat</a>
 	                    </li>
 	                    <li class="list-inline-item">
 	                        <label for="beton">
@@ -129,6 +132,7 @@
 	                            <img src="images/beton.jpg" alt="Beton">
 	                            <span>Beton</span>
 	                        </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento materiál">Vybrat</a>
 	                    </li>
 	                    <li class="list-inline-item">
 	                        <label for="kacirek">
@@ -136,6 +140,7 @@
 	                            <img src="images/kacirek.jpg" alt="Kačírek">
 	                            <span>Kačírek</span>
 	                        </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento materiál">Vybrat</a>
 	                    </li>
 	                    <li class="list-inline-item">
 	                        <label for="zemina">
@@ -143,28 +148,33 @@
 	                            <img src="images/zemina.jpg" alt="Zemina">
 	                            <span>Zemina</span>
 	                        </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento materiál">Vybrat</a>
 	                    </li>
 	                </ul>
 	                <div class="roughness">
 	                    <h4>Zvolte typ a hrubost</h4>
 	                    <ul class="list-unstyled">
 	                        <li>
-	                            <label for="pisek-kopany">
-	                                <input class="check" id="pisek-kopany" type="radio" name="hrubost" value="pisek-kopany">
-	                                <div class="image">
-	                                    <img src="images/pisek.jpg" alt="Písek kopaný">
-	                                </div>
+                                <div class="image chocolat-parent">
+                                    <a href="images/pisek.jpg" class="chocolat-image" title="Zvětšit obrázek"><img src="images/pisek.jpg" alt="Písek kopaný"></a>
+                                </div>
+                                <label for="pisek-kopany">
+	                                <input class="check" id="pisek-kopany" type="radio" value="pisek-kopany">
 	                                <div class="title">
 	                                    <span>Písek kopaný</span>
 	                                    <div class="description" style="display: block">
 	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 	                                    </div>
+	                                    <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu">Vybrat</a>
 	                                </div>
 	                            </label>
+	                            <div class="amount">
+				                    <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+				                </div>
 	                        </li>
 	                        <li>
 	                            <label for="pisek-ricni">
-	                                <input id="pisek-ricni" type="radio" name="hrubost" value="pisek-ricni">
+	                                <input id="pisek-ricni" type="radio" value="pisek-ricni">
 	                                <div class="image">
 	                                    <img src="images/pisek.jpg" alt="Písek říční">
 	                                </div>
@@ -173,12 +183,16 @@
 	                                    <div class="description">
 	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 	                                    </div>
+	                                    <a href="#" class="btn btn-primary btn-arrow btn-red" title="Odebrat tento druh materiálu">Odebrat</a>
 	                                </div>
 	                            </label>
+	                            <div class="amount">
+				                    <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
+				                </div>
 	                        </li>
 	                        <li>
 	                            <label for="pisek-zasypovy">
-	                                <input id="pisek-zasypovy" type="radio" name="hrubost" value="pisek-zasypovy">
+	                                <input id="pisek-zasypovy" type="radio" value="pisek-zasypovy">
 	                                <div class="image">
 	                                    <img src="images/pisek.jpg" alt="Písek zásypový">
 	                                    <div class="description">
@@ -190,15 +204,13 @@
 	                                    <div class="description">
 	                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 	                                    </div>
+	                                    <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu">Vybrat</a>
 	                                </div>
 	                            </label>
 	                        </li>
 	                    </ul>
 	                </div>
 	                <!-- ./typ a hrubost -->
-	                <div class="amount">
-	                    <label for="amount">Množství materiálu</label><div class="number"><span class="minus"></span><input id="amount" class="form-control" type="text" min="1" value="1"><span class="plus"></span></div> <span class="tons">tun =</span><input class="form-control material-quantity" type="text" value="25"> <span class="material-quantity">m<sup>3</sup></span>
-	                </div>
 	            </form>
 	        </div>
 	    </div>

@@ -4,7 +4,7 @@
 
       <div class="content" style="clear: both">
         <div class="head">
-          <h1 class="title">Přehled objednávek</h1>
+          <h1 class="card-title">Přehled objednávek</h1>
           {*
           <a class="btn btn-primary" n:href="add" n:if="false"><i class="fas fa-plus"></i> Vytvořit objednávku</a>
           <a class="btn btn-primary" n:href="export!"><i class="fas fa-file-csv"></i> Exportovat e-maily</a>
@@ -13,15 +13,17 @@
         </div>
         <div class="filter">
           {form filterForm}
-              <div class="row">
-                  <div class="col">
-                    {label reserver/}
-                    {input reserver}
+            <div class="row">
+              <div class="col-xl-4 col-lglg-4 col-md-4 col-sm-4 col-12">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div style="display: block; width: 100%">{label reserver/}</div>
+                      {input reserver}
+                      {input submit}
+                      {input reset}
+                    </div>
                   </div>
-                  <div class="col">
-                    {input submit}
-                    {input reset}
-                  </div>
+                </div>
               </div>
           {/form}
         </div>

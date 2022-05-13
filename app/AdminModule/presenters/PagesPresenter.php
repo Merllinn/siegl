@@ -150,7 +150,7 @@ class PagesPresenter extends BasePresenter
 
 
         if(count($this->locations)>1){
-            $grid->addColumnText("Umístění", "location")
+            $grid->addColumnText("location", "Umístění")
                 ->setRenderer(function($row) use ($presenter) {
                     $locations = $presenter->locations;
                     return $locations[$row->location];

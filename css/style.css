@@ -3141,6 +3141,11 @@ p.desc {
     text-transform: uppercase;
   }
 
+p.empty-order {
+  margin-bottom: 36px;
+  font-weight: 700;
+}
+
 div.oneContainer:not(:last-child) {
   margin-bottom: 60px;
 }
@@ -3394,6 +3399,19 @@ div.roughness label.select {
       content: none;
     }
 
+li.weekend,
+li.beton {
+  text-transform: lowercase;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+  div.total-price li.weekend strong,
+  div.total-price li.beton strong {
+    font-size: 1.25rem;
+    text-transform: none;
+  }
+
 div.total-price {
   text-align: center;
   background-color: #d71921;
@@ -3406,7 +3424,7 @@ div.total-price {
   z-index: 2;
 }
 
-  div.total-price span:first-child {
+  div.total-price span.total {
     text-transform: uppercase;
     margin-right: 35px;
   }

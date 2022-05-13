@@ -113,7 +113,7 @@
 	                    {/if}
                     </div>
                     {else}
-                    	<p>Objednávka je prázdná. Přidejte alespoň jeden kontejner.</p>
+                    	<p class="empty-order">Objednávka je prázdná. Přidejte alespoň jeden kontejner.</p>
                     {/if}
                     <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item add-container">
@@ -378,8 +378,10 @@
     <!-- ./material -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
-        <p class="weekend" n:if="$basket->weekendPrice>0">{_'PRIPLATEK_VIKEND_SVATEK'}: {$basket->weekendPrice|number:0:",":" "} Kč</p>
-        <p class="beton" n:if="$basket->betonPrice>0">{_'PRIPLATEK_BETON'}: {$basket->betonPrice|number:0:",":" "} Kč</p>
+    	<ul class="list-unstyled">
+        	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'}: <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
+        	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'}: <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
+        </ul>
         <span class="total">Celková cena</span>
         <strong class="price">{$basket->price|number:0:",":" "} Kč</strong>
         <span class="with-vat">{$basket->priceVat|number:0:",":" "} Kč vč. DPH</span>

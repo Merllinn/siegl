@@ -29,7 +29,7 @@ final class RouterFactory
         $front[] = new Route('import-feed', array('presenter' => 'Xml','action' => 'importFeed'));
         $front[] = new Route('cron', array('presenter' => 'Cron','action' => 'default'));
         $front[] = new Route('platba[/<id>]', array('presenter' => 'Homepage','action' => 'payment'));
-        $front[] = new Route('/[<id>][/<id2>]', array('presenter' => 'Homepage','action' => 'page','id' => '','lang' => 'cz'));
+        $front[] = new Route('/[<id>]', array('presenter' => 'Homepage','action' => 'page','id' => '','lang' => 'cz'));
         $front[] = new Route('<id>', array('presenter' => 'Homepage','action' => 'container','lang' => 'cz'));
         $front[] = new Route('<presenter>/<action>', 'Homepage:page');
 

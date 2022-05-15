@@ -34,84 +34,84 @@
             	{snippet orderContainers}
                 <form>
                 	{if !empty($containers)}
-                    {var $zoneTimes = array()}
-                    {if !empty($basket->zoneObj)}
-	                    {foreach explode(chr(10), $basket->zoneObj->orderTimes) as $orderTime}
-                    		{php $zoneTimes[$orderTime] = $orderTime}
-	                    {/foreach}
-                    {/if}
-                    {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
-                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
-	                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-                    		{var $attr = $presenter->attributeManager->find(1)}
-	                        <li class="list-inline-item druh-odpadu">
-	                            <label class="select">
-		                            <select name="type[{$index}]" data-link={link setBasketVal! $index, "type"} class="form-select updateValue typePick" aria-label="{$attr->name}">
-		                                <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
-		                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
-		                                <option n:foreach="$values as $key=>$val"  {if !empty($container->type) && $container->type==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
-		                            </select>
-	                            </label>
-	                        </li>
-	                        <!-- ./druh odpadu -->
-	                        {var $products = $presenter->productManager->getByType(1)}
-	                        <li class="list-inline-item objem">
-	                            <label class="select">
-		                            <select name="container{$index}"data-link={link setBasketVal! $index, "product"}  class="form-select updateValue productPick" aria-label="Kontejner">
-		                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
-		                                <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
-		                                	{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
-		                                	{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
-		                                </option>
-		                            </select>
-	                            </label>
-	                        </li>
-	                        <!-- ./velikost kontejneru -->
-	                    </ul>
-	                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
-	                    {if empty($basket->zoneObj)}
-	                    	<p>Nejprve vyberte místo přistavení</p>
-	                    {else}
-		                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-		                        {*
-		                        <li class="list-inline-item today">
-		                            <button class="btn btn-primary">Dnes</button>
-		                        </li>
-		                        *}
-		                        <!-- ./dnes -->
-		                        <li class="list-inline-item date dateField">
-		                            <label class="select">
-		                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
-		                            </label>
-		                        </li>
-		                        <li class="list-inline-item timefield">
-		                            <label class="select">
-		                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time"}>
-	                                		{if empty($container->term)}
-	                                			<option value="">Vyberte datum přistavení</option>
-	                                		{else}
-	                                			<option value="">Čas přistavení</option>
-	                                			{foreach $zoneTimes as $zoneTime}
-	                                				{var $timesArr = explode("-", $zoneTime)}
-	                                				{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
-	                                				{var $isToday = (date("d/m/Y") == $container->term)}
-	                                				{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
-	                                					<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
-	                                						{$zoneTime}
-	                                					</option>
-	                                				{/if}
-	                                			{/foreach}
-	                                		{/if}
-		                                </select>
-		                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
-		                            </label>
-		                        </li>
-		                        <li class="list-inline-item remove-container">
-		                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
-		                        </li>
-		                    </ul>
+	                    {var $zoneTimes = array()}
+	                    {if !empty($basket->zoneObj)}
+		                    {foreach explode(chr(10), $basket->zoneObj->orderTimes) as $orderTime}
+                    			{php $zoneTimes[$orderTime] = $orderTime}
+		                    {/foreach}
 	                    {/if}
-                    </div>
+	                    {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+	                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
+		                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                    			{var $attr = $presenter->attributeManager->find(1)}
+		                        <li class="list-inline-item druh-odpadu">
+		                            <label class="select">
+			                            <select name="type[{$index}]" data-link={link setBasketVal! $index, "type"} class="form-select updateValue typePick" aria-label="{$attr->name}">
+			                                <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
+			                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
+			                                <option n:foreach="$values as $key=>$val"  {if !empty($container->type) && $container->type==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+			                            </select>
+		                            </label>
+		                        </li>
+		                        <!-- ./druh odpadu -->
+		                        {var $products = $presenter->productManager->getByType(1)}
+		                        <li class="list-inline-item objem">
+		                            <label class="select">
+			                            <select name="container{$index}"data-link={link setBasketVal! $index, "product"}  class="form-select updateValue productPick" aria-label="Kontejner">
+			                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
+			                                <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
+		                                		{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
+		                                		{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
+			                                </option>
+			                            </select>
+		                            </label>
+		                        </li>
+		                        <!-- ./velikost kontejneru -->
+		                    </ul>
+		                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
+		                    {if empty($basket->zoneObj)}
+	                    		<p>Nejprve vyberte místo přistavení</p>
+		                    {else}
+			                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+			                        {*
+			                        <li class="list-inline-item today">
+			                            <button class="btn btn-primary">Dnes</button>
+			                        </li>
+			                        *}
+			                        <!-- ./dnes -->
+			                        <li class="list-inline-item date dateField">
+			                            <label class="select">
+			                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
+			                            </label>
+			                        </li>
+			                        <li class="list-inline-item timefield">
+			                            <label class="select">
+			                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time"}>
+	                                			{if empty($container->term)}
+	                                				<option value="">Vyberte datum přistavení</option>
+	                                			{else}
+	                                				<option value="">Čas přistavení</option>
+	                                				{foreach $zoneTimes as $zoneTime}
+	                                					{var $timesArr = explode("-", $zoneTime)}
+	                                					{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
+	                                					{var $isToday = (date("d/m/Y") == $container->term)}
+	                                					{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
+	                                						<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
+	                                							{$zoneTime}
+	                                						</option>
+	                                					{/if}
+	                                				{/foreach}
+	                                			{/if}
+			                                </select>
+			                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
+			                            </label>
+			                        </li>
+			                        <li class="list-inline-item remove-container">
+			                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
+			                        </li>
+			                    </ul>
+		                    {/if}
+	                    </div>
                     {else}
                     	<p class="empty-order">Objednávka je prázdná. Přidejte alespoň jeden kontejner.</p>
                     {/if}
@@ -225,16 +225,16 @@
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class=" {if !empty($materials[0]->price) && $price->id == $materials[0]->price}selected{/if}">
                                 <div class="image chocolat-parent">
                             		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                    <a href="{$matImg|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a href="{$matImg|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
                                 </div>
                             	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}" data-price="{$price->priceFrom}" data-koef="{$price->koef}">
-                                    <input class="check" id="price-{$price->id}" type="radio" name="varianta" value="{$price->id}">
+                                    <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
                                     <div class="title">
                                         <span>{$attVals[$price->attributeValue]->name}</span>
                                         <div class="description" style="display: block">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
-                                        <a href="#" class="btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu">Vybrat</a>
+                                        <a href="#" class="pickButton btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">{if !empty($materials[0]->price) && $price->id == $materials[0]->price}{_'TEXT_VYBRANY'}{else}{_'TEXT_VYBRAT'}{/if}</a>
                                     </div>
                                 </label>
                             </li>
@@ -533,6 +533,10 @@
     	$(document).ready(function(){
 			var materialPrice = 0;
 			
+			$(".variantImage").click(function(e){
+				e.stopPropagation();
+			});
+			
 			$(".updateValue").change(function(){
 				var link = $(this).data("link");
 				link = link + "&val=" + $(this).val();
@@ -566,6 +570,8 @@
 				$(".material-quantity").val(Math.round($(".materialWeight").val()*materialKoef));
 				$(".amount").show();
 				$(".tons-price").show();
+				$(".pickVariant .pickButton").text($(this).find(".pickButton").data("pick"));
+				$(this).find(".pickButton").text($(this).find(".pickButton").data("picked"));
 				$.get(link);
 			});
 			

@@ -29,10 +29,19 @@ final class HomepagePresenter extends HomepageForms
 		$this->template->zones = $this->commonManager->getActiveZones();
 	}
 	
-	public function handleAddNextContainer(){
-		$containers = $this->basket->containers;
+    public function renderDemand(){
+		$this->template->basket = $this->basketD;
+		$this->template->address = $this->basketD->address;
+		$this->template->containers = $this->basketD->containers;
+		$this->template->materials = $this->basketD->materials;
+		$this->template->attVals = $this->attributeManager->getAllValues();
+		$this->template->zones = $this->commonManager->getActiveZones();
+	}
+	
+	public function handleAddNextContainer($basket="basket"){
+		$containers = $this->$basket->containers;
 		$containers[] = new \Nette\Utils\ArrayHash();
-		$this->basket->containers = $containers;
+		$this->$basket->containers = $containers;
 		$this->recalculateBasket();
 		$this->redirect("this");
 	}
@@ -49,7 +58,7 @@ final class HomepagePresenter extends HomepageForms
 	}
 
 	public function handleUnuseMaterial(){
-		$this->basket->materials = array();
+		$this->basketD->materials = array();
 		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
@@ -72,6 +81,47 @@ final class HomepagePresenter extends HomepageForms
 		$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
+	public function handleSetMaterialVariantD($var){
+		$priceObj = $this->rowToArray($this->productManager->findPrice($var));
+		$materials = $this->basketD->materials;
+		if(!isset($materials[$priceObj->product])){
+			$materials[$priceObj->product] = array();
+		}
+		$material = $materials[$priceObj->product];
+		if(!isset($material[$var])){
+			$material[$var] = new \Nette\Utils\ArrayHash();
+		}
+		$variant = $material[$var];
+		$variant->priceObj = $priceObj;
+		if($priceObj->product==$this->settings->betonProduct){
+			$variant->amount = 1/$priceObj->koef;
+		}
+		else{
+			$variant->amount = 1;
+		}
+		$material[$var] = $variant;
+		$materials[$priceObj->product] = $material;
+		$this->basketD->materials = $materials;
+		$this->recalculateBasket();
+		//$this->redrawControl("matamount");
+		//$this->redirect("this");
+	}
+	public function handleUnsetMaterialVariantD($var){
+		$priceObj = $this->rowToArray($this->productManager->findPrice($var));
+		$materials = $this->basketD->materials;
+		if(!isset($materials[$priceObj->product])){
+			$materials[$priceObj->product] = array();
+		}
+		$material = $materials[$priceObj->product];
+		if(isset($material[$var])){
+			$material[$var] = null;
+		}
+		$materials[$priceObj->product] = $material;
+		$this->basketD->materials = $materials;
+		$this->recalculateBasket();
+		//$this->redrawControl("matamount");
+		//$this->redirect("this");
+	}
 	public function handleSetMaterialAmount($amount){
 		$materials = $this->basket->materials;
 		if(!empty($materials[0])){
@@ -83,21 +133,35 @@ final class HomepagePresenter extends HomepageForms
 		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
-	public function handleSetAddress($a){
-		$this->basket->address = $a;
+	public function handleSetMaterialAmountD($product, $variant, $amount){
+		$materials = $this->basketD->materials;
+		if(!empty($materials[$product][$variant])){
+			$var = $materials[$product][$variant];
+			$var->amount = $amount;
+			$materials[$product][$variant] = $var;
+			$this->basketD->materials = $materials;
+		}
 		$this->recalculateBasket();
 		//$this->redirect("this");
 	}
-    public function handleSetBasketZone($z){
-		$this->basket->zone = $z;
+	public function handleSetAddress($basket="basket", $a){
+		$this->$basket->address = $a;
+		$this->recalculateBasket();
+		//$this->redirect("this");
+	}
+    public function handleSetBasketZone($basket="basket", $z){
+		$this->$basket->zone = $z;
 		$zoneObj = $this->commonManager->findZone($z);
 		if($zoneObj){
-			$this->basket->zoneObj = $this->rowToArray($zoneObj);
+			$this->$basket->zoneObj = $this->rowToArray($zoneObj);
 		}
 		$this->redrawControl("orderContainers");
 		$this->recalculateBasket();
     }
-
+    
+    public function handleSetBasketNote($basket="basket", $val){
+		$this->$basket->note = $val;
+    }
 
 	public function handleRemoveFromOrder($index){
 		$containers = $this->basket->containers;
@@ -109,6 +173,33 @@ final class HomepagePresenter extends HomepageForms
 		$this->recalculateBasket();
 		$this->redirect("this");
 	}
+
+    public function handleSetBasketVal($index, $name, $basket="basket", $val){
+		$items = $this->$basket->containers;
+		$items[$index]->$name = $val;
+		if($name=="term"){
+			unset($items[$index]->time);
+		}
+		if(!empty($items[$index]->product) && !empty($items[$index]->type)){
+			$price = $this->productManager->findActualPrice($items[$index]->product, $items[$index]->type);
+			if($price){
+				$items[$index]->price = $this->rowToArray($price);
+			}
+			else{
+				$items[$index]->price = null;
+			}
+		}
+		$this->$basket->containers = $items;
+		$this->recalculateBasket();
+		if(in_array($name, array("term"))!==false){
+			$this->redrawControl("orderContainers");
+		}
+    }
+
+    public function handleSetOrderVal($name, $basket="basket", $val){
+		$this->$basket->$name = $val;
+		$this->recalculateBasket();
+    }
 
     public function renderOrder2(){
 		$this->template->items = $this->basket->items;
@@ -587,28 +678,6 @@ final class HomepagePresenter extends HomepageForms
         }
     }
     
-    public function handleSetBasketVal($index, $name, $val){
-		$items = $this->basket->containers;
-		$items[$index]->$name = $val;
-		if($name=="term"){
-			unset($items[$index]->time);
-		}
-		if(!empty($items[$index]->product) && !empty($items[$index]->type)){
-			$price = $this->productManager->findActualPrice($items[$index]->product, $items[$index]->type);
-			if($price){
-				$items[$index]->price = $this->rowToArray($price);
-			}
-			else{
-				$items[$index]->price = null;
-			}
-		}
-		$this->basket->containers = $items;
-		$this->recalculateBasket();
-		if(in_array($name, array("term"))!==false){
-			$this->redrawControl("orderContainers");
-		}
-    }
-
     public function createComponentUpload(){
         $form = new Form();
         

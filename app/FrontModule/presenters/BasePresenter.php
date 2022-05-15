@@ -29,6 +29,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     public $breadcrumbs=array();
     public $settings;
     public $basket;
+    public $basketD;
+    public $basketM;
     public $onlineSale = 0;
     
     public $zones = 8;
@@ -78,6 +80,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		$this->languages = $this->translateManager->getLanguages();
 
         $this->basket = $this->getSession("basket");
+        $this->basketD = $this->getSession("basket-demand");
+        $this->basketM = $this->getSession("basket-material");
 
         $this->template->topPages = $this->pageManager->get()->where("location = ?", 0)->where("active = ?", true)->where("parent IS NULL");
         $this->template->bottomPages = $this->pageManager->get()->where("location = ?", 1)->where("active = ?", true)->where("parent IS NULL");
@@ -471,8 +475,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 						$startYear = strtotime($year."-01-01");
 						$endYear = strtotime($year."-12-31");
 						$startRange = strtotime($year."-11-15");
-						$endRange = strtotime($year."-05-15");
-						//$endRange = strtotime($year."-03-15");
+						$endRange = strtotime($year."-03-15");
 						$now = time();
 						if(($startYear <= $now && $now <= $endRange) || ($startRange <= $now && $now <= $endYear)){
 							$m3Amount = round($material->amount * $material->priceObj->koef, 2);

@@ -26,338 +26,73 @@
         	<div id="map" style="width:100%; height:680px;"></div>
         </div>
     </section>
-    <section class="waste">
+    <section class="material order-material">
         <div class="container">
-            <h1 class="title underline">Druh odpadu a velikost kontejneru</h1>
-            <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
-            <div class="filter">
-            	{snippet orderContainers}
-                <form>
-                	{if !empty($containers)}
-	                    {var $zoneTimes = array()}
-	                    {if !empty($basket->zoneObj)}
-		                    {foreach explode(chr(10), $basket->zoneObj->orderTimes) as $orderTime}
-                    			{php $zoneTimes[$orderTime] = $orderTime}
-		                    {/foreach}
-	                    {/if}
-	                    {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
-	                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
-		                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-                    			{var $attr = $presenter->attributeManager->find(1)}
-		                        <li class="list-inline-item druh-odpadu">
-		                            <label class="select">
-			                            <select name="type[{$index}]" data-link={link setBasketVal! $index, "type"} class="form-select updateValue typePick" aria-label="{$attr->name}">
-			                                <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
-			                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
-			                                <option n:foreach="$values as $key=>$val"  {if !empty($container->type) && $container->type==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
-			                            </select>
-		                            </label>
-		                        </li>
-		                        <!-- ./druh odpadu -->
-		                        {var $products = $presenter->productManager->getByType(1)}
-		                        <li class="list-inline-item objem">
-		                            <label class="select">
-			                            <select name="container{$index}"data-link={link setBasketVal! $index, "product"}  class="form-select updateValue productPick" aria-label="Kontejner">
-			                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
-			                                <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
-		                                		{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
-		                                		{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
-			                                </option>
-			                            </select>
-		                            </label>
-		                        </li>
-		                        <!-- ./velikost kontejneru -->
-		                    </ul>
-		                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
-		                    {if empty($basket->zoneObj)}
-	                    		<p>Nejprve vyberte místo přistavení</p>
-		                    {else}
-			                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-			                        {*
-			                        <li class="list-inline-item today">
-			                            <button class="btn btn-primary">Dnes</button>
-			                        </li>
-			                        *}
-			                        <!-- ./dnes -->
-			                        <li class="list-inline-item date dateField">
-			                            <label class="select">
-			                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
-			                            </label>
-			                        </li>
-			                        <li class="list-inline-item timefield">
-			                            <label class="select">
-			                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time"}>
-	                                			{if empty($container->term)}
-	                                				<option value="">Vyberte datum přistavení</option>
-	                                			{else}
-	                                				<option value="">Čas přistavení</option>
-	                                				{foreach $zoneTimes as $zoneTime}
-	                                					{var $timesArr = explode("-", $zoneTime)}
-	                                					{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
-	                                					{var $isToday = (date("d/m/Y") == $container->term)}
-	                                					{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
-	                                						<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
-	                                							{$zoneTime}
-	                                						</option>
-	                                					{/if}
-	                                				{/foreach}
-	                                			{/if}
-			                                </select>
-			                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
-			                            </label>
-			                        </li>
-			                        <li class="list-inline-item remove-container">
-			                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
-			                        </li>
-			                    </ul>
-		                    {/if}
-	                    </div>
-                    {else}
-                    	<p class="empty-order">Objednávka je prázdná. Přidejte alespoň jeden kontejner.</p>
-                    {/if}
-                    <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-                        <li class="list-inline-item add-container">
-                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
-                        </li>
-                    </ul>
-                </form>
-                <script {*n:if="$presenter->isAjax()"*}>
-				    $(function(){
-						var checkWeight = true;
-						window.checkAddress = false;
-						{if !empty($address)}
-							window.checkAddress = true;
-						{/if}
-
-					    AOS.init({
-							once: true
-						});
-					    {if!empty($basket->zoneObj)}
-						    $(".dateField input").datetimepicker({
-						      language:'cs',
-						      minuteStep: 30,
-						      format: 'dd/mm/yyyy',
-						      autoclose: true,
-                              pickTime: false,
-                              minView: 2,
-						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
-						      	startDate: '+0d',
-						      {else}
-						      	startDate: '+1d',
-						      {/if}
-						    });
-					    {/if}
-						$(".updateValue").change(function(){
-							var link = $(this).data("link");
-							link = link + "&val=" + $(this).val();
-							$.get(link);
-						});
-						$(".typePick").change(function(){
-							var type = $(this).val();
-							$(this).closest("ul").find(".productPick option").each(function(){
-								if($(this).data("types")=="all"){
-									$(this).show();
-								}
-								else if($(this).data("types").indexOf(type)>-1){
-									$(this).show();
-								}
-								else{
-									$(this).hide();
-									if($(this).is(':selected')){
-										$(this).closest("select").val("");
-									}
-								}
-							});
-						});
-						
-						function enableDisableOrder(){
-							sendOrderButton = $(".sendOrderButton");
-							var orderValid = true;
-							if(window.checkWeight==false) orderValid = false;
-							if(window.checkAddress==false) orderValid = false;
-							var containerCount = $(".oneContainer").length;
-							if(containerCount==0) orderValid = false;
-							if(orderValid){
-								sendOrderButton.removeClass("disabled");
-							}	
-							else{
-								sendOrderButton.addClass("disabled");
-							}	
-						}
-						
-					    
-				    });
-                </script>
-                {/snippet}
-                <!-- ./form -->
-            </div>
-            <!-- ./filter -->
+        	<h1 class="title underline">Typ materiálu</h1>
+        	<p class="desc">Jaký materiál a v jakém množství potřebujete dovézt?</p>
         </div>
-        <img class="mosaic left" src="{$basePath}/img/mosaic_s8.png" alt="Obrázek mozaiky">
-    </section>
-    <!-- ./waste -->
-    <section class="material">
-        <div class="container">
-            <h3 class="title underline">Potřebujete stavební materiál?</h3>
-            <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
-        </div>
-        <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
-            <div class="container margin">
+        <div class="select-material changeMaterial">
+            <div class="container">
                 <h4>Vyberte typ materiálu</h4>
                 <form>
-                    <ul class="list-inline select-material">
-                        {var $allMaterials = $presenter->productManager->getByType(2)}
-                        <li class="list-inline-item {if !empty($materials) && $mat->id == $materials[0]->product}selected{/if}" n:foreach="$allMaterials as $mat">
-                            <label class="pickMaterial" for="material{$mat->id}" data-mat="{$mat->id}" data-link="{link setMaterial! $mat->id}">
+	                <ul class="list-inline select-material">
+	                	{var $allMaterials = $presenter->productManager->getByType(2)}
+                        <li class="list-inline-item" n:foreach="$allMaterials as $mat" data-mat="{$mat->id}">
+                            <label class="pickMaterial" for="material{$mat->id}">
                                 <input id="material{$mat->id}" type="radio" name="material" value="{$mat->id}">
                                 {var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
                                 <img src="{$matImg|thumb}" alt="{$mat->name}">
                                 <span>{$mat->name}</span>
                             </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red pickMaterial" title="Vybrat tento materiál" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_ZMENIT'}">{if !empty($materials[$mat->id])}{_'TEXT_ZMENIT'}{else}{_'TEXT_VYBRAT'}{/if}</a>
                         </li>
-                    </ul>
-                    <div class="roughness mat{$mat->id}" n:foreach="$allMaterials as $mat" {if empty($materials) || $mat->id != $materials[0]->product}style="display: none;"{/if}>
+	                </ul>
+                    <div class="roughness mat{$mat->id}" n:foreach="$allMaterials as $mat" style="display: none;">
                         <h4>Zvolte typ / hrubost</h4>
                         {var $prices = $presenter->productManager->getPrices($mat->id)}
                         <ul class="list-unstyled">
-                            <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class=" {if !empty($materials[0]->price) && $price->id == $materials[0]->price}selected{/if}">
+                            <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class="variantLi {if !empty($materials[$mat->id][$price->id])}selected{/if}">
                                 <div class="image chocolat-parent">
                             		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                    <a href="{$matImg|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a href="{$matImg|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
                                 </div>
-                            	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}" data-price="{$price->priceFrom}" data-koef="{$price->koef}">
+                            	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariantD! $price->id}" data-unlink="{link unsetMaterialVariantD! $price->id}" data-price="{$price->priceFrom}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
                                     <div class="title">
                                         <span>{$attVals[$price->attributeValue]->name}</span>
                                         <div class="description" style="display: block">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
-                                        <a href="#" class="pickButton btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">{if !empty($materials[0]->price) && $price->id == $materials[0]->price}{_'TEXT_VYBRANY'}{else}{_'TEXT_VYBRAT'}{/if}</a>
+                                        <a href="#" class="pickButton btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">{if !empty($materials[$mat->id][$price->id])}{_'TEXT_VYBRANY'}{else}{_'TEXT_VYBRAT'}{/if}</a>
                                     </div>
                                 </label>
+	                            <div class="amount" data-koef="{if $mat->id==$settings->betonProduct}{1/$price->koef}{else}{$price->koef}{/if}" data-link="{link setMaterialAmountD! $mat->id, $price->id}" style="{if empty($materials[$mat->id][$price->id])}display: none;{/if}">
+				                    <label for="amount">Množství materiálu</label>
+				                    	{if $mat->id==$settings->betonProduct}
+				                    		<div class="number">
+				                    			<span class="minus"></span>
+				                    			<input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}">
+				                    			<span class="plus"></span>
+				                    		</div> 
+				                    		<span class="material-quantity">m<sup>3</sup> =</span>
+				                    		<input class="form-control material-quantity materialTarger" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount*$price->koef|number:2}{else}{=1*$price->koef}{/if}" readonly> 
+				                    		<span class="tons">tun</span>
+				                    	{else}
+				                    		<div class="number">
+				                    			<span class="minus"></span>
+				                    			<input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}">
+				                    			<span class="plus"></span>
+				                    		</div> 
+				                    		<span class="tons">tun =</span>
+				                    		<input class="form-control material-quantity materialTarger" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount/$price->koef|number:2}{else}{=1/$price->koef}{/if}" readonly> 
+				                    		<span class="material-quantity">m<sup>3</sup></span>
+				                    	{/if}
+				                </div>
                             </li>
                         </ul>
                     </div>
-                    <!-- ./typ a hrubost -->
-                    {snippet matamount}
-                    <div class="amount" style="display: none;">
-                        <label for="amount">Množství materiálu</label>
-                        {if !empty($materials[0]->product) && $materials[0]->product!=$settings->betonProduct}
-	                        <div class="number">
-                        		<span class="minus"></span><input class="amountField form-control materialWeight changeable" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
-	                        </div>
-	                        <span class="tons">tun =</span>
-	                        <input class="form-control material-quantity" type="text" value="" readonly>
-	                        <span class="material-quantity">m<sup>3</sup></span>
-                        {/if}
-                        {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
-	                        <div class="number">
-                        		<span class="minus"></span><input class="amountField form-control material-quantity changeable" type="text" value="1"><span class="plus"></span>
-	                        </div>
-	                        <span class="material-quantity">m<sup>3</sup> =</span>
-                        	<input class="form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount|number:2}{/if}" readonly>
-	                        <span class="tons">tun</span>
-                        {/if}
-                    </div>
-                    <div class="tons-price" style="display: none;">
-                        Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
-                    </div>
-                    <script>
-					$(document).ready(function(){
-						window.checkAddress = false;
-						{if !empty($address)}
-							window.checkAddress = true;
-						{/if}
-						var materialKoef = 1;
-						{if !empty($materials[0]->priceObj)}
-							materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
-							materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
-							$(".materialPrice").html(materialPrice.toLocaleString());
-							$(".material-quantity").val(($(".materialWeight").val()*materialKoef).toFixed(2));
-							$(".amount").show();
-							$(".tons-price").show();
-						{/if}
-			
-					  $('.minus').click(function () {
-					    var $input = $(this).parent().find('input.amountField');
-					    var count = parseFloat($input.val()) - 0.5;
-					    count = count < 1 ? 1 : count;
-					    $input.val(count);
-					    $input.change();
-					    return false;
-					  });
-					  
-					  $('.plus').click(function () {
-					    var $input = $(this).parent().find('input.amountField');
-					    $input.val(parseFloat($input.val()) + 0.5);
-					    $input.change();
-					    return false;
-					  });
-						$(".materialWeight.changeable").change(function(){
-							var thisVal = parseFloat($(this).val().replace(",", "."));
-							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
-							$(this).val(correctedVal);
-							var matWeight = $(this).val();
-							$(".material-quantity").val((matWeight*materialKoef).toFixed(2));
-							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
-							checkMaterialAmount();
-							$.get(link);
-
-						});
-						$(".material-quantity.changeable").change(function(){
-							var thisVal = parseFloat($(this).val().replace(",", "."));
-							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
-							$(this).val(correctedVal);
-							var matWeight = $(this).val()/materialKoef;
-							$(".materialWeight").val(matWeight.toFixed(2));
-							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
-							checkMaterialAmount();
-							$.get(link);
-
-						});
-						function checkMaterialAmount(){
-							var matWeight = parseFloat($(".materialWeight").val());
-							var matVolume = Math.round(matWeight*materialKoef);
-							var maxWeight = parseInt($(".total-price").data("weight"));
-							var maxVolume = parseInt($(".total-price").data("volume"));
-							if(matWeight>maxWeight){
-								window.checkWeight = false;
-								enableDisableOrder();
-								alert("Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.");
-							}
-							else if(matVolume>maxVolume){
-								window.checkWeight = false;
-								enableDisableOrder();
-								alert("Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.");
-							}
-							else{
-								window.checkWeight = true;
-								enableDisableOrder();
-							}
-						}
-
-						function enableDisableOrder(){
-							sendOrderButton = $(".sendOrderButton");
-							var orderValid = true;
-							if(window.checkWeight==false) orderValid = false;
-							if(window.checkAddress==false) orderValid = false;
-							var containerCount = $(".oneContainer").length;
-							if(containerCount==0) orderValid = false;
-							if(orderValid){
-								sendOrderButton.removeClass("disabled");
-							}	
-							else{
-								sendOrderButton.addClass("disabled");
-							}	
-						}
-						
-					  
-					});
-                    </script>
-                    {/snippet}
-                </form>
+	                <!-- ./typ a hrubost -->
+	            </form>
             </div>
         </div>
         <!-- ./select material -->
@@ -365,6 +100,183 @@
         <img class="mosaic right" src="{$basePath}/img/mosaic_s9.png" alt="Obrázek mozaiky">
     </section>
     <!-- ./material -->
+    <section class="waste in-material">
+        <div class="container">
+            <h3 class="title underline">Potřebujete přistavit kontejner?</h3>
+            <p class="desc">Nechte si s dovozem materiálu přistavit kontejner na odvoz odpadu<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerContainer changeContainer" title="Objednat přistavení kontejneru" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerContainer changeContainer" title="Žádný kontejner nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a></button>
+        </div>
+        <div class="select-material changeContainer" {if empty($materials)}style="display: none;"{/if}>
+        	<div class="container margin">
+        		<h4>Vyberte druh odpadu a velikost kontejneru</h4>
+	            <div class="filter">
+	            	{snippet orderContainers}
+	                <form>
+	                	{if !empty($containers)}
+		                    {var $zoneTimes = array()}
+		                    {if !empty($basket->zoneObj)}
+			                    {foreach explode(chr(10), $basket->zoneObj->orderTimes) as $orderTime}
+	                    			{php $zoneTimes[$orderTime] = $orderTime}
+			                    {/foreach}
+		                    {/if}
+		                    {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+		                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
+			                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                    			{var $attr = $presenter->attributeManager->find(1)}
+			                        <li class="list-inline-item druh-odpadu">
+			                            <label class="select">
+				                            <select name="type[{$index}]" data-link={link setBasketVal! $index, "type"} class="form-select updateValue typePick" aria-label="{$attr->name}">
+				                                <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
+				                                {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
+				                                <option n:foreach="$values as $key=>$val"  {if !empty($container->type) && $container->type==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+				                            </select>
+			                            </label>
+			                        </li>
+			                        <!-- ./druh odpadu -->
+			                        {var $products = $presenter->productManager->getByType(1)}
+			                        <li class="list-inline-item objem">
+			                            <label class="select">
+				                            <select name="container{$index}"data-link={link setBasketVal! $index, "product"}  class="form-select updateValue productPick" aria-label="Kontejner">
+				                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
+				                                <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
+			                                		{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
+			                                		{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
+				                                </option>
+				                            </select>
+			                            </label>
+			                        </li>
+			                        <!-- ./velikost kontejneru -->
+			                    </ul>
+			                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
+			                    {if empty($basket->zoneObj)}
+		                    		<p>Nejprve vyberte místo přistavení</p>
+			                    {else}
+				                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+				                        {*
+				                        <li class="list-inline-item today">
+				                            <button class="btn btn-primary">Dnes</button>
+				                        </li>
+				                        *}
+				                        <!-- ./dnes -->
+				                        <li class="list-inline-item date dateField">
+				                            <label class="select">
+				                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
+				                            </label>
+				                        </li>
+				                        <li class="list-inline-item timefield">
+				                            <label class="select">
+				                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time"}>
+		                                			{if empty($container->term)}
+		                                				<option value="">Vyberte datum přistavení</option>
+		                                			{else}
+		                                				<option value="">Čas přistavení</option>
+		                                				{foreach $zoneTimes as $zoneTime}
+		                                					{var $timesArr = explode("-", $zoneTime)}
+		                                					{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
+		                                					{var $isToday = (date("d/m/Y") == $container->term)}
+		                                					{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
+		                                						<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
+		                                							{$zoneTime}
+		                                						</option>
+		                                					{/if}
+		                                				{/foreach}
+		                                			{/if}
+				                                </select>
+				                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
+				                            </label>
+				                        </li>
+				                        <li class="list-inline-item remove-container">
+				                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
+				                        </li>
+				                    </ul>
+			                    {/if}
+		                    </div>
+	                    {else}
+	                    	<p class="empty-order">Objednávka zatím neobsahuje žádný kontejner.</p>
+	                    {/if}
+	                    <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                        <li class="list-inline-item add-container">
+	                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
+	                        </li>
+	                    </ul>
+	                </form>
+	                <script {*n:if="$presenter->isAjax()"*}>
+					    $(function(){
+							var checkWeight = true;
+							window.checkAddress = false;
+							{if !empty($address)}
+								window.checkAddress = true;
+							{/if}
+
+						    AOS.init({
+								once: true
+							});
+						    {if!empty($basket->zoneObj)}
+							    $(".dateField input").datetimepicker({
+							      language:'cs',
+							      minuteStep: 30,
+							      format: 'dd/mm/yyyy',
+							      autoclose: true,
+	                              pickTime: false,
+	                              minView: 2,
+							      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
+							      	startDate: '+0d',
+							      {else}
+							      	startDate: '+1d',
+							      {/if}
+							    });
+						    {/if}
+							$(".updateValue").change(function(){
+								var link = $(this).data("link");
+								link = link + "&val=" + $(this).val();
+								$.get(link);
+							});
+							$(".typePick").change(function(){
+								var type = $(this).val();
+								$(this).closest("ul").find(".productPick option").each(function(){
+									if($(this).data("types")=="all"){
+										$(this).show();
+									}
+									else if($(this).data("types").indexOf(type)>-1){
+										$(this).show();
+									}
+									else{
+										$(this).hide();
+										if($(this).is(':selected')){
+											$(this).closest("select").val("");
+										}
+									}
+								});
+							});
+							
+							function enableDisableOrder(){
+								sendOrderButton = $(".sendOrderButton");
+								var orderValid = true;
+								if(window.checkWeight==false) orderValid = false;
+								if(window.checkAddress==false) orderValid = false;
+								var containerCount = $(".oneContainer").length;
+								if(containerCount==0) orderValid = false;
+								if(orderValid){
+									sendOrderButton.removeClass("disabled");
+								}	
+								else{
+									sendOrderButton.addClass("disabled");
+								}	
+							}
+							
+						    
+					    });
+	                </script>
+	                {/snippet}
+	                <!-- ./form -->
+	            </div>
+	            <!-- ./filter -->
+	        </div>
+        </div>
+        <img class="mosaic left" src="{$basePath}/img/mosaic_s8.png" alt="Obrázek mozaiky">
+    </section>
+    <!-- ./waste -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
     	<ul class="list-unstyled">
@@ -546,6 +458,13 @@
 			$(".triggerMaterial").click(function(e){
 				e.preventDefault()
 				$(".changeMaterial").toggle();
+				if($(this).data("link")!=""){
+					$.get($(this).data("link"));
+				}
+			});
+			$(".triggerContainer").click(function(e){
+				e.preventDefault()
+				$(".changeContainer").toggle();
 				if($(this).data("link")!=""){
 					$.get($(this).data("link"));
 				}

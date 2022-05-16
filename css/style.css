@@ -19,6 +19,17 @@ body.subpages {
   background-color: #eaeaea;
 }
 
+  body.subpages::before {
+    content: "";
+    width: 100%; height: 100%;
+    background: url("../img/stripe.png");
+    background-position: calc(50% - 127px) 0;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    opacity: .35;
+  }
+
 body.page {
   padding-top: 290px;
 }
@@ -407,8 +418,15 @@ div.roughness label.select::before {
   color: #004a39;
 }
 
+  li.weekend button.btn-white:focus {
+    background-color: #004a39 !important;
+    color: #FFF;
+  }
+
 .btn-red,
-.btn-red:hover {
+.btn-red:hover,
+.btn-red.disabled,
+.btn-red:disabled {
   background-color: #d71921;
   color: #FFF;
 }
@@ -949,7 +967,8 @@ section.slide {
   section.top img.mosaic.left,
   section.top img.mosaic.right,
   section.top.order img.mosaic.left,
-  body.subpages img.mosaic.left {
+  body.subpages img.mosaic.left,
+  body.subpages img.mosaic.right {
     position: absolute;
     top: 0; left: 0;
     mix-blend-mode: multiply;
@@ -961,7 +980,8 @@ section.slide {
     }
 
     section.slide img.mosaic.right,
-    section.top img.mosaic.right {
+    section.top img.mosaic.right,
+    body.subpages img.mosaic.right {
       left: auto; right: 0;
     }
 
@@ -3189,6 +3209,10 @@ section.waste {
   position: relative;
 }
 
+  section.waste.in-material {
+    margin-top: 0;
+  }
+
 div.filter li.today::before {
   content: none;
 }
@@ -3259,6 +3283,12 @@ div.select-material {
   position: relative;
 }
 
+  section.order-material div.select-material {
+    background-color: transparent;
+    margin-top: 36px;
+    padding-top: 0;
+  }
+
   div.select-material::after {
     content: "";
     width: 100%; height: 378px;
@@ -3272,9 +3302,17 @@ div.select-material {
             transform: skew(0deg, 7deg);
   }
 
+    section.order-material div.select-material::after {
+      content: none;
+    }
+
   div.select-material .container.margin {
     margin-top: -155px;
   }
+
+    div.changeContainer .container.margin {
+      margin-top: -130px;
+    }
 
   div.select-material h4 {
     font-size: 1.875rem;
@@ -3997,15 +4035,19 @@ li.weekend button {
   margin-left: 12px;
   padding-left: 16px;
   display: inline-block;
+  transition: none;
 }
 
   li.weekend button.active {
     background-color: #004a39;
+    transition: none !important;
   }
 
-    li.weekend button.active::before {
+    li.weekend button.active::before,
+    li.weekend button.btn-white:focus::before {
       background: url(../img/green-arrow.svg);
       background-size: cover;
+      transition: none !important;
     }
 
     li.weekend button.active:hover {
@@ -4037,6 +4079,70 @@ article.article {
 }
 
 /*!
+* Datepicker
+*/
+
+.datetimepicker {
+  padding: 10px;
+  border-radius: 0;
+}
+
+.datetimepicker  .table-sm>:not(caption)>*>* {
+  padding: 0.4rem 0.6rem;
+}
+
+.datetimepicker td,
+.datetimepicker th {
+  border-radius: 0;
+  border: 0;
+  text-shadow: none;
+}
+
+.datetimepicker table tr td.active.active,
+.datetimepicker table tr td.active.disabled.active,
+.datetimepicker table tr td.active.disabled:active,
+.datetimepicker table tr td.active.disabled:hover.active,
+.datetimepicker table tr td.active.disabled:hover:active,
+.datetimepicker table tr td.active:active,
+.datetimepicker table tr td.active:hover.active,
+.datetimepicker table tr td.active:hover:active {
+  background: #004a39;
+  font-weight: 500;
+}
+
+/*!
+* Subpages
+*/
+
+div.subpages div.container {
+  max-width: 895px;
+}
+
+div.col-subpage {
+  max-width: 270px; width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+  div.col-subpage img {
+    max-width: 190px; width: 100%;
+    display: table;
+    margin: 0 auto 26px auto;
+  }
+
+  div.col-subpage h2 {
+    font-size: 1.25rem;
+    font-weight: 300;
+    text-align: center;
+  }
+
+  div.col-subpage a.btn {
+    display: table;
+    margin: 26px auto 0 auto;
+  }
+
+/*!
 * Footer
 */
 
@@ -4051,6 +4157,11 @@ footer {
 
   body.container-detail footer {
     background-color: rgba(234, 234, 234, 0.4);
+  }
+
+  body.subpages footer {
+    padding-top: 0;
+    margin-top: 80px;
   }
 
   footer div.container {

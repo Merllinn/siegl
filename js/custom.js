@@ -68,7 +68,7 @@ $(document).ready(function() {
   
   function resolveHeader(){
     var yPos = ( $(window).scrollTop() );
-    if(yPos > 104) {
+    if(yPos > 50) {
       $("header.header").fadeOut(200);
       $("header.fixed").fadeIn(200);
     } else {

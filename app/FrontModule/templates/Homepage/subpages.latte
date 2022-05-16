@@ -8,15 +8,18 @@
 		    	{$page->content_continuation|noescape}
 		    	<div class="row">
 					<div class="col-4" n:foreach="$subpages as $sp">
-						<h2>{$sp->name}</h2>
-						{var $mainImage = $presenter->pageManager->getMainPhoto($sp->id)}
-						<img src="{$mainImage|thumb:300:200}" alt="{$sp->name}" />
-						{$sp->content|noescape}
-						<a class="btn btn-primary btn-arrow btn-red btn-without-arrow" href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}">Vybrat</a>
+						<div class="col-subpage">
+							{var $mainImage = $presenter->pageManager->getMainPhoto($sp->id)}
+							<img src="{$mainImage|thumb:300:200}" alt="{$sp->name}" />
+							<h2>{$sp->name}</h2>
+							{$sp->content|noescape}
+							<a class="btn btn-primary btn-arrow btn-red btn-without-arrow" href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}">Vybrat</a>
+						</div>
 					</div>
 				</div>
 		  	{/block}
 		</div>
 	</div>
 	<img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	<img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
 {/block}

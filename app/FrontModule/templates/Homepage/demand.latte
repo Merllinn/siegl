@@ -40,7 +40,7 @@
 	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 	                    <i class="fa-solid fa-pen-to-square"></i>
 	                    <label for="describe">Popište:</label>
-	                    <textarea class="form-control updateValue" data-link="{link setBasketNote! 'basketD'}" id="describe" rows="7">{$basket->note}</textarea>
+	                    <textarea class="form-control updateValue" data-link="{link setBasketNote! 'basketD'}" id="describe" rows="7">{$basket->description}</textarea>
 	                </div>
 	                <p class="desc">Nebo zadejte druh odpadu a velikost kontejneru</p>
 	                {if !empty($containers)}
@@ -303,174 +303,155 @@
 	    </div>
 	</div>
 	<!-- ./term -->
-	<div class="order-form">
-	    <div class="container">
-	        <nav>
-	            <div class="nav nav-tabs" id="nav-order-form" role="tablist">
-	                <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
-	                <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
-	            </div>
-	        </nav>
-	        <div class="tab-content" id="nav-tabOrderForm">
-	            <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
-	                <div class="row">
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="jmeno">Jméno</label>
-	                        <input type="name" class="form-control" id="jmeno">
-	                    </div>
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="prijmeni">Příjmení</label>
-	                        <input type="surname" class="form-control" id="prijmeni">
-	                    </div>
-	                </div>
-	                <div class="row">
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="email">E-mail</label>
-	                        <input type="email" class="form-control" id="email">
-	                    </div>
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="telefon">Telefon</label>
-	                        <input type="phone" class="form-control" id="telefon">
-	                    </div>
-	                </div>
-	                <div class="row">
-	                    <div class="form-group col-md-12 arrow note">
-	                        <label for="poznamka">Poznámka</label>
-	                        <textarea class="form-control" id="poznamka" rows="5"></textarea>
-	                    </div>
-	                </div>
-	                <div class="row billing-address">
-	                    <div class="form-group col-md-12">
-	                        <div class="billing-address">
-	                            <input class="form-check-input" type="checkbox" value="" id="fakturacni-adresa">
-	                            <label id="fakturacni-adresa" class="form-check-label" for="fakturacni-adresa">
-	                                Fakturační adresa je jiná než adresa přistavení
-	                            </label>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div id="billing-information" style="display: none">
-	                    <div class="row">
-	                        <div class="form-group col-md-12 arrow">
-	                            <label for="ulice-cislo-popisne">Ulice a číslo popisné</label>
-	                            <input type="text" class="form-control" id="ulice-cislo-popisne">
-	                        </div>
-	                    </div>
-	                    <div class="row">
-	                        <div class="form-group col-md-6 arrow">
-	                            <label for="mesto">Město</label>
-	                            <input type="text" class="form-control" id="mesto">
-	                        </div>
-	                        <div class="form-group col-md-6 arrow">
-	                            <label for="psc">PSČ</label>
-	                            <input type="text" class="form-control" id="psc">
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="row row-send-order">
-	                    <div class="form-group col-md-12 send-order">
-	                        <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
-	                    </div>
-	                </div>
-	            </div>
-	            <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
-	                <div class="row row-ic">
-	                    <div class="form-group col-md-12">
-	                        <label for="ic">IČ</label><input type="text" class="form-control" id="ic"><button class="btn btn-primary">Načíst údaje</button>
-	                    </div>
-	                </div>
-	                <div class="row">
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="business-customer-jmeno">Jméno</label>
-	                        <input type="name" class="form-control" id="business-customer-jmeno">
-	                    </div>
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="business-customer-prijmeni">Příjmení</label>
-	                        <input type="surname" class="form-control" id="business-customer-prijmeni">
-	                    </div>
-	                </div>
-	                <div class="row">
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="business-customer-email">E-mail</label>
-	                        <input type="email" class="form-control" id="business-customer-email">
-	                    </div>
-	                    <div class="form-group col-md-6 arrow">
-	                        <label for="business-customer-telefon">Telefon</label>
-	                        <input type="phone" class="form-control" id="business-customer-telefon">
-	                    </div>
-	                </div>
-	                <div class="row">
-	                    <div class="form-group col-md-12 arrow note">
-	                        <label for="business-customer-poznamka">Poznámka</label>
-	                        <textarea class="form-control" id="business-customer-poznamka" rows="5"></textarea>
-	                    </div>
-	                </div>
-	                <div class="row row-firm-name">
-	                    <div class="form-group col-md-12 arrow">
-	                        <label for="business-customer-nazev-firmy">Název firmy</label>
-	                        <input type="text" class="form-control" id="business-customer-nazev-firmy">
-	                    </div>
-	                </div>
-	                <div class="row billing-address">
-	                    <div class="form-group col-md-12">
-	                        <div class="billing-address">
-	                            <input class="form-check-input" type="checkbox" value="" id="business-customer-fakturacni-adresa">
-	                            <label id="business-customer-fakturacni-adresa" class="form-check-label" for="business-customer-fakturacni-adresa">
-	                                Fakturační adresa je jiná než adresa přistavení
-	                            </label>
-	                        </div>
-	                    </div>
-	                </div>
-	                <div id="business-customer-billing-information" style="display: none">
-	                    <div class="row">
-	                        <div class="form-group col-md-12 arrow">
-	                            <label for="business-customer-ulice-cislo-popisne">Ulice a číslo popisné</label>
-	                            <input type="text" class="form-control" id="business-customer-ulice-cislo-popisne">
-	                        </div>
-	                    </div>
-	                    <div class="row">
-	                        <div class="form-group col-md-6 arrow">
-	                            <label for="business-customer-mesto">Město</label>
-	                            <input type="text" class="form-control" id="business-customer-mesto">
-	                        </div>
-	                        <div class="form-group col-md-6 arrow">
-	                            <label for="business-customer-psc">PSČ</label>
-	                            <input type="text" class="form-control" id="business-customer-psc">
-	                        </div>
-	                    </div>
-	                </div>
-	                <div class="row row-send-order">
-	                    <div class="form-group col-md-12 send-order">
-	                        <button class="btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        <img class="car" src="img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
-	        <img class="stripe" src="img/stripe.png" alt="Obrázek pruhů">
-	    </div>
-	    <div class="bottom-navigation">
-	        <div class="container">
-	            <ul class="list-inline">
-	                <li class="list-inline-item">
-	                    <a href="#" title="Přistavení kontejneru v Praze">Přistavení kontejneru v Praze</a>
-	                </li>
-	                <li class="list-inline-item">
-	                    <a href="#" title="Typy odpadů">Typy odpadů</a>
-	                </li>
-	                <li class="list-inline-item">
-	                    <a href="#" title="Aktuálně">Aktuálně</a>
-	                </li>
-	                <li class="list-inline-item">
-	                    <a href="#" title="Pracovní příležitosti">Pracovní příležitosti</a>
-	                </li>
-	            </ul>
-	        </div>
-	    </div>
-	    <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
-	    <div class="rectangle"></div>
-	</div>
-	<!-- ./form -->
+    {form orderForm}
+    {input type}
+    <div class="order-form">
+        <div class="container">
+            <ul class="errors" n:if="$form->hasErrors()">
+				<li n:foreach="$form->errors as $error">{$error}</li>
+			</ul>
+            <nav>
+                <div class="nav nav-tabs" id="nav-order-form" role="tablist">
+                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabOrderForm">
+                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            {label name/}
+                            {input name}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            {label surname/}
+                            {input surname}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            {label email/}
+                            {input email}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            {label phone/}
+                            {input phone}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+                            {label note/}
+                            {input note}
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+                                {input different_delivery}
+								{label different_delivery}{/label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="billing-information" style="display: none">
+                        <div class="row">
+                            <div class="form-group col-md-12 arrow delivery-street">
+	                            {label delivery_street/}
+	                            {input delivery_street}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 arrow">
+	                            {label delivery_city/}
+	                            {input delivery_city}
+                            </div>
+                            <div class="form-group col-md-6 arrow">
+	                            {label delivery_zip/}
+	                            {input delivery_zip}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                    <div class="row row-ic">
+                        <div class="form-group col-md-12">
+	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_name/}
+	                        {input bussiness_name}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_surname/}
+	                        {input bussiness_surname}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_email/}
+	                        {input bussiness_email}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_phone/}
+	                        {input bussiness_phone}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+	                        {label bussiness_note/}
+	                        {input bussiness_note}
+                        </div>
+                    </div>
+                    <div class="row row-firm-name">
+                        <div class="form-group col-md-12 arrow company">
+	                        {label bussiness_company/}
+	                        {input bussiness_company}
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+		                        {input bussiness_different_delivery}
+		                        {label bussiness_different_delivery}{/label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="business-customer-billing-information" style="display: none">
+                        <div class="row">
+                            <div class="form-group col-md-12 arrow delivery-street">
+		                        {label bussiness_delivery_street/}
+		                        {input bussiness_delivery_street}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 arrow">
+		                        {label bussiness_delivery_city/}
+		                        {input bussiness_delivery_city}
+                            </div>
+                            <div class="form-group col-md-6 arrow">
+		                        {label bussiness_delivery_zip/}
+		                        {input bussiness_delivery_zip}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-send-order">
+                    <div class="form-group col-md-12 send-order">
+                        <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat poptávku <i class="fa-solid fa-angles-right"></i></button>
+                    </div>
+                </div>
+                
+            </div>
+            <img class="car" src="{$basePath}/img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
+            <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
+        </div>
+        {include '../_parts/footerMenu.latte', class=>''}
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
+        <div class="rectangle"></div>
+    </div>
+    {/form}
+    <!-- ./form -->
 	<div class="waste-type-rectangle"></div>
 {/block}
 
@@ -561,13 +542,14 @@
 				return false;
 			  });
 				$(".materialSource").change(function(){
-					var materialKoef = $(this).closest(".amount").data("koef");
+					var amountBlock = $(this).closest(".amount");
+					var materialKoef = amountBlock.data("koef");
 					var thisVal = parseFloat($(this).val().replace(",", "."));
 					var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
 					$(this).val(correctedVal);
 					var matWeight = $(this).val();
-					$(".materialTarger").val((matWeight*materialKoef).toFixed(2));
-					var link = $(this).closest(".amount").data("link") + "&amount=" + matWeight;
+					amountBlock.find(".materialTarger").val((matWeight*materialKoef).toFixed(2));
+					var link = amountBlock.data("link") + "&amount=" + matWeight;
 					//checkMaterialAmount();
 					$.get(link);
 
@@ -839,6 +821,7 @@
     		{/foreach}
     		
 			function enableDisableOrder(){
+				/*
 				sendOrderButton = $(".sendOrderButton");
 				var orderValid = true;
 				if(window.checkWeight==false) orderValid = false;
@@ -851,6 +834,7 @@
 				else{
 					sendOrderButton.addClass("disabled");
 				}	
+				*/
 			}
     		
 

@@ -1,0 +1,102 @@
+{block content}
+	<h1>Nový doklad</h1>
+    <div class="row">
+        <div class="col col-6">
+            <h2>Faktura</h2>
+            {var $count=0}
+            {foreach $cameras as $camera}
+                <div class="row" n:if="$camera->billable>0">
+                    <div class="col col-6">Fotky pro {$camera->name}</div>
+                    <div class="col col-2">{$camera->billable} ks</div>
+                    <div class="col col-4">{$camera->billable*$camera->photoPrice|number:2:',':' '} Kč</div>
+                    {php $count++}
+                </div>
+            {/foreach}
+            {foreach $items as $item}
+                <div class="row" n:if="$item->billable>0">
+                    <div class="col col-6">{$item->name}</div>
+                    <div class="col col-2">{$item->billable} ks</div>
+                    <div class="col col-4">{$item->billable*$item->price|number:2:',':' '} Kč</div>
+                    {php $count++}
+                </div>
+            {/foreach}
+            {if $count>0}
+                {form invoiceForm}
+                    <div class="row">
+                        <div class="col col-4">{input type}</div>
+                        <div class="col col-5">{input cashDesk}</div>
+                        <div class="col col-3">{input submit}</div>
+                    </div>
+                    <script>
+                        $(document).ready(function(){
+                            function resolveCashDesk(){
+                                if($("select.payment").val()=={$presenter->cashType}){
+                                   $("select.cashdesk").show();
+                                }
+                                else{
+                                    $("select.cashdesk").hide();
+                                }
+                            }
+
+                            resolveCashDesk();
+                            $("select.payment").change(function(){
+                                resolveCashDesk();
+                            });
+                        });
+                    </script>
+                {/form}
+            {else}
+                <p>Není co fakturovat</p>
+            {/if}
+        </div>
+
+        <div class="col col-6">
+            <h2>Dobropis</h2>
+            {var $count=0}
+            {foreach $cameras as $camera}
+                <div class="row" n:if="$camera->billable<0">
+                    <div class="col col-6">Fotky pro {$camera->name}</div>
+                    <div class="col col-2">{$camera->billable} ks</div>
+                    <div class="col col-4">{$camera->billable*$camera->photoPrice|number:2:',':' '} Kč</div>
+                    {php $count++}
+                </div>
+            {/foreach}
+            {foreach $items as $item}
+                <div class="row" n:if="$item->billable<0">
+                    <div class="col col-6">{$item->name}</div>
+                    <div class="col col-2">{$item->billable} ks</div>
+                    <div class="col col-4">{$item->billable*$item->price|number:2:',':' '} Kč</div>
+                    {php $count++}
+                </div>
+            {/foreach}
+            {if $count>0}
+                {form dobropisForm}
+                    <div class="row">
+                        <div class="col col-4">{input type}</div>
+                        <div class="col col-5">{input cashDesk}</div>
+                        <div class="col col-3">{input submit}</div>
+                    </div>
+                    <script>
+                        $(document).ready(function(){
+                            function resolveCashDeskD(){
+                                if($("select.paymentD").val()=={$presenter->dobropisType}){
+                                   $("select.cashdeskD").show();
+                                }
+                                else{
+                                    $("select.cashdeskD").hide();
+                                }
+                            }
+
+                            resolveCashDeskD();
+                            $("select.paymentD").change(function(){
+                                resolveCashDeskD();
+                            });
+                        });
+                    </script>
+                {/form}
+            {else}
+                <p>Není co dobropisovat</p>
+            {/if}
+        </div>
+    </div>
+{/block}

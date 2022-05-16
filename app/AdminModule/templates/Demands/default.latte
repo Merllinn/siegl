@@ -1,0 +1,37 @@
+{block content}
+
+        <div class="span10">
+
+      <div class="content" style="clear: both">
+        <div class="head">
+          <h1 class="card-title">Přehled poptávek</h1>
+          {*
+          <a class="btn btn-primary" n:href="add" n:if="false"><i class="fas fa-plus"></i> Vytvořit objednávku</a>
+          <a class="btn btn-primary" n:href="export!"><i class="fas fa-file-csv"></i> Exportovat e-maily</a>
+          *}
+          <div class="clearfix"></div>
+        </div>
+        <div class="filter">
+          {form filterForm}
+            <div class="row">
+              <div class="col-xl-4 col-lglg-4 col-md-4 col-sm-4 col-12">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div style="display: block; width: 100%">{label reserver/}</div>
+                      {input reserver}
+                      {input submit}
+                      {input reset}
+                    </div>
+                  </div>
+                </div>
+              </div>
+          {/form}
+        </div>
+      </div>
+
+
+ 	  {control orders}
+
+          <!--Body content-->
+        </div>
+{/block}

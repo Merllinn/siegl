@@ -1,0 +1,215 @@
+{block content}
+    <div class="container fs">
+        <div class="head">
+            <h1 class="card-title">{if empty($order)}Vytvoření{else}Úprava objednávky  č. {$order->id}{/if}</h1>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col col-6">
+                {form orderForm}
+          			<h2 class="title">Stav objednávky</h2>
+					<div class="row">
+						<div class="form-group col-md-12">
+							{input order_status_id}
+						</div>
+					</div>
+          			<h2 class="title">Pobočka</h2>
+					<div class="row">
+						<div class="form-group col-md-12">
+							{input branch}
+						</div>
+					</div>
+          			<h2 class="title">Fakturační údaje</h2>
+					<ul class="errors" n:if="$form->hasErrors()">
+						<li style="color:red;" n:foreach="$form->errors as $error">{$error}</li>
+					</ul>
+					<div class="row">
+						<div class="form-group col-md-6">
+							{label name/}
+							{input name}
+						</div>
+						<div class="form-group col-md-6">
+							{label surname/}
+							{input surname}
+						</div>
+						<div class="form-group col-md-6">
+							{label email/}
+							{input email}
+						</div>
+						<div class="form-group col-md-6">
+							{label phone/}
+							{input phone}
+						</div>
+						<div class="form-group col-md-4">
+							{label street/}
+							{input street}
+						</div>
+						<div class="form-group col-md-4">
+							{label city/}
+							{input city}
+						</div>
+						<div class="form-group col-md-4">
+							{label zip/}
+							{input zip}
+						</div>
+					</div>
+					<div class="form-group">
+						{label note/}
+						{input note}
+					</div>
+					<div class="form-group">
+						{label publicNote/}
+						{input publicNote}
+					</div>
+          			<h2 class="title">Doručovací údaje</h2>
+						<div class="form-check">
+							{input different_delivery}
+							{label different_delivery}
+						</div>
+						<div class="deliveryInfo row">
+							<div class="form-group col-md-6">
+								{label delivery_name/}
+								{input delivery_name}
+							</div>
+							<div class="form-group col-md-6">
+								{label delivery_street/}
+								{input delivery_street}
+							</div>
+							<div class="form-group col-md-6">
+								{label delivery_city/}
+								{input delivery_city}
+							</div>
+							<div class="form-group col-md-6">
+								{label delivery_zip/}
+								{input delivery_zip}
+							</div>
+						</div>
+                    <div class="row">
+                        <div class="col">
+                            {input submit}
+                        </div>
+                    </div>
+                {/form}
+            </div>
+
+			<div class="orderItems col-6">
+					<h3>Fotky</h3>
+					<div class="row">
+						<div class="col-2"><strong>Položka</strong></div>
+						<div class="col-1"><strong>Rám.</strong></div>
+						<div class="col-2"><strong>Množství</strong></div>
+						<div class="col-2"><strong>Rozměr</strong></div>
+						<div class="col-1"><strong>Mat.</strong></div>
+						<div class="col-2 text-right"><strong>Cena/ks</strong></div>
+						<div class="col-2 text-right"><strong>Cena</strong></div>
+					</div>
+					{var $totalPrice = 0}
+					<div class="row" n:foreach="$items as $itemId=>$item" data-id="{$itemId}">
+						<div class="col-2">
+							<img src="https://drive.google.com/thumbnail?id={$item->fileId}" title="" width="50">
+                            {var $meta = $presenter->getGfile($item->fileId)->getImageMediaMetadata()}
+                            <br>{$meta->getWidth()}x{$meta->getHeight()}px
+						</div>
+						<div class="col-1">
+							{if !empty($item->border)}
+								ANO
+							{else}
+								NE
+							{/if}
+						</div>
+						<div class="col-2">
+							{$item->amount} ks
+						</div>
+						<div class="col-2">
+							{$sizes[$item->size]["name"]}
+						</div>
+						<div class="col-1">
+							{$materials[$item->material]}
+						</div>
+						<div class="col-2 text-right">
+							{$item->price} Kč
+						</div>
+						<div class="col-2 text-right">
+							{$item->priceTotal} Kč
+						</div>
+					</div>
+					<h3>Produkty</h3>
+					<div class="row">
+						<div class="col-2"><strong>Položka</strong></div>
+						<div class="col-4"><strong>Název</strong></div>
+						<div class="col-2"><strong>Množství</strong></div>
+						<div class="col-2 text-right"><strong>Cena/ks</strong></div>
+						<div class="col-2 text-right"><strong>Cena</strong></div>
+					</div>
+					<div class="row" n:foreach="$products as $itemId=>$product" data-id="{$itemId}">
+						<div class="col-2">
+							{var $img = $presenter->productManager->getMainPhoto($product->products_id)}
+							<img n:if="!empty($img)" src="{$img|thumb:100:null}" title="{$product->name}" width="50">
+						</div>
+						<div class="col-4">
+							<strong>{$product->name}</strong>
+						</div>
+						<div class="col-2">
+							{$product->quantity} ks
+						</div>
+						<div class="col-2">
+							{$product->price_vat|number:0:',':' '} Kč
+						</div>
+						<div class="col-2 text-right">
+							{$product->price_vat*$product->quantity|number:0:',':' '} Kč
+						</div>
+					</div>
+					<div class="row" n:if="!empty($order->voucherSale)">
+						<div class="col-4">
+							Slevový kupón: <strong>{$order->voucherCode}</strong>
+						</div>
+						<div class="col-8 text-right">
+							-{$order->voucherSale} Kč
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							Způsob dopravy: <strong>{$order->delivery}</strong>
+						</div>
+						<div class="col-6 text-right">
+							{$order->deliveryPrice} Kč
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6">
+							Způsob platby: <strong>{$order->payment}</strong>
+						</div>
+						<div class="col-6 text-right">
+							{$order->paymentPrice} Kč
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-6"><strong>Celková cena</strong></div>
+						<div class="col-6 text-right">
+							{$order->price|number:0:',':' '} Kč
+						</div>
+					</div>
+				</div>
+
+    </div>
+
+    <script>
+        $(document).ready(function(){
+			$(".differentDelivery").change(function(){
+				updateDelivery();
+			});
+
+			function updateDelivery(){
+				if($(".differentDelivery").prop("checked")==true){
+					$(".deliveryInfo").show();
+				}
+				else{
+					$(".deliveryInfo").hide();
+				}
+
+			}
+			updateDelivery();
+		});
+    </script>
+
+{/block}

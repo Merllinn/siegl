@@ -9,7 +9,7 @@ use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
 use Vojir\Responses\CsvResponse\SimpleCsvResponse;
 
-class OrdersPresenter extends OrdersForms
+class DemandsPresenter extends OrdersForms
 {
 
 	public $branches = array();
@@ -20,7 +20,7 @@ class OrdersPresenter extends OrdersForms
         $this->fromPage = $this->getSession("ordersPage");
 
         $this->filter = $this->getSession("ordersFilter");
-		$this->addBreadcrumbs("Objednávky", $this->link(":Admin:Orders:default"));
+		$this->addBreadcrumbs("Poptávky", $this->link(":Admin:Demands:default"));
 
 }
 
@@ -35,7 +35,7 @@ class OrdersPresenter extends OrdersForms
             $weekEnd = new \nette\Utils\DateTime();
             $weekEnd->modify("+".(8-date("w"))." days");
             $this->filter->to = $weekEnd;
-            $this->redirect(":Admin:Orders:default");
+            $this->redirect(":Admin:Demands:default");
         }
         $this->prepareOrders();
     }
@@ -43,7 +43,7 @@ class OrdersPresenter extends OrdersForms
     public function actionDetail($id){
 		$this->template->order = $this->orderManager->find($id);
 		$this->template->products = $this->orderManager->findOrderProducts($id);
-		$this->addBreadcrumbs("Detail objednávky ".$id, $this->link(":Admin:Orders:detail", $id));
+		$this->addBreadcrumbs("Detail poptávky ".$id, $this->link(":Admin:Demands:detail", $id));
 	}
 
     public function actionAdd(){
@@ -125,7 +125,7 @@ class OrdersPresenter extends OrdersForms
         $grid->addColumnText('customer', 'Zákazník')
         	->setSortable()->setSortableResetPagination()
             ->setRenderer(function($row) use ($presenter) {
-                return html::el("a")->href($presenter->link(":Admin:Orders:edit", $row->id))->setHtml($row->customer)->title("Upravit");
+                return html::el("a")->href($presenter->link(":Admin:Demands:edit", $row->id))->setHtml($row->customer)->title("Upravit");
         });
 
         $grid->addColumnText('note', 'Poznámka')
@@ -138,20 +138,6 @@ class OrdersPresenter extends OrdersForms
                         $el->insert($i++, nl2br($row->note));
                         //$el->insert($i++, '</div>');
                     }
-                return $el;
-        });
-
-        $grid->addColumnText('price', 'Cena bez DPH')
-            ->setRenderer(function($row) use ($presenter) {
-                $el = Html::el("span");
-                $el->insert(0, number_format($row->price, 0, ',', ' ')." Kč");
-                return $el;
-        });
-
-        $grid->addColumnText('price_vat', 'Cena s DPH')
-            ->setRenderer(function($row) use ($presenter) {
-                $el = Html::el("span");
-                $el->insert(0, number_format($row->price_vat, 0, ',', ' ')." Kč");
                 return $el;
         });
 
@@ -178,7 +164,7 @@ class OrdersPresenter extends OrdersForms
             $like = "%".$this->filter->reserver."%";
             $orders->whereOr(['surname LIKE ?'=>$like,'email LIKE ?'=>$like]);
         }
-        $orders->where("type != ?", 9);
+        $orders->where("type = ?", 9);
 
         $orders->order("date DESC");
         $this->orders = $orders;

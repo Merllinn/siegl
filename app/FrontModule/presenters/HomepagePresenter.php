@@ -9,7 +9,6 @@ use Nette\Utils\Html;
 
 final class HomepagePresenter extends HomepageForms
 {
-	
     public function actionApprove($id, $branch=1){
     	$this->orderManager->update(array("branch"=>$branch), $id);
 		$this->approveOrder($id);
@@ -27,6 +26,10 @@ final class HomepagePresenter extends HomepageForms
 		$this->template->materials = $this->basket->materials;
 		$this->template->attVals = $this->attributeManager->getAllValues();
 		$this->template->zones = $this->commonManager->getActiveZones();
+        if(!empty($this->basket->order)){
+        	$this["orderForm"]->setDefaults($this->basket->order);
+		}
+		$this["orderForm"]["type"]->setValue("1");
 	}
 	
     public function renderDemand(){
@@ -36,6 +39,10 @@ final class HomepagePresenter extends HomepageForms
 		$this->template->materials = $this->basketD->materials;
 		$this->template->attVals = $this->attributeManager->getAllValues();
 		$this->template->zones = $this->commonManager->getActiveZones();
+        if(!empty($this->basketD->order)){
+        	$this["orderForm"]->setDefaults($this->basketD->order);
+		}
+		$this["orderForm"]["type"]->setValue("9");
 	}
 	
 	public function handleAddNextContainer($basket="basket"){
@@ -160,7 +167,7 @@ final class HomepagePresenter extends HomepageForms
     }
     
     public function handleSetBasketNote($basket="basket", $val){
-		$this->$basket->note = $val;
+		$this->$basket->description = $val;
     }
 
 	public function handleRemoveFromOrder($index){
@@ -487,6 +494,9 @@ final class HomepagePresenter extends HomepageForms
     public function createComponentOrderForm(){
         $form = new Form();
 
+        //SYSTEM
+        $form ->addHidden("type");
+        
         //PERSONAL
         $form ->addText("name", "Jméno")
                 ->getControlPrototype()->class("form-control");
@@ -572,10 +582,6 @@ final class HomepagePresenter extends HomepageForms
 
         $form->onSuccess[] = [$this, 'saveOrder'];
 
-        if(!empty($this->basket->order)){
-        	$form->setDefaults($this->basket->order);
-		}
-
         return $form;
     }
 
@@ -588,7 +594,12 @@ final class HomepagePresenter extends HomepageForms
     public function saveOrder(Form $form){
         $values = $form->getValues();
         
-        if(count($this->basket->containers)==0){
+        $basketfield = "basket";
+		if($values->type == 9){
+			$basketfield = "basketD";
+		}
+
+        if($values->type==1 && count($this->basket->containers)==0){
 			$form->addError("Objednávka neobsahuje žádné kontejnery");
         }
 
@@ -603,11 +614,11 @@ final class HomepagePresenter extends HomepageForms
 					$values->deliveryPrice = (!empty($this->deliveryPrices[$values->delivery])?$this->deliveryPrices[$values->delivery]:0);
 				}
 				*/
-                $this->basket->order = $values;
+                $this->$basketfield->order = $values;
 
-				$orderId = $this->orderManager->saveOrder($this->basket, $this->productManager, $this->settings);
+				$orderId = $this->orderManager->saveOrder($this->$basketfield, $this->productManager, $this->settings);
 
-				$this->basket->remove();
+				$this->$basketfield->remove();
 
 				$order = $this->orderManager->find($orderId);
 
@@ -622,7 +633,12 @@ final class HomepagePresenter extends HomepageForms
 
 				//TODO generate mail
 				//$this->sendMailFromTemplate("orderStatus1.latte", $data, $order->email, "Potvrzení objednávky kontejneru");
-				$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
+				if($values->type==1){
+					$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
+				}
+				if($values->type==9){
+					$this->sendMailFromTemplate("demandConfirmEshop.latte", $data, $this->settings->email, "Nová poptávka");
+				}
 
 
                 $this->redirect(":Front:Homepage:page", "dekujeme-za-objednavku");

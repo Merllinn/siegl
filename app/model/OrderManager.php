@@ -262,6 +262,12 @@ final class OrderManager
         $order->price_vat = ($ses->price * (1 + ($settings->vat/100)));
         $order->weekendPrice = $ses->weekendPrice;
         $order->betonPrice = $ses->betonPrice;
+        if($order->type==9){
+			$order->description = $ses->description;
+			$order->termFrom = $ses->termFrom;
+			$order->termTo = $ses->termTo;
+			$order->weekends = $ses->weekends;
+        }
         
         //save order
         $orderId = $this->add($order);
@@ -272,37 +278,62 @@ final class OrderManager
         //$totalPice = 0;
 
         //save containers
-        foreach($containers as $container){
-            $product = $pm->find($container->product);
-            $price = $pm->findPrice($container->price->id);
-            $itemData = array(
-                "order_id"		=>$orderId,
-                "products_id"   =>$container->product,
-                "term"   		=>$container->term . " " . $container->time,
-                "quantity"      =>1,
-                "type"			=>1,
-                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
-                "price"         =>$price->priceFrom,
-                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
-            );
-            $this->addProduct($itemData);
-            //$totalPice += $price->priceFrom;
+        if(!empty($containers)){
+	        foreach($containers as $container){
+	            $product = $pm->find($container->product);
+	            $price = $pm->findPrice($container->price->id);
+	            $itemData = array(
+	                "order_id"		=>$orderId,
+	                "products_id"   =>$container->product,
+	                "type"			=>1,
+	                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+	            );
+	            if($order->type==1){
+					$itemData["term"] = $container->term . " " . $container->time;
+					$itemData["quantity"] = 1;
+					$itemData["price"] = $price->priceFrom;
+					$itemData["price_vat"] = $price->priceFrom * (1 + ($settings->vat/100));
+	            }
+	            if($order->type==9){
+					$itemData["quantity"] = $container->amount;
+	            }
+	            $this->addProduct($itemData);
+	            //$totalPice += $price->priceFrom;
+	        }
         }
         //save containers
-        foreach($materials as $material){
-            $product = $pm->find($material->product);
-            $price = $pm->findPrice($material->priceObj->id);
-            $itemData = array(
-                "order_id"		=>$orderId,
-                "products_id"   =>$material->product,
-                "quantity"      =>$material->amount,
-                "type"			=>2,
-                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
-                "price"         =>$price->priceFrom,
-                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
-            );
-            $this->addProduct($itemData);
-            //$totalPice += $price->priceFrom * $material->amount;
+        if(!empty($materials)){
+	        foreach($materials as $material){
+	            if($order->type==1){
+		            $product = $pm->find($material->product);
+		            $price = $pm->findPrice($material->priceObj->id);
+		            $itemData = array(
+		                "order_id"		=>$orderId,
+		                "products_id"   =>$material->product,
+		                "quantity"      =>$material->amount,
+		                "type"			=>2,
+		                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+		                "price"         =>$price->priceFrom,
+		                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
+		            );
+		            $this->addProduct($itemData);
+				}
+	            if($order->type==9){
+		            foreach($material as $variant){
+			            $product = $pm->find($variant->priceObj->product);
+			            $price = $pm->findPrice($variant->priceObj->id);
+			            $itemData = array(
+			                "order_id"		=>$orderId,
+			                "products_id"   =>$variant->priceObj->product,
+			                "quantity"      =>$variant->amount,
+			                "type"			=>2,
+			                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+			            );
+			            $this->addProduct($itemData);
+		            }
+				}
+	            //$totalPice += $price->priceFrom * $material->amount;
+	        }
         }
         //$totalPice += $order->paymentPrice;
         //$totalPice += $order->deliveryPrice;

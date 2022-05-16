@@ -1,0 +1,128 @@
+	<p>
+        Dobrý den,
+    </p>
+
+    <p>
+        byla přijata nová poptávka.
+    </p>
+    
+    {var $containers = array()}
+    {var $materials = array()}
+    {foreach $products as $itemId=>$product}
+    	{if $product->type==1}
+    		{php $containers[$itemId] = $product}
+    	{/if}
+    	{if $product->type==2}
+    		{php $materials[$itemId] = $product}
+    	{/if}
+    {/foreach}
+
+	<h4>rozsah poptávky</h4>
+	{$order->description|breaklines|noescape}
+
+	{if count($containers)>0}
+		<h4>Kontejnery</h4>
+		<table>
+			<thead>
+				<th>Název</th>
+				<th>Množství</th>
+			</thead>
+			<tbody>
+			<tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
+				<td><strong>{$product->name}</strong></td>
+				<td>
+					{$product->quantity} tun
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	{/if}
+	{if count($materials)>0}
+		<h4>Materiál</h4>
+		<table>
+			<thead>
+				<th>Název</th>
+				<th>Množství</th>
+			</thead>
+			<tbody>
+			<tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
+				<td><strong>{$product->name}</strong></td>
+				<td>
+					{$product->quantity} tun
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	{/if}
+
+	<h4>Termín realizace</h4>
+		<table>
+			<thead>
+				<th>Od</th>
+				<th>Do</th>
+				<th>Víkendy</th>
+			</thead>
+			<tbody>
+			<tr>
+				<td>{$order->termFrom}</td>
+				<td>{$order->termTo}</td>
+				<td>
+					{if $order->weekends}ANO{else}NE{/if}
+				</td>
+			</tr>
+			</tbody>
+		</table>
+
+	<h4>Místo přistavení</h4>
+	{$order->street}
+	
+	<h4>Údaje o {if !empty($order->ic)}firemním {/if}zákazníkovi</h4>
+    <table>
+		<tbody>
+			<tr n:if="!empty($order->ic)">
+				<th>IČ</th>
+				<td>{$order->ic}</td>
+			</tr>
+			<tr n:if="!empty($order->company_name)">
+				<th>Název společnosti</th>
+				<td>{$order->company_name}</td>
+			</tr>
+			<tr>
+				<th>Jméno</th>
+				<td>{$order->name}</td>
+			</tr>
+			<tr>
+				<th>Příjmení</th>
+				<td>{$order->surname}</td>
+			</tr>
+			<tr>
+				<th>E-mail</th>
+				<td>{$order->email}</td>
+			</tr>
+			<tr>
+				<th>Telefon</th>
+				<td>{$order->phone}</td>
+			</tr>
+			<tr n:if="!empty($order->note)">
+				<th>Poznámka</th>
+				<td>{$order->note|breaklines|noescape}</td>
+			</tr>
+			{if $order->different_delivery}
+				<tr>
+					<th colspan="2">Jiná adresa dodání</th>
+				</tr>
+				<tr n:if="!empty($order->delivery_street)">
+					<th>Adresa</th>
+					<td>{$order->delivery_street}</td>
+				</tr>
+				<tr n:if="!empty($order->delivery_city)">
+					<th>Město</th>
+					<td>{$order->delivery_city}</td>
+				</tr>
+				<tr n:if="!empty($order->delivery_zip)">
+					<th>PS</th>
+					<td>{$order->delivery_zip}</td>
+				</tr>
+			{/if}
+		</tbody>
+    </table>

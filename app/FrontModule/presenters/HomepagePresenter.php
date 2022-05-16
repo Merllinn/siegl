@@ -32,7 +32,33 @@ final class HomepagePresenter extends HomepageForms
 		$this["orderForm"]["type"]->setValue("1");
 	}
 	
+    public function renderOrderMaterial(){
+		$this->template->basket = $this->basketM;
+		$this->template->address = $this->basketM->address;
+		$this->template->containers = $this->basketM->containers;
+		$this->template->materials = $this->basketM->materials;
+		$this->template->attVals = $this->attributeManager->getAllValues();
+		$this->template->zones = $this->commonManager->getActiveZones();
+        if(!empty($this->basketM->order)){
+        	$this["orderForm"]->setDefaults($this->basketM->order);
+		}
+		$this["orderForm"]["type"]->setValue("2");
+	}
+	
     public function renderDemand(){
+		$this->template->basket = $this->basketD;
+		$this->template->address = $this->basketD->address;
+		$this->template->containers = $this->basketD->containers;
+		$this->template->materials = $this->basketD->materials;
+		$this->template->attVals = $this->attributeManager->getAllValues();
+		$this->template->zones = $this->commonManager->getActiveZones();
+        if(!empty($this->basketD->order)){
+        	$this["orderForm"]->setDefaults($this->basketD->order);
+		}
+		$this["orderForm"]["type"]->setValue("9");
+	}
+	
+    public function renderDemandMaterial(){
 		$this->template->basket = $this->basketD;
 		$this->template->address = $this->basketD->address;
 		$this->template->containers = $this->basketD->containers;

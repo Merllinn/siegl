@@ -3372,7 +3372,11 @@ div.roughness {
       text-transform: uppercase;
     }
 
-      div.roughness li.selected span {
+      div.roughness li.variantLi span.material-quantity {
+        text-transform: lowercase;
+      }
+
+      div.roughness li.selected div.title span {
           -webkit-text-fill-color: #004a39;
         -webkit-text-stroke-width: 1px;
         -webkit-text-stroke-color: #004a39;
@@ -3588,6 +3592,10 @@ div.amount {
     display: inline-block;
     vertical-align: middle;
   }
+
+    li.variantLi div.amount label {
+      margin-right: 10px;
+    }
 
   span.tons {
     display: inline-block;

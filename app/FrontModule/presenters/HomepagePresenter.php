@@ -73,9 +73,11 @@ final class HomepagePresenter extends HomepageForms
 	
 	public function handleAddNextContainer($basket="basket"){
 		$containers = $this->$basket->containers;
-		$containers[] = new \Nette\Utils\ArrayHash();
+		$container = new \Nette\Utils\ArrayHash();
+		$container->amount = 1;
+		$containers[] = $container;
 		$this->$basket->containers = $containers;
-		$this->recalculateBasket();
+		$this->recalculateBasket($basket);
 		$this->redirect("this");
 	}
 
@@ -90,10 +92,16 @@ final class HomepagePresenter extends HomepageForms
 		//$this->redirect("this");
 	}
 
-	public function handleUnuseMaterial(){
-		$this->basketD->materials = array();
-		$this->recalculateBasket();
+	public function handleUnuseMaterial($basket="basketD"){
+		$this->$basket->materials = array();
+		$this->recalculateBasket($basket);
 		//$this->redirect("this");
+	}
+
+	public function handleUnuseContainers($basket="basketM"){
+		$this->$basket->containers = array();
+		$this->recalculateBasket($basket);
+		$this->redirect("this");
 	}
 
 	public function handleSetMaterialVariant($var){
@@ -102,21 +110,23 @@ final class HomepagePresenter extends HomepageForms
 		$material->price = $var;
 		$priceObj = $this->productManager->findPrice($var);
 		$material->priceObj = $this->rowToArray($priceObj);
+		$material->amount = 1;
+		/*
 		if($material->product==$this->settings->betonProduct){
 			$material->amount = 1/$priceObj->koef;
 		}
 		else{
-			$material->amount = 1;
 		}
+		*/
 		$materials[0] = $material;
 		$this->basket->materials = $materials;
 		$this->recalculateBasket();
 		$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
-	public function handleSetMaterialVariantD($var){
+	public function handleSetMaterialVariantD($var, $basket="basketD"){
 		$priceObj = $this->rowToArray($this->productManager->findPrice($var));
-		$materials = $this->basketD->materials;
+		$materials = $this->$basket->materials;
 		if(!isset($materials[$priceObj->product])){
 			$materials[$priceObj->product] = array();
 		}
@@ -126,32 +136,32 @@ final class HomepagePresenter extends HomepageForms
 		}
 		$variant = $material[$var];
 		$variant->priceObj = $priceObj;
-		if($priceObj->product==$this->settings->betonProduct){
-			$variant->amount = 1/$priceObj->koef;
-		}
-		else{
-			$variant->amount = 1;
-		}
+		$variant->amount = 1;
 		$material[$var] = $variant;
 		$materials[$priceObj->product] = $material;
-		$this->basketD->materials = $materials;
-		$this->recalculateBasket();
+		$this->$basket->materials = $materials;
+		$this->recalculateBasket($basket);
 		//$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
-	public function handleUnsetMaterialVariantD($var){
+	public function handleUnsetMaterialVariantD($var, $basket="basketD"){
 		$priceObj = $this->rowToArray($this->productManager->findPrice($var));
-		$materials = $this->basketD->materials;
+		$materials = $this->$basket->materials;
 		if(!isset($materials[$priceObj->product])){
 			$materials[$priceObj->product] = array();
 		}
 		$material = $materials[$priceObj->product];
 		if(isset($material[$var])){
-			$material[$var] = null;
+			unset($material[$var]);
 		}
-		$materials[$priceObj->product] = $material;
-		$this->basketD->materials = $materials;
-		$this->recalculateBasket();
+		if(empty($material)){
+			unset($materials[$priceObj->product]);
+		}
+		else{
+			$materials[$priceObj->product] = $material;
+		}
+		$this->$basket->materials = $materials;
+		$this->recalculateBasket($basket);
 		//$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
@@ -174,12 +184,23 @@ final class HomepagePresenter extends HomepageForms
 			$materials[$product][$variant] = $var;
 			$this->basketD->materials = $materials;
 		}
-		$this->recalculateBasket();
+		$this->recalculateBasket("basketD");
+		//$this->redirect("this");
+	}
+	public function handleSetMaterialAmountM($product, $variant, $amount){
+		$materials = $this->basketM->materials;
+		if(!empty($materials[$product][$variant])){
+			$var = $materials[$product][$variant];
+			$var->amount = $amount;
+			$materials[$product][$variant] = $var;
+			$this->basketM->materials = $materials;
+		}
+		$this->recalculateBasket("basketM");
 		//$this->redirect("this");
 	}
 	public function handleSetAddress($basket="basket", $a){
 		$this->$basket->address = $a;
-		$this->recalculateBasket();
+		$this->recalculateBasket($basket);
 		//$this->redirect("this");
 	}
     public function handleSetBasketZone($basket="basket", $z){
@@ -189,21 +210,21 @@ final class HomepagePresenter extends HomepageForms
 			$this->$basket->zoneObj = $this->rowToArray($zoneObj);
 		}
 		$this->redrawControl("orderContainers");
-		$this->recalculateBasket();
+		$this->recalculateBasket($basket);
     }
     
     public function handleSetBasketNote($basket="basket", $val){
 		$this->$basket->description = $val;
     }
 
-	public function handleRemoveFromOrder($index){
-		$containers = $this->basket->containers;
+	public function handleRemoveFromOrder($index, $basket="basket"){
+		$containers = $this->$basket->containers;
 		unset($containers[$index]);
-		$this->basket->containers = $containers;
+		$this->$basket->containers = $containers;
 		if(count($containers)==0){
-			$this->basket->materials = null;
+			$this->$basket->materials = null;
 		}
-		$this->recalculateBasket();
+		$this->recalculateBasket($basket);
 		$this->redirect("this");
 	}
 
@@ -223,7 +244,7 @@ final class HomepagePresenter extends HomepageForms
 			}
 		}
 		$this->$basket->containers = $items;
-		$this->recalculateBasket();
+		$this->recalculateBasket($basket);
 		if(in_array($name, array("term"))!==false){
 			$this->redrawControl("orderContainers");
 		}
@@ -231,7 +252,31 @@ final class HomepagePresenter extends HomepageForms
 
     public function handleSetOrderVal($name, $basket="basket", $val){
 		$this->$basket->$name = $val;
-		$this->recalculateBasket();
+		$this->recalculateBasket($basket);
+    }
+
+    public function handleSetMoreToDemand($val){
+		if(empty($this->basketD->more)){
+			$more = array();
+		}
+		else{
+			$more = $this->basketD->more;
+		}
+		$more[$val] = true;
+		$this->basketD->more = $more;
+		//$this->recalculateBasket();
+    }
+
+    public function handleUnsetMoreToDemand($val){
+		if(empty($this->basketD->more)){
+			$more = array();
+		}
+		else{
+			$more = $this->basketD->more;
+		}
+		unset($more[$val]);
+		$this->basketD->more = $more;
+		//$this->recalculateBasket();
     }
 
     public function renderOrder2(){
@@ -624,6 +669,9 @@ final class HomepagePresenter extends HomepageForms
 		if($values->type == 9){
 			$basketfield = "basketD";
 		}
+		if($values->type == 2){
+			$basketfield = "basketM";
+		}
 
         if($values->type==1 && count($this->basket->containers)==0){
 			$form->addError("Objednávka neobsahuje žádné kontejnery");
@@ -653,6 +701,7 @@ final class HomepagePresenter extends HomepageForms
 				$data = array(
 					"order" => $order,
 					"products" => $products,
+					"beton" => $this->settings->betonProduct,
 					//"deliveries" => $this->deliveries,
 					//"payments" => $this->payments,
 				);
@@ -661,6 +710,9 @@ final class HomepagePresenter extends HomepageForms
 				//$this->sendMailFromTemplate("orderStatus1.latte", $data, $order->email, "Potvrzení objednávky kontejneru");
 				if($values->type==1){
 					$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
+				}
+				if($values->type==2){
+					$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva materiálu");
 				}
 				if($values->type==9){
 					$this->sendMailFromTemplate("demandConfirmEshop.latte", $data, $this->settings->email, "Nová poptávka");
@@ -716,6 +768,28 @@ final class HomepagePresenter extends HomepageForms
 			$this->recalculateBasket();
 
             $containerOrderPage = $this->pageManager->findByLayout(11);
+            $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);
+        }
+        if($values->isContainer=="2"){
+	        $items = array();
+	        foreach($prices as $priceId=>$value){
+				if($value=="on"){
+					$amount = $amounts[$priceId];
+					$price = $this->productManager->findPrice($priceId);
+	        		if(empty($items[$price->product])){
+						$items[$price->product] = array();
+	        		}
+					$item = new \Nette\Utils\ArrayHash();
+					$item->amount = $amount;
+					$item->priceObj = $this->rowToArray($price);
+					$items[$price->product][$priceId] = $item;
+				}
+	        }
+	        $this->basketM->materials = $items;
+            
+			$this->recalculateBasket();
+
+            $containerOrderPage = $this->pageManager->findByLayout(15);
             $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);
         }
     }

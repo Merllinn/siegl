@@ -99,6 +99,7 @@
 					    AOS.init({
 							once: true
 						});
+					    {*
 					    {if!empty($basket->zoneObj)}
 						    $(".dateField input").datetimepicker({
 						      language:'cs',
@@ -114,6 +115,7 @@
 						      {/if}
 						    });
 					    {/if}
+					    *}
 						$(".updateValue").change(function(){
 							var link = $(this).data("link");
 							link = link + "&val=" + $(this).val();
@@ -175,17 +177,17 @@
 	            <form>
 	                <ul class="list-inline select-material">
 	                	{var $allMaterials = $presenter->productManager->getByType(2)}
-                        <li class="list-inline-item" n:foreach="$allMaterials as $mat" data-mat="{$mat->id}">
+                        <li class="list-inline-item materialBlock{$mat->id}" n:foreach="$allMaterials as $mat" data-mat="{$mat->id}">
                             <label class="pickMaterial" for="material{$mat->id}">
                                 <input id="material{$mat->id}" type="radio" name="material" value="{$mat->id}">
                                 {var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
                                 <img src="{$matImg|thumb}" alt="{$mat->name}">
                                 <span>{$mat->name}</span>
                             </label>
-	                        <a href="#" class="btn btn-primary btn-arrow btn-red pickMaterial" title="Vybrat tento materiál" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_ZMENIT'}">{if !empty($materials[$mat->id])}{_'TEXT_ZMENIT'}{else}{_'TEXT_VYBRAT'}{/if}</a>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red pickMaterial materialButton" title="Vybrat tento materiál" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_ZMENIT'}">{if !empty($materials[$mat->id])}{_'TEXT_ZMENIT'}{else}{_'TEXT_VYBRAT'}{/if}</a>
                         </li>
 	                </ul>
-                    <div class="roughness mat{$mat->id}" n:foreach="$allMaterials as $mat" style="display: none;">
+                    <div class="roughness mat{$mat->id}" data-mat="{$mat->id}" n:foreach="$allMaterials as $mat" style="display: none;">
                         <h4>Zvolte typ / hrubost</h4>
                         {var $prices = $presenter->productManager->getPrices($mat->id)}
                         <ul class="list-unstyled">
@@ -240,34 +242,21 @@
 	            Potřebujete něco dalšího?
 	        </h3>
 	        <div class="row">
-	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="50">
-	                <div class="service-icon">
-	                    <img src="img/i_kontejnery-na-odpad.svg" alt="Ikona kontejnerů na odpad">
-	                </div>
-	                Prodej a dovoz <span>zeminy</span>
-	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
-	            </div>
-	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
-	                <div class="service-icon">
-	                    <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
-	                </div>
-	                Odvoz a likvidace <span>po demolicích</span>
-	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
-	            </div>
-	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
-	                <div class="service-icon">
-	                    <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
-	                </div>
-	                <span>Zemní a výkopové</span> práce
-	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
-	            </div>
-	            <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="75">
-	                <div class="service-icon">
-	                    <img src="img/i_kontejnery-na-sut.svg" alt="Ikona kontejnerů na suť">
-	                </div>
-	                <span>Výkopy bazénů</span> na klíč
-	                <a class="btn btn-primary btn-arrow btn-red btn-select" title="Vybrat službu">Vybrat</a>
-	            </div>
+            	{var $subpages = $presenter->pageManager->getInDemand()}
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
+                    <div class="service-icon">
+                        {var $mainImg = $presenter->pageManager->getMainPhoto($sp->id)}
+                        <img src="{$mainImg|thumb:140:null}" class="img-service-{$sp->id}" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
+                    </div>
+                    {$sp->name|noescape}
+                    <a href="" data-link="{link setMoreToDemand! $sp->name}" data-unlink="{link unsetMoreToDemand! $sp->name}" class="btn btn-primary btn-arrow btn-red btn-select selectMoreDemand {if !empty($basket->more[$sp->name])}selected{/if}" title="Vybrat službu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">
+                    	{if !empty($basket->more[$sp->name])}
+                    		{_'TEXT_VYBRANY'}
+                    	{else}
+                    		{_'TEXT_VYBRAT'}
+                    	{/if}
+                    </a>
+                </div>
 	        </div>
 	    </div>
 	</section>
@@ -465,6 +454,20 @@
 				link = link + "&val=" + $(this).val();
 				$.get(link);
 			});
+			$(".selectMoreDemand").click(function(e){
+				e.preventDefault();
+				if($(this).hasClass("selected")){
+					var link = $(this).data("unlink");
+					$(this).removeClass("selected");
+					$(this).text($(this).data("pick"));
+				}
+				else{
+					var link = $(this).data("link");
+					$(this).addClass("selected");
+					$(this).text($(this).data("picked"));
+				}
+				$.get(link);
+			});
 			$(".includeWeekend").click(function(e){
 				e.preventDefault();
 				var link = $(this).data("link");
@@ -491,7 +494,7 @@
 				var closestLi = $(this).closest("li");
 				//var link = $(this).data("link");
 				var matId = closestLi.data("mat");
-				closestLi.addClass("selected");
+				closestLi.addClass("selected").siblings().removeClass("selected");
 				$(".roughness").hide();
 				$(".roughness.mat"+matId).show();
 				//$(".amount").hide();
@@ -511,7 +514,7 @@
 					$(this).find(".pickButton").text($(this).find(".pickButton").data("pick"));
 				}
 				else{
-					$(".variantLi").removeClass("selected");
+					//$(".variantLi").removeClass("selected");
 					var link = $(this).data("link");
 					thisLi.addClass("selected");
 					var materialKoef = thisLi.find(".amount").data("koef");
@@ -520,7 +523,22 @@
 					$(this).find(".pickButton").text($(this).find(".pickButton").data("picked"));
 				}
 				$.get(link);
+				resolveMaterials();
 			});
+			
+			function resolveMaterials(){
+				$(".roughness").each(function(){
+					var matId = $(this).data("mat");
+					var pickedVariants = $(this).find(".variantLi.selected");
+					var matButton = $(".materialBlock"+matId+" .materialButton");
+					if(pickedVariants.length > 0){
+						matButton.text(matButton.data("picked"));
+					}
+					else{
+						matButton.text(matButton.data("pick"));
+					}
+				});
+			}
 			
 			  $('.minus').click(function () {
 				var $input = $(this).parent().find('input.amountField');

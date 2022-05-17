@@ -411,19 +411,27 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         //$this->sender->send(new BulkGate\Sms\Message($number, $text));
     }
 
-    public function recalculateBasket(){
+    public function recalculateBasket($basket = "basket"){
         $totalPrice = 0;
         $weightAttr = 3;
         $volumeAttr = 2;
         $totalWeight = 0;
         $totalVolume = 0;
-        $zone = $this->basket->zone;
+        $zone = $this->$basket->zone;
         $holidays = explode(chr(10), $this->settings->holidays);
         $weekendPrice = 0;
         $betonPrice = 0;
+        
+        $isBetonAdd = false;
+		$year = date("Y");
+		$startYear = strtotime($year."-01-01");
+		$endYear = strtotime($year."-12-31");
+		$startRange = strtotime($year."-11-15");
+		$endRange = strtotime($year."-03-15");
+        
 
-		if(!empty($this->basket->containers)){
-			foreach($this->basket->containers as $container){
+		if(!empty($this->$basket->containers)){
+			foreach($this->$basket->containers as $container){
 				if(!empty($container->price)){
 					$price = $this->productManager->findActualPrice($container->product, $container->type);
 					if(empty($zone)){
@@ -460,42 +468,57 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 					else if($dateTime->format("N")>=6){
 						$weekendPrice += $this->settings->holidayPrice;
 					}
+					$termU = $dateTime->format("U");
+					if(($startYear <= $termU && $termU <= $endRange) || ($startRange <= $termU && $termU <= $endYear)){
+						$isBetonAdd = true;
+					}
 				}
 			}
 		}
-		if(!empty($this->basket->materials)){
-			foreach($this->basket->materials as $material){
-				if(!empty($material->priceObj)){
-					$totalPrice += $material->priceObj->priceFrom * $material->amount;
+		if(!empty($this->$basket->materials)){
+			if($basket=="basket"){
+				foreach($this->$basket->materials as $material){
+					if(!empty($material->priceObj)){
+						$totalPrice += $material->priceObj->priceFrom * $material->amount;
 
-					//text beton extra pay
-					if($material->product == $this->settings->betonProduct){
-						//test date
-						$year = date("Y");
-						$startYear = strtotime($year."-01-01");
-						$endYear = strtotime($year."-12-31");
-						$startRange = strtotime($year."-11-15");
-						$endRange = strtotime($year."-03-15");
-						$now = time();
-						if(($startYear <= $now && $now <= $endRange) || ($startRange <= $now && $now <= $endYear)){
-							$m3Amount = round($material->amount * $material->priceObj->koef, 2);
-							$betonPrice += $this->settings->betonPrice * $m3Amount;
+						//text beton extra pay
+						if($material->product == $this->settings->betonProduct){
+							if($isBetonAdd){
+								//$m3Amount = round($material->amount * $material->priceObj->koef, 2);
+								$betonPrice += $this->settings->betonPrice * $material->amount;
+							}
+						}
+					}
+				}
+			}
+			else{
+				foreach($this->$basket->materials as $materials){
+					foreach($materials as $material){
+						if(!empty($material->priceObj)){
+							$totalPrice += $material->priceObj->priceFrom * $material->amount;
+
+							//text beton extra pay
+							if($material->priceObj->product == $this->settings->betonProduct){
+								if($isBetonAdd){
+									//$m3Amount = round($material->amount * $material->priceObj->koef, 2);
+									$betonPrice += $this->settings->betonPrice * $material->amount;
+								}
+							}
 						}
 					}
 				}
 			}
 		}
-        
-        $this->basket->weekendPrice = $weekendPrice;
-        $this->basket->betonPrice = $betonPrice;
-        $this->basket->price = $totalPrice + $weekendPrice;
-        $this->basket->maxWeight = $totalWeight;
-        $this->basket->maxVolume = $totalVolume;
+        $this->$basket->betonPrice = $betonPrice;
+        $this->$basket->weekendPrice = $weekendPrice;
+        $this->$basket->price = $totalPrice + $weekendPrice;
+        $this->$basket->maxWeight = $totalWeight;
+        $this->$basket->maxVolume = $totalVolume;
 
 		$vatKoef = 1 + ($this->settings->vat/100);
-        $this->basket->priceVat = ($this->basket->price * $vatKoef);
+        $this->$basket->priceVat = ($this->$basket->price * $vatKoef);
         
-        $this->template->basket = $this->basket;
+        $this->template->$basket = $this->$basket;
         
         $this->redrawControl("orderprice");
 

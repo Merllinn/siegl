@@ -110,7 +110,7 @@
 						<tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
 							<td><strong>{$product->name}</strong></td>
 							<td>
-								{$product->quantity} tun
+								{$product->quantity} {if $product->products_id==$settings->betonProduct}m<sup>3</sup>{else}tun{/if}
 							</td>
 							<td>
 								{$product->price|number:0:',':' '} Kč

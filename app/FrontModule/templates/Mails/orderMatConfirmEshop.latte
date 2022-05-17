@@ -3,7 +3,7 @@
     </p>
 
     <p>
-        byla přijata nová poptávka.
+        byla přijata nová objednávka materiálu.
     </p>
     
     {var $containers = array()}
@@ -17,26 +17,6 @@
     	{/if}
     {/foreach}
 
-	<h4>rozsah poptávky</h4>
-	{$order->description|breaklines|noescape}
-
-	{if count($containers)>0}
-		<h4>Kontejnery</h4>
-		<table>
-			<thead>
-				<th>Název</th>
-				<th>Množství</th>
-			</thead>
-			<tbody>
-			<tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
-				<td><strong>{$product->name}</strong></td>
-				<td>
-					{$product->quantity} tun
-				</td>
-			</tr>
-			</tbody>
-		</table>
-	{/if}
 	{if count($materials)>0}
 		<h4>Materiál</h4>
 		<table>
@@ -55,31 +35,48 @@
 		</table>
 	{/if}
 
-	<h4>Termín realizace</h4>
+	{if count($containers)>0}
+		<h4>Kontejnery</h4>
 		<table>
 			<thead>
-				<th>Od</th>
-				<th>Do</th>
-				<th>Víkendy</th>
+				<th>Název</th>
+				<th>Množství</th>
 			</thead>
 			<tbody>
-			<tr>
-				<td>{$order->termFrom}</td>
-				<td>{$order->termTo}</td>
+			<tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
+				<td><strong>{$product->name}</strong></td>
 				<td>
-					{if $order->weekends}ANO{else}NE{/if}
+					{$product->quantity} tun
 				</td>
 			</tr>
 			</tbody>
 		</table>
+	{/if}
+
+	<h4>Cena</h4>
+	<table>
+		<tbody>
+			<tr n:if="$order->weekendPrice>0">
+				<td colspan="3">{_'PRIPLATEK_VIKEND_SVATEK'}:</td>
+				<td >{$order->weekendPrice|number:0:',':' '} Kč</td>
+			</tr>
+			<tr n:if="$order->betonPrice>0">
+				<td colspan="3">{_'PRIPLATEK_BETON'}:</td>
+				<td >{$order->betonPrice|number:0:',':' '} Kč</td>
+			</tr>
+			<tr>
+				<td colspan="3">Celková cena bez DPH:</td>
+				<td >{$order->price|number:0:',':' '} Kč</td>
+			</tr>
+			<tr>
+				<td colspan="3">Celková cena s DPH:</td>
+				<td >{$order->price*(1 + ($settings->vat/100))|number:0:',':' '} Kč</td>
+			</tr>
+		</tbody>
+	</table>
 
 	<h4>Místo přistavení</h4>
 	{$order->street}
-	
-	{if !empty($order->more)}
-		<h4>Něco dalšího</h4>
-		<p>{=nl2br($order->more)|noescape}</p>
-	{/if}
 	
 	<h4>Údaje o {if !empty($order->ic)}firemním {/if}zákazníkovi</h4>
     <table>

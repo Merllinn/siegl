@@ -76,6 +76,14 @@ final class PageManager
             ->order("order");
     }
 
+    public function getInDemand()
+    {
+        return $this->get()
+            ->where("inDemand = ?", true)
+            ->where("parent = ?", 1)
+            ->order("order");
+    }
+
     public function add($values)
     {
         $this->get()->insert($values);

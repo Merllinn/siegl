@@ -242,22 +242,26 @@
                     </div>
                     <!-- ./typ a hrubost -->
                     {snippet matamount}
-                    <div class="amount" style="display: none;">
+                    <div class="amount" n:if="!empty($materials[0]->priceObj)" data-koef="{if $materials[0]->product==$settings->betonProduct}{1/$materials[0]->priceObj->koef}{else}{$materials[0]->priceObj->koef}{/if}" data-link="{link setMaterialAmount!}"  style="display: none;">
                         <label for="amount">Množství materiálu</label>
                         {if !empty($materials[0]->product) && $materials[0]->product!=$settings->betonProduct}
 	                        <div class="number">
-                        		<span class="minus"></span><input class="amountField form-control materialWeight changeable" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
+                        		<span class="minus"></span>
+                        		<input class="amountField form-control materialSource materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}">
+                        		<span class="plus"></span>
 	                        </div>
 	                        <span class="tons">tun =</span>
-	                        <input class="form-control material-quantity" type="text" value="" readonly>
+	                        <input class="form-control materialTarger" type="text" value="{$materials[0]->amount*$materials[0]->priceObj->koef}" readonly>
 	                        <span class="material-quantity">m<sup>3</sup></span>
                         {/if}
                         {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
 	                        <div class="number">
-                        		<span class="minus"></span><input class="amountField form-control material-quantity changeable" type="text" value="1"><span class="plus"></span>
+                        		<span class="minus"></span>
+                        		<input class="amountField form-control materialSource" type="text" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}">
+                        		<span class="plus"></span>
 	                        </div>
 	                        <span class="material-quantity">m<sup>3</sup> =</span>
-                        	<input class="form-control materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount|number:2}{/if}" readonly>
+                        	<input class="form-control materialTarger materialWeight" type="text" min="1" value="{$materials[0]->amount/$materials[0]->priceObj->koef|number:2}" readonly>
 	                        <span class="tons">tun</span>
                         {/if}
                     </div>
@@ -295,25 +299,16 @@
 					    $input.change();
 					    return false;
 					  });
-						$(".materialWeight.changeable").change(function(){
+						$(".materialSource").change(function(){
+							var amountBlock = $(this).closest(".amount");
+							var materialKoef = amountBlock.data("koef");
 							var thisVal = parseFloat($(this).val().replace(",", "."));
 							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
 							$(this).val(correctedVal);
 							var matWeight = $(this).val();
-							$(".material-quantity").val((matWeight*materialKoef).toFixed(2));
-							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
-							checkMaterialAmount();
-							$.get(link);
-
-						});
-						$(".material-quantity.changeable").change(function(){
-							var thisVal = parseFloat($(this).val().replace(",", "."));
-							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
-							$(this).val(correctedVal);
-							var matWeight = $(this).val()/materialKoef;
-							$(".materialWeight").val(matWeight.toFixed(2));
-							var link = {link setMaterialAmount!} + "&amount=" + matWeight;
-							checkMaterialAmount();
+							amountBlock.find(".materialTarger").val((matWeight*materialKoef).toFixed(2));
+							var link = amountBlock.data("link") + "&amount=" + matWeight;
+							//checkMaterialAmount();
 							$.get(link);
 
 						});

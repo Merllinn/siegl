@@ -110,6 +110,26 @@ class PagesPresenter extends BasePresenter
 		}
 	}
 
+	public function handleActivateD($id){
+		try{
+			$this->pageManager->update(array("inDemand"=>1), $id);
+			$this->redirect("this");
+		}
+		catch(DibiDriverException $e){
+			$this->flashMessage($e->getMessage());
+		}
+	}
+
+	public function handleDeactivateD($id){
+		try{
+			$this->pageManager->update(array("inDemand"=>0), $id);
+			$this->redirect("this");
+		}
+		catch(DibiDriverException $e){
+			$this->flashMessage($e->getMessage());
+		}
+	}
+
     /**
      * Make table of pages
      *
@@ -196,6 +216,29 @@ class PagesPresenter extends BasePresenter
 					}
                 }
         });
+
+        if($presenter->parent==1){
+	        $grid->addColumnText('inDemand', 'V poptávce')
+	            ->setRenderer(function($row) use ($presenter) {
+	                if($row->inDemand){
+						if($this->user->identity->role==9){
+                    		return Html::el("a")->class("")->href($presenter->link("deactivateD!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/active.png")->class("action"));
+						}
+						else{
+                    		return Html::el("img")->src(FOLDER."/images/active.png")->class("action");
+						}
+	                }
+	                else{
+						if($this->user->identity->role==9){
+                    		return Html::el("a")->class("")->href($presenter->link("activateD!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/deactive.png")->class("action"));
+						}
+						else{
+                    		return Html::el("img")->src(FOLDER."/images/active.png")->class("deactive");
+						}
+	                }
+	        });
+        }
+        
 
 		if($this->user->identity->role==9){
         $grid->addColumnText('tools', 'Nástroje')

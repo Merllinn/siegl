@@ -1,0 +1,860 @@
+{layout ../@layout.latte}
+{block content}
+	<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvbrT0aEtXB5ZsAZUMRHhKxKTE8ocIlKA&callback=initMap&v=weekly&libraries=places"
+      defer
+    ></script>
+	<section class="top order">
+	    <div class="container">
+	        <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Poptávka</h1>
+	        <p class="desc">
+	            Poptávka pro stavební firmy a velkoodběratele.<br>
+	            Individuální nabídku zpracujeme v pracovní dny do 24 hodin.
+	        </p>
+	        <h2>Lokalita stavby</h2>
+            <form class="orderform">
+                <div class="input-group street">
+                    <label for="searchTextField" class="form-label">Zadejte ulici</label>
+                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
+                    <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
+                </div>
+            </form>
+	        <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
+	    </div>
+	    <img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	    <img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	</section>
+	<!-- ./top -->
+	<section class="map">
+	    <div class="container">
+	        <div id="map" style="width:100%; height:680px;"></div>
+	    </div>
+	</section>
+	<section class="material">
+	    <div class="container">
+	        <h3 class="title underline">Potřebujete stavební materiál?</h3>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
+	    </div>
+	    <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
+	        <div class="container margin">
+	            <h4>Vyberte typ materiálu</h4>
+	            <form>
+	                <ul class="list-inline select-material">
+	                	{var $allMaterials = $presenter->productManager->getByType(2)}
+                        <li class="list-inline-item materialBlock{$mat->id}" n:foreach="$allMaterials as $mat" data-mat="{$mat->id}">
+                            <label class="pickMaterial" for="material{$mat->id}">
+                                <input id="material{$mat->id}" type="radio" name="material" value="{$mat->id}">
+                                {var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
+                                <img src="{$matImg|thumb}" alt="{$mat->name}">
+                                <span>{$mat->name}</span>
+                            </label>
+	                        <a href="#" class="btn btn-primary btn-arrow btn-red pickMaterial materialButton" title="Vybrat tento materiál" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_ZMENIT'}">{if !empty($materials[$mat->id])}{_'TEXT_ZMENIT'}{else}{_'TEXT_VYBRAT'}{/if}</a>
+                        </li>
+	                </ul>
+                    <div class="roughness mat{$mat->id}" data-mat="{$mat->id}" n:foreach="$allMaterials as $mat" style="display: none;">
+                        <h4>Zvolte typ / hrubost</h4>
+                        {var $prices = $presenter->productManager->getPrices($mat->id)}
+                        <ul class="list-unstyled">
+                            <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class="variantLi {if !empty($materials[$mat->id][$price->id])}selected{/if}">
+                                <div class="image chocolat-parent">
+                            		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
+                                    <a href="{$matImg|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                </div>
+                            	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariantD! $price->id}" data-unlink="{link unsetMaterialVariantD! $price->id}" data-price="{$price->priceFrom}">
+                                    <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
+                                    <div class="title">
+                                        <span>{$attVals[$price->attributeValue]->name}</span>
+                                        <div class="description" style="display: block">
+                                            {$attVals[$price->attributeValue]->desc|noescape}
+                                        </div>
+                                        <a href="#" class="pickButton btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">{if !empty($materials[$mat->id][$price->id])}{_'TEXT_VYBRANY'}{else}{_'TEXT_VYBRAT'}{/if}</a>
+                                    </div>
+                                </label>
+	                            <div class="amount" data-koef="{if $mat->id==$settings->betonProduct}{1/$price->koef}{else}{$price->koef}{/if}" data-link="{link setMaterialAmountD! $mat->id, $price->id}" style="{if empty($materials[$mat->id][$price->id])}display: none;{/if}">
+				                    <label for="amount">Množství materiálu</label>
+				                    	{if $mat->id==$settings->betonProduct}
+				                    		<div class="number">
+				                    			<span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span>
+				                    		</div> 
+				                    		<span class="material-quantity">m<sup>3</sup> =</span>
+				                    		<input class="form-control material-quantity materialTarger" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount*$price->koef|number:2}{else}{=1*$price->koef}{/if}" readonly> 
+				                    		<span class="tons">tun</span>
+				                    	{else}
+				                    		<div class="number">
+				                    			<span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span>
+				                    		</div> 
+				                    		<span class="tons">tun =</span>
+				                    		<input class="form-control material-quantity materialTarger" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount/$price->koef|number:2}{else}{=1/$price->koef}{/if}" readonly> 
+				                    		<span class="material-quantity">m<sup>3</sup></span>
+				                    	{/if}
+				                </div>
+                            </li>
+                        </ul>
+                    </div>
+	                <!-- ./typ a hrubost -->
+	            </form>
+	        </div>
+	    </div>
+	    <!-- ./select material -->
+	    <img class="mosaic left" src="{$basePath}/img/mosaic_s10.png" alt="Obrázek mozaiky">
+	    <img class="mosaic right" src="{$basePath}/img/mosaic_s9.png" alt="Obrázek mozaiky">
+	</section>
+	<!-- ./material -->
+	<section class="waste">
+	    <div class="container">
+	        <h1 class="title underline">Rozsah zakázky</h1>
+	        <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
+	        <div class="filter">
+	            {snippet orderContainers}
+	            <form>
+	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                    <i class="fa-solid fa-pen-to-square"></i>
+	                    <label for="describe">Popište:</label>
+	                    <textarea class="form-control updateValue" data-link="{link setBasketNote! 'basketD'}" id="describe" rows="7">{$basket->description}</textarea>
+	                </div>
+	                <p class="desc">Nebo zadejte druh odpadu a velikost kontejneru</p>
+	                {if !empty($containers)}
+	                	<div class="oneContainer" n:foreach="$containers as $index=>$container">
+		                <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                    		{var $attr = $presenter->attributeManager->find(1)}
+		                    <li class="list-inline-item druh-odpadu">
+		                        <label class="select">
+			                        <select name="type[{$index}]" data-link={link setBasketVal! $index, "type", 'basketD'} class="form-select updateValue typePick" aria-label="{$attr->name}">
+			                            <option {if empty($container->price->attributeValue)}selected="selected"{/if} value="">Vyberte druh odpadu</option>
+			                            {var $values = $presenter->attributeManager->getValuesArr($attr->id)}
+			                            <option n:foreach="$values as $key=>$val"  {if !empty($container->type) && $container->type==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+			                        </select>
+		                        </label>
+		                    </li>
+		                    <!-- ./druh odpadu -->
+		                    {var $products = $presenter->productManager->getByType(1)}
+		                    <li class="list-inline-item objem">
+		                        <label class="select">
+			                        <select name="container{$index}" data-link={link setBasketVal! $index, "product", 'basketD'}  class="form-select updateValue productPick" aria-label="Kontejner">
+			                            <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
+			                            <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
+		                                	{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
+		                                	{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
+			                            </option>
+			                        </select>
+		                        </label>
+		                    </li>
+		                    <!-- ./velikost kontejneru -->
+		            		<li class="list-inline-item pocet-kontejneru">
+			                    Přibližný počet kontejnerů/den
+			                    <label class="select">
+			                        <select aria-label="Pocet" data-link={link setBasketVal! $index, "amount", 'basketD'} class="updateValue">
+			                            <option n:for="$i=1;$i<=6;$i++" {if !empty($container->amount) && $container->amount==$i}selected="selected"{/if} value="{$i}">{$i}</option>
+			                        </select>
+			                    </label>
+			                </li>
+	                    	<!-- ./priblizny pocet kontejneru -->
+		                </ul>
+	                </div>
+	                {/if}
+                    <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+                        <li class="list-inline-item add-container">
+                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!, 'basketD'">Přidat další kontejner</a></button>
+                        </li>
+                    </ul>
+	            </form>
+                <script {*n:if="$presenter->isAjax()"*}>
+				    $(function(){
+						var checkWeight = true;
+						window.checkAddress = false;
+						{if !empty($address)}
+							window.checkAddress = true;
+						{/if}
+
+					    AOS.init({
+							once: true
+						});
+					    {*
+					    {if!empty($basket->zoneObj)}
+						    $(".dateField input").datetimepicker({
+						      language:'cs',
+						      minuteStep: 30,
+						      format: 'dd/mm/yyyy',
+						      autoclose: true,
+                              pickTime: false,
+                              minView: 2,
+						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
+						      	startDate: '+0d',
+						      {else}
+						      	startDate: '+1d',
+						      {/if}
+						    });
+					    {/if}
+					    *}
+						$(".updateValue").change(function(){
+							var link = $(this).data("link");
+							link = link + "&val=" + $(this).val();
+							$.get(link);
+						});
+						$(".typePick").change(function(){
+							var type = $(this).val();
+							$(this).closest("ul").find(".productPick option").each(function(){
+								if($(this).data("types")=="all"){
+									$(this).show();
+								}
+								else if($(this).data("types").indexOf(type)>-1){
+									$(this).show();
+								}
+								else{
+									$(this).hide();
+									if($(this).is(':selected')){
+										$(this).closest("select").val("");
+									}
+								}
+							});
+						});
+						
+						function enableDisableOrder(){
+							sendOrderButton = $(".sendOrderButton");
+							var orderValid = true;
+							if(window.checkWeight==false) orderValid = false;
+							if(window.checkAddress==false) orderValid = false;
+							var containerCount = $(".oneContainer").length;
+							if(containerCount==0) orderValid = false;
+							if(orderValid){
+								sendOrderButton.removeClass("disabled");
+							}	
+							else{
+								sendOrderButton.addClass("disabled");
+							}	
+						}
+						
+					    
+				    });
+                </script>
+	            {/snippet}
+	            <!-- ./form -->
+	        </div>
+	        <!-- ./filter -->
+	    </div>
+	    <img class="mosaic left" src="{$basePath}/img/mosaic_s8.png" alt="Obrázek mozaiky">
+	</section>
+	<!-- ./waste -->
+	<section class="something-else">
+	    <div class="container">
+	        <h3 class="title underline">
+	            Potřebujete něco dalšího?
+	        </h3>
+	        <div class="row">
+            	{var $subpages = $presenter->pageManager->getInDemand()}
+                <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
+                    <div class="service-icon">
+                        {var $mainImg = $presenter->pageManager->getMainPhoto($sp->id)}
+                        <img src="{$mainImg|thumb:140:null}" class="img-service-{$sp->id}" alt="Ikona {=strtolower(strip_tags($sp->name))}" n:if="!empty($mainImg->file)">
+                    </div>
+                    {$sp->name|noescape}
+                    <a href="" data-link="{link setMoreToDemand! $sp->name}" data-unlink="{link unsetMoreToDemand! $sp->name}" class="btn btn-primary btn-arrow btn-red btn-select selectMoreDemand {if !empty($basket->more[$sp->name])}selected{/if}" title="Vybrat službu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">
+                    	{if !empty($basket->more[$sp->name])}
+                    		{_'TEXT_VYBRANY'}
+                    	{else}
+                    		{_'TEXT_VYBRAT'}
+                    	{/if}
+                    </a>
+                </div>
+	        </div>
+	    </div>
+	</section>
+	<!-- ./something else -->
+	<div class="term">
+	    <div class="container">
+	        <h2 class="title underline">Termín realizace</h2>
+	        <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	            <li class="list-inline-item date-from" id="date-from">
+	                Od
+	                <label class="select">
+	                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketD'}" type="text" value="{$basket->termFrom}" readonly>
+	                </label>
+	            </li>
+	            <!-- ./od -->
+	            <li class="list-inline-item date-to" id="date-to">
+	                Do
+	                <label class="select">
+	                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termTo', 'basketD'}" type="text" value="{$basket->termTo}" readonly>
+	                </label>
+	            </li>
+	            <!-- ./od -->
+	            <li class="list-inline-item weekend">
+	                Práce včetně víkendu
+	                <button class="btn btn-primary btn-arrow btn-white {if !empty($basket->weekends)}active{/if} includeWeekend" data-link="{link setOrderVal! 'weekends', 'basketD'}">{if !empty($basket->weekends)}Ano{else}Ne{/if}</button>
+	            </li>
+	            <!-- ./od -->
+	        </ul>
+	    </div>
+	</div>
+	<!-- ./term -->
+    {form orderForm}
+    {input type}
+    <div class="order-form">
+        <div class="container">
+            <ul class="errors" n:if="$form->hasErrors()">
+				<li n:foreach="$form->errors as $error">{$error}</li>
+			</ul>
+            <nav>
+                <div class="nav nav-tabs" id="nav-order-form" role="tablist">
+                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabOrderForm">
+                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            {label name/}
+                            {input name}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            {label surname/}
+                            {input surname}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            {label email/}
+                            {input email}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            {label phone/}
+                            {input phone}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+                            {label note/}
+                            {input note}
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+                                {input different_delivery}
+								{label different_delivery}{/label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="billing-information" style="display: none">
+                        <div class="row">
+                            <div class="form-group col-md-12 arrow delivery-street">
+	                            {label delivery_street/}
+	                            {input delivery_street}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 arrow">
+	                            {label delivery_city/}
+	                            {input delivery_city}
+                            </div>
+                            <div class="form-group col-md-6 arrow">
+	                            {label delivery_zip/}
+	                            {input delivery_zip}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                    <div class="row row-ic">
+                        <div class="form-group col-md-12">
+	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_name/}
+	                        {input bussiness_name}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_surname/}
+	                        {input bussiness_surname}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_email/}
+	                        {input bussiness_email}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_phone/}
+	                        {input bussiness_phone}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+	                        {label bussiness_note/}
+	                        {input bussiness_note}
+                        </div>
+                    </div>
+                    <div class="row row-firm-name">
+                        <div class="form-group col-md-12 arrow company">
+	                        {label bussiness_company/}
+	                        {input bussiness_company}
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+		                        {input bussiness_different_delivery}
+		                        {label bussiness_different_delivery}{/label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="business-customer-billing-information" style="display: none">
+                        <div class="row">
+                            <div class="form-group col-md-12 arrow delivery-street">
+		                        {label bussiness_delivery_street/}
+		                        {input bussiness_delivery_street}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 arrow">
+		                        {label bussiness_delivery_city/}
+		                        {input bussiness_delivery_city}
+                            </div>
+                            <div class="form-group col-md-6 arrow">
+		                        {label bussiness_delivery_zip/}
+		                        {input bussiness_delivery_zip}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-send-order">
+                    <div class="form-group col-md-12 send-order">
+                        <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat poptávku <i class="fa-solid fa-angles-right"></i></button>
+                    </div>
+                </div>
+                
+            </div>
+            <img class="car" src="{$basePath}/img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
+            <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
+        </div>
+        {include '../_parts/footerMenu.latte', class=>''}
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
+        <div class="rectangle"></div>
+    </div>
+    {/form}
+    <!-- ./form -->
+	<div class="waste-type-rectangle"></div>
+{/block}
+
+{block scripts}
+    <script>
+    	$(document).ready(function(){
+			var materialPrice = 0;
+			
+			$(".variantImage").click(function(e){
+				e.stopPropagation();
+			});
+			
+			$(".updateValue").change(function(){
+				var link = $(this).data("link");
+				link = link + "&val=" + $(this).val();
+				$.get(link);
+			});
+			$(".selectMoreDemand").click(function(e){
+				e.preventDefault();
+				if($(this).hasClass("selected")){
+					var link = $(this).data("unlink");
+					$(this).removeClass("selected");
+					$(this).text($(this).data("pick"));
+				}
+				else{
+					var link = $(this).data("link");
+					$(this).addClass("selected");
+					$(this).text($(this).data("picked"));
+				}
+				$.get(link);
+			});
+			$(".includeWeekend").click(function(e){
+				e.preventDefault();
+				var link = $(this).data("link");
+				if($(this).hasClass("active")){
+					link = link + "&val=0";
+					$(this).removeClass("active").text("Ne");
+				}
+				else{
+					link = link + "&val=1";
+					$(this).addClass("active").text("Ano");
+				}
+				$(this).trigger("blur");
+				$.get(link);
+			});
+			$(".triggerMaterial").click(function(e){
+				e.preventDefault()
+				$(".changeMaterial").toggle();
+				if($(this).data("link")!=""){
+					$.get($(this).data("link"));
+				}
+			});
+			$(".pickMaterial").click(function(e){
+				e.preventDefault();
+				var closestLi = $(this).closest("li");
+				//var link = $(this).data("link");
+				var matId = closestLi.data("mat");
+				closestLi.addClass("selected").siblings().removeClass("selected");
+				$(".roughness").hide();
+				$(".roughness.mat"+matId).show();
+				//$(".amount").hide();
+				//$(".tons-price").hide();
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $(".roughness.mat"+matId).offset().top
+    			}, 500);
+				//$.get(link);
+			});
+			$(".pickVariant").click(function(e){
+				e.preventDefault()
+				var thisLi = $(this).closest("li");
+				if(thisLi.hasClass("selected")){
+					var link = $(this).data("unlink");
+					thisLi.removeClass("selected");
+					thisLi.find(".amount").slideUp();
+					$(this).find(".pickButton").text($(this).find(".pickButton").data("pick"));
+				}
+				else{
+					//$(".variantLi").removeClass("selected");
+					var link = $(this).data("link");
+					thisLi.addClass("selected");
+					var materialKoef = thisLi.find(".amount").data("koef");
+					$(".materialTarger").val(($(".materialSource").val()*materialKoef).toFixed(2));
+					thisLi.find(".amount").slideDown();
+					$(this).find(".pickButton").text($(this).find(".pickButton").data("picked"));
+				}
+				$.get(link);
+				resolveMaterials();
+			});
+			
+			function resolveMaterials(){
+				$(".roughness").each(function(){
+					var matId = $(this).data("mat");
+					var pickedVariants = $(this).find(".variantLi.selected");
+					var matButton = $(".materialBlock"+matId+" .materialButton");
+					if(pickedVariants.length > 0){
+						matButton.text(matButton.data("picked"));
+					}
+					else{
+						matButton.text(matButton.data("pick"));
+					}
+				});
+			}
+			
+			  $('.minus').click(function () {
+				var $input = $(this).parent().find('input.amountField');
+				var count = parseFloat($input.val()) - 0.5;
+				count = count < 1 ? 1 : count;
+				$input.val(count);
+				$input.change();
+				return false;
+			  });
+			  
+			  $('.plus').click(function () {
+				var $input = $(this).parent().find('input.amountField');
+				$input.val(parseFloat($input.val()) + 0.5);
+				$input.change();
+				return false;
+			  });
+				$(".materialSource").change(function(){
+					var amountBlock = $(this).closest(".amount");
+					var materialKoef = amountBlock.data("koef");
+					var thisVal = parseFloat($(this).val().replace(",", "."));
+					var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+					$(this).val(correctedVal);
+					var matWeight = $(this).val();
+					amountBlock.find(".materialTarger").val((matWeight*materialKoef).toFixed(2));
+					var link = amountBlock.data("link") + "&amount=" + matWeight;
+					//checkMaterialAmount();
+					$.get(link);
+
+				});
+			
+			
+			if($("#searchTextField").val() != ""){
+				$(".setAddress").trigger("click");
+			}
+			if($(".materialWeight").val() != 1){
+				$(".materialWeight").trigger("change");
+			}
+			
+			function readFromAres(){
+				var ic=$(".idField");
+				if(ic.val()==""){
+					alert("Vyplňte IČO");
+				}
+				else{
+					var buttonText = $(".loadAres").text();
+					$(".loadAres").html(buttonText + ' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+     				//$(".loadAres").removeClass("btn-primary");
+				   $.ajax({
+					url: {link :Front:Homepage:ares},
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					data: "ico="+ic.val(),
+					cache: false,
+					success: function(d) {
+					 data = d.data;
+					 if (data.stav == 'ok') {
+					  //$('input[name=dic]').val(data.dic);
+					  $('input[name=bussiness_company]').val(data.firma);
+					  if($('input[name=bussiness_different_delivery]').prop('checked')){
+						  $('input[name=bussiness_delivery_street]').val(data.ulice);
+						  $('input[name=bussiness_delivery_city]').val(data.mesto);
+						  $('input[name=bussiness_delivery_zip]').val(data.psc);
+					  }
+					 } else {
+					  alert(data.stav);
+					 }
+     				//$(".loadAres").addClass("btn-primary");
+     				$(".loadAres").html(buttonText);
+					},
+				   });
+   				}
+			}
+            $(".loadAres").click(function(e){
+                e.preventDefault();
+                readFromAres();
+            });
+			
+		});
+		
+		function initMap() {
+			var center = { lat: 50.1025735, lng: 14.4273201 };
+			var mapEl = document.getElementById("map");
+			var geocoder = new google.maps.Geocoder();
+			var map = new google.maps.Map(
+			   mapEl,
+			  {
+			    zoom: 14.21,
+			    center: center,
+			  }
+			);
+			
+            google.maps.Polygon.prototype.Contains = function (point) {
+                var crossings = 0,
+                    path = this.getPath();
+                // for each edge
+                for (var i = 0; i < path.getLength() ; i++) {
+                    var a = path.getAt(i),
+                        j = i + 1;
+                    if (j >= path.getLength()) {
+                        j = 0;
+                    }
+                    var b = path.getAt(j);
+                    if (rayCrossesSegment(point, a, b)) {
+                        crossings++;
+                    }
+                }
+                // odd number of crossings?
+                return (crossings % 2 == 1);
+                function rayCrossesSegment(point, a, b) {
+                    var px = point.lng(),
+                        py = point.lat(),
+                        ax = a.lng(),
+                        ay = a.lat(),
+                        bx = b.lng(),
+                        by = b.lat();
+                    if (ay > by) {
+                        ax = b.lng();
+                        ay = b.lat();
+                        bx = a.lng();
+                        by = a.lat();
+                    }
+                    if (py == ay || py == by) py += 0.00000001;
+                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
+                    if (px < Math.min(ax, bx)) return true;
+                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
+                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
+                    return (blue >= red);
+                }
+            };			
+			
+			var input = document.getElementById('searchTextField');
+			/*
+			const center = { lat: 50.064192, lng: -130.605469 };
+			// Create a bounding box with sides ~10km away from the center point
+			const defaultBounds = {
+			    north: center.lat + 0.1,
+			    south: center.lat - 0.1,
+			    east: center.lng + 0.1,
+			    west: center.lng - 0.1,
+			};
+			*/
+			const acoptions = {
+			    //bounds: defaultBounds,
+			    componentRestrictions: { country: "cz" },
+			    fields: ["address_components", "geometry"],
+			    strictBounds: false,
+			    //types: ["establishment"],
+			};
+  			new google.maps.places.Autocomplete(input, acoptions);
+  			var marker
+  			
+  			$("#searchTextField").keypress(function(event){
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+  				if(keycode == '13'){
+					event.preventDefault();
+					checkPickedAddress();
+				}
+  			});
+  			$("#searchTextField").change(function(){
+				checkPickedAddress();
+  			});
+  			$(".setAddress").click(function(e){
+				e.preventDefault();
+				checkPickedAddress();
+  			});
+  			map.addListener("click", (mapsMouseEvent) => {
+    		  var ll = mapsMouseEvent.latLng;
+    		  geocoder
+    		  	.geocode({ location: ll })
+    		  	.then((response) => {
+    		  		if (response.results[0]) {
+    		  			$("#searchTextField").val(response.results[0].formatted_address);
+    		  			validateAddress(response.results[0]);
+					}else{
+						$("#searchTextField").val("nenalezeno");
+					}
+					
+    		  	});
+    		});
+    		
+    		function checkPickedAddress(){
+				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						validateAddress(results[0]);
+					} 
+				}); 				
+    		}
+    		
+    		function validateAddress(result){
+					var inPrague = false;
+					var inZone = false;
+					var activeZone = 0;
+					sendOrderButton = $(".sendOrderButton");
+					var i;
+					
+					{foreach $zones as $zone}
+						if(zone{$zone->id} != null && zone{$zone->id}.Contains(result.geometry.location)){
+							inZone = true;
+							var activeZone = {$zone->id};
+						}
+					{/foreach}
+					
+					for (i = 0; i < result.address_components.length; ++i) {
+						if(result.address_components[i].short_name == "Hlavní město Praha"){
+							inPrague = true;
+						}
+					}
+					if(inZone){
+						setMarker(result.geometry.location, $("#searchTextField").val());
+						map.setCenter(result.geometry.location);
+						window.checkAddress = true;
+						enableDisableOrder();
+					}
+					else if(inPrague){
+						$("#searchTextField").val("");
+						unsetMarker();
+						alert({_'ADRESA_MIMO_ZONU'});
+						window.checkAddress = false;
+						enableDisableOrder();
+					}
+					else{
+						$("#searchTextField").val("");
+						unsetMarker();
+						alert({_'ADRESA_MIMO_PRAHU'});
+						window.checkAddress = false;
+						enableDisableOrder();
+					}
+					var link = {link setBasketZone! 'basketD'} + "&z=" + activeZone;
+					$.get(link);
+				
+    		}
+    		
+    		function unsetMarker(){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			}
+			
+    		function setMarker(latLn, caption){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			  marker = new google.maps.Marker({
+				position: latLn,
+				map,
+				title: caption,
+			  });
+			  var link = {link setAddress!, 'basketD'} + "&a=" + caption;
+			  $.get(link);
+    		}
+    		
+    		//Draw zones polygons
+    		{foreach $zones as $zone}
+				const zone{$zone->id}Coords = [
+				    {var $points = explode(chr(10), $zone->points)}
+				    {foreach $points as $zonePoint}
+			    		{var $pArray = explode(',', $zonePoint)}
+			    		{var $latC = trim((float)$pArray[1])}
+			    		{var $lngC = trim((float)$pArray[0])}
+			    		{ lat: {$latC|noescape}, lng: {$lngC|noescape} },
+				    {/foreach}
+				];
+
+				{var $color = "#333333"};
+				{if !empty($zone->color)}
+					{php $color = $zone->color}
+				{/if}
+				const zone{$zone->id} = new google.maps.Polygon({
+				    paths: zone{$zone->id}Coords,
+				    strokeColor: {$color},
+				    strokeOpacity: 0.8,
+				    strokeWeight: 2,
+				    fillColor: {$color},
+				    fillOpacity: 0.5,
+				});
+
+				zone{$zone->id}.setMap(map);
+				
+  				zone{$zone->id}.addListener("click", (mapsMouseEvent) => {
+    			  var ll = mapsMouseEvent.latLng;
+    			  geocoder
+    		  		.geocode({ location: ll })
+    		  		.then((response) => {
+    		  			if (response.results[0]) {
+    		  				$("#searchTextField").val(response.results[0].formatted_address);
+							validateAddress(response.results[0]);
+						}else{
+							$("#searchTextField").val("nenalezeno");
+						}
+						
+    		  		});
+    			});
+			
+    		{/foreach}
+    		
+			function enableDisableOrder(){
+				/*
+				sendOrderButton = $(".sendOrderButton");
+				var orderValid = true;
+				if(window.checkWeight==false) orderValid = false;
+				if(window.checkAddress==false) orderValid = false;
+				var containerCount = $(".oneContainer").length;
+				if(containerCount==0) orderValid = false;
+				if(orderValid){
+					sendOrderButton.removeClass("disabled");
+				}	
+				else{
+					sendOrderButton.addClass("disabled");
+				}	
+				*/
+			}
+    		
+
+		}
+
+		
+		
+    </script>
+{/block}

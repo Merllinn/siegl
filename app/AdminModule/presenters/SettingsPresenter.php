@@ -46,6 +46,10 @@ class SettingsPresenter extends BasePresenter
 		$form ->addText("betonPrice", "Příplatek za beton (15.11. - 15. 3.) / m3");
 		$form->addGroup("Další nastavení");
 		$form ->addTextArea("deliveries", "Časy přistavení ve fromátu: Část Prahy|standardní kontejner|jednotka|turbo kontejner|jednotka", 30, 10);
+		$form ->addText("smallDelivery", "Cena dopravy malého auta [Kč]");
+		$form ->addText("bigDelivery", "Cena dopravy velkého auta [Kč]");
+		$form ->addText("smallDeliveryS", "Cena dopravy malého auta (beton, kačírek) [Kč]");
+		$form ->addText("bigDeliveryS", "Cena dopravy velkého auta (beton, kačírek) [Kč]");
 		$form->addGroup("SEO");
 		$form ->addTextArea("description", "Popis");
 		$form ->addTextArea("keywords", "Klíčová slova");

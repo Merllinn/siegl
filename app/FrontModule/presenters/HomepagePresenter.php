@@ -78,7 +78,8 @@ final class HomepagePresenter extends HomepageForms
 		$containers[] = $container;
 		$this->$basket->containers = $containers;
 		$this->recalculateBasket($basket);
-		$this->redirect("this");
+		$this->redrawControl("orderContainers");
+		//$this->redirect("this");
 	}
 
 	public function handleSetMaterial($mat){
@@ -225,7 +226,8 @@ final class HomepagePresenter extends HomepageForms
 			$this->$basket->materials = null;
 		}
 		$this->recalculateBasket($basket);
-		$this->redirect("this");
+		$this->redrawControl("orderContainers");
+		//$this->redirect("this");
 	}
 
     public function handleSetBasketVal($index, $name, $basket="basket", $val){
@@ -402,6 +404,9 @@ final class HomepagePresenter extends HomepageForms
         }
         else{
 	        $page = $this->template->page = $this->pageManager->findByAlias($id);
+	        if(!$page){
+				$this->redirect(":front:Homepage:page", "stranka-nenalezena");
+	        }
 	        $this->template->title = $page->title;
 	        $this->template->keywords = $page->seo_keywords;
 	        $this->template->description = $page->seo_description;
@@ -487,6 +492,7 @@ final class HomepagePresenter extends HomepageForms
     	$this->template->attVals = $this->attributeManager->getAllValues();
     	$this->template->paVals = $this->getProductAttributeValues($container->attributes);
     	$this->template->mainImg = $this->productManager->getMainPhoto($container->id);
+    	$this->template->secondImg = $this->productManager->getSecondPhoto($container->id);
 	    $this->template->title = $container->title;
 	    $this->template->description = $container->seo_description;
 	}
@@ -567,20 +573,32 @@ final class HomepagePresenter extends HomepageForms
 
         //SYSTEM
         $form ->addHidden("type");
+        $form ->addHidden("usertype")->setDefaultValue(0);
         
         //PERSONAL
         $form ->addText("name", "Jméno")
                 ->getControlPrototype()->class("form-control");
-        //$form["name"]->addRule(Form::FILLED, "Vyplňte jméno");
         $form ->addText("surname", "Příjmení")
                 ->getControlPrototype()->class("form-control");
-        //$form["surname"]->addRule(Form::FILLED, "Vyplňte příjmení");
         $form ->addText("email", "E-mail")
                 ->getControlPrototype()->class("form-control");
-        //$form["email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
         $form ->addText("phone", "Telefon")
                 ->getControlPrototype()->class("form-control");
-        //$form["phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
+		
+		//PERSONAL valudations
+        $form["name"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 1)
+        	->addRule(Form::FILLED, "Vyplňte jméno");
+        $form["surname"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 1)
+        	->addRule(Form::FILLED, "Vyplňte příjmení");
+        $form["email"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 1)
+        	->addRule(Form::FILLED, "Vyplňte e-mail")
+        	->addRule(Form::EMAIL, "Vyplňte platný e-mail");
+        $form["phone"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 1)
+        	->addRule(Form::FILLED, "Vyplňte telefonní číslo");
 
         $form ->addTextArea("note", "Poznámka", 30, 5)
                 ->getControlPrototype()->class("form-control");
@@ -611,21 +629,35 @@ final class HomepagePresenter extends HomepageForms
                 ->getControlPrototype()->class("form-control idField");
         $form ->addText("bussiness_name", "Jméno")
                 ->getControlPrototype()->class("form-control");
-        //$form["bussiness_name"]->addRule(Form::FILLED, "Vyplňte jméno");
         $form ->addText("bussiness_surname", "Příjmení")
                 ->getControlPrototype()->class("form-control");
-        //$form["bussiness_surname"]->addRule(Form::FILLED, "Vyplňte příjmení");
         $form ->addText("bussiness_email", "E-mail")
                 ->getControlPrototype()->class("form-control");
-        //$form["bussiness_email"]->setRequired(true)->addRule(Form::EMAIL, "Vyplňte e-mail");
         $form ->addText("bussiness_phone", "Telefon")
                 ->getControlPrototype()->class("form-control");
-        //$form["bussiness_phone"]->setRequired(true)->addRule(Form::FILLED, "Vyplňte telefonní číslo");
-
         $form ->addTextArea("bussiness_note", "Poznámka", 30, 5)
                 ->getControlPrototype()->class("form-control");
         $form ->addText("bussiness_company", "Název firmy")
                 ->getControlPrototype()->class("form-control");
+
+		//COMPANY valudations
+        $form["ic"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 0)
+        	->addRule(Form::FILLED, "Vyplňte IČ");
+        $form["bussiness_name"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 0)
+        	->addRule(Form::FILLED, "Vyplňte jméno");
+        $form["bussiness_surname"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 0)
+        	->addRule(Form::FILLED, "Vyplňte příjmení");
+        $form["bussiness_email"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 0)
+        	->addRule(Form::FILLED, "Vyplňte e-mail")
+        	->addRule(Form::EMAIL, "Vyplňte platný e-mail");
+        $form["bussiness_phone"]
+        	->addConditionOn($form['usertype'], Form::EQUAL, 0)
+        	->addRule(Form::FILLED, "Vyplňte telefonní číslo");
+
 
 		//different delivery company
         $form -> addCheckbox("bussiness_different_delivery", "Fakturační adresa je jiná než adresa přistavení")
@@ -688,6 +720,7 @@ final class HomepagePresenter extends HomepageForms
 					$values->deliveryPrice = (!empty($this->deliveryPrices[$values->delivery])?$this->deliveryPrices[$values->delivery]:0);
 				}
 				*/
+                unset($values->usertype);
                 $this->$basketfield->order = $values;
 
 				$orderId = $this->orderManager->saveOrder($this->$basketfield, $this->productManager, $this->settings);
@@ -718,8 +751,12 @@ final class HomepagePresenter extends HomepageForms
 					$this->sendMailFromTemplate("demandConfirmEshop.latte", $data, $this->settings->email, "Nová poptávka");
 				}
 
-
-                $this->redirect(":Front:Homepage:page", "dekujeme-za-objednavku");
+				if($values->type==9){
+                	$this->redirect(":Front:Homepage:page", "dekujeme-za-poptavku");
+				}
+				else{
+                	$this->redirect(":Front:Homepage:page", "dekujeme-za-objednavku");
+				}
             }
             catch(DibiDriverException $e){
                 $this->flashMessage($e->getMessage(), "error");

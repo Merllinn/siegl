@@ -152,6 +152,7 @@ class AttributesPresenter extends BasePresenter
 		$form ->addText("name", "Hodnota")
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno atributu");
+		$form ->addUpload("file", "Obrázek");
 		$form ->addTextArea("desc", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
@@ -173,13 +174,41 @@ class AttributesPresenter extends BasePresenter
 
 		if($form->isValid()){
 			try{
+				$img = $values->file;
+				unset($values->file);
 				if(empty($this->edited)){
 					$values->attribute = $this->attr;
-					$this->attributeManager->addValue($values);
+					$this->edited = $this->attributeManager->addValue($values);
 				}
 				else{
 					$this->attributeManager->updateValue($values, $this->edited);
 				}
+				//upload image
+	            if ($img->isOk()) {
+            		$image = $img;
+					$ext = pathinfo($img->getSanitizedName(), PATHINFO_EXTENSION);
+					$name = $this->generateString(15);
+					$fileName = $name.".".$ext;
+					$tempFile = BASE_DIR."/data/temp/".$fileName;
+					$resizedFile = BASE_DIR."/data/original/".$fileName;
+					$image->move($tempFile);
+
+    				//resize and move
+    				$bigImage = Image::fromFile($tempFile);
+    				//$bigImage->resize(800, 600, Image::FIT);
+    				$bigImage->save($resizedFile);
+
+    				if(file_exists($tempFile))
+    					unlink($tempFile);
+
+    				//save to DB
+    				$data = array(
+    					"file"=>$fileName,
+    				);
+
+    				$this->attributeManager->updateValue($data, $this->edited);
+
+	            }
 
 				$this->flashMessage("Hodnota byla uložena.");
 				$this->redirect("values", $this->attr);
@@ -261,6 +290,16 @@ class AttributesPresenter extends BasePresenter
 
         $grid = new DataGrid($this, $name);
         $grid->setDataSource($source);
+
+        $grid->addColumnText('img', 'Obrázek')
+            ->setRenderer(function($row) use ($presenter) {
+                if(!empty($row->file)){
+                        return html::el("img")->src($presenter->thumb($row, 100, 100))->width("100");
+                    }
+                    else{
+                        return "";
+                    }
+        });
 
         $grid->addColumnText('name', 'Hodnota');
 

@@ -274,6 +274,10 @@ final class OrderManager
 			}
 			$order->more = implode(chr(10), $mores);
         }
+        if($order->type==2){
+			$order->deliveryPrice = $ses->deliveryPrice;
+			$order->termFrom = $ses->termFrom;
+        }
         
         //save order
         $orderId = $this->add($order);

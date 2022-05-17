@@ -69,6 +69,8 @@
 		                        </label>
 		                    </li>
 		                    <!-- ./velikost kontejneru -->
+		                </ul>
+		                <ul class="list-inline kontejneru-den" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 		            		<li class="list-inline-item pocet-kontejneru">
 			                    Přibližný počet kontejnerů/den
 			                    <label class="select">
@@ -248,7 +250,7 @@
 	        <h3 class="title underline">
 	            Potřebujete něco dalšího?
 	        </h3>
-	        <div class="row">
+	        <div class="row justify-content-center">
             	{var $subpages = $presenter->pageManager->getInDemand()}
                 <div class="col-md-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
                     <div class="service-icon">

@@ -1693,8 +1693,13 @@ label.select {
     }
 
       div.filter li.dateField,
-      div.filter li.timefield {
+      div.filter li.timefield,
+      div.filter ul.kontejneru-den li:not(:last-child) {
         margin-right: 46px;
+      }
+
+      div.filter ul.kontejneru-den li:first-child {
+        margin-left: 0;
       }
 
     section.waste li.druh-odpadu {
@@ -1996,12 +2001,13 @@ label.select {
           left: 28px;
         }
 
+      section.waste div.filter ul.kontejneru-den {
+        margin-top: 27px;
+      }
+
       li.pocet-kontejneru {
         color: #424242;
         font-weight: 600;
-        display: block;
-        margin-top: 27px;
-        text-align: center;
       }
 
         li.pocet-kontejneru::before {
@@ -2009,7 +2015,7 @@ label.select {
         }
 
         div.filter li.pocet-kontejneru::after {
-          left: auto; right: 295px;
+          left: auto; right: 97px;
         }
 
         li.pocet-kontejneru label.select {

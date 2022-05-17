@@ -14,12 +14,14 @@ body {
   position: relative;
 }
 
-body.subpages {
+body.subpages,
+body.page {
   padding-top: 290px;
   background-color: #eaeaea;
 }
 
-  body.subpages::before {
+  body.subpages::before,
+  body.page::before {
     content: "";
     width: 100%; height: 100%;
     background: url("../img/stripe.png");
@@ -29,10 +31,6 @@ body.subpages {
     top: 0;
     opacity: .35;
   }
-
-body.page {
-  padding-top: 290px;
-}
 
 textarea:hover, 
 input:hover, 
@@ -112,7 +110,8 @@ h2 {
 }
 
   h1.title,
-  h2.title {
+  h2.title,
+  article.article h2 {
     text-align: center;
     color: #004a39;
     font-size: 1.875rem;
@@ -131,19 +130,31 @@ h2 {
 
   h1.underline,
   h2.underline,
-  h3.underline {
+  h3.underline,
+  article.article h2 {
     margin-bottom: 25px;
   }
 
+    article.article h2 {
+      margin-top: 50px;
+      font-size: 1.25rem;
+    }
+
     h1.underline::after,
     h2.underline::after,
-    h3.underline::after {
+    h3.underline::after,
+    article.article h2::after {
       content: "";
       display: block;
       width: 120px; height: 5px;
       background-color: #d71921;
       margin: 23px auto 0 auto;
     }
+
+      article.article h2::after {
+        width: 90px; height: 3px;
+        margin-top: 12px;
+      }
 
   div.subpages h1.underline {
     margin-bottom: 55px;
@@ -968,7 +979,9 @@ section.slide {
   section.top img.mosaic.right,
   section.top.order img.mosaic.left,
   body.subpages img.mosaic.left,
-  body.subpages img.mosaic.right {
+  body.subpages img.mosaic.right,
+  body.page img.mosaic.left,
+  body.page img.mosaic.right {
     position: absolute;
     top: 0; left: 0;
     mix-blend-mode: multiply;
@@ -981,7 +994,8 @@ section.slide {
 
     section.slide img.mosaic.right,
     section.top img.mosaic.right,
-    body.subpages img.mosaic.right {
+    body.subpages img.mosaic.right,
+    body.page img.mosaic.right {
       left: auto; right: 0;
     }
 
@@ -1398,8 +1412,15 @@ section.video {
   padding-top: 130px;
 }
 
+  div.page-bottom-navigation {
+    background: #424242;
+    position: relative;
+    margin-top: 70px;
+  }
+
   section.video::after,
-  div.order-form::after {
+  div.order-form::after,
+  div.page-bottom-navigation::after {
     content: "";
     width: 100%; height: 100%;
     position: absolute;
@@ -4073,10 +4094,28 @@ body.page section.top {
 }
 
 article.article {
-  margin-bottom: 60px;
-  font-size: 1.25rem;
+  font-size: 1rem;
   text-align: center;
 }
+
+  article.article div.container {
+    max-width: 800px;
+  }
+
+  article.article a {
+    color: #004a39;
+    font-weight: 400;
+  }
+
+    article.article a:hover {
+      text-decoration: none;
+      color: #424242;
+    }
+
+  article.article ol,
+  article.article ul {
+    list-style-position: inside;
+  }
 
 /*!
 * Datepicker
@@ -4133,13 +4172,27 @@ div.col-subpage {
 
   div.col-subpage h2 {
     font-size: 1.25rem;
-    font-weight: 300;
+    font-weight: 400;
     text-align: center;
   }
+
+    div.col-subpage h2 a,
+    div.col-subpage h2 a:hover {
+      color: #424242;
+      text-decoration: none;
+    }
 
   div.col-subpage a.btn {
     display: table;
     margin: 26px auto 0 auto;
+  }
+
+div.subpages .row {
+  margin-top: -40px;
+}
+
+  div.subpages .row>[class*=col-] {
+    margin-top: 40px;
   }
 
 /*!
@@ -4157,11 +4210,6 @@ footer {
 
   body.container-detail footer {
     background-color: rgba(234, 234, 234, 0.4);
-  }
-
-  body.subpages footer {
-    padding-top: 0;
-    margin-top: 80px;
   }
 
   footer div.container {

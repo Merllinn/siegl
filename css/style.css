@@ -232,8 +232,8 @@ h2 {
       transform: rotate(-7deg);
     }
 
-.table>:not(caption)>*>*,
-.table>:not(:first-child) {
+.modal-body .table>:not(caption)>*>*,
+.modal-body .table>:not(:first-child) {
   border: 0;
   padding: 0;
 }
@@ -367,6 +367,15 @@ h2 {
     background-color: transparent;
   }
 
+  .btn-primary.btn-back {
+    padding-right: 16px;
+    padding-left: 16px;
+    color: #FFF;
+    margin: 60px auto 0 46px;
+    zoom: 0.8;
+    display: table;
+  }
+
 .btn-arrow::before,
 .btn-arrow::after,
 div.roughness label.select::before {
@@ -379,6 +388,15 @@ div.roughness label.select::before {
   .btn-arrow:after {
     width: 46px; height: 46px;
     left: auto; right: -46px;
+  }
+
+    .btn-arrow.btn-back:after {
+      left: -46px; right: auto;
+    }
+
+  .btn-arrow.btn-back::before {
+    left: auto; right: -8px;
+    transform: rotate(180deg);
   }
 
   .btn-arrow i,
@@ -413,6 +431,10 @@ div.roughness label.select::before {
 
     .btn-without-arrow {
       padding: 9px 27px 7px 27px;
+    }
+
+    .btn-arrow.btn-back i {
+      right: auto; left: -31px;
     }
 
 .btn-white,
@@ -2118,6 +2140,11 @@ label.select {
       display: table;
     }
 
+    div.filter li.add-container button,
+    div.filter li.remove-container button {
+      margin: 0;
+    }
+
     .btn-deselect a {
       color: #424242;
       text-decoration: underline;
@@ -3201,6 +3228,7 @@ p.desc {
 p.empty-order {
   margin-bottom: 36px;
   font-weight: 700;
+  text-align: center;
 }
 
 div.oneContainer:not(:last-child) {
@@ -3244,8 +3272,8 @@ div.filter li.today::before {
   }
 
   div.filter li.today button,
-  li.add-container button,
-  li.remove-container button {
+  li.add-container a,
+  li.remove-container a {
     padding: 11px 30px;
     margin: 0;
     background-color: #f2f2f2;
@@ -3259,6 +3287,7 @@ div.filter li.today::before {
     li.remove-container button a {
       color: #424242;
       text-decoration: none;
+      display: inline-block;
     }
 
     div.filter li.today button:hover,
@@ -4099,7 +4128,7 @@ article.article {
 }
 
   article.article div.container {
-    max-width: 800px;
+    max-width: 1000px;
   }
 
   article.article a {
@@ -4116,6 +4145,29 @@ article.article {
   article.article ul {
     list-style-position: inside;
   }
+
+article.article table.table-machinery tbody {
+  font-weight: 600;
+}
+
+article.article table.table-machinery tbody tr:nth-child(1),
+article.article table.table-machinery tbody tr:nth-child(2) {
+  background-color: #004a39;
+  color: #FFF;
+}
+
+article.article table.table-machinery img {
+  width: 160px; height: 100px;
+  object-fit: contain;
+}
+
+article.article table.table-machinery p:first-child {
+  margin-bottom: 5px;
+}
+
+article.article table.table-machinery p {
+  margin: 0;
+}
 
 /*!
 * Datepicker
@@ -4165,9 +4217,10 @@ div.col-subpage {
 }
 
   div.col-subpage img {
-    max-width: 190px; width: 100%;
+    width: 190px; height: 100px;
     display: table;
     margin: 0 auto 26px auto;
+    object-fit: contain;
   }
 
   div.col-subpage h2 {

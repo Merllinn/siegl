@@ -59,7 +59,8 @@
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class="variantLi {if !empty($materials[$mat->id][$price->id])}selected{/if}">
                                 <div class="image chocolat-parent">
                             		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                    <a href="{$price->ref("attributeValue")|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$price->ref("attributeValue")|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a n:if="!empty($price->ref('attributeValue')->file)" href="{$price->ref("attributeValue")|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$price->ref("attributeValue")|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a n:if="empty($price->ref('attributeValue')->file)" href="{$matImg|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
                                 </div>
                             	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariantD! $price->id}" data-unlink="{link unsetMaterialVariantD! $price->id}" data-price="{$price->priceFrom}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
@@ -185,10 +186,12 @@
 						      autoclose: true,
                               pickTime: false,
                               minView: 2,
+						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+						      {var $date = new \Nette\Utils\DateTime()}
 						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
-						      	startDate: '+0d',
+						      	startDate: {$date|date:"d.m.Y"},
 						      {else}
-						      	startDate: '+1d',
+						      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
 						      {/if}
 						    });
 					    {/if}

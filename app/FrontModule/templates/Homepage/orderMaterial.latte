@@ -67,7 +67,8 @@
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class="variantLi {if !empty($materials[$mat->id][$price->id])}selected{/if}">
                                 <div class="image chocolat-parent">
                             		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                    <a href="{$price->ref("attributeValue")|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$price->ref("attributeValue")|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a n:if="!empty($price->ref('attributeValue')->file)" href="{$price->ref("attributeValue")|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$price->ref("attributeValue")|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a n:if="empty($price->ref('attributeValue')->file)" href="{$matImg|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
                                 </div>
                             	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariantD! $price->id, "basketM"}" data-unlink="{link unsetMaterialVariantD! $price->id, "basketM"}" data-price="{$price->priceFrom}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
@@ -114,6 +115,7 @@
     </section>
     <!-- ./material -->
     <section class="waste in-material">
+	    {snippet orderContainers}
         <div class="container">
             <h3 class="title underline">Potřebujete přistavit kontejner?</h3>
             <p class="desc">Nechte si s dovozem materiálu přistavit kontejner na odvoz odpadu<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
@@ -124,7 +126,6 @@
         	<div class="container margin">
         		<h4>Vyberte druh odpadu a velikost kontejneru</h4>
 	            <div class="filter">
-	            	{snippet orderContainers}
 	                	{if !empty($containers)}
 		                    {var $zoneTimes = array()}
 		                    {if !empty($basket->zoneObj)}
@@ -194,7 +195,7 @@
 					                        </li>
 			                    		{/if}
 				                        <li class="list-inline-item remove-container">
-				                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index", "basketM">Odebrat</a></button>
+				                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index, 'basketM'">Odebrat</a></button>
 				                        </li>
 				                    </ul>
 		                    </div>
@@ -214,6 +215,11 @@
 							window.checkAddress = true;
 						{/if}
 
+						$(".changeContainer").click(function(e){
+							e.preventDefault();
+							var link = $(this).data("link");
+							$.get(link);
+						});
 						$("a.ajax").click(function(e){
 							e.preventDefault();
 							$.get($(this).attr("href"));
@@ -231,10 +237,11 @@
                               pickTime: false,
                               minView: 2,
 						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+						      {var $date = new \Nette\Utils\DateTime()}
 						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
-						      	startDate: '+0d',
+						      	startDate: {$date|date:"d.m.Y"},
 						      {else}
-						      	startDate: '+1d',
+						      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
 						      {/if}
 						    });
 					    {/if}
@@ -279,12 +286,12 @@
 					    
 				    });
                 </script>
-	                {/snippet}
 	                <!-- ./form -->
 	            </div>
 	            <!-- ./filter -->
 	        </div>
         </div>
+	    {/snippet}
         <img class="mosaic left" src="{$basePath}/img/mosaic_s8.png" alt="Obrázek mozaiky">
     </section>
     <!-- ./waste -->
@@ -481,11 +488,6 @@
 			$(".updateValue").change(function(){
 				var link = $(this).data("link");
 				link = link + "&val=" + $(this).val();
-				$.get(link);
-			});
-			$(".changeContainer").click(function(e){
-				e.preventDefault();
-				var link = $(this).data("link");
 				$.get(link);
 			});
 			$(".selectMoreDemand").click(function(e){

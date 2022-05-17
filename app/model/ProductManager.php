@@ -185,6 +185,15 @@ final class ProductManager
 
     }
 
+    public function getSecondPhoto($product){
+        return $this->getPh()
+            ->where("products_id", $product)
+            ->where("main = ?", 0)
+            ->order("order")
+            ->fetch();
+
+    }
+
     public function getFull($id){
         $product = $this->find($id)->toArray();
         $photos = $this->getPhotos($id);

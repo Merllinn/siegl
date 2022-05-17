@@ -36,7 +36,6 @@
 	        <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
 	        <div class="filter">
 	            {snippet orderContainers}
-	            <form>
 	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 	                    <i class="fa-solid fa-pen-to-square"></i>
 	                    <label for="describe">Popište:</label>
@@ -78,6 +77,10 @@
 			                        </select>
 			                    </label>
 			                </li>
+			                <li class="list-inline-item remove-container">
+			                    <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index, 'basketD'">Odebrat</a></button>
+			                </li>
+			                
 	                    	<!-- ./priblizny pocet kontejneru -->
 		                </ul>
 	                </div>
@@ -87,7 +90,6 @@
                             <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!, 'basketD'">Přidat další kontejner</a></button>
                         </li>
                     </ul>
-	            </form>
                 <script {*n:if="$presenter->isAjax()"*}>
 				    $(function(){
 						var checkWeight = true;
@@ -95,6 +97,11 @@
 						{if !empty($address)}
 							window.checkAddress = true;
 						{/if}
+
+						$("a.ajax").click(function(e){
+							e.preventDefault();
+							$.get($(this).attr("href"));
+						});
 
 					    AOS.init({
 							once: true
@@ -194,13 +201,13 @@
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class="variantLi {if !empty($materials[$mat->id][$price->id])}selected{/if}">
                                 <div class="image chocolat-parent">
                             		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                    <a href="{$matImg|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a href="{$price->ref("attributeValue")|thumb}" class="chocolat-image" title="Zvětšit obrázek"><img src="{$price->ref("attributeValue")|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
                                 </div>
                             	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariantD! $price->id}" data-unlink="{link unsetMaterialVariantD! $price->id}" data-price="{$price->priceFrom}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
                                     <div class="title">
                                         <span>{$attVals[$price->attributeValue]->name}</span>
-                                        <div class="description" style="display: block">
+                                        <div class="description" n:if="!empty(strip_tags($attVals[$price->attributeValue]->desc))" style="display: block">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
                                         <a href="#" class="pickButton btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">{if !empty($materials[$mat->id][$price->id])}{_'TEXT_VYBRANY'}{else}{_'TEXT_VYBRAT'}{/if}</a>
@@ -290,6 +297,7 @@
 	<!-- ./term -->
     {form orderForm}
     {input type}
+    {input usertype, class=>"userType"}
     <div class="order-form">
         <div class="container">
             <ul class="errors" n:if="$form->hasErrors()">

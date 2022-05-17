@@ -32,7 +32,6 @@
             <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
             <div class="filter">
             	{snippet orderContainers}
-                <form>
                 	{if !empty($containers)}
 	                    {var $zoneTimes = array()}
 	                    {if !empty($basket->zoneObj)}
@@ -40,7 +39,6 @@
                     			{php $zoneTimes[$orderTime] = $orderTime}
 		                    {/foreach}
 	                    {/if}
-	                    {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
 	                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
 		                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                     			{var $attr = $presenter->attributeManager->find(1)}
@@ -69,48 +67,43 @@
 		                        <!-- ./velikost kontejneru -->
 		                    </ul>
 		                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
-		                    {if empty($basket->zoneObj)}
-	                    		<p>Nejprve vyberte místo přistavení</p>
-		                    {else}
 			                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-			                        {*
-			                        <li class="list-inline-item today">
-			                            <button class="btn btn-primary">Dnes</button>
-			                        </li>
-			                        *}
-			                        <!-- ./dnes -->
-			                        <li class="list-inline-item date dateField">
-			                            <label class="select">
-			                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
-			                            </label>
-			                        </li>
-			                        <li class="list-inline-item timefield">
-			                            <label class="select">
-			                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time"}>
-	                                			{if empty($container->term)}
-	                                				<option value="">Vyberte datum přistavení</option>
-	                                			{else}
-	                                				<option value="">Čas přistavení</option>
-	                                				{foreach $zoneTimes as $zoneTime}
-	                                					{var $timesArr = explode("-", $zoneTime)}
-	                                					{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
-	                                					{var $isToday = (date("d/m/Y") == $container->term)}
-	                                					{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
-	                                						<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
-	                                							{$zoneTime}
-	                                						</option>
-	                                					{/if}
-	                                				{/foreach}
-	                                			{/if}
-			                                </select>
-			                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
-			                            </label>
-			                        </li>
+				                    {if empty($basket->zoneObj)}
+	                    				<p>Nejprve vyberte místo přistavení</p>
+				                    {else}
+				                        <li class="list-inline-item date dateField">
+				                            <label class="select">
+				                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
+				                            </label>
+				                        </li>
+				                        <li class="list-inline-item timefield">
+				                            <label class="select">
+				                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time"}>
+	                                				{if empty($container->term)}
+	                                					<option value="">Vyberte datum přistavení</option>
+	                                				{else}
+	                                					<option value="">Čas přistavení</option>
+	                                					{foreach $zoneTimes as $zoneTime}
+	                                						{var $timesArr = explode("-", $zoneTime)}
+	                                						{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
+	                                						{var $isToday = (date("d/m/Y") == $container->term)}
+	                                						{var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+	                                						{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
+	                                							<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
+	                                								{$zoneTime}
+	                                							</option>
+	                                						{/if}
+	                                					{/foreach}
+	                                				{/if}
+				                                </select>
+				                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
+				                            </label>
+				                        </li>
+		                    		{/if}
 			                        <li class="list-inline-item remove-container">
 			                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
 			                        </li>
 			                    </ul>
-		                    {/if}
 	                    </div>
                     {else}
                     	<p class="empty-order">Objednávka zatím neobsahuje žádný kontejner.</p>
@@ -120,7 +113,6 @@
                             <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
                         </li>
                     </ul>
-                </form>
                 <script {*n:if="$presenter->isAjax()"*}>
 				    $(function(){
 						var checkWeight = true;
@@ -128,6 +120,11 @@
 						{if !empty($address)}
 							window.checkAddress = true;
 						{/if}
+						
+						$("a.ajax").click(function(e){
+							e.preventDefault();
+							$.get($(this).attr("href"));
+						});
 
 					    AOS.init({
 							once: true
@@ -140,6 +137,7 @@
 						      autoclose: true,
                               pickTime: false,
                               minView: 2,
+						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
 						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
 						      	startDate: '+0d',
 						      {else}
@@ -185,6 +183,14 @@
 							}	
 						}
 						
+						enableDisableOrder();
+						
+						if($(".oneContainer").length==0){
+							$(".btn-i-need.triggerMaterial").addClass("disabled");
+						}
+						else{
+							$(".btn-i-need.triggerMaterial").removeClass("disabled");
+						}
 					    
 				    });
                 </script>
@@ -200,7 +206,7 @@
         <div class="container">
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
             <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial {if empty($containers)}disabled{/if}" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
         </div>
         <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
@@ -225,13 +231,13 @@
                             <li n:foreach="$prices as $price" data-price="{$price->priceFrom}" class=" {if !empty($materials[0]->price) && $price->id == $materials[0]->price}selected{/if}">
                                 <div class="image chocolat-parent">
                             		{var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
-                                    <a href="{$matImg|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$matImg|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
+                                    <a href="{$price->ref("attributeValue")|thumb}" class="chocolat-image variantImage" title="Zvětšit obrázek"><img src="{$price->ref("attributeValue")|thumb}" alt="{$attVals[$price->attributeValue]->name}"></a>
                                 </div>
                             	<label for="price{$price->id}" class="pickVariant" data-link="{link setMaterialVariant! $price->id}" data-price="{$price->priceFrom}" data-koef="{$price->koef}">
                                     <input class="check" id="price-{$price->id}" type="radio" name="varianta{$price->id}" value="{$price->id}">
                                     <div class="title">
                                         <span>{$attVals[$price->attributeValue]->name}</span>
-                                        <div class="description" style="display: block">
+                                        <div class="description" n:if="!empty(strip_tags($attVals[$price->attributeValue]->desc))" style="display: block">
                                             {$attVals[$price->attributeValue]->desc|noescape}
                                         </div>
                                         <a href="#" class="pickButton btn btn-primary btn-arrow btn-red" title="Vybrat tento druh materiálu" data-pick="{_'TEXT_VYBRAT'}" data-picked="{_'TEXT_VYBRANY'}">{if !empty($materials[0]->price) && $price->id == $materials[0]->price}{_'TEXT_VYBRANY'}{else}{_'TEXT_VYBRAT'}{/if}</a>
@@ -362,7 +368,7 @@
     <!-- ./material -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
-    	<ul class="list-unstyled">
+    	<ul class="list-unstyled" n:if="($basket->weekendPrice + $basket->betonPrice)>0">
         	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'}: <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
         	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'}: <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
         </ul>
@@ -374,6 +380,7 @@
     <!-- ./price -->
     {form orderForm}
     {input type}
+    {input usertype, class=>"userType"}
     <div class="order-form">
         <div class="container">
             <ul class="errors" n:if="$form->hasErrors()">
@@ -381,12 +388,12 @@
 			</ul>
             <nav>
                 <div class="nav nav-tabs" id="nav-order-form" role="tablist">
-                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
-                    <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                    <button class="nav-link {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}active{/if}" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link {if empty($basket->order->usertype)}active{/if}" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabOrderForm">
-                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                <div class="tab-pane fade {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}show active{/if}" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
                     <div class="row">
                         <div class="form-group col-md-6 arrow">
                             {label name/}
@@ -440,7 +447,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                <div class="tab-pane fade {if empty($basket->order->usertype)}show active{/if}" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
                     <div class="row row-ic">
                         <div class="form-group col-md-12">
 	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
@@ -598,11 +605,11 @@
 					 if (data.stav == 'ok') {
 					  //$('input[name=dic]').val(data.dic);
 					  $('input[name=bussiness_company]').val(data.firma);
-					  if($('input[name=bussiness_different_delivery]').prop('checked')){
+					  //if($('input[name=bussiness_different_delivery]').prop('checked')){
 						  $('input[name=bussiness_delivery_street]').val(data.ulice);
 						  $('input[name=bussiness_delivery_city]').val(data.mesto);
 						  $('input[name=bussiness_delivery_zip]').val(data.psc);
-					  }
+					  //}
 					 } else {
 					  alert(data.stav);
 					 }

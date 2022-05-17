@@ -421,6 +421,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $holidays = explode(chr(10), $this->settings->holidays);
         $weekendPrice = 0;
         $betonPrice = 0;
+        $materialTons = 0;
         
         $isBetonAdd = false;
 		$year = date("Y");
@@ -475,6 +476,16 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 				}
 			}
 		}
+
+		if(!empty($this->$basket->termFrom)){
+			$dateTime = \Nette\Utils\DateTime::createFromFormat("d/m/Y", $this->$basket->termFrom);
+			$termU = $dateTime->format("U");
+			if(($startYear <= $termU && $termU <= $endRange) || ($startRange <= $termU && $termU <= $endYear)){
+				$isBetonAdd = true;
+			}
+		}
+		
+		$specialDelivery = false;
 		if(!empty($this->$basket->materials)){
 			if($basket=="basket"){
 				foreach($this->$basket->materials as $material){
@@ -503,17 +514,45 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 									//$m3Amount = round($material->amount * $material->priceObj->koef, 2);
 									$betonPrice += $this->settings->betonPrice * $material->amount;
 								}
+								$materialTons += ($material->amount/$material->priceObj->koef);
+							}
+							else{
+								$materialTons += $material->amount;
+							}
+							if(in_array($material->priceObj->product, array("10", "14"))){
+								$specialDelivery = true;
 							}
 						}
 					}
 				}
 			}
 		}
+		
+		$deliveryPrice = 0;
+		if($materialTons<6){
+			if($specialDelivery){
+				$deliveryPrice = $this->settings->smallDeliveryS;
+			}
+			else{
+				$deliveryPrice = $this->settings->smallDelivery;
+			}
+		}
+		else if($materialTons<=12){
+			if($specialDelivery){
+				$deliveryPrice = $this->settings->bigDeliveryS;
+			}
+			else{
+				$deliveryPrice = $this->settings->bigDelivery;
+			}
+		}
+		
         $this->$basket->betonPrice = $betonPrice;
         $this->$basket->weekendPrice = $weekendPrice;
         $this->$basket->price = $totalPrice + $weekendPrice;
         $this->$basket->maxWeight = $totalWeight;
         $this->$basket->maxVolume = $totalVolume;
+        $this->$basket->materialTons = $materialTons;
+        $this->$basket->deliveryPrice = $deliveryPrice;
 
 		$vatKoef = 1 + ($this->settings->vat/100);
         $this->$basket->priceVat = ($this->$basket->price * $vatKoef);

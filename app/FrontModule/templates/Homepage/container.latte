@@ -75,11 +75,13 @@
                     <div class="container-content chocolat-parent">
                         <div class="container-size {$product->alias}">
                             <div class="silhouette"><img src="{$basePath}/img/silhouette.png" alt="Silueta"></div>
-                            <div class="image"><img src="{$mainImg|thumb}" alt="Obrázek kontejneru"></div>
+                            <div class="image"><img src="{$secondImg|thumb}" alt="Obrázek kontejneru"></div>
                             <div class="dimensions">
+                                {*
                                 <div class="width" data-aos="fade-left" data-aos-duration="200" data-aos-delay="250" data-aos-easing="ease-in-sine"><strong>Výška</strong>{$product->height} m</div>
                                 <div class="height" data-aos="fade-down" data-aos-duration="200" data-aos-delay="350" data-aos-easing="ease-in-sine"><strong>Šířka</strong>{$product->width} m</div>
                                 <div class="lenght" data-aos="fade-up" data-aos-duration="200" data-aos-delay="450" data-aos-easing="ease-in-sine"><strong>Délka</strong>{$product->length} m</div>
+                                *}
                             </div>
                             <div class="clearfix"></div>
                         </div>

@@ -12,6 +12,7 @@
 							{var $mainImage = $presenter->pageManager->getMainPhoto($sp->id)}
 							<a href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}"><img src="{$mainImage|thumb:300:200}" alt="{$sp->name}" /></a>
 							<h2><a href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}">{$sp->name}</a></h2>
+							<div class="date" n:if="!empty($sp->date)">{$sp->date|date:"d. m. Y"}</div>
 							{$sp->content|noescape}
 							<a class="btn btn-primary btn-arrow btn-red btn-without-arrow" href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}">Vybrat</a>
 						</div>

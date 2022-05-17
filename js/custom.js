@@ -16,6 +16,14 @@ $(document).ready(function() {
         offset: '50%',
         triggerOnce: true
   });
+  
+	$("#nav-individual-tab").click(function(){
+		$("input.userType").val("1");
+	});
+	$("#nav-business-customer-tab").click(function(){
+		$("input.userType").val("0");
+	});
+  
 
   // Parallax background
   var scrolled = $(window).scrollTop()

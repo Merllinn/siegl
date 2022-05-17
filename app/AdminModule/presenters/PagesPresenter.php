@@ -275,10 +275,11 @@ class PagesPresenter extends BasePresenter
 		$form->addGroup("Základní údaje");
 		$form ->addText("name", "Jméno")
 				->addRule(Form::FILLED, "Vyplňte jméno stránky");
-        if($this->parent==56){
+        //if($this->parent==56){
 		$form ->addDatePicker("date", "Datum")
-				->addRule(Form::FILLED, "Vyplňte datum akce");
-        }
+				//->addRule(Form::FILLED, "Vyplňte datum akce")
+				;
+        //}
 		if($this->type==0){
 			$form ->addSelect("layoutId", "Šablona", $layouts)
 				->setDefaultValue(1);
@@ -294,7 +295,7 @@ class PagesPresenter extends BasePresenter
 			$form ->addText("alias", "Alias (do adresy)");
 			$form ->addText("hover", "Titulek při najetí");
 			$form ->addText("title", "Titulek stránky");
-			$form ->addText("seo_keywords", "SEO klíčová slova");
+			//$form ->addText("seo_keywords", "SEO klíčová slova");
 			$form ->addTextArea("seo_description", "SEO popis");
 		}
 		else{

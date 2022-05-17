@@ -17,6 +17,11 @@
     	{/if}
     {/foreach}
 
+	{if !empty($order->termFrom)}
+		<h4>Termín realizace</h4>
+		<p>{$order->termFrom}</p>
+	{/if}
+
 	{if count($materials)>0}
 		<h4>Materiál</h4>
 		<table>
@@ -56,6 +61,10 @@
 	<h4>Cena</h4>
 	<table>
 		<tbody>
+			<tr n:if="$order->deliveryPrice>0">
+				<td colspan="3">Doprava:</td>
+				<td >{$order->deliveryPrice|number:0:',':' '} Kč</td>
+			</tr>
 			<tr n:if="$order->weekendPrice>0">
 				<td colspan="3">{_'PRIPLATEK_VIKEND_SVATEK'}:</td>
 				<td >{$order->weekendPrice|number:0:',':' '} Kč</td>

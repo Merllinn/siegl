@@ -308,7 +308,7 @@ h2 {
 
   .modal-body td {
     vertical-align: middle;
-    padding: 20px;
+    padding: 20px !important;
     line-height: 1;
   }
 
@@ -1961,6 +1961,12 @@ label.select {
         left: 50px;
       }
 
+      div.term.in-material li.date-from::after {
+        background: url(../img/gray-arrow.svg);
+        background-size: cover;
+        left: -8px;
+      }
+
       section.waste div.filter {
         margin-bottom: 0;
       }
@@ -2068,6 +2074,10 @@ label.select {
         width: 100%;
         padding-right: 57px;
       }
+
+        div.term.in-material input.form-control {
+          background-color: #f2f2f2;
+        }
 
       section.waste label.select::after {
         right: -46px;
@@ -3613,7 +3623,9 @@ div.amount {
     input.amountField:disabled,
     input.amountField[readonly],
     input.materialWeight:disabled,
-    input.materialWeight[readonly] {
+    input.materialWeight[readonly],
+    input.materialTarger:disabled,
+    input.materialTarger[readonly] {
       max-width: 75px;
       background-color: #FFF;
     }
@@ -4074,12 +4086,18 @@ div.term {
   z-index: 3;
 }
 
+  div.term.in-material {
+    padding: 0;
+    margin-top: 70px;
+  }
+
   div.term ul {
     margin: 0;
   }
 
   div.term li {
     vertical-align: top;
+    position: relative;
   }
 
     div.term li:not(:last-child) {
@@ -4118,6 +4136,10 @@ li.date-from label,
 li.date-to label {
  margin-left: 12px;
 }
+
+  div.term.in-material label {
+   margin-left: 0;
+  }
 
 /*!
 * Page

@@ -1,133 +1,337 @@
-	<p>
-        Dobrý den,
-    </p>
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<style type="text/css">
 
-    <p>
-        byla přijata nová poptávka.
-    </p>
+body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+img { -ms-interpolation-mode: bicubic; }
+
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+table { border-collapse: collapse !important; }
+body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+
+
+a[x-apple-data-detectors] {
+    color: inherit !important;
+    text-decoration: none !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+}
+
+@media screen and (max-width: 480px) {
+    .mobile-hide {
+        display: none !important;
+    }
+    .mobile-center {
+        text-align: center !important;
+    }
+}
+div[style*="margin: 16px 0;"] { margin: 0 !important; }
+</style>
+<body style="margin: 0 !important; padding: 0 !important; background-color: #eaeaea;" bgcolor="#eaeaea">
+
+{var $containers = array()}
+{var $materials = array()}
+{foreach $products as $itemId=>$product}
+    {if $product->type==1}
+        {php $containers[$itemId] = $product}
+    {/if}
+    {if $product->type==2}
+        {php $materials[$itemId] = $product}
+    {/if}
+{/foreach}
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td align="center" style="background-color: #eaeaea;" bgcolor="#eaeaea">
+        
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
+            <tr>
+                <td align="center" valign="top" style="font-size:0; padding: 35px;" bgcolor="#FFFFFF">
+               
+                <div style="display:inline-block; max-width:100%; min-width:100px; vertical-align:top; width:100%; text-align: center;">
+                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                            <td align="center" valign="top" class="mobile-center">
+                                <img src="https://siegl.qpt.cz/img/logo.svg" alt="SIEGL s.r.o. logo" style="max-width: 160px;">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+              
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding: 0 35px 20px 35px; background-color: #ffffff;" bgcolor="#ffffff">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
+                    <tr>
+                        <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 0;">
+                            <h2 style="font-size: 26px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;">
+                                Děkujeme za Vaši poptávku
+                            </h2>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px;">
+                            <p style="font-size: 14px; font-weight: 400; line-height: 24px; color: #777777;">
+                                Vaši poptávku jsme v pořádku přijali.<br>Budeme Vás kontaktovat co nejdříve.
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="padding-top: 20px;">
+                            <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td colspan="3" width="100%" align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Shrnutí poptávky
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" width="100%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Rozsah poptávky
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="100%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 10px;">
+                                        {$order->description|breaklines|noescape}
+                                    </td>
+                                </tr>
+                                {if !empty($order->more)}
+                                    <tr>
+                                        <td colspan="3" width="100%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                            Něco dalšího
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" width="100%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 10px;">
+                                            {=nl2br($order->more)|noescape}
+                                        </td>
+                                    </tr>
+                                {/if}
+                                {if count($containers)>0}
+                                <tr>
+                                    <td colspan="2" width="50%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Kontejner
+                                    </td>
+                                    <td colspan="1" width="50%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Kontejnerů/den
+                                    </td>
+                                </tr>
+                                <tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
+                                    <td colspan="2" width="50%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 10px;">
+                                        {$product->name}
+                                    </td>
+                                    <td colspan="1" width="50%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 10px;">
+                                        {$product->quantity}
+                                    </td>
+                                </tr>
+                                {/if}
+                                {if count($materials)>0}
+                                <tr>
+                                    <td colspan="2" width="50%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Materiál
+                                    </td>
+                                    <td colspan="1" width="50%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Množství
+                                    </td>
+                                </tr>
+                                <tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
+                                    <td colspan="2" width="50%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 10px;">
+                                        {$product->name}
+                                    </td>
+                                    <td colspan="1" width="50%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 10px;">
+                                        {$product->quantity} {if $product->products_id==$beton}m<sup>3</sup>{else}tun{/if}
+                                    </td>
+                                </tr>
+                                {/if}
+                                <tr>
+                                    <td colspan="3" width="100%" align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Termín realizace
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1" width="33.333%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Od
+                                    </td>
+                                    <td colspan="1" width="33.333%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Do
+                                    </td>
+                                    <td colspan="1" width="33.333%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                        Víkendy
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1" width="33.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 10px;">
+                                        {$order->termFrom}
+                                    </td>
+                                    <td colspan="1" width="33.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 10px;">
+                                        {$order->termTo}
+                                    </td>
+                                    <td colspan="1" width="33.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 10px;">
+                                        {if $order->weekends}ANO{else}NE{/if}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                
+                </td>
+            </tr>
+             <tr>
+                <td align="center" height="100%" valign="top" width="100%" style="padding: 0 35px 35px 35px; background-color: #ffffff;" bgcolor="#ffffff">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:660px;">
+                    <tr>
+                        <td align="center" valign="top" style="font-size:0;">
+                            <div style="display:inline-block; max-width:45%; min-width:240px; vertical-align:top; width:100%;">
+
+                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
+                                    <tr>
+                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                            <p style="font-weight: 800;">Místo přistavení</p>
+                                            <p>{$order->street}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="display:inline-block; max-width:50%; min-width:240px; vertical-align:top; width:100%; margin-left: 4.7%;">
+                                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:300px;">
+                                    <tr>
+                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                            <p style="font-weight: 800;">Údaje o {if !empty($order->ic)}firemním {/if}zákazníkovi</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px;">
+                                            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                <tr n:if="!empty($order->ic)">
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">IČ</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->ic}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr n:if="!empty($order->company_name)">
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">Název společnosti</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->company_name}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">Jméno</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->name}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">Příjmení</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->surname}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">E-mail</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->email}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">Telefon</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->phone}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr n:if="!empty($order->note)">
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <strong style="font-weight: 400;">Poznámka</strong>
+                                                    </td>
+                                                    <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <span style="font-weight: 400;">{$order->note|breaklines|noescape}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                        <p style="font-weight: 800;">Fakturační adresa</p>
+                                                    </td>
+                                                </tr>
+                                                {if $order->different_delivery}
+                                                    <tr n:if="!empty($order->delivery_street)">
+                                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                            <strong style="font-weight: 400;">Ulice</strong>
+                                                        </td>
+                                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                            <span style="font-weight: 400;">{$order->delivery_street}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr n:if="!empty($order->delivery_city)">
+                                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                            <strong style="font-weight: 400;">Město</strong>
+                                                        </td>
+                                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                            <span style="font-weight: 400;">{$order->delivery_city}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr n:if="!empty($order->delivery_zip)">
+                                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                            <strong style="font-weight: 400;">PSČ</strong>
+                                                        </td>
+                                                        <td align="left" valign="top" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                                                            <span style="font-weight: 400;">{$order->delivery_zip}</span>
+                                                        </td>
+                                                    </tr>
+                                                {/if}
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding: 35px; background-color: #ffffff;" bgcolor="#ffffff">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
+                    <tr>
+                        <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 5px 0 10px 0;">
+                            <p style="font-size: 14px; font-weight: 800; line-height: 18px; color: #333333;">
+                                Teplárenská 1620,<br>
+                                Praha 14, 198 00
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px;">
+                            <p style="font-size: 13px; font-weight: 400; line-height: 20px; color: #777777;">
+                                Našli jste v poptávce nějaké nesrovnalosti?<br>Kontaktujte nás prosím telefonicky na <strong style="font-weight: 800; color: #333333">602 20 30 44</strong> nebo e-mailem na <a style="font-weight: 800; color: #333333" href="mailto:info@siegl.cz">info@siegl.cz</a>.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+</table>
     
-    {var $containers = array()}
-    {var $materials = array()}
-    {foreach $products as $itemId=>$product}
-    	{if $product->type==1}
-    		{php $containers[$itemId] = $product}
-    	{/if}
-    	{if $product->type==2}
-    		{php $materials[$itemId] = $product}
-    	{/if}
-    {/foreach}
-
-	<h4>rozsah poptávky</h4>
-	{$order->description|breaklines|noescape}
-
-	{if count($containers)>0}
-		<h4>Kontejnery</h4>
-		<table>
-			<thead>
-				<th>Název</th>
-				<th>Množství</th>
-			</thead>
-			<tbody>
-			<tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
-				<td><strong>{$product->name}</strong></td>
-				<td>
-					{$product->quantity} tun
-				</td>
-			</tr>
-			</tbody>
-		</table>
-	{/if}
-	{if count($materials)>0}
-		<h4>Materiál</h4>
-		<table>
-			<thead>
-				<th>Název</th>
-				<th>Množství</th>
-			</thead>
-			<tbody>
-			<tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
-				<td><strong>{$product->name}</strong></td>
-				<td>
-					{$product->quantity} {if $product->products_id==$beton}m<sup>3</sup>{else}tun{/if}
-				</td>
-			</tr>
-			</tbody>
-		</table>
-	{/if}
-
-	<h4>Termín realizace</h4>
-		<table>
-			<thead>
-				<th>Od</th>
-				<th>Do</th>
-				<th>Víkendy</th>
-			</thead>
-			<tbody>
-			<tr>
-				<td>{$order->termFrom}</td>
-				<td>{$order->termTo}</td>
-				<td>
-					{if $order->weekends}ANO{else}NE{/if}
-				</td>
-			</tr>
-			</tbody>
-		</table>
-
-	<h4>Místo přistavení</h4>
-	{$order->street}
-	
-	{if !empty($order->more)}
-		<h4>Něco dalšího</h4>
-		<p>{=nl2br($order->more)|noescape}</p>
-	{/if}
-	
-	<h4>Údaje o {if !empty($order->ic)}firemním {/if}zákazníkovi</h4>
-    <table>
-		<tbody>
-			<tr n:if="!empty($order->ic)">
-				<th>IČ</th>
-				<td>{$order->ic}</td>
-			</tr>
-			<tr n:if="!empty($order->company_name)">
-				<th>Název společnosti</th>
-				<td>{$order->company_name}</td>
-			</tr>
-			<tr>
-				<th>Jméno</th>
-				<td>{$order->name}</td>
-			</tr>
-			<tr>
-				<th>Příjmení</th>
-				<td>{$order->surname}</td>
-			</tr>
-			<tr>
-				<th>E-mail</th>
-				<td>{$order->email}</td>
-			</tr>
-			<tr>
-				<th>Telefon</th>
-				<td>{$order->phone}</td>
-			</tr>
-			<tr n:if="!empty($order->note)">
-				<th>Poznámka</th>
-				<td>{$order->note|breaklines|noescape}</td>
-			</tr>
-			{if $order->different_delivery}
-				<tr>
-					<th colspan="2">Jiná adresa dodání</th>
-				</tr>
-				<tr n:if="!empty($order->delivery_street)">
-					<th>Adresa</th>
-					<td>{$order->delivery_street}</td>
-				</tr>
-				<tr n:if="!empty($order->delivery_city)">
-					<th>Město</th>
-					<td>{$order->delivery_city}</td>
-				</tr>
-				<tr n:if="!empty($order->delivery_zip)">
-					<th>PS</th>
-					<td>{$order->delivery_zip}</td>
-				</tr>
-			{/if}
-		</tbody>
-    </table>
+</body>
+</html>

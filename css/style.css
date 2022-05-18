@@ -3553,7 +3553,8 @@ div.roughness div.amount {
 }
 
 li.weekend,
-li.beton {
+li.beton,
+ul.delivery {
   text-transform: lowercase;
   font-size: 1.25rem;
   margin: 0;

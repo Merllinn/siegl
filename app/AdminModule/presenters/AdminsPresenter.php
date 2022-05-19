@@ -80,7 +80,7 @@ class AdminsPresenter extends BasePresenter
             ->setRenderer(function($row) use ($presenter) {
                 if($row->active){
 					if($this->user->identity->role==9){
-                    	return Html::el("a")->class("tabella_ajax")->href($presenter->link("deactivate!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/active.png")->class("action"));
+                    	return Html::el("a")->href($presenter->link("deactivate!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/active.png")->class("action"));
 					}
 					else{
                     	return Html::el("img")->src(FOLDER."/images/active.png")->class("action");
@@ -88,7 +88,7 @@ class AdminsPresenter extends BasePresenter
                 }
                 else{
 					if($this->user->identity->role==9){
-                    	return Html::el("a")->class("tabella_ajax")->href($presenter->link("activate!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/deactive.png")->class("action"));
+                    	return Html::el("a")->href($presenter->link("activate!", $row->id))->setHtml(html::el("img")->src(FOLDER."/images/deactive.png")->class("action"));
 					}
 					else{
                     	return Html::el("img")->src(FOLDER."/images/active.png")->class("deactive");

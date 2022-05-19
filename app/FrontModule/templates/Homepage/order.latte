@@ -121,6 +121,11 @@
 							window.checkAddress = true;
 						{/if}
 						
+						$(".changeContainer").click(function(e){
+							e.preventDefault();
+							var link = $(this).data("link");
+							$.get(link);
+						});
 						$("a.ajax").click(function(e){
 							e.preventDefault();
 							$.get($(this).attr("href"));
@@ -208,7 +213,7 @@
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
             <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial {if empty($containers)}disabled{/if}" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!}">Ne, nepotřebuji</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!, 'basket'}">Ne, nepotřebuji</a>
         </div>
         <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
             <div class="container margin">

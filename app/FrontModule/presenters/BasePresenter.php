@@ -529,7 +529,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		}
 		
 		$deliveryPrice = 0;
-		if($materialTons<6){
+		if($materialTons>0 && $materialTons<=6){
 			if($specialDelivery){
 				$deliveryPrice = $this->settings->smallDeliveryS;
 			}
@@ -537,7 +537,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 				$deliveryPrice = $this->settings->smallDelivery;
 			}
 		}
-		else if($materialTons<=12){
+		else if($materialTons>6 && $materialTons<=12){
 			if($specialDelivery){
 				$deliveryPrice = $this->settings->bigDeliveryS;
 			}

@@ -102,7 +102,8 @@ final class HomepagePresenter extends HomepageForms
 	public function handleUnuseContainers($basket="basketM"){
 		$this->$basket->containers = array();
 		$this->recalculateBasket($basket);
-		$this->redirect("this");
+		$this->redrawControl("orderContainers");
+		//$this->redirect("this");
 	}
 
 	public function handleSetMaterialVariant($var){
@@ -743,12 +744,30 @@ final class HomepagePresenter extends HomepageForms
 				//$this->sendMailFromTemplate("orderStatus1.latte", $data, $order->email, "Potvrzení objednávky kontejneru");
 				if($values->type==1){
 					$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
+					if(!empty($values->email)){
+						$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $values->email, "Nová objednáva kontejneru");
+					}
+					if(!empty($values->bussiness_email)){
+						$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $values->bussiness_email, "Nová objednáva kontejneru");
+					}
 				}
 				if($values->type==2){
 					$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva materiálu");
+					if(!empty($values->email)){
+						$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $values->email, "Nová objednáva materiálu");
+					}
+					if(!empty($values->bussiness_email)){
+						$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $values->bussiness_email, "Nová objednáva materiálu");
+					}
 				}
 				if($values->type==9){
 					$this->sendMailFromTemplate("demandConfirmEshop.latte", $data, $this->settings->email, "Nová poptávka");
+					if(!empty($values->email)){
+						$this->sendMailFromTemplate("demandConfirmEshop.latte", $data, $values->email, "Nová poptávka");
+					}
+					if(!empty($values->bussiness_email)){
+						$this->sendMailFromTemplate("demandConfirmEshop.latte", $data, $values->bussiness_email, "Nová poptávka");
+					}
 				}
 
 				if($values->type==9){

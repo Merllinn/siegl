@@ -100,6 +100,11 @@
 							window.checkAddress = true;
 						{/if}
 
+						$(".changeContainer").click(function(e){
+							e.preventDefault();
+							var link = $(this).data("link");
+							$.get(link);
+						});
 						$("a.ajax").click(function(e){
 							e.preventDefault();
 							$.get($(this).attr("href"));
@@ -117,10 +122,12 @@
 						      autoclose: true,
                               pickTime: false,
                               minView: 2,
+						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+						      {var $date = new \Nette\Utils\DateTime()}
 						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
-						      	startDate: '+0d',
+						      	startDate: {$date|date:"d.m.Y"},
 						      {else}
-						      	startDate: '+1d',
+						      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
 						      {/if}
 						    });
 					    {/if}

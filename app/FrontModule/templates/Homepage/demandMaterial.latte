@@ -169,6 +169,11 @@
 							window.checkAddress = true;
 						{/if}
 
+						$(".changeContainer").click(function(e){
+							e.preventDefault();
+							var link = $(this).data("link");
+							$.get(link);
+						});
 						$("a.ajax").click(function(e){
 							e.preventDefault();
 							$.get($(this).attr("href"));

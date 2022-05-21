@@ -50,6 +50,7 @@ class SettingsPresenter extends BasePresenter
 		$form ->addText("bigDelivery", "Cena dopravy velkého auta [Kč]");
 		$form ->addText("smallDeliveryS", "Cena dopravy malého auta (beton, kačírek) [Kč]");
 		$form ->addText("bigDeliveryS", "Cena dopravy velkého auta (beton, kačírek) [Kč]");
+		$form ->addText("bigContainer", "ID kontejneru pro větší množství materiálu (6-12 tun)");
 		$form->addGroup("SEO");
 		$form ->addTextArea("description", "Popis");
 		$form ->addTextArea("keywords", "Klíčová slova");

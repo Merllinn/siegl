@@ -186,11 +186,14 @@
     <script>
     	$(document).ready(function(){
 			$(".modal .form-check-input").on("change", function(){
+				$(".modal .form-check-input").prop('checked', false);
+				$(this).prop('checked', true);
 				synchButtons();
 			});
 			
 			$(".includeRow").on("click", function(e){
 				e.preventDefault();
+				$(".modal .form-check-input").prop('checked', false);
 				$(this).closest("tr").find(".form-check-input").prop('checked', true);
 				synchButtons();
 			});

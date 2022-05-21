@@ -65,9 +65,9 @@
         <div class="container">
             <h2 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">{_'SIEGL_BLOG'}</h2>
             <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">{_'RADY_TIPY_NAZORY'}</p>
-            <div class="row" n:if="file_exists($_SERVER['DOCUMENT_ROOT'] . '/blog/wp-load.php')">
+            <div class="row" n:if="file_exists($basePath.'blog/wp-load.php')">
 				{var $i=0}
-				{php require($_SERVER['DOCUMENT_ROOT'] . '/blog/wp-load.php')}
+				{php require($basePath.'blog/wp-load.php')}
 				{var $args = array('posts_per_page' => 3)}
 				{var $latest_posts = new WP_Query( $args )}
 				{if $latest_posts->have_posts()}
@@ -76,12 +76,12 @@
 			            <div class="col-md-4" data-aos="fade-in" data-aos-duration="250" data-aos-delay="{=($i+50)}">
 			                <div class="blog-post">
 			                    <a href="{php the_permalink()}" title="Přečíst příspěvek{php the_title()}">
-			                        <img class="img-fluid" src="{php the_post_thumbnail()}" alt="Náhledový obrázek příspěvku {php the_title()}">
+			                        {php the_post_thumbnail()}
 			                    </a>
 			                    <span class="date">{php the_time('d/m/Y')}</span>
 			                    <a href="{php the_permalink()}" title="Přečíst příspěvek {php the_title()}"><h3>{php the_title()}</h3></a>
 			                    {php the_excerpt()}
-			                    <a class="read-more" href="{php the_permalink()}" title="Přečíst příspěvek {php the_title()}">Přečíst</a>
+			                    <a class="read-more" href={php the_permalink()} title="Přečíst příspěvek {php the_title()}">Přečíst</a>
 			                </div>
 			            </div>
 			            <!-- ./blog post -->

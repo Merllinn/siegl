@@ -31,11 +31,15 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     public $basket;
     public $basketD;
     public $basketM;
+    public $basketMap;
     public $onlineSale = 0;
     
     public $zones = 8;
     
     public $vatSes;
+    
+	public $contactCategories = array(10=>"řidič", 20=>"strojník");
+    
 
     /** @var Model\CommonManager  @inject */
     public $commonManager;
@@ -82,6 +86,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->basket = $this->getSession("basket");
         $this->basketD = $this->getSession("basket-demand");
         $this->basketM = $this->getSession("basket-material");
+        $this->basketMap = $this->getSession("basket-map");
 
         $this->template->topPages = $this->pageManager->get()->where("location = ?", 0)->where("active = ?", true)->where("parent IS NULL");
         $this->template->bottomPages = $this->pageManager->get()->where("location = ?", 1)->where("active = ?", true)->where("parent IS NULL");
@@ -168,6 +173,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     }
 
     public function actionLogin(){
+		$this->template->bodyClassPage = "page";
         $page = new \Nette\Utils\ArrayHash();
         $page->name = "Přihlášení";
         $page->alias = "";
@@ -429,8 +435,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		$endYear = strtotime($year."-12-31");
 		$startRange = strtotime($year."-11-15");
 		$endRange = strtotime($year."-03-15");
-        
-
+		
 		if(!empty($this->$basket->containers)){
 			foreach($this->$basket->containers as $container){
 				if(!empty($container->price)){
@@ -438,7 +443,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 					if(empty($zone)){
 						$totalPrice += $price->priceFrom;
 					}
-					else{
+					else if($price){
 						$zoneField = "price".$zone;
 						if(!empty($price->$zoneField)){
 							$totalPrice += $price->$zoneField;
@@ -448,15 +453,17 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 						}
 					}
 					$prod = $this->productManager->find($container->product);
-					foreach(explode("|", $prod->attributes) as $aKey){
-						list($key, $val) = explode("-", $aKey);
-						if($key==$weightAttr){
-							$aVal = $this->attributeManager->findValue($val);
-							$totalWeight += (int)$aVal->name;
-						}
-						if($key==$volumeAttr){
-							$aVal = $this->attributeManager->findValue($val);
-							$totalVolume += (int)$aVal->name;
+					if($prod){
+						foreach(explode("|", $prod->attributes) as $aKey){
+							list($key, $val) = explode("-", $aKey);
+							if($key==$weightAttr){
+								$aVal = $this->attributeManager->findValue($val);
+								$totalWeight += (int)$aVal->name;
+							}
+							if($key==$volumeAttr){
+								$aVal = $this->attributeManager->findValue($val);
+								$totalVolume += (int)$aVal->name;
+							}
 						}
 					}
 				}
@@ -502,6 +509,28 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 					}
 				}
 			}
+			else if($basket=="basketM"){
+				foreach($this->$basket->materials as $material){
+					if(!empty($material->priceObj)){
+						$totalPrice += $material->priceObj->priceFrom * $material->amount;
+
+						//text beton extra pay
+						if($material->product == $this->settings->betonProduct){
+							if($isBetonAdd){
+								//$m3Amount = round($material->amount * $material->priceObj->koef, 2);
+								$betonPrice += $this->settings->betonPrice * $material->amount;
+							}
+							$materialTons += ($material->amount/$material->priceObj->koef);
+						}
+						else{
+							$materialTons += $material->amount;
+						}
+						if(in_array($material->priceObj->product, array("10", "14"))){
+							$specialDelivery = true;
+						}
+					}
+				}
+			}
 			else{
 				foreach($this->$basket->materials as $materials){
 					foreach($materials as $material){
@@ -530,7 +559,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		
 		$deliveryPrice = 0;
 		if($materialTons>0 && $materialTons<=6){
-			if($specialDelivery){
+			if(!empty($this->$basket->containers[0]->product)){
+				$deliveryPrice = 0;
+			}
+			else if($specialDelivery){
 				$deliveryPrice = $this->settings->smallDeliveryS;
 			}
 			else{
@@ -538,7 +570,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 			}
 		}
 		else if($materialTons>6 && $materialTons<=12){
-			if($specialDelivery){
+			if(!empty($this->$basket->containers[0]->product) && $this->$basket->containers[0]->product == $this->settings->bigContainer){
+				$deliveryPrice = 0;
+			}
+			else if($specialDelivery){
 				$deliveryPrice = $this->settings->bigDeliveryS;
 			}
 			else{

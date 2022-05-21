@@ -157,22 +157,29 @@
 							$.get(link);
 						});
 						$(".typePick").change(function(){
-							var type = $(this).val();
-							$(this).closest("ul").find(".productPick option").each(function(){
-								if($(this).data("types")=="all"){
-									$(this).show();
-								}
-								else if($(this).data("types").indexOf(type)>-1){
-									$(this).show();
-								}
-								else{
-									$(this).hide();
-									if($(this).is(':selected')){
-										$(this).closest("select").val("");
-									}
-								}
-							});
+							resolveByType();
 						});
+						
+						function resolveByType(){
+							$(".typePick").each(function(){
+								var type = $(this).val();
+								$(this).closest("ul").find(".productPick option").each(function(){
+									if($(this).data("types")=="all"){
+										$(this).show();
+									}
+									else if($(this).data("types").indexOf(type)>-1){
+										$(this).show();
+									}
+									else{
+										$(this).hide();
+										if($(this).is(':selected')){
+											$(this).closest("select").val("");
+										}
+									}
+								});
+							});
+						}
+						resolveByType();
 						
 						function enableDisableOrder(){
 							sendOrderButton = $(".sendOrderButton");
@@ -367,6 +374,44 @@
     <!-- ./material -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
+    	<ul class="list-unstyled">
+    		{if !empty($containers)}
+    			<li n:foreach="$containers as $container">
+    				{if !empty($container->product)}
+    					{$presenter->productManager->find($container->product)->name}
+    				{/if}
+    				{if !empty($container->price->id)}
+	            		{var $price = $presenter->productManager->findPrice($container->price->id)}
+	            		({$price->ref("attributeValue")->name}) 
+	            		{if !empty($basket->zone)}
+	            			{var $priceFiels = "price".$basket->zone}
+	            			<strong>{$price->$priceFiels|number:0:",":" "} Kč</strong>
+	            		{else}
+	            			{var $priceFiels = "priceFrom"}
+	            			<strong>od {$price->$priceFiels|number:0:",":" "} Kč</strong>
+	            		{/if}
+    				{else}
+    					<strong>vyberte typ odpadu</strong>
+    				{/if}
+    				
+    			</li>
+    		{/if}
+    		{if !empty($materials)}
+    			<li n:foreach="$materials as $material">
+					{if !empty($material->product)}
+						{var $prod = $presenter->productManager->find($material->product)}
+						{$prod->name}
+					{/if}
+					{if !empty($material->priceObj)}
+	            		{var $price = $presenter->productManager->findPrice($material->priceObj->id)}
+	            		 - {$price->ref("attributeValue")->name}
+	            		<strong>{$price->priceFrom * $material->amount|number:0:",":" "} Kč</strong>
+					{else}
+						<strong>Vvyberte variantu materiálu</strong>
+					{/if}
+    			</li>
+    		{/if}
+    	</ul>
     	<ul class="list-unstyled" n:if="($basket->weekendPrice + $basket->betonPrice)>0">
         	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'}: <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
         	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'}: <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
@@ -535,6 +580,12 @@
     	$(document).ready(function(){
 			var materialPrice = 0;
 			
+			if($("form ul.errors").length > 0){
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("form ul.errors").offset().top - 120
+    			}, 500);				
+			}
+			
 			$(".variantImage").click(function(e){
 				e.stopPropagation();
 			});
@@ -549,6 +600,13 @@
 				$(".changeMaterial").toggle();
 				if($(this).data("link")!=""){
 					$.get($(this).data("link"));
+				}
+				if($(".changeMaterial").is(":hidden")){
+					var pickedVariant = $(".roughness li.selected");
+					pickedVariant.find(".pickButton").text(pickedVariant.find(".pickButton").data("pick"));
+					pickedVariant.removeClass("selected");
+					$(".roughness").hide();
+					$(".select-material li.selected").removeClass("selected");
 				}
 			});
 			$(".pickMaterial").click(function(e){

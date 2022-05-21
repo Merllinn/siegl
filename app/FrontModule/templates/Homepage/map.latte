@@ -26,6 +26,24 @@
         	<div id="map" style="width:100%; height:680px;"></div>
         </div>
     </section>
+    {snippet deliveryTerm}
+        <div class="speed" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
+            <h2 class="title underline">Jak rychle vám kontejner přistavíme?</h2>
+            <div class="warrant deliveryBlock">
+                <ul class="list-unstyled">
+                    <li>
+                        {$basket->zone} Garantujeme čas přistavení do <span class="number standardDelivery">1 - {if !empty($basket->zoneObj)}{$basket->zoneObj->lead}{else}4{/if}</span> <strong class="standardUnit">hodin</strong>
+                    </li>
+                    <li>
+                        Turbokontejner s přistavením do <span class="number turbodelivery">60</span> <strong class="turbounit">minut</strong>
+                        <span class="turbo">(pouze telefonicky Po - Pá: 6:00 - 17:00)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- ./speed -->
+    
+    {/snippet}
     <div class="waste-type-rectangle"></div>
 {/block}
 
@@ -33,126 +51,20 @@
     <script>
     	$(document).ready(function(){
 			var materialPrice = 0;
-			var materialKoef = 1;
-			var checkWeight = true;
-			var checkAddress = true;
-			
-			{if !empty($materials[0]->priceObj)}
-				materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
-				materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
-				$(".materialPrice").html(materialPrice.toLocaleString());
-				$(".material-quantity").val(Math.round($(".materialWeight").val()*materialKoef));
-				$(".amount").show();
-				$(".tons-price").show();
-			{/if}
-			
-			$(".updateValue").change(function(){
-				var link = $(this).data("link");
-				link = link + "&val=" + $(this).val();
-				$.get(link);
-			});
-			$(".triggerMaterial").click(function(e){
-				e.preventDefault()
-				$(".changeMaterial").toggle();
-				if($(this).data("link")!=""){
-					$.get($(this).data("link"));
-				}
-			});
-			$(".typePick").change(function(){
-				var type = $(this).val();
-				$(this).closest("ul").find(".productPick option").each(function(){
-					if($(this).data("types")=="all"){
-						$(this).show();
-					}
-					else if($(this).data("types").indexOf(type)>-1){
-						$(this).show();
-					}
-					else{
-						$(this).hide();
-						if($(this).is(':selected')){
-							$(this).closest("select").val("");
-						}
-					}
-				});
-			});
-			$(".materialWeight").change(function(){
-				var matWeight = parseInt($(this).val());
-				var matVolume = Math.round(matWeight*materialKoef);
-				var maxWeight = parseInt($(".total-price").data("weight"));
-				var maxVolume = parseInt($(".total-price").data("weight"));
-				$(".material-quantity").val(Math.round(matWeight*materialKoef));
-				var link = {link setMaterialAmount!} + "&amount=" + matWeight;
-				$.get(link);
-
-				if(matWeight>maxWeight){
-					window.checkWeight = false;
-					enableDisableOrder();
-					alert("Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.");
-				}
-				else if(matVolume>maxVolume){
-					window.checkWeight = false;
-					enableDisableOrder();
-					alert("Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.");
-				}
-				else{
-					window.checkWeight = true;
-					enableDisableOrder();
-				}
-				
-			});
-			$(".pickMaterial").click(function(e){
-				e.preventDefault()
-				var link = $(this).data("link");
-				var matId = $(this).data("mat");
-				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
-				$(".roughness").hide();
-				$(".roughness.mat"+matId).show();
-				$(".amount").hide();
-				$(".tons-price").hide();
-				$.get(link);
-			});
-			$(".pickVariant").click(function(e){
-				e.preventDefault()
-				var link = $(this).data("link");
-				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
-				materialPrice = parseInt($(this).data("price"));
-				materialKoef = parseFloat($(this).data("koef"));
-				$(".materialPrice").html(materialPrice.toLocaleString());
-				$(".material-quantity").val(Math.round($(".materialWeight").val()*materialKoef));
-				$(".amount").show();
-				$(".tons-price").show();
-				$.get(link);
-			});
 			
 			if($("#searchTextField").val() != ""){
 				$(".setAddress").trigger("click");
 			}
-			if($(".materialWeight").val() != 1){
-				$(".materialWeight").trigger("change");
-			}
-			
-			function enableDisableOrder(){
-				sendOrderButton = $(".sendOrderButton");
-				var orderValid = true;
-				if(window.checkWeight==false) orderValid = false;
-				if(window.checkAddress==false) orderValid = false;
-				if(orderValid){
-					sendOrderButton.removeClass("disabled");
-				}	
-				else{
-					sendOrderButton.addClass("disabled");
-				}	
-			}
 		});
 		
 		function initMap() {
-			var center = { lat: 50.1025735, lng: 14.4273201 };
+			var center = { lat: 50.0731605, lng: 14.4467046 };
 			var mapEl = document.getElementById("map");
 			var geocoder = new google.maps.Geocoder();
 			var map = new google.maps.Map(
 			   mapEl,
 			  {
-			    zoom: 14.21,
+			    zoom: 11.8,
 			    center: center,
 			  }
 			);
@@ -277,23 +189,20 @@
 						setMarker(result.geometry.location, $("#searchTextField").val());
 						map.setCenter(result.geometry.location);
 						window.checkAddress = true;
-						enableDisableOrder();
 					}
 					else if(inPrague){
 						$("#searchTextField").val("");
 						unsetMarker();
 						alert({_'ADRESA_MIMO_ZONU'});
 						window.checkAddress = false;
-						enableDisableOrder();
 					}
 					else{
 						$("#searchTextField").val("");
 						unsetMarker();
 						alert({_'ADRESA_MIMO_PRAHU'});
 						window.checkAddress = false;
-						enableDisableOrder();
 					}
-					var link = {link setBasketZone!} + "&z=" + activeZone;
+					var link = {link setBasketZone!, "basketMap"} + "&z=" + activeZone;
 					$.get(link);
 				
     		}
@@ -313,7 +222,7 @@
 				map,
 				title: caption,
 			  });
-			  var link = {link setAddress!} + "&a=" + caption;
+			  var link = {link setAddress!, "basketMap"} + "&a=" + caption;
 			  $.get(link);
     		}
     		
@@ -339,7 +248,7 @@
 				    strokeOpacity: 0.8,
 				    strokeWeight: 2,
 				    fillColor: {$color},
-				    fillOpacity: 0.35,
+				    fillOpacity: 0.5,
 				});
 
 				zone{$zone->id}.setMap(map);
@@ -361,20 +270,6 @@
 			
     		{/foreach}
     		
-			function enableDisableOrder(){
-				sendOrderButton = $(".sendOrderButton");
-				var orderValid = true;
-				if(window.checkWeight==false) orderValid = false;
-				if(window.checkAddress==false) orderValid = false;
-				if(orderValid){
-					sendOrderButton.removeClass("disabled");
-				}	
-				else{
-					sendOrderButton.addClass("disabled");
-				}	
-			}
-    		
-
 		}
 
 		

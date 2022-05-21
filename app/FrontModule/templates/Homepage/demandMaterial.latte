@@ -207,22 +207,29 @@
 							$.get(link);
 						});
 						$(".typePick").change(function(){
-							var type = $(this).val();
-							$(this).closest("ul").find(".productPick option").each(function(){
-								if($(this).data("types")=="all"){
-									$(this).show();
-								}
-								else if($(this).data("types").indexOf(type)>-1){
-									$(this).show();
-								}
-								else{
-									$(this).hide();
-									if($(this).is(':selected')){
-										$(this).closest("select").val("");
-									}
-								}
-							});
+							resolveByType();
 						});
+						
+						function resolveByType(){
+							$(".typePick").each(function(){
+								var type = $(this).val();
+								$(this).closest("ul").find(".productPick option").each(function(){
+									if($(this).data("types")=="all"){
+										$(this).show();
+									}
+									else if($(this).data("types").indexOf(type)>-1){
+										$(this).show();
+									}
+									else{
+										$(this).hide();
+										if($(this).is(':selected')){
+											$(this).closest("select").val("");
+										}
+									}
+								});
+							});
+						}
+						resolveByType();
 						
 						function enableDisableOrder(){
 							sendOrderButton = $(".sendOrderButton");
@@ -312,12 +319,12 @@
 			</ul>
             <nav>
                 <div class="nav nav-tabs" id="nav-order-form" role="tablist">
-                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
-                    <button class="nav-link active" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                    <button class="nav-link {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}active{/if}" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link {if empty($basket->order->usertype)}active{/if}" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabOrderForm">
-                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                <div class="tab-pane fade {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}show active{/if}" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
                     <div class="row">
                         <div class="form-group col-md-6 arrow">
                             {label name/}
@@ -371,7 +378,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade show active" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                <div class="tab-pane fade {if empty($basket->order->usertype)}show active{/if}" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
                     <div class="row row-ic">
                         <div class="form-group col-md-12">
 	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
@@ -438,7 +445,7 @@
                 </div>
                 <div class="row row-send-order">
                     <div class="form-group col-md-12 send-order">
-                        <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat poptávku <i class="fa-solid fa-angles-right"></i></button>
+                        <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
                     </div>
                 </div>
                 
@@ -459,6 +466,12 @@
     <script>
     	$(document).ready(function(){
 			var materialPrice = 0;
+			
+			if($("form ul.errors").length > 0){
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("form ul.errors").offset().top - 120
+    			}, 500);				
+			}
 			
 			$(".variantImage").click(function(e){
 				e.stopPropagation();

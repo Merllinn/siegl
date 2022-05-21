@@ -16,6 +16,7 @@ final class UserManager implements Nette\Security\IAuthenticator
 
 	const
 		TABLE_NAME = 'users',
+		PERSONS = 'persons',
 		COLUMN_ID = 'id',
 		COLUMN_PASSWORD_HASH = 'password',
 		COLUMN_LOGIN = 'login',
@@ -150,6 +151,58 @@ final class UserManager implements Nette\Security\IAuthenticator
         ->where("active", 0)
         ->delete();
     }
+    
+    public function getPersons(){
+        return $this->database->table(self::PERSONS);
+    }
+
+    public function getActivePersons(){
+        return $this->getPersons()
+			->where("active = ?", true);
+    }
+
+    public function getActivePersonsByRole($role){
+        return $this->getPersons()
+			->where("active = ?", true)
+			->where("role = ?", $role);
+    }
+
+
+	public function addPerson($values)
+	{
+		try {
+			return $this->getPersons()->insert($values);
+		} catch (Nette\Database\UniqueConstraintViolationException $e) {
+			throw new \App\Model\DuplicateNameException;
+		}
+	}
+
+	public function updatePerson($values, $id)
+	{
+		try {
+			$this->getPersons()
+			->where("id", $id)
+			->update($values);
+		} catch (Nette\Database\UniqueConstraintViolationException $e) {
+			throw new \App\Model\DuplicateNameException;
+		}
+	}
+
+	public function deletePerson($id)
+	{
+		$this->getPersons()
+		->where("id", $id)
+		->delete();
+	}
+	
+	public function findPerson($id)
+	{
+		return $this->getPersons()
+			->where("id", $id)
+			->fetch();
+	}
+	
+    
 }
 
 

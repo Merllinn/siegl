@@ -81,10 +81,20 @@ class ZonesPresenter extends BasePresenter
             	}
         });
 
-        $grid->addColumnText('orderTimes', 'Objednací časy')
+        $grid->addColumnText('orderTimes', 'Objednací časy kont.')
             ->setRenderer(function($row) use ($presenter) {
             	if(!empty($row->orderTimes)){
 					return html::el("span")->setHtml(nl2br($row->orderTimes));
+            	}
+            	else{
+					return "";
+            	}
+        });
+
+        $grid->addColumnText('orderTimesM', 'Objednací časy mat.')
+            ->setRenderer(function($row) use ($presenter) {
+            	if(!empty($row->orderTimesM)){
+					return html::el("span")->setHtml(nl2br($row->orderTimesM));
             	}
             	else{
 					return "";
@@ -139,7 +149,9 @@ class ZonesPresenter extends BasePresenter
 		$form ->addText("deadline", "Do kdy lze poslat objednávku [hh:mm]");
 		$form ->addTextarea("points", "Body hranice (souřadnice na jeden řádek)")
 				->addRule(Form::FILLED, "Vyplňte hranici");
-		$form ->addTextarea("orderTimes", "Rezervační časy [hh:mm - hh:mm] (jeden na řádek)")
+		$form ->addTextarea("orderTimes", "Rezervační časy kontejnerů [hh:mm - hh:mm] (jeden na řádek)")
+				->addRule(Form::FILLED, "Vyplňte časy");
+		$form ->addTextarea("orderTimesM", "Rezervační časy materiálů [hh:mm - hh:mm] (jeden na řádek)")
 				->addRule(Form::FILLED, "Vyplňte časy");
         /*
         $form->addSelect("role", "Role", $this->roles)

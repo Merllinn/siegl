@@ -276,7 +276,7 @@ final class OrderManager
         }
         if($order->type==2){
 			$order->deliveryPrice = $ses->deliveryPrice;
-			$order->termFrom = $ses->termFrom;
+			$order->termFrom = $ses->termFrom." ".$ses->time;
         }
         
         //save order
@@ -343,20 +343,18 @@ final class OrderManager
 		            }
 				}
 	            if($order->type==2){
-		            foreach($material as $variant){
-			            $product = $pm->find($variant->priceObj->product);
-			            $price = $pm->findPrice($variant->priceObj->id);
-			            $itemData = array(
-			                "order_id"		=>$orderId,
-			                "products_id"   =>$variant->priceObj->product,
-			                "quantity"      =>$variant->amount,
-			                "type"			=>2,
-			                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
-			                "price"         =>$price->priceFrom,
-			                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
-			            );
-			            $this->addProduct($itemData);
-		            }
+		            $product = $pm->find($material->product);
+		            $price = $pm->findPrice($material->priceObj->id);
+		            $itemData = array(
+		                "order_id"		=>$orderId,
+		                "products_id"   =>$material->product,
+		                "quantity"      =>$material->amount,
+		                "type"			=>2,
+		                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+		                "price"         =>$price->priceFrom,
+		                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
+		            );
+		            $this->addProduct($itemData);
 				}
 	            //$totalPice += $price->priceFrom * $material->amount;
 	        }

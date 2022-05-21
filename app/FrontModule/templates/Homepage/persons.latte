@@ -1,0 +1,29 @@
+{layout ../@layout.latte}
+{block content}
+	<div class="subpages">
+		<div class="container">
+			<h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">{$page->name}</h1>
+			{block subcontent}
+		    	{$page->content|noescape}
+		    	{$page->content_continuation|noescape}
+		    	<div class="row" n:foreach="$presenter->contactCategories as $role=>$roleName">
+		    		<div class="col-12"><h3>{$roleName}</h3></div>
+					<div class="col-4" n:foreach="$presenter->userManager->getActivePersonsByRole($role) as $person" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}">
+						<div class="col-subpage">
+							<img src="{$person|thumb:300:200}" alt="{$person->name}" />
+							<h2>{$person->name}</h2>
+							<div class="date">{$roleName}</div>
+						</div>
+					</div>
+				</div>
+		  	{/block}
+		</div>
+	</div>
+	<div class="page-bottom-navigation">
+        {include '../_parts/footerMenu.latte', class=>''}
+        <!-- ./bottom navigation -->
+    </div>
+    <!-- ./page bottom navigation -->
+	<img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	<img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+{/block}

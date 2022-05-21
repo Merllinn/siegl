@@ -75,6 +75,10 @@ class AttributesPresenter extends BasePresenter
 		$this->template->attribute = $this->attributeManager->find($id);
 		$this->addBreadcrumbs($this->template->attribute->name, $this->link(":Admin:Attributes:values", $this->template->attribute->id));
 		$this->addBreadcrumbs("Přidání hodnoty");
+		$this["valueForm"]["imgDel"]->getControlPrototype()->style("display", "none");
+		$this["valueForm"]["imgDel"]->getLabelPrototype()->style("display", "none");
+		$this["valueForm"]["imgShow"]->getControlPrototype()->style("display", "none");
+		$this["valueForm"]["imgShow"]->getLabelPrototype()->style("display", "none");
 		$this->setView("addEditValue");
 	}
 
@@ -83,6 +87,19 @@ class AttributesPresenter extends BasePresenter
 		$details = $this->attributeManager->findValue($id);
 		$this->attr = $details->attribute;
 		$this->template->attribute = $this->attributeManager->find($details->attribute);
+		if(!empty($details->file)){
+			//$details["fileShow"] = $details->file;
+			$this["valueForm"]["imgShow"]->getControlPrototype()->height("200px")->src("/data/original/".$details->file)->onClick("return false;");
+			$this["valueForm"]["file"]->getControlPrototype()->style("display", "none");
+			$this["valueForm"]["file"]->getLabelPrototype()->style("display", "none");			
+		}
+		else{
+			$this["valueForm"]["imgDel"]->getControlPrototype()->style("display", "none");
+			$this["valueForm"]["imgDel"]->getLabelPrototype()->style("display", "none");
+			$this["valueForm"]["imgShow"]->getControlPrototype()->style("display", "none");
+			$this["valueForm"]["imgShow"]->getLabelPrototype()->style("display", "none");
+			
+		}
 		$this["valueForm"]->setDefaults($details);
 		$this->setView("addEditValue");
 		$this->addBreadcrumbs($this->template->attribute->name, $this->link(":Admin:Attributes:values", $this->template->attribute->id));
@@ -153,6 +170,9 @@ class AttributesPresenter extends BasePresenter
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno atributu");
 		$form ->addUpload("file", "Obrázek");
+		$form->addImage("imgShow", "");
+		$form->addCheckbox("imgDel", "Smazat obrázek");
+		
 		$form ->addTextArea("desc", "Popis")
 				->getControlPrototype()
 					->class("wysiwyg");
@@ -176,6 +196,8 @@ class AttributesPresenter extends BasePresenter
 			try{
 				$img = $values->file;
 				unset($values->file);
+				$imgDel = $values->imgDel;
+				unset($values->imgDel);
 				if(empty($this->edited)){
 					$values->attribute = $this->attr;
 					$this->edited = $this->attributeManager->addValue($values);
@@ -209,6 +231,12 @@ class AttributesPresenter extends BasePresenter
     				$this->attributeManager->updateValue($data, $this->edited);
 
 	            }
+				elseif($imgDel==true){
+    				$data = array(
+    					"file"=>"",
+    				);
+    				$this->attributeManager->updateValue($data, $this->edited);
+				}	            
 
 				$this->flashMessage("Hodnota byla uložena.");
 				$this->redirect("values", $this->attr);

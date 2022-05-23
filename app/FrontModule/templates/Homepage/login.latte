@@ -1,31 +1,26 @@
 {layout page.latte}
 {block subcontent}
       <div class="container login-page">
-          <h1 class="title">
-            {$page->name}
-        </h1>
-        <article>
-            {form loginForm}
-                <ul class="errors list-unstyled alert-danger" n:if="$form->hasErrors()">
-                    <li n:foreach="$form->errors as $error">{$error}</li>
-                </ul>
-                <div class="row justify-content-center">
-                    <div class="col-5">
-                        <div class="form-group">
-                            {input login, class=>"form-control"}
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <div class="form-group">
-                            {input pass, class=>"form-control"}
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        {input submit, class=>"btn btn-primary"}
+        {form loginForm}
+            <ul class="errors list-unstyled alert-danger" n:if="$form->hasErrors()">
+                <li n:foreach="$form->errors as $error">{$error}</li>
+            </ul>
+            <div class="row justify-content-center">
+                <div class="col-5">
+                    <div class="form-group">
+                        {input login, class=>"form-control"}
                     </div>
                 </div>
-              {/form}
-        </article>
+                <div class="col-5">
+                    <div class="form-group">
+                        {input pass, class=>"form-control"}
+                    </div>
+                </div>
+                <div class="col-2">
+                    {input submit, class=>"btn btn-primary"}
+                </div>
+            </div>
+          {/form}
       </div>
       <!-- ./container -->
 {/block}

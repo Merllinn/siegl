@@ -94,61 +94,67 @@ div[style*="margin: 16px 0;"] { margin: 0 !important; }
                                 </tr>
                                 {if count($containers)>0}
                                 <tr>
-                                    <td width="30%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Kontejner
-                                    </td>
-                                    <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Termín
-                                    </td>
-                                    <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Cena/ks
-                                    </td>
-                                    <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Cena celkem
-                                    </td>
-                                </tr>
-                                <tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
-                                    <td width="30%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 15px 10px 5px 10px;">
-                                        {$product->name}
-                                    </td>
-                                    <td width="20%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                                        {$product->term}
-                                    </td>
-                                    <td width="20%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                                        {$product->price|number:0:',':' '} Kč
-                                    </td>
-                                    <td width="20%" align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                                        {$product->price*$product->quantity|number:0:',':' '} Kč
+                                    <td align="left" style="padding-top: 20px;">
+                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td width="40%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Kontejner
+                                                </td>
+                                                <td width="40%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Termín
+                                                </td>
+                                                <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Celkem
+                                                </td>
+                                            </tr>
+                                            <tr n:foreach="$containers as $itemId=>$product" data-id="{$itemId}">
+                                                <td width="40%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 15px 10px 5px 10px;">
+                                                    {$product->name}
+                                                </td>
+                                                <td width="40%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                                                    {$product->term}
+                                                </td>
+                                                <td width="20%" align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                                                    {$product->price*$product->quantity|number:0:',':' '} Kč
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                                 {/if}
                                 {if count($materials)>0}
                                 <tr>
-                                    <td width="30%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Materiál
-                                    </td>
-                                    <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Množství
-                                    </td>
-                                    <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Cena/ks
-                                    </td>
-                                    <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
-                                        Cena celkem
-                                    </td>
-                                </tr>
-                                <tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
-                                    <td width="30%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 15px 10px 5px 10px;">
-                                        {$product->name}
-                                    </td>
-                                    <td width="13.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                                        {$product->quantity} {if $product->products_id==$beton}m<sup>3</sup>{else}tun{/if}
-                                    </td>
-                                    <td width="13.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                                        {$product->price|number:0:',':' '} Kč
-                                    </td>
-                                    <td width="13.333%" align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
-                                        {$product->price*$product->quantity|number:0:',':' '} Kč
+                                    <td align="left" style="padding-top: 20px;">
+                                        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td width="40%"  align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Materiál
+                                                </td>
+                                                <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Množství
+                                                </td>
+                                                <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Cena/j
+                                                </td>
+                                                <td width="20%" align="left" bgcolor="#eaeaea" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 800; line-height: 24px; padding: 10px;">
+                                                    Celkem
+                                                </td>
+                                            </tr>
+                                            <tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
+                                                <td width="40%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 1.3; padding: 15px 10px 5px 10px;">
+                                                    {$product->name}
+                                                </td>
+                                                <td width="13.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                                                    {$product->quantity} {if $product->products_id==$beton}m<sup>3</sup>{else}tun{/if}
+                                                </td>
+                                                <td width="13.333%" align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                                                    {$product->price|number:0:',':' '} Kč
+                                                </td>
+                                                <td width="13.333%" align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 24px; padding: 15px 10px 5px 10px;">
+                                                    {$product->price*$product->quantity|number:0:',':' '} Kč
+                                                </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                                 {/if}

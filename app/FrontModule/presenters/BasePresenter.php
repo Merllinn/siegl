@@ -38,7 +38,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     
     public $vatSes;
     
-	public $contactCategories = array(10=>"řidič", 20=>"strojník");
+	public $contactCategories = array(50=>"Vedení společnosti", 30=>"Administrativa", 40=>"Dispečink", 10=>"Řidiči", 20=>"Strojníci");
     
 
     /** @var Model\CommonManager  @inject */

@@ -374,7 +374,7 @@
     <!-- ./material -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
-    	<ul class="list-unstyled">
+    	<ul class="list-unstyled summary">
     		{if !empty($containers)}
     			<li n:foreach="$containers as $container">
     				{if !empty($container->product)}
@@ -391,7 +391,7 @@
 	            			<strong>od {$price->$priceFiels|number:0:",":" "} Kč</strong>
 	            		{/if}
     				{else}
-    					<strong>vyberte typ odpadu</strong>
+    					<strong>Vyberte druh odpadu</strong>
     				{/if}
     				
     			</li>
@@ -407,14 +407,14 @@
 	            		 - {$price->ref("attributeValue")->name}
 	            		<strong>{$price->priceFrom * $material->amount|number:0:",":" "} Kč</strong>
 					{else}
-						<strong>Vvyberte variantu materiálu</strong>
+						<strong>Vyberte variantu materiálu</strong>
 					{/if}
     			</li>
     		{/if}
     	</ul>
     	<ul class="list-unstyled" n:if="($basket->weekendPrice + $basket->betonPrice)>0">
-        	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'}: <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
-        	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'}: <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
+        	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'} <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
+        	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'} <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
         </ul>
         <span class="total">Celková cena</span>
         <strong class="price">{$basket->price|number:0:",":" "} Kč</strong>

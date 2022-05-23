@@ -28,76 +28,78 @@
     </section>
 	<div class="term in-material">
 	    <div class="container">
-	        <h2 class="title underline">Termín realizace</h2>
-	        {snippet realizationterm}
-		        {var $zoneTimesM = array()}
-		        {if !empty($basket->zoneObj)}
-			        {foreach explode(chr(10), $basket->zoneObj->orderTimesM) as $orderTime}
-                    	{php $zoneTimesM[$orderTime] = $orderTime}
-			        {/foreach}
-		        {/if}
-		        <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-					{if empty($basket->zoneObj)}
-		                <p>Nejprve vyberte místo přistavení</p>
-					{else}
-			            <li class="list-inline-item date-realization" id="date-realization">
-			                <label class="select">
-			                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketM'}" type="text" value="{$basket->termFrom}" readonly>
-			                </label>
-			            </li>
-						<li class="list-inline-item timefield">
-						    <label class="select">
-						        <select name="time" class="updateValue" data-link={link setOrderVal! "time", 'basketM'}>
-				                        {if empty($basket->termFrom)}
-				                            <option value="">Vyberte datum realizace</option>
-				                        {else}
-				                            <option value="">Čas realizace</option>
-				                            {foreach $zoneTimesM as $zoneTime}
-				                                {var $timesArr = explode("-", $zoneTime)}
-				                                {var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
-				                                {var $isToday = (date("d/m/Y") == $basket->termFrom)}
-				                                {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
-				                                {if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
-	                                				<option value="{$zoneTime}" {if !empty($basket->time) && $basket->time==$zoneTime}selected="selected"{/if}>
-	                                					{$zoneTime}
-	                                				</option>
-				                                {/if}
-				                            {/foreach}
-				                        {/if}
-						        </select>
-						        {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
-						    </label>
-						</li>
+	        <p class="desc">Datum a čas dovozu</h2>
+	        <div class="filter">
+		        {snippet realizationterm}
+			        {var $zoneTimesM = array()}
+			        {if !empty($basket->zoneObj)}
+				        {foreach explode(chr(10), $basket->zoneObj->orderTimesM) as $orderTime}
+	                    	{php $zoneTimesM[$orderTime] = $orderTime}
+				        {/foreach}
 			        {/if}
-		        </ul>
-		        <script>
-		        	$(document).ready(function(){
-					    {if!empty($basket->zoneObj)}
-						    $("#date-realization input").datetimepicker({
-						      language:'cs',
-						      minuteStep: 30,
-						      format: 'dd/mm/yyyy',
-						      autoclose: true,
-                              pickTime: false,
-                              minView: 2,
-						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
-						      {var $date = new \Nette\Utils\DateTime()}
-						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
-						      	startDate: {$date|date:"d.m.Y"},
-						      {else}
-						      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
-						      {/if}
-						    });
-					    {/if}
-						$(".updateValue").change(function(){
-							var link = $(this).data("link");
-							link = link + "&val=" + $(this).val();
-							$.get(link);
-						});
-					    
-		        	});
-		        </script>
-	        {/snippet}
+			        <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+						{if empty($basket->zoneObj)}
+			                <p>Nejprve vyberte místo přistavení</p>
+						{else}
+				            <li class="list-inline-item date-realization date" id="date-realization">
+				                <label class="select">
+				                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketM'}" type="text" value="{$basket->termFrom}" readonly>
+				                </label>
+				            </li>
+							<li class="list-inline-item timefield">
+							    <label class="select">
+							        <select name="time" class="updateValue" data-link={link setOrderVal! "time", 'basketM'}>
+					                        {if empty($basket->termFrom)}
+					                            <option value="">Vyberte datum realizace</option>
+					                        {else}
+					                            <option value="">Čas realizace</option>
+					                            {foreach $zoneTimesM as $zoneTime}
+					                                {var $timesArr = explode("-", $zoneTime)}
+					                                {var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
+					                                {var $isToday = (date("d/m/Y") == $basket->termFrom)}
+					                                {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+					                                {if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
+		                                				<option value="{$zoneTime}" {if !empty($basket->time) && $basket->time==$zoneTime}selected="selected"{/if}>
+		                                					{$zoneTime}
+		                                				</option>
+					                                {/if}
+					                            {/foreach}
+					                        {/if}
+							        </select>
+							        {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
+							    </label>
+							</li>
+				        {/if}
+			        </ul>
+			        <script>
+			        	$(document).ready(function(){
+						    {if!empty($basket->zoneObj)}
+							    $("#date-realization input").datetimepicker({
+							      language:'cs',
+							      minuteStep: 30,
+							      format: 'dd/mm/yyyy',
+							      autoclose: true,
+	                              pickTime: false,
+	                              minView: 2,
+							      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+							      {var $date = new \Nette\Utils\DateTime()}
+							      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
+							      	startDate: {$date|date:"d.m.Y"},
+							      {else}
+							      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
+							      {/if}
+							    });
+						    {/if}
+							$(".updateValue").change(function(){
+								var link = $(this).data("link");
+								link = link + "&val=" + $(this).val();
+								$.get(link);
+							});
+						    
+			        	});
+			        </script>
+		        {/snippet}
+		    </div>
 	    </div>
 	</div>
 	<!-- ./term -->
@@ -259,7 +261,7 @@
     <section class="waste in-material">
 	    {snippet orderContainers}
         <div class="container">
-            <h3 class="title underline">Potřebujete přistavit kontejner?</h3>
+            <h3 class="title underline">Chcete ušetřit?</h3>
             <p class="desc">Nechte si s dovozem materiálu přistavit kontejner na odvoz odpadu<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerContainer changeContainer" title="Objednat přistavení kontejneru" {if !empty($containers)}style="display: none;"{/if} data-link="{link addNextContainer! 'basketM'}">Ano, potřebuji</a>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerContainer changeContainer" title="Žádný kontejner nepotřebuji" {if empty($containers)}style="display: none;"{/if} data-link="{link unuseContainers! "basketM"}">Ne, nepotřebuji</a></button>
@@ -446,6 +448,7 @@
     <!-- ./waste -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
+    	<div class="container">
     		<ul class="list-unstyled">
     			{if !empty($containers)}
     				<li n:foreach="$containers as $container">
@@ -463,9 +466,9 @@
 	            				<strong>od {$price->$priceFiels|number:0:",":" "} Kč</strong>
 	            			{/if}
     					{elseif empty($container->product)}
-    						<strong>vyberte velikost kontejneru</strong>
+    						<strong>Vyberte velikost kontejneru</strong>
     					{else}
-    						<strong>vyberte typ odpadu</strong>
+    						<strong>Vyberte typ odpadu</strong>
     					{/if}
     					
     				</li>
@@ -481,33 +484,34 @@
 	            			 - {$price->ref("attributeValue")->name}
 	            			<strong>{$price->priceFrom * $material->amount|number:0:",":" "} Kč</strong>
 						{else}
-							<strong>Vvyberte variantu materiálu</strong>
+							<strong>Vyberte variantu materiálu</strong>
 						{/if}
     				</li>
     			{/if}
     		</ul>
     		<ul class="list-unstyled" n:if="($basket->weekendPrice + $basket->betonPrice)>0">
-        	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'} <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
-        	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'} <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
-        </ul>
-    	<ul class="list-unstyled delivery">
-        	<li class="delivery" n:if="$basket->deliveryPrice>0">Doprava <strong>{$basket->deliveryPrice|number:0:",":" "} Kč</strong></li>
-        	<li n:if="$basket->deliveryPrice>0 && $basket->materialTons>6 && $basket->materialTons <= 12">{_'TEXT_VELKE_AUTO'}</li>
-        	<li n:if="$basket->materialTons>12">{_'TEXT_PREKROCENA_VAHA'}</li>
-        </ul>
-        <span class="total">Celková cena</span>
-        <strong class="price">{$basket->price|number:0:",":" "} Kč</strong>
-        <span class="with-vat">{$basket->priceVat|number:0:",":" "} Kč vč. DPH</span>
-        <script>
-			$(document).ready(function(){
-		        sendOrderButton = $(".sendOrderButton");
-		        {if $basket->materialTons>12}
-		        	sendOrderButton.addClass("disabled");
-		        {else}
-		        	sendOrderButton.removeClass("disabled");
-		        {/if}
-			});
-        </script>
+	        	<li class="weekend" n:if="$basket->weekendPrice>0">+ {_'PRIPLATEK_VIKEND_SVATEK'} <strong>{$basket->weekendPrice|number:0:",":" "} Kč</strong></li>
+	        	<li class="beton" n:if="$basket->betonPrice>0">+ {_'PRIPLATEK_BETON'} <strong>{$basket->betonPrice|number:0:",":" "} Kč</strong></li>
+	        </ul>
+	    	<ul class="list-unstyled delivery">
+	        	<li class="delivery" n:if="$basket->deliveryPrice>0">Doprava <strong>{$basket->deliveryPrice|number:0:",":" "} Kč</strong></li>
+	        	<li class="warning" n:if="$basket->deliveryPrice>0 && $basket->materialTons>6 && $basket->materialTons <= 12">{_'TEXT_VELKE_AUTO'}</li>
+	        	<li class="warning"  n:if="$basket->materialTons>12">{_'TEXT_PREKROCENA_VAHA'}</li>
+	        </ul>
+	        <span class="total">Celková cena</span>
+	        <strong class="price">{$basket->price|number:0:",":" "} Kč</strong>
+	        <span class="with-vat">{$basket->priceVat|number:0:",":" "} Kč vč. DPH</span>
+	        <script>
+				$(document).ready(function(){
+			        sendOrderButton = $(".sendOrderButton");
+			        {if $basket->materialTons>12}
+			        	sendOrderButton.addClass("disabled");
+			        {else}
+			        	sendOrderButton.removeClass("disabled");
+			        {/if}
+				});
+	        </script>
+	    </div>
     </div>
     {/snippet}
     <!-- ./price -->

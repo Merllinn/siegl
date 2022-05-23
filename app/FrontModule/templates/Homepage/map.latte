@@ -32,7 +32,7 @@
             <div class="warrant deliveryBlock">
                 <ul class="list-unstyled">
                     <li>
-                        {$basket->zone} Garantujeme čas přistavení do <span class="number standardDelivery">1 - {if !empty($basket->zoneObj)}{$basket->zoneObj->lead}{else}4{/if}</span> <strong class="standardUnit">hodin</strong>
+                        Garantujeme čas přistavení do <span class="number standardDelivery">1 - {if !empty($basket->zoneObj)}{$basket->zoneObj->lead}{else}4{/if}</span> <strong class="standardUnit">hodin</strong>
                     </li>
                     <li>
                         Turbokontejner s přistavením do <span class="number turbodelivery">60</span> <strong class="turbounit">minut</strong>
@@ -45,6 +45,11 @@
     
     {/snippet}
     <div class="waste-type-rectangle"></div>
+    <div class="page-bottom-navigation map-bottom-navigation">
+        {include '../_parts/footerMenu.latte', class=>''}
+        <!-- ./bottom navigation -->
+    </div>
+    <!-- ./page bottom navigation -->
 {/block}
 
 {block scripts}

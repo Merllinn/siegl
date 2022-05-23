@@ -567,10 +567,6 @@ header {
   header div.container {
     position: relative;
     z-index: 3;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
     max-width: 1120px;
   }
 
@@ -861,6 +857,10 @@ header.fixed {
     font-size: 1rem;
   }
 
+  header::after {
+    height: 64px;
+  }
+
   header div.fastest {
     margin-top: 11px;
   }
@@ -871,8 +871,24 @@ header.fixed {
 
 }
 
+@media (min-width: 846px) {
+
+  header div.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  div.mobile-navigation {
+    display: none;
+  }
+
+}
+
 @media (max-width: 845px) {
 
+  header img.mosaic,
   header div.fastest span,
   header div.fastest span.to,
   header div.fastest strong {
@@ -911,6 +927,205 @@ header.fixed {
       font-size: 1rem;
       font-weight: 500;
     }
+
+  header::after {
+    height: 36px;
+  }
+
+  header div.logo {
+    width: 170px;
+    position: absolute;
+    left: 0; top: 0;
+    padding: 15px;
+  }
+
+    header div.logo img {
+      max-width: 140px;
+    }
+
+    header div.logo::before {
+      border-width: 27px 170px 0 0px;
+    }
+
+    header div.logo::after {
+      top: 0; left: 2px;
+      width: 176px; height: 122px;
+      background-size: cover;
+    }
+
+  header div.fastest,
+  div.order {
+    position: absolute;
+    top: 0; left: 200px;
+    margin-left: 0;
+  }
+
+  div.order {
+    top: 45px;
+  }
+
+  header.fixed {
+    display: none !important;
+  }
+
+  span.phone {
+    margin-left: 20px;
+    padding-left: 20px;
+    position: relative;
+  }
+
+    span.phone::before {
+      content: "";
+      width: 1px; height: 18px;
+      background-color: #FFF;
+      position: absolute;
+      top: 50%; left: 0;
+      transform: translateY(-50%);
+    }
+
+  div.mobile-navigation {
+    position: absolute;
+    top: 7px; right: 20px;
+  }
+
+    div.mobile-navigation i {
+      transform: scale(1.5, 1);
+    }
+
+}
+
+@media (max-width: 580px) {
+
+  header div.fastest span:first-child {
+    padding-right: 20px;
+  }
+
+    header div.fastest span:first-child::after {
+      content: "";
+      width: 1px; height: 18px;
+      background-color: #FFF;
+      position: absolute;
+      top: 50%; right: 0;
+      transform: translateY(-50%);
+    }
+
+}
+
+@media (max-width: 560px) {
+
+  header,
+  span.phone {
+    font-size: .75rem;
+  }
+
+  header div.logo {
+    width: 150px;
+    padding: 15px 20px;
+  }
+
+    header div.logo img {
+      max-width: 110px;
+    }
+
+    header div.logo::before {
+      border-width: 27px 150px 0 0px;
+    }
+
+    header div.logo::after {
+      top: -9px; left: -13px;
+      width: 172px; height: 117px;
+    }
+
+  header div.fastest,
+  div.order {
+    left: 180px;
+  }
+
+  span.phone::before,
+  header div.fastest span:first-child::after {
+    height: 14px;
+  }
+
+  div.mobile-navigation {
+    top: 8px;
+  }
+
+  div.order {
+    top: 48px;
+  }
+
+}
+
+@media (max-width: 500px) {
+
+  header div.fastest,
+  div.order {
+    left: 165px;
+  }
+
+}
+
+@media (max-width: 450px) {
+
+  header div.fastest span:first-child {
+    padding-right: 12px;
+  }
+
+  span.phone {
+    margin-left: 12px;
+    padding-left: 12px;
+  }
+
+}
+
+@media (max-width: 435px) {
+
+  header div.logo {
+    width: 110px;
+    padding: 15px;
+  }
+
+    header div.logo img {
+      max-width: 80px;
+    }
+
+    header div.logo::after {
+      top: 0; left: -9px;
+      width: 120px; height: 88px;
+    }
+
+    header div.logo::before {
+      border-width: 15px 110px 0 0px;
+      bottom: -15px;
+    }
+
+  header::before,
+  header::after {
+    height: 32px;
+    top: 0;
+  }
+
+    header::after {
+      top: 32px;
+    }
+
+  header div.fastest,
+  div.order {
+    left: 125px;
+  }
+
+    header div.fastest {
+      margin-top: 10px;
+    }
+
+    div.order {
+      top: 41px;
+      width: 100%;
+    }
+
+  div.mobile-navigation {
+    top: 7px;
+  }
 
 }
 
@@ -1095,6 +1310,14 @@ div.submenu {
 
 }
 
+@media (max-width: 845px) {
+
+  nav {
+    display: none;
+  }
+
+}
+
 /*!
 * Slide
 */
@@ -1275,6 +1498,252 @@ img.car {
 
 }
 
+@media (max-width: 1080px) {
+
+  section.slide h1 {
+    margin-top: 23px;
+  }
+
+}
+
+@media (max-width: 1055px) {
+
+  div.map {
+    margin-left: -38px;
+  }
+
+}
+
+@media (max-width: 1025px) {
+
+  section.slide h1 {
+    margin-top: 0;
+  }
+
+}
+
+@media (max-width: 991px) {
+
+  div.map {
+    margin-left: -123px;
+  }
+
+}
+
+@media (max-width: 980px) {
+
+  div.map {
+    margin-left: -150px;
+  }
+
+}
+
+@media (max-width: 935px) {
+
+  div.map {
+    transform: scale(.9);
+  }
+
+  img.car {
+    transform: scale(.9);
+    right: 150px;
+  }
+
+}
+
+@media (max-width: 870px) {
+
+  section.slide div.container .row {
+    padding-bottom: 150px;
+  }
+
+  div.map {
+    transform: scale(.8);
+    margin-top: -50px;
+  }
+
+  img.car {
+    transform: scale(.8);
+    right: 92px;
+  }
+
+  section.slide h1,
+  section.slide p {
+    font-size: 1.125rem;
+  }
+
+}
+
+@media (max-width: 845px) {
+
+  section.slide {
+    padding-top: 120px;
+    background-position: 55% -75px;
+  }
+
+  div.map {
+    margin-top: -80px;
+  }
+
+}
+
+@media (max-width: 767px) {
+
+  section.slide {
+    background-position: 13% -106px;
+    background-size: 200%;
+  }
+
+    section.slide p {
+      display: none;
+    }
+
+    section.slide h1 {
+      max-width: 50%;
+      margin: 0;
+    }
+
+  section.slide img.stripe,
+  section.top img.stripe {
+    top: -221px; left: -326px;
+    opacity: .5;
+  }
+
+  section.slide img.mosaic.right,
+  section.top img.mosaic.right,
+  body.subpages img.mosaic.right,
+  body.page img.mosaic.right {
+    display: none;
+  }
+
+  section.slide img.mosaic.left,
+  section.slide img.mosaic.right,
+  section.top img.mosaic.left,
+  section.top img.mosaic.right,
+  section.top.order img.mosaic.left,
+  body.subpages img.mosaic.left,
+  body.subpages img.mosaic.right,
+  body.page img.mosaic.left,
+  body.page img.mosaic.right {
+    width: 50%;
+  }
+
+  div.map {
+    margin: 0 auto;
+    margin-top: -25px;
+  }
+
+  section.slide div.container .row {
+    padding-bottom: 0;
+    margin-left: 40px;
+  }
+
+  img.car {
+    right: -190px;
+    bottom: -155px;
+  }
+
+}
+
+@media (max-width: 650px) {
+
+  div.map {
+    margin-left: -35px;
+  }
+
+  img.car {
+    transform: scale(.5);
+    right: -270px; bottom: -200px;
+  }
+
+}
+
+@media (max-width: 625px) {
+
+  section.slide h1 {
+    max-width: 75%;
+  }
+
+}
+
+@media (max-width: 585px) {
+
+  section.slide {
+    background-position: 18% -80px;
+    background-size: 210%;
+  }
+
+}
+
+@media (max-width: 580px) {
+
+  div.map {
+    margin-left: -80px;
+  }
+
+}
+
+@media (max-width: 525px) {
+
+  div.map {
+    transform: scale(.7);
+    margin-top: -40px;
+  }
+
+}
+
+@media (max-width: 490px) {
+
+  section.slide div.container {
+    padding-top: 0;
+  }
+
+  section.slide {
+    background-position: 15% -19px;
+    background-size: 202%;
+  }
+
+  div.map {
+    margin-left: -88px;
+  }
+
+  section.slide div.container .row {
+    margin-left: 0;
+  }
+
+}
+
+@media (max-width: 450px) {
+
+  div.map {
+    transform: scale(.65);
+    margin-top: -60px;
+  }
+
+}
+
+@media (max-width: 445px) {
+
+  section.slide h1 {
+    max-width: none;
+  }
+
+}
+
+@media (max-width: 420px) {
+
+  div.map {
+    margin-left: -105px;
+  }
+
+  img.car {
+    transform: scale(.4);
+    right: -316px;
+    bottom: -161px;
+  }
+
+}
+
 /*!
 * Demand
 */
@@ -1369,6 +1838,30 @@ div.calculation {
   50% {
     transform: translate(5px, 0) translateY(-50%) scale(.6, 2.2);
   }
+}
+
+@media (max-width: 1090px) {
+
+  div.calculation::before {
+    top: -40px; left: 20px;
+  }
+
+}
+
+@media (max-width: 800px) {
+
+  div.calculation::after {
+    right: -41px;
+  }
+
+}
+
+@media (max-width: 870px) {
+
+  section.demand {
+    margin-top: -345px;
+  }
+
 }
 
 /*!
@@ -2400,6 +2893,22 @@ section.waste img.mosaic {
     left: 0; top: -120px;
   }
 
+@media (max-width: 870px) {
+
+  body.homepage::before {
+    height: 1000px;
+  }
+
+}
+
+@media (max-width: 845px) {
+
+  body.homepage::before {
+    height: 920px;
+  }
+
+}
+
 /*!
 * Subpage - containers
 */
@@ -3354,6 +3863,22 @@ div.warrant {
     font-size: 3.125rem;
     font-weight: 500;
   }
+
+@media (max-width: 870px) {
+
+  div.demand-rectangle {
+    top: 374px;
+  }
+
+}
+
+@media (max-width: 845px) {
+
+  div.demand-rectangle {
+    top: 180px;
+  }
+
+}
 
 @media (min-width: 768px) {
 

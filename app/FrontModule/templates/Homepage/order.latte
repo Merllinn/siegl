@@ -320,12 +320,13 @@
 							var matWeight = $(this).val();
 							amountBlock.find(".materialTarger").val((matWeight*materialKoef).toFixed(2));
 							var link = amountBlock.data("link") + "&amount=" + matWeight;
-							//checkMaterialAmount();
+							checkMaterialAmount();
 							$.get(link);
 
 						});
 						function checkMaterialAmount(){
 							var matWeight = parseFloat($(".materialWeight").val());
+							materialKoef = parseFloat($(".amount").data("koef"));
 							var matVolume = Math.round(matWeight*materialKoef);
 							var maxWeight = parseInt($(".total-price").data("weight"));
 							var maxVolume = parseInt($(".total-price").data("volume"));
@@ -374,7 +375,7 @@
     <!-- ./material -->
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
-    	<ul class="list-unstyled summary">
+    	<ul class="list-unstyled summary" n:if="!empty($containers) && !empty($materials)">
     		{if !empty($containers)}
     			<li n:foreach="$containers as $container">
     				{if !empty($container->product)}

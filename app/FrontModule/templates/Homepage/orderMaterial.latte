@@ -449,7 +449,7 @@
     {snippet orderprice}
     <div class="total-price" data-weight="{$basket->maxWeight}" data-volume="{$basket->maxVolume}">
     	<div class="container">
-    		<ul class="list-unstyled">
+    		<ul class="list-unstyled" n:if="!empty($containers) && !empty($materials)">
     			{if !empty($containers)}
     				<li n:foreach="$containers as $container">
     					{if !empty($container->product)}

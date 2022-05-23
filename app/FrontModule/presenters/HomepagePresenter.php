@@ -254,7 +254,7 @@ final class HomepagePresenter extends HomepageForms
 		$containers = $this->$basket->containers;
 		unset($containers[$index]);
 		$this->$basket->containers = $containers;
-		if(count($containers)==0){
+		if(count($containers)==0 && $basket=="basket"){
 			$this->$basket->materials = null;
 		}
 		$this->recalculateBasket($basket);
@@ -440,7 +440,7 @@ final class HomepagePresenter extends HomepageForms
         else{
 	        $page = $this->template->page = $this->pageManager->findByAlias($id);
 	        if(!$page){
-				$this->redirect(":front:Homepage:page", "stranka-nenalezena");
+				$this->redirect(":Front:Homepage:page", "stranka-nenalezena");
 	        }
 	        $this->template->title = $page->title;
 	        $this->template->keywords = $page->seo_keywords;
@@ -756,11 +756,13 @@ final class HomepagePresenter extends HomepageForms
 				if(empty($container->product)){
 					$productsError = true;
 				}
-				if(empty($container->term)){
-					$termsError = true;
-				}
-				if(empty($container->time)){
-					$timesError = true;
+				if($basketfield != "basketD"){
+					if(empty($container->term)){
+						$termsError = true;
+					}
+					if(empty($container->time)){
+						$timesError = true;
+					}
 				}
 	        }
 	        if($typesError) $form->addError("Vyplňte typ odpadu u všech kontejerů");
@@ -902,7 +904,7 @@ final class HomepagePresenter extends HomepageForms
 				}
 	        }
             
-			$this->recalculateBasket();
+			$this->recalculateBasket("basketM");
 
             $containerOrderPage = $this->pageManager->findByLayout(15);
             $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);

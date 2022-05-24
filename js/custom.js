@@ -133,5 +133,37 @@ $(document).ready(function() {
     }
   });
 
+  $('.services-carousel').slick({
+    centerMode: true,
+    slidesToShow: 3,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          arrows: true,
+          centerMode: true,
+          centerPadding: '20px',
+          slidesToShow: 3
+        }
+      },
+      {
+        breakpoint: 580,
+        settings: {
+          arrows: true,
+          centerMode: true,
+          slidesToShow: 2
+        }
+      },
+      {
+        breakpoint: 390,
+        settings: {
+          arrows: true,
+          centerMode: true,
+          slidesToShow: 1
+        }
+      }
+    ]
+  });
+
 
 });

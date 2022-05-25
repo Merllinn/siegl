@@ -48,7 +48,7 @@
             <p class="section-description" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="150">{_'ODVEZEME_ODPAD_I_SUT'}<br>{_'VYKOPEME_BAZEN'}</p>
             <div class="row">
             	{var $subpages = $presenter->pageManager->getActiveByParent($page->id)}
-                <div class="col-md-6 col-lg-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
+                <div class="col-sm-6 col-md-4 col-lg-3" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}" n:foreach="$subpages as $sp">
                     <a href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}" title="Přejít na {=strtolower(strip_tags($sp->name))}">
                         <div class="service-icon">
                         	{var $mainImg = $presenter->pageManager->getMainPhoto($sp->id)}

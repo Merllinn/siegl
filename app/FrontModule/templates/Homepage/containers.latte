@@ -96,7 +96,7 @@
     <section class="products" data-image-src="{$basePath}/img/_MG_4880.jpg">
         <div class="container">
             <div class="row">
-                <div class="col-md-4" n:foreach="$containers as $container">
+                <div class="col-xs-12 col-sm-6 col-lg-4" n:foreach="$containers as $container">
     				{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
                     <div class="col-container">
                         <h2><a n:href=":Front:Homepage:container $container->alias">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a></h2>

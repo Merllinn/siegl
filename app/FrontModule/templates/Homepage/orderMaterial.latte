@@ -263,8 +263,8 @@
         <div class="container">
             <h3 class="title underline">Chcete ušetřit?</h3>
             <p class="desc">Nechte si s dovozem materiálu přistavit kontejner na odvoz odpadu<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerContainer changeContainer" title="Objednat přistavení kontejneru" {if !empty($containers)}style="display: none;"{/if} data-link="{link addNextContainer! 'basketM'}">Ano, potřebuji</a>
-            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerContainer changeContainer" title="Žádný kontejner nepotřebuji" {if empty($containers)}style="display: none;"{/if} data-link="{link unuseContainers! "basketM"}">Ne, nepotřebuji</a></button>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerContainer changeContainer" title="Objednat přistavení kontejneru" {if !empty($containers)}style="display: none;"{/if} data-link="{link addNextContainer! 'basketM'}">Ano, chci</a>
+            <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerContainer changeContainer" title="Žádný kontejner nepotřebuji" {if empty($containers)}style="display: none;"{/if} data-link="{link unuseContainers! "basketM"}">Ne, nechci</a></button>
         </div>
         <div class="select-material changeContainer" {if empty($containers)}style="display: none;"{/if}>
         	<div class="container margin">

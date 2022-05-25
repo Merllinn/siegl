@@ -99,10 +99,10 @@
                 <div class="col-xs-12 col-sm-6 col-lg-4" n:foreach="$containers as $container">
     				{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
                     <div class="col-container">
-                        <h2><a n:href=":Front:Homepage:container $container->alias">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a></h2>
+                        <h2><a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a></h2>
                         {var $mainImg = $presenter->productManager->getMainPhoto($container->id)}
                         <div class="container-image">
-                            <img src="{$mainImg|thumb}" alt="{$container->name}">
+                            <a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru"><img src="{$mainImg|thumb}" alt="{$container->name}"></a>
                         </div>
                         <div class="accordion accordion-flush" id="containers{$container->id}">
                             {var $prices = $presenter->productManager->getPrices($container->id)}

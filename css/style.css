@@ -5646,6 +5646,10 @@ div.col-subpage {
     object-fit: contain;
   }
 
+    div.persons div.col-subpage img  {
+      max-width: 100%; width: auto; height: auto;
+    }
+
   div.col-subpage h2 {
     font-size: 1.25rem;
     font-weight: 400;

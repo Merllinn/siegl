@@ -10,7 +10,7 @@
 		    		<h2 class="title sub-title">{$roleName}</h2>
 					<div class="col-4" n:foreach="$presenter->userManager->getActivePersonsByRole($role) as $person" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}">
 						<div class="col-subpage">
-							<a class="chocolat-image" href="{$person|thumb:300:200}"><img src="{$person|thumb:300:200}" alt="{$person->name}" /></a>
+							<a class="chocolat-image" href="{$person|thumb:0:0}"><img src="{$person|thumb:300:200}" alt="{$person->name}" /></a>
 							<span class="person-name">{$person->name}</span>
 						</div>
 					</div>

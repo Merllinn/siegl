@@ -639,7 +639,7 @@ final class HomepagePresenter extends HomepageForms
                 ->getControlPrototype()->class("form-control");
 
 		//different delivery personal
-        $form -> addCheckbox("different_delivery", "Fakturační adresa je jiná než adresa přistavení")
+        $form -> addCheckbox("different_delivery", "Adresa trvalého bydliště je jiná než adresa přistavení")
                 ->getControlPrototype()->class("differentDelivery form-check-input");
         $form["different_delivery"]->getLabelPrototype()->class("form-check-label");
 

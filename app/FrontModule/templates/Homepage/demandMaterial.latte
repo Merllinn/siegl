@@ -18,6 +18,7 @@
                     <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
                     <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
+                <p class="warning-street">Nezapomeňte vyplnit ulici včetně čísla popisného</p>
             </form>
 	        <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
 	    </div>
@@ -109,13 +110,14 @@
 	        <div class="filter">
 	            {snippet orderContainers}
 	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+	                	<h3 class="title small-title underline">Popište rozsah zakázky</h3>
 	                    <i class="fa-solid fa-pen-to-square"></i>
-	                    <label for="describe">Popište:</label>
 	                    <textarea class="form-control updateValue" data-link="{link setBasketNote! 'basketD'}" id="describe" rows="7">{$basket->description}</textarea>
 	                </div>
-	                <p class="desc">Nebo zadejte druh odpadu a velikost kontejneru</p>
+	                <h3 class="title small-title underline">Nebo</h3>
+	                <p class="desc small-margin">zadejte druh odpadu a velikost kontejneru</p>
 	                {if !empty($containers)}
-	                	<div class="oneContainer" n:foreach="$containers as $index=>$container">
+	                	<div class="oneContainer{first} first-container{/first}" n:foreach="$containers as $index=>$container">
 		                <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                     		{var $attr = $presenter->attributeManager->find(1)}
 		                    <li class="list-inline-item druh-odpadu">
@@ -152,7 +154,8 @@
 			                    </label>
 			                </li>
 			                <li class="list-inline-item remove-container">
-			                    <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index, 'basketD'">Odebrat</a></button>
+			                	<a class="ajax btn-absolute" n:href="removeFromOrder! $index, 'basketD'"></a>
+			                    <button class="btn btn-primary">Odebrat</button>
 			                </li>
 	                    	<!-- ./priblizny pocet kontejneru -->
 		                </ul>
@@ -160,7 +163,8 @@
 	                {/if}
                     <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item add-container">
-                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!, 'basketD'">Přidat další kontejner</a></button>
+                        	<a class="ajax btn-absolute" n:href="addNextContainer!, 'basketD'"></a>
+                            <button class="btn btn-primary">Přidat další kontejner</button>
                         </li>
                     </ul>
                 <script {*n:if="$presenter->isAjax()"*}>
@@ -192,6 +196,7 @@
 						      format: 'dd/mm/yyyy',
 						      autoclose: true,
                               pickTime: false,
+                              todayHighlight: true,
                               minView: 2,
 						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
 						      {var $date = new \Nette\Utils\DateTime()}
@@ -290,20 +295,20 @@
 	            <li class="list-inline-item date-from" id="date-from">
 	                Od
 	                <label class="select">
-	                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketD'}" type="text" value="{$basket->termFrom}" readonly>
+	                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketD'}" type="text" {if !empty($basket->termFrom)}value="{$basket->termFrom}"{/if} value="Vyberte datum" readonly>
 	                </label>
 	            </li>
 	            <!-- ./od -->
 	            <li class="list-inline-item date-to" id="date-to">
 	                Do
 	                <label class="select">
-	                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termTo', 'basketD'}" type="text" value="{$basket->termTo}" readonly>
+	                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termTo', 'basketD'}" type="text" {if !empty($basket->termTo)}value="{$basket->termTo}"{/if} value="Vyberte datum" readonly>
 	                </label>
 	            </li>
 	            <!-- ./od -->
 	            <li class="list-inline-item weekend">
+	            	<button class="btn btn-primary btn-arrow btn-white {if !empty($basket->weekends)}active{/if} includeWeekend" data-link="{link setOrderVal! 'weekends', 'basketD'}"></button>
 	                Práce včetně víkendu
-	                <button class="btn btn-primary btn-arrow btn-white {if !empty($basket->weekends)}active{/if} includeWeekend" data-link="{link setOrderVal! 'weekends', 'basketD'}">{if !empty($basket->weekends)}Ano{else}Ne{/if}</button>
 	            </li>
 	            <!-- ./od -->
 	        </ul>
@@ -502,11 +507,11 @@
 				var link = $(this).data("link");
 				if($(this).hasClass("active")){
 					link = link + "&val=0";
-					$(this).removeClass("active").text("Ne");
+					$(this).removeClass("active");
 				}
 				else{
 					link = link + "&val=1";
-					$(this).addClass("active").text("Ano");
+					$(this).addClass("active");
 				}
 				$(this).trigger("blur");
 				$.get(link);

@@ -143,6 +143,12 @@ h2 {
     z-index: 1;
   }
 
+    h3.small-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #004a39;
+    }
+
   h1.underline,
   h2.underline,
   h3.underline,
@@ -167,7 +173,8 @@ h2 {
     }
 
       article.article h2::after,
-      h2.subtitle::after {
+      h2.subtitle::after,
+      h3.small-title::after {
         width: 90px; height: 3px;
         margin-top: 12px;
       }
@@ -195,6 +202,10 @@ h2 {
   padding-top: 180px;
 }
 
+  .modal-errors.modal-content {
+    padding-top: 265px;
+  }
+
   .modal-content h2 {
     font-size: 2.5rem;
     line-height: 1;
@@ -208,6 +219,10 @@ h2 {
     top: 0; left: 50%;
     transform: translateX(-50%);
   }
+
+    .modal-errors.modal-content h2 {
+      top: 102px;
+    }
 
 .modal-body {
   padding: 0;
@@ -233,6 +248,10 @@ h2 {
   opacity: 1;
   overflow: hidden;
 }
+
+  #modal-errors .modal-rectangle {
+    height: 600px;
+  }
 
   .modal-rectangle img.cars {
     transform: rotate(-7deg);
@@ -358,6 +377,13 @@ h2 {
   display: block;
   font-size: 1.125rem;
   margin-bottom: 40px;
+}
+
+.modal-content.modal-errors ul {
+  max-width: 600px; width: 100%;
+  margin: 0 auto;
+  font-weight: 500;
+  text-align: center;
 }
 
 .container {
@@ -2891,7 +2917,7 @@ label.select {
       div.describe i {
         color: #d71921;
         position: absolute;
-        top: 38px; left: -45px;
+        top: 79px; left: -45px;
         font-size: 1.75rem;
       }
 
@@ -3096,7 +3122,7 @@ label.select {
       div.describe::before {
         background: url(../img/gray-arrow.svg);
         background-size: cover;
-        top: 28px;
+        top: 69px;
       }
 
         div.describe::after {
@@ -3562,6 +3588,10 @@ section.products [class*=col-] {
     font-size: .875rem;
     padding: 0 0 20px 0;
   }
+
+    .accordion-body p {
+      margin-bottom: 0;
+    }
 
 .accordion-item {
   border: 0;
@@ -4296,12 +4326,20 @@ a.btn-manipulation {
     font-size: 1.125rem;
   }
 
+  div.velkoobjemovy-kontejner-odpad-40m3-10tuny a.btn-manipulation {
+    display: none;
+  }
+
 div.waste-type {
   color: #FFF;
   margin-top: 100px;
   font-size: 1.375rem;
   min-height: 190px;
 }
+
+  div.velkoobjemovy-kontejner-odpad-40m3-10tuny div.waste-type {
+    margin-top: 225px;
+  }
 
   div.waste-type-rectangle,
   div.demand-rectangle {
@@ -4616,6 +4654,14 @@ p.empty-order {
   text-align: center;
 }
 
+p.warning-street {
+  text-align: center;
+  font-size: .875rem;
+  font-weight: 500;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
 div.oneContainer:not(:last-child) {
   margin-bottom: 60px;
 }
@@ -4627,6 +4673,10 @@ div.oneContainer:not(:first-child)::before {
   background-color: #d71921;
   margin: 0 auto 60px auto;
 }
+
+  div.oneContainer.first-container::before {
+    content: none;
+  }
 
 div.oneContainer:nth-child(1)::before {
   content: none;
@@ -4661,8 +4711,8 @@ div.filter li.today::before {
   }
 
   div.filter li.today button,
-  li.add-container a,
-  li.remove-container a {
+  li.add-container button.btn-primary,
+  li.remove-container button.btn-primary {
     padding: 11px 30px;
     margin: 0;
     background-color: #f2f2f2;
@@ -4680,13 +4730,17 @@ div.filter li.today::before {
     }
 
     div.filter li.today button:hover,
-    li.add-container button:hover,
-    li.add-container button:hover a,
-    li.remove-container button:hover,
-    li.remove-container button:hover a {
+    li.add-container:hover button,
+    li.remove-container:hover button {
       color: #004a39;
-      background-color: #f2f2f2;
     }
+
+  .btn-absolute {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+  }
 
 div.filter li.add-container {
   display: table;
@@ -5501,26 +5555,34 @@ div.term {
     }
 
 li.weekend button {
-  margin-left: 12px;
-  padding-left: 16px;
+  margin-right: 12px;
+  width: 46px; height: 46px;
   display: inline-block;
-  transition: none;
 }
+
+  li.weekend button::before,
+  li.weekend button.active::before {
+    position: absolute;
+    top: 5px; left: 16px;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #d71921;
+    content: "\f00d";
+    background: none;
+    width: auto; height: auto;
+  }
 
   li.weekend button.active {
     background-color: #004a39;
     transition: none !important;
   }
 
-    li.weekend button.active::before,
-    li.weekend button.btn-white:focus::before {
-      background: url(../img/green-arrow.svg);
-      background-size: cover;
-      transition: none !important;
-    }
-
-    li.weekend button.active:hover {
+    li.weekend button.active::before {
+      top: 10px;
+      font-size: 1.125rem;
       color: #FFF;
+      content: "\f00c";
     }
 
   li.weekend button::after {
@@ -5535,6 +5597,19 @@ li.date-to label {
   div.term.in-material label {
    margin-left: 0;
   }
+
+.amount {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.amount:focus {
+  outline: none !important;
+}
 
 /*!
 * Page
@@ -5622,6 +5697,41 @@ article.article table.table-machinery p {
 .datetimepicker table tr td.active:hover:active {
   background: #004a39;
   font-weight: 500;
+}
+
+.datetimepicker table tr td.today,
+.datetimepicker table tr td.today.disabled,
+.datetimepicker table tr td.today.disabled:hover,
+.datetimepicker table tr td.today:hover {
+  background: transparent;
+  font-weight: 500;
+  box-shadow: 0px 0px 0px 2px #004a39 inset;
+}
+
+.datetimepicker table tr td.today.active,
+.datetimepicker table tr td.today.disabled,
+.datetimepicker table tr td.today.disabled.active,
+.datetimepicker table tr td.today.disabled.disabled,
+.datetimepicker table tr td.today.disabled:active,
+.datetimepicker table tr td.today.disabled:hover,
+.datetimepicker table tr td.today.disabled:hover.active,
+.datetimepicker table tr td.today.disabled:hover.disabled,
+.datetimepicker table tr td.today.disabled:hover:active,
+.datetimepicker table tr td.today.disabled:hover:hover,
+.datetimepicker table tr td.today.disabled:hover[disabled],
+.datetimepicker table tr td.today.disabled[disabled],
+.datetimepicker table tr td.today:active,
+.datetimepicker table tr td.today:hover,
+.datetimepicker table tr td.today:hover.active,
+.datetimepicker table tr td.today:hover.disabled,
+.datetimepicker table tr td.today:hover:active,
+.datetimepicker table tr td.today:hover:hover,
+.datetimepicker table tr td.today:hover[disabled],
+.datetimepicker table tr td.today[disabled] {
+  color: #004a39;
+  background: transparent;
+  font-weight: 500;
+  box-shadow: 0px 0px 0px 2px #004a39 inset;
 }
 
 /*!

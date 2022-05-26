@@ -14,6 +14,7 @@
                     <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
                     <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
+                <p class="warning-street">Nezapomeňte vyplnit ulici včetně čísla popisného</p>
             </form>
             <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
         </div>
@@ -101,7 +102,8 @@
 				                        </li>
 		                    		{/if}
 			                        <li class="list-inline-item remove-container">
-			                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index">Odebrat</a></button>
+			                        	<a class="ajax btn-absolute" n:href="removeFromOrder! $index"></a>
+			                            <button class="btn btn-primary">Odebrat</button>
 			                        </li>
 			                    </ul>
 	                    </div>
@@ -110,7 +112,8 @@
                     {/if}
                     <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item add-container">
-                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer!">Přidat další kontejner</a></button>
+                        	<a class="ajax btn-absolute" n:href="addNextContainer!"></a>
+                            <button class="btn btn-primary">Přidat další kontejner</button>
                         </li>
                     </ul>
                 <script {*n:if="$presenter->isAjax()"*}>
@@ -141,6 +144,7 @@
 						      format: 'dd/mm/yyyy',
 						      autoclose: true,
                               pickTime: false,
+                              todayHighlight: true,
                               minView: 2,
 						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
 						      {var $date = new \Nette\Utils\DateTime()}

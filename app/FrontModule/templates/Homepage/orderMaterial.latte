@@ -14,6 +14,7 @@
                     <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
                     <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
+                <p class="warning-street">Nezapomeňte vyplnit ulici včetně čísla popisného</p>
             </form>
             <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
         </div>
@@ -39,20 +40,20 @@
 			        {/if}
 			        <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 						{if empty($basket->zoneObj)}
-			                <p>Nejprve vyberte místo přistavení</p>
+			                <p class="empty-order">Nejprve vyberte místo přistavení</p>
 						{else}
 				            <li class="list-inline-item date-realization date" id="date-realization">
 				                <label class="select">
-				                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketM'}" type="text" value="{$basket->termFrom}" readonly>
+				                    <input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketM'}" type="text" {if !empty($basket->termFrom)}value="{$basket->termFrom}"{/if} value="Datum dovozu" readonly>
 				                </label>
 				            </li>
 							<li class="list-inline-item timefield">
 							    <label class="select">
 							        <select name="time" class="updateValue" data-link={link setOrderVal! "time", 'basketM'}>
 					                        {if empty($basket->termFrom)}
-					                            <option value="">Vyberte datum realizace</option>
+					                            <option value="">Vyberte datum dovozu</option>
 					                        {else}
-					                            <option value="">Čas realizace</option>
+					                            <option value="">Čas dovozu</option>
 					                            {foreach $zoneTimesM as $zoneTime}
 					                                {var $timesArr = explode("-", $zoneTime)}
 					                                {var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
@@ -80,6 +81,7 @@
 							      format: 'dd/mm/yyyy',
 							      autoclose: true,
 	                              pickTime: false,
+	                              todayHighlight: true,
 	                              minView: 2,
 							      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
 							      {var $date = new \Nette\Utils\DateTime()}
@@ -339,7 +341,8 @@
 					                        </li>
 			                    		{/if}
 				                        <li class="list-inline-item remove-container">
-				                            <button class="btn btn-primary"><a class="ajax" n:href="removeFromOrder! $index, 'basketM'">Odebrat</a></button>
+				                        	<a class="ajax btn-absolute" n:href="removeFromOrder! $index, 'basketM'"></a>
+				                            <button class="btn btn-primary">Odebrat</button>
 				                        </li>
 				                    </ul>
 		                    </div>
@@ -348,7 +351,8 @@
 	                    {/if}
 	                    <ul class="list-inline add-container" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200" n:if="empty($containers)">
 	                        <li class="list-inline-item add-container">
-	                            <button class="btn btn-primary"><a class="ajax" n:href="addNextContainer! 'basketM'">Přidat další kontejner</a></button>
+	                        	<a class="ajax btn-absolute" n:href="addNextContainer! 'basketM'"></a>
+	                            <button class="btn btn-primary">Přidat další kontejner</button>
 	                        </li>
 	                    </ul>
                 <script {*n:if="$presenter->isAjax()"*}>

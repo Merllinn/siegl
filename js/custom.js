@@ -96,6 +96,7 @@ $(document).ready(function() {
       format: 'dd/mm/yyyy',
       autoclose: true,
       startDate: '+0d',
+      todayHighlight: true,
     });
   });
 

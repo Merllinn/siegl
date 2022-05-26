@@ -6,8 +6,8 @@
 			{block subcontent}
 		    	{$page->content|noescape}
 		    	{$page->content_continuation|noescape}
-		    	<div class="row">
-					<div class="col-6 col-md-4" n:foreach="$subpages as $sp" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}">
+		    	<div class="row justify-content-center">
+					<div class="col-12 col-md-4" n:foreach="$subpages as $sp" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}">
 						<div class="col-subpage">
 							{var $mainImage = $presenter->pageManager->getMainPhoto($sp->id)}
 							<a href="{if $sp->type=='1'}{$sp->link}{else}{link :Front:Homepage:page $sp->alias}{/if}"><img src="{$mainImage|thumb:300:200}" alt="{$sp->name}" /></a>

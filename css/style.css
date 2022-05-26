@@ -388,7 +388,7 @@ h2 {
 
 .container {
   position: relative;
-  z-index: 1;
+  z-index: 4;
 }
 
 .btn {
@@ -566,6 +566,15 @@ p.section-description {
   line-height: 1.2;
 }
 
+@media (max-width: 845px) {
+
+  body.subpages,
+  body.page {
+    padding-top: 120px;
+  }
+
+}
+
 @media (max-width: 767px) {
 
   h1.title,
@@ -578,7 +587,6 @@ p.section-description {
 
 @media (max-width: 690px) {
 
-  .btn-primary,
   .btn-arrow i,
   div.street button i {
     font-size: 1rem;
@@ -591,6 +599,10 @@ p.section-description {
     width: 7px; height: 40px;
   }
 
+  .btn-arrow::before {
+    height: 46px;
+  }
+
   .btn-arrow::before,
   div.roughness label.select::before {
     left: -7px;
@@ -599,6 +611,18 @@ p.section-description {
   .btn-arrow:after {
     width: 40px; height: 40px;
     right: -40px;
+  }
+
+  .btn-arrow.btn-back::before {
+    right: -7px;
+  }
+
+  .btn-arrow.btn-back:after {
+    left: -40px;
+  }
+
+  .btn-arrow.btn-back i {
+    left: -25px;
   }
 
 }
@@ -644,6 +668,18 @@ p.section-description {
   .btn-arrow:after {
     width: 37px;
     left: auto;
+  }
+
+  .btn-arrow.btn-back::before {
+    right: -6px;
+  }
+
+  .btn-arrow.btn-back:after {
+    left: -37px;
+  }
+
+  .btn-arrow.btn-back i {
+    left: -22px;
   }
 
 }
@@ -1690,6 +1726,14 @@ div.map {
 img.car {
   position: absolute;
   right: 73px; bottom: -29px;
+}
+
+@media (max-width: 1420px) {
+
+  div.order-form img.car {
+    display: none;
+  }
+
 }
 
 @media (max-width: 1310px) {
@@ -2879,6 +2923,26 @@ div.bottom-navigation.background {
 
 }
 
+@media (max-width: 767px) {
+
+  div.bottom-navigation li:nth-child(4)::before {
+    content: none;
+  }
+
+}
+
+@media (max-width: 408px) {
+
+  div.bottom-navigation li:nth-child(3) {
+    display: block;
+  }
+
+    div.bottom-navigation li:nth-child(3)::before {
+      content: none;
+    }
+
+}
+
 /*!
 * Subpage - top section
 */
@@ -3528,6 +3592,43 @@ section.waste img.mosaic {
     -webkit-overflow-scrolling: touch;
   }
 
+    section.waste div.filter {
+      white-space: normal;
+    }
+
+}
+
+@media (max-width: 1400px) {
+
+  li.turbokontejner {
+    display: none;
+  }
+
+  section.waste img.mosaic,
+  section.material img.mosaic.right {
+    opacity: .02;
+  }
+
+}
+
+@media (max-width: 1199px) {
+
+  section.waste div.filter {
+    text-align: center;
+  }
+
+  section.waste div.container {
+    max-width: none;
+  }
+
+}
+
+@media (max-width: 991px) {
+
+  li.nosnost {
+    display: none;
+  }
+
 }
 
 @media (max-width: 870px) {
@@ -3539,6 +3640,15 @@ section.waste img.mosaic {
 }
 
 @media (max-width: 845px) {
+
+  body.homepage::before,
+  body.containers::before,
+  body.materials::before,
+  body.container-detail::before,
+  body.order::before,
+  body.demand::before {
+    height: 655px;
+  }
 
   body.homepage::before {
     height: 920px;
@@ -3552,6 +3662,66 @@ section.waste img.mosaic {
     max-width: none;
   }
 
+  section.top.containers::before,
+  body.demand section.order::before {
+    height: 200%;
+  }
+
+}
+
+@media (max-width: 715px) {
+
+  section.top.containers li.objem {
+    display: none;
+  }
+
+}
+
+@media (max-width: 795px) {
+
+  section.waste li.druh-odpadu {
+    display: block;
+    margin: 0 auto 10px auto;
+  }
+
+  div.filter li.druh-odpadu::after {
+    left: 76px;
+  }
+
+}
+
+@media (max-width: 777px) {
+
+  div.filter li.dateField {
+    display: block;
+    margin: 0 auto 10px auto;
+    width: 305px;
+  }
+
+    section.waste div.filter li.date::after {
+      left: 50px;
+    }
+
+  section.waste li.druh-odpadu {
+    width: 335px;
+  }
+
+  section.top.order .container {
+    max-width: none;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  section.top.containers li.vat {
+    display: block;
+  }
+
+  section.top.containers li.druh-odpadu {
+    display: none;
+  }
+
 }
 
 @media (max-width: 420px) {
@@ -3559,6 +3729,32 @@ section.waste img.mosaic {
   body.homepage::before {
     height: 860px;
   }
+
+}
+
+@media (max-width: 415px) {
+
+  section.waste div.filter {
+    margin-top: 0;
+  }
+
+    section.waste div.filter ul,
+    section.waste div.filter li,
+    section.waste div.filter label.select {
+      width: 100%;
+    }
+
+      section.waste div.filter li::before,
+      section.waste div.filter li::after {
+        content: none;
+      }
+
+      section.waste div.filter li.dateField,
+      section.waste div.filter li.timefield,
+      section.waste div.filter ul.kontejneru-den li:not(:last-child) {
+        margin-right: 0;
+        margin-left: 0;
+      }
 
 }
 
@@ -4639,6 +4835,11 @@ div.warrant {
     top: 180px;
   }
 
+  body.order div.waste-type-rectangle,
+  body.order div.demand-rectangle {
+    height: 710px;
+  }
+
 }
 
 @media (min-width: 768px) {
@@ -4846,6 +5047,10 @@ section.waste {
   section.waste.in-material {
     margin-top: 0;
   }
+
+div.filter ul {
+  margin-bottom: 0;
+}
 
 div.filter li.today::before {
   content: none;
@@ -5757,6 +5962,87 @@ li.date-to label {
   outline: none !important;
 }
 
+@media (max-width: 1199px) {
+
+  section.map div.container {
+    max-width: none;
+  }
+
+}
+
+@media (max-width: 1014px) {
+
+  li.remove-container {
+    width: 164px;
+    margin: 26px auto 0 auto;
+    display: table;
+  }
+
+  div.filter li.remove-container::after {
+    left: 33px;
+  }
+
+}
+
+@media (max-width: 767px) {
+
+  section.order h2 {
+    font-size: 1.5rem;
+  }
+
+  p.desc {
+    font-size: 1.125rem;
+  }
+
+}
+
+@media (min-width: 601px) {
+
+  div.street.mobile {
+    display: none;
+  }
+
+}
+
+@media (max-width: 600px) {
+
+  div.input-group.street {
+    display: none;
+  }
+
+  div.street input {
+    max-width: calc(100% - 46px);
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  div.street::before {
+    content: none;
+  }
+
+  div.street label {
+    margin: 0 auto;
+    margin-bottom: 10px;
+    display: table;
+    font-size: 1.125rem;
+  }
+
+    div.street label::after {
+      margin-right: 0;
+      margin-left: 10px;
+      font-size: 1.5rem;
+    }
+
+}
+
+@media (max-width: 415px) {
+
+  li.remove-container {
+    padding-left: 23px;
+  }
+
+}
+
 /*!
 * Page
 */
@@ -5977,6 +6263,30 @@ div.benefit {
     div.row-blocks [class*=col-]:first-child:before {
       content: none;
     }
+
+@media (max-width: 650px) {
+
+  body.order img.mosaic {
+    display: none;
+  }
+
+}
+
+@media (max-width: 560px) {
+
+  div.col-subpage h2 {
+    font-size: 1rem;
+  }
+
+}
+
+@media (max-width: 525px) {
+
+  div.col-subpage img {
+    max-width: 100%; height: auto;
+  }
+
+}
 
 /*!
 * Footer

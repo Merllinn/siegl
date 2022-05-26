@@ -1095,9 +1095,13 @@ header.fixed {
       transform: translateY(-50%);
     }
 
-  div.mobile-navigation {
+  div.mobile-navigation button {
     position: absolute;
-    top: 7px; right: 20px;
+    top: 0; right: 0;
+    padding: 6px 20px;
+    background: transparent;
+    border: 0;
+    color: #FFF;
   }
 
     div.mobile-navigation i {
@@ -1158,12 +1162,12 @@ header.fixed {
     height: 14px;
   }
 
-  div.mobile-navigation {
-    top: 8px;
-  }
-
   div.order {
     top: 48px;
+  }
+
+  div.mobile-navigation button {
+    padding: 9px 20px;
   }
 
 }
@@ -1174,6 +1178,45 @@ header.fixed {
   div.order {
     left: 165px;
   }
+
+}
+
+@media (min-width: 461px) {
+
+  div.order.mobile,
+  div.fastest a.mobile {
+    display: none;
+  }
+
+}
+
+@media (max-width: 460px) {
+
+  div.order.desktop,
+  header div.fastest span.desktop {
+    display: none;
+  }
+
+  div.order.mobile,
+  div.fastest a.mobile {
+    display: block;
+  }
+
+  div.fastest a.mobile {
+    color: #FFF;
+  }
+
+    div.fastest a:hover {
+      text-decoration: none;
+    }
+
+    div.fastest a.mobile span:first-child {
+      padding: 0;
+    }
+
+      div.fastest a.mobile span:first-child::after {
+        content: none;
+      }
 
 }
 
@@ -1235,8 +1278,17 @@ header.fixed {
       width: 100%;
     }
 
-  div.mobile-navigation {
-    top: 7px;
+  div.mobile-navigation button {
+    padding: 7px 20px;
+  }
+
+}
+
+@media (max-width: 340px) {
+
+  header,
+  span.phone {
+    font-size: .65rem;
   }
 
 }
@@ -1245,166 +1297,170 @@ header.fixed {
 * Main navigation
 */
 
-nav {
-  margin: 40px auto 0 auto;
-  display: table;
-  font-weight: 300;
-  position: relative;
-  z-index: 4;
-}
+@media (min-width: 846px) {
 
-  nav::after {
-    content: "";
-    width: 90%; height: 1px;
-    background-color: #424242;
-    display: block;
-    margin: 28px auto 0 auto;
-  }
-
-nav ul {
-  margin: 0; padding: 0;
-  line-height: 1;
-  vertical-align: top;
-}
-
-  nav ul li {
-    display: inline-block;
-    position: relative;
-  }
-
-    nav ul li a::before {
-      content: "";
-      width: 1px; height: 26px;
-      background-color: #424242;
-      position: absolute;
-      left: 0; top: -1px;
-    }
-
-      nav ul li:first-child a::before {
-        content: none;
-      }
-
-nav a {
-  color: #424242;
-  text-decoration: none;
-  position: relative;
-  letter-spacing: .5px;
-  padding: 0 18px 21px 18px;
-}
-
-  nav a:hover {
-    color: #424242;
-  }
-
-  nav a:hover span,
-  a.active span,
-  a.active,
-  div.submenu li a:hover,
-  nav li.submenu.active span,
-  header.fixed div.submenu a.active {
-    color: #424242;
-      -webkit-text-fill-color: #424242;
-    -webkit-text-stroke-width: 1px;
-    -webkit-text-stroke-color: #424242;
-    border-bottom: 1px solid #424242;
-  }
-
-    a.active span,
-    a.active,
-    header.fixed div.submenu a.active {
-      border-bottom: 0;
-    }
-
-  nav li a.external::after {
-    font-family: "Font Awesome 6 Free";
-    font-weight: 600;
-    content: "\f35d";
-    display: inline-block;
-    vertical-align: top;
-    font-size: 0.625rem;
-    margin-left: 3px;
-  }
-
-nav li.submenu>a::after {
-  font-family: "Font Awesome 6 Free";
-  font-weight: 600;
-  content: "\f078";
-  position: absolute;
-  left: 50%; top: 19px;
-  transform: translateX(-50%) scale(1.5, .5);
-}
-
-  nav li.submenu>a:hover::after,
-  nav li.submenu.active>a::after {
-    content: "";
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 15px 15px 15px;
-    border-color: transparent transparent #FFF transparent;
-    position: absolute;
-    left: calc(50% - 15px); top: auto; bottom: -1px;
-    transform: none;
-  }
-
-div.submenu {
-  position: absolute;
-  top: 42px; left: auto;
-  display: none;
-  font-size: 1rem;
-  min-width: 187px;
-  -webkit-box-shadow: 3px 6px 9px -3px rgba(0,0,0,0.43); 
-          box-shadow: 3px 6px 9px -3px rgba(0,0,0,0.43);
-}
-
-  div.submenu.two-columns {
-    min-width: 410px;
-  }
-
-  nav li.submenu:hover div.submenu {
+  nav {
+    margin: 40px auto 0 auto;
     display: table;
+    font-weight: 300;
+    position: relative;
+    z-index: 4;
   }
 
-  div.submenu ul {
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px 16px;
-    text-align: center;
-    width: 187px;
-    display: table-cell;
-  }
-
-    div.submenu ul.products {
-      background-color: rgba(242, 242, 242, 0.95);
-      padding: 20px 16px;
-      text-align: left;
-      width: calc(410px - 187px);
-      font-size: 0.875rem;
+    nav::after {
+      content: "";
+      width: 90%; height: 1px;
+      background-color: #424242;
+      display: block;
+      margin: 28px auto 0 auto;
     }
 
-      div.submenu ul.products a {
-        color: #959595;
-      }
-
-  div.submenu li {
-    display: block;
-    border-bottom: 1px solid #ebebeb;
+  nav ul {
+    margin: 0; padding: 0;
+    line-height: 1;
+    vertical-align: top;
   }
 
-    div.submenu li a {
-      padding: 10px 0;
-      line-height: 1.2;
-      display: block;
+    nav ul li {
+      display: inline-block;
+      position: relative;
+    }
+
+      nav ul li a::before {
+        content: "";
+        width: 1px; height: 26px;
+        background-color: #424242;
+        position: absolute;
+        left: 0; top: -1px;
+      }
+
+        nav ul li:first-child a::before {
+          content: none;
+        }
+
+  nav a {
+    color: #424242;
+    text-decoration: none;
+    position: relative;
+    letter-spacing: .5px;
+    padding: 0 18px 21px 18px;
+  }
+
+    nav a:hover {
       color: #424242;
     }
 
-      div.submenu li a:hover {
+    nav a:hover span,
+    a.active span,
+    a.active,
+    div.submenu li a:hover,
+    nav li.submenu.active span,
+    header.fixed div.submenu a.active {
+      color: #424242;
+        -webkit-text-fill-color: #424242;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: #424242;
+      border-bottom: 1px solid #424242;
+    }
+
+      a.active span,
+      a.active,
+      header.fixed div.submenu a.active {
         border-bottom: 0;
       }
 
-  div.submenu li::before,
-  div.submenu ul li a::before {
-    content: none;
+    nav li a.external::after {
+      font-family: "Font Awesome 6 Free";
+      font-weight: 600;
+      content: "\f35d";
+      display: inline-block;
+      vertical-align: top;
+      font-size: 0.625rem;
+      margin-left: 3px;
+    }
+
+  nav li.submenu>a::after {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 600;
+    content: "\f078";
+    position: absolute;
+    left: 50%; top: 19px;
+    transform: translateX(-50%) scale(1.5, .5);
   }
+
+    nav li.submenu>a:hover::after,
+    nav li.submenu.active>a::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 15px 15px 15px;
+      border-color: transparent transparent #FFF transparent;
+      position: absolute;
+      left: calc(50% - 15px); top: auto; bottom: -1px;
+      transform: none;
+    }
+
+  div.submenu {
+    position: absolute;
+    top: 42px; left: auto;
+    display: none;
+    font-size: 1rem;
+    min-width: 187px;
+    -webkit-box-shadow: 3px 6px 9px -3px rgba(0,0,0,0.43); 
+            box-shadow: 3px 6px 9px -3px rgba(0,0,0,0.43);
+  }
+
+    div.submenu.two-columns {
+      min-width: 410px;
+    }
+
+    nav li.submenu:hover div.submenu {
+      display: table;
+    }
+
+    div.submenu ul {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 20px 16px;
+      text-align: center;
+      width: 187px;
+      display: table-cell;
+    }
+
+      div.submenu ul.products {
+        background-color: rgba(242, 242, 242, 0.95);
+        padding: 20px 16px;
+        text-align: left;
+        width: calc(410px - 187px);
+        font-size: 0.875rem;
+      }
+
+        div.submenu ul.products a {
+          color: #959595;
+        }
+
+    div.submenu li {
+      display: block;
+      border-bottom: 1px solid #ebebeb;
+    }
+
+      div.submenu li a {
+        padding: 10px 0;
+        line-height: 1.2;
+        display: block;
+        color: #424242;
+      }
+
+        div.submenu li a:hover {
+          border-bottom: 0;
+        }
+
+    div.submenu li::before,
+    div.submenu ul li a::before {
+      content: none;
+    }
+
+}
 
 @media (max-width: 975px) {
 
@@ -1424,8 +1480,98 @@ div.submenu {
 
 @media (max-width: 845px) {
 
-  nav {
+  div.mobile-navigation-open {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(255, 255, 255, 0.97);
+    z-index: 11;
+    padding: 30px;
+  }
+
+  div.mobile-navigation-open nav {
+    display: block;
+  }
+
+  ul.products,
+  nav.main-navigation.desktop {
     display: none;
+  }
+
+  nav.main-navigation {
+    text-transform: none;
+  }
+
+    nav.main-navigation a {
+      color: #424242;
+      text-decoration: none;
+      padding-left: 0;
+      display: inline-block;
+      padding: 5px 0;
+    }
+
+    div.submenu a:active,
+    div.submenu a:hover,
+    div.submenu a.active {
+        -webkit-text-fill-color: #004a39;
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: #004a39;
+      color: #004a39;
+    }
+
+    nav.main-navigation ul {
+      margin: 0; padding: 0;
+    }
+
+    nav.main-navigation li {
+      list-style: none;
+      line-height: 1;
+    }
+
+      nav.main-navigation>ul>li {
+        margin-bottom: 15px;
+      }
+
+        nav.main-navigation>ul>li>a {
+          font-size: 1.125rem;
+            -webkit-text-fill-color: #424242;
+          -webkit-text-stroke-width: 1px;
+          -webkit-text-stroke-color: #424242;
+        }
+
+  div.mobile-navigation-open div.logo {
+    margin-bottom: 30px;
+  }
+
+    div.mobile-navigation-open div.logo a {
+      display: inline-block;
+    }
+
+    div.mobile-navigation-open img {
+      max-width: 250px;
+    }
+
+    div.mobile-navigation-open button {
+      position: absolute;
+      top: 0; right: 0;
+      font-size: 1.5rem;
+      padding: 30px;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+  div.mobile-navigation-open img {
+    max-width: 180px;
+  }
+
+}
+
+@media (max-width: 330px) {
+
+  div.mobile-navigation-open img {
+    max-width: 150px;
   }
 
 }

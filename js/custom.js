@@ -166,5 +166,12 @@ $(document).ready(function() {
     ]
   });
 
+  $("button#open-menu").click(function(){
+    $("div.mobile-navigation-open").fadeToggle("fast", "linear");
+  });
+
+  $("button#close-menu").click(function(){
+    $("div.mobile-navigation-open").fadeOut("fast", "linear");
+  });
 
 });

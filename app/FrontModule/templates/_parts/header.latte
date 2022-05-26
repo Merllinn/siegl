@@ -5,24 +5,29 @@
             </div>
             <!-- ./logo -->
             <div class="fastest">
-                <span>{_'HLAVICKA_NEJRYCHLEJSI'}</span>
+                <span class="desktop">{_'HLAVICKA_NEJRYCHLEJSI'}</span>
+                <a class="mobile" href="/objednavka" title="Přejít na objednávku"><span>Objednávejte online</span></a>
                 <span class="to">Kontejner do</span> <strong>{_'KONTEJNER_CAS'}</strong>
                 <span>Turbokontejner do <strong>{_'TURBOKONTEJNER_CAS'}</strong></span>
             </div>
             <!-- ./fastest -->
             <div class="mobile-navigation">
-                <i class="fa-solid fa-bars"></i>
+                <button id="open-menu"><i class="fa-solid fa-bars"></i></button>
             </div>
             <!-- ./mobile navigation -->
             <img class="we-guarantee" src="{$basePath}/img/i_garantujeme-cenu.svg" alt="Ikona garantujeme cenu">
-            <div class="order">
+            <div class="order desktop">
                 <span><a href="/objednavka" title="Přejít na objednávku">Objednávejte</a> online</span>
                 <span class="or">nebo</span> <span class="phone">{_'OBJEDNAVEJTE_NA'}</span>
                 <span>{_'OTEVIRACI_DOBA'}</span>
             </div>
             <!-- ./order -->
+            <div class="order mobile">
+                <span class="mobile">nebo telefonicky </span> <a href="tel:{_'OBJEDNAVEJTE_NA'}">{_'OBJEDNAVEJTE_NA'}</a>
+            </div>
+            <!-- ./order -->
         </div>
-        <nav class="main-navigation">
+        <nav class="main-navigation desktop">
             {include 'mainMenu.latte'}
         </nav>
         <!-- ./main navigation -->
@@ -46,3 +51,15 @@
         </div>
     </header>
     <!-- ./fixed header -->
+    <div class="mobile-navigation-open" style="display: none;">
+        <button class="btn-close" id="close-menu"></button>
+        <div class="logo">
+            <a n:href=":Front:Homepage:page ''" title="Přejít na úvodní stránku"><img src="{$basePath}/img/logo.svg" alt="Logo Siegl kontejnery"></a>
+        </div>
+        <!-- ./logo -->
+        <nav class="main-navigation">
+            {include 'mainMenu.latte'}
+        </nav>
+        <!-- ./main navigation -->
+    </div>
+    <!-- ./mobile navigation -->

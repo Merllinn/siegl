@@ -3929,11 +3929,23 @@ section.products [class*=col-] {
   .accordion-body {
     font-size: .875rem;
     padding: 0 0 20px 0;
+    color: #3f3f3f;
   }
 
     .accordion-body p {
       margin-bottom: 0;
     }
+
+    .accordion-body a {
+      color: #3f3f3f;
+      display: table;
+      margin: 3px auto 0 auto;
+      font-weight: 500;
+    }
+
+      .accordion-body a:hover {
+        text-decoration: none;
+      }
 
 .accordion-item {
   border: 0;

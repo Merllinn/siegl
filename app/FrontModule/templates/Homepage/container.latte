@@ -1,6 +1,6 @@
 {layout ../@layout.latte}
 {block content}
-    <section class="top container-detail">
+    <section class="top container-detail {$product->alias}">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -55,7 +55,7 @@
 		                                    <div class="accordion-body">
 		                                        {$attVals[$price->attributeValue]->desc|noescape}
 		                                        {if !empty($attVals[$price->attributeValue]->file)}
-                                        			<a href="{$attVals[$price->attributeValue]|thumb}" class="chocolat-image" title="Zobrazit obrázek">viz foto</a>
+                                        			<a href="{$attVals[$price->attributeValue]|thumb}" class="chocolat-image" title="Zobrazit obrázek">Více viz foto</a>
 		                                        {/if}
 		                                    </div>
 		                                </div>
@@ -80,18 +80,9 @@
                 </div>
                 <!-- ./sidebar -->
                 <div class="col-md-8">
-                    <div class="container-content chocolat-parent {$product->alias}">
+                    <div class="container-content chocolat-parent">
                         <div class="container-size">
-                            <div class="silhouette"><img src="{$basePath}/img/silhouette.png" alt="Silueta"></div>
-                            <div class="image"><img src="{$secondImg|thumb}" alt="Obrázek kontejneru"></div>
-                            <div class="dimensions">
-                                {*
-                                <div class="width" data-aos="fade-left" data-aos-duration="200" data-aos-delay="250" data-aos-easing="ease-in-sine"><strong>Výška</strong>{$product->height} m</div>
-                                <div class="height" data-aos="fade-down" data-aos-duration="200" data-aos-delay="350" data-aos-easing="ease-in-sine"><strong>Šířka</strong>{$product->width} m</div>
-                                <div class="lenght" data-aos="fade-up" data-aos-duration="200" data-aos-delay="450" data-aos-easing="ease-in-sine"><strong>Délka</strong>{$product->length} m</div>
-                                *}
-                            </div>
-                            <div class="clearfix"></div>
+                            <a class="chocolat-image" href="{$secondImg|thumb}" title="Zvětšit obrázek"><img src="{$secondImg|thumb}" alt="Obrázek kontejneru"></a>
                         </div>
                         <a class="btn btn-primary btn-manipulation chocolat-image" href="{$basePath}/images/manipulace.jpeg" title="Zobrazit prostor pro manipulaci" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="100" data-aos-easing="linear" data-aos-delay="2200">Zobrazit prostor pro manipulaci <i class="fa-solid fa-magnifying-glass"></i></a>
                         <div class="waste-type" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="400">

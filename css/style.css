@@ -103,6 +103,14 @@ abbr[title] {
   background-color: #424242;
 }
 
+  body.container-detail .chocolat-overlay {
+    background-color: #eaeaea;
+  }
+
+  body.container-detail .chocolat-overlay.chocolat-visible {
+    opacity: .975;
+  }
+
 .chocolat-wrapper .chocolat-bottom {
   display: none;
 }
@@ -3031,11 +3039,11 @@ section.top {
       }
 
       body.order::before {
-        top: -151px;
+        top: -120px;
       }
 
       body.demand::before {
-        top: -46px;
+        top: -16px;
       }
 
   section.top img.stripe {
@@ -3094,8 +3102,31 @@ label.select {
       }
 
       div.filter ul.kontejneru-den li:first-child {
+        margin-right: 0;
         margin-left: 0;
       }
+
+        div.filter ul.kontejneru-den li:first-child::before {
+          content: none;
+        }
+
+        div.filter ul.kontejneru-den li:first-child::after {
+          right: 150px;
+        }
+
+      div.filter ul.kontejneru-den li:first-child {
+        margin-right: 0;
+        margin-left: 0;
+      }
+
+        div.filter ul.kontejneru-den input.form-control {
+          padding: 0.375rem 0.75rem;
+          width: 150px;
+        }
+
+        div.filter ul.kontejneru-den label {
+          margin-left: 18px;
+        }
 
     section.waste li.druh-odpadu {
       margin-right: 70px;
@@ -3199,7 +3230,8 @@ label.select {
           transition: all .25s;
         }
 
-        li.turbokontejner div.form-check {
+        li.turbokontejner div.form-check,
+        li.vat div.form-check {
           background-color: #FFF;
           display: inline-block;
           height: 46px;
@@ -3210,6 +3242,7 @@ label.select {
         }
 
           li.turbokontejner .form-check-input[type=checkbox],
+          li.vat .form-check-input[type=checkbox],
           .modal-content [type=checkbox],
           .billing-address [type=checkbox] {
             position: absolute;
@@ -3238,6 +3271,7 @@ label.select {
             }
 
             li.turbokontejner .form-check-input[type=checkbox]:checked,
+            li.vat .form-check-input[type=checkbox]:checked,
             .modal-content [type=checkbox]:checked,
             .billing-address [type=checkbox]:checked {
               background-color: #FFF;
@@ -3245,6 +3279,7 @@ label.select {
             }
 
             li.turbokontejner .form-check-input[type=checkbox]:checked::after,
+            li.vat .form-check-input[type=checkbox]:checked::after,
             .modal-content [type=checkbox]:checked::after,
             .billing-address [type=checkbox]:checked::after {
               font-family: "Font Awesome 6 Free";
@@ -3531,7 +3566,8 @@ label.select {
     }
 
   label.select::after,
-  li.turbokontejner div.form-check::after {
+  li.turbokontejner div.form-check::after,
+  li.vat div.form-check::after {
     content: "";
     position: absolute;
     right: 0;
@@ -4269,19 +4305,25 @@ div.sidebar-vat {
   margin: 10px 0 20px 0;
 }
 
+  div.sidebar-vat>div {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0; padding: 0;
+    padding-left: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
   div.form-check-container {
     border-radius: 12.5px;
     background-color: #d71921;
     overflow: hidden;
     border: 2px solid #d71921;
+    padding-left: 0;
   }
 
-  div.sidebar-vat div {
-    display: inline-block;
-    vertical-align: top;
-    margin: 0; padding: 0;
-    font-weight: 400;
-    line-height: 1.6;
+  div.sidebar-vat .form-check {
+    margin: 0;
   }
 
   div.sidebar-vat label {
@@ -4305,6 +4347,35 @@ div.sidebar-vat {
       div.sidebar-vat input[type="radio"]:checked ~ label a {
         color: #FFF;
       }
+
+  div.sidebar-vat .form-check-input[type=checkbox] {
+    z-index: 3;
+    width: 13px; height: 13px;
+    border-radius: 0;
+    border: 0;
+    margin-top: 5px;
+    position: relative;
+    cursor: pointer;
+  }
+
+    div.sidebar-vat .form-check-input[type=checkbox]:checked {
+      background-color: #FFF;
+      transition: all .25s;
+    }
+
+    div.sidebar-vat .form-check-input[type=checkbox]:checked::after {
+      font-family: "Font Awesome 6 Free";
+      font-weight: 600;
+      color: #424242;
+      content: "\f00c";
+      position: absolute;
+      top: -1px; right: 2px;
+      font-size: .625rem;
+      transition: all .25s;
+      -webkit-text-fill-color: #424242;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #424242;
+    }
 
   div.sidebar-vat span {
     text-transform: none;
@@ -4386,283 +4457,31 @@ div.container-content {
 }
 
   div.container-content img {
-    vertical-align: bottom;
+    width: 100%; height: 100%;
+    object-fit: contain;
   }
 
 div.container-size {
-  width: 600px; height: 263px;
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: flex-end;
-  position: relative;
+  width: 100%; height: 283px;
+  text-align: center;
 }
 
-div.silhouette {
-  width: 90.85px; height: 263px;
-  opacity: .5;
-}
-
-div.container-size .image {
-  max-width: calc(100% - 120.85px); width: 100%;
-}
-
-  div.container-size .image img {
-    width: auto; height: 100%;
-  }
-
-  div.silhouette,
-  div.container-size .image {
-    display: inline-block;
-    vertical-align: bottom;
-  }
-
-    div.container-size .image {
-      margin-right: 0;
-      margin-left: auto;
-    }
-
-  div.silhouette img,
   div.container-size .image img {
     max-width: 100%;
-  }
-
-div.dimensions {
-  font-size: 0.75rem;
-  text-transform: lowercase;
-  position: absolute;
-  top: 0; right: 0;
-  width: calc(100% - 120.85px);
-  height: 100%;
-}
-
-  div.dimensions div {
-    position: absolute;
-    text-align: center;
-  }
-
-    div.kontejner-4-m3-6-tun div.image {
-      height: 38.888%;
-    }
-
-    div.kontejner-3-m3-3-tuny div.image {
-      height: 27.777%;
-    }
-
-    div.kontejner-4-m3-6-tun-uzky div.image {
-      height: 66.666%;
-    }
-
-    div.kontejner-9-m3-3-tuny div.image {
-      height: 83.333%;
-    }
-
-    div.kontejner-15-m3-5-tun div.image {
-      height: 111.111%;
-    }
-
-    div.kontejner-10-m3-12-tun div.image {
-      height: 100%;
-    }
-
-    div.kontejner-40-m3-10-tun div.image {
-      height: 138.888%;
-    }
-
-  div.dimensions div::before,
-  div.dimensions div::after {
-    content: "";
-    background-color: #d9363d;
-    position: absolute;
-  }
-
-  /* width */
-
-  div.container-size div.width {
-    width: 35px; height: 95px;
-    left: 0; bottom: 0;
-    padding-top: 36px;
-    line-height: 1;
-  }
-
-    div.container-size.kontejner-odpad-sut-zemina-3m3-3tuny div.width {
-      left: auto; right: -40px;
-      bottom: 47px;
-    }
-
-    div.dimensions div.width::before,
-    div.dimensions div.width::after {
-      width: 2px; height: 0;
-    }
-
-      div.dimensions div.width::before,
-      div.dimensions div.width::after {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-
-        div.dimensions div.width::before {
-          bottom: 66px;
-          left: 50%;
-          transform: translateX(-50%);
-          animation-name: width-left-line-4m3-6tun;
-          animation-duration: .15s;
-          animation-delay: 1s;
-          animation-fill-mode: forwards;
-        }
-
-        div.dimensions div.width::after {
-          top: 66px;
-          animation-name: width-right-line-4m3-6tun;
-          animation-duration: .15s;
-          animation-delay: 1s;
-          animation-fill-mode: forwards;
-        }
-
-    @keyframes width-left-line-4m3-6tun {
-        0%   {height: 0;}
-        100% {height: 30px;}
-    }
-
-    @keyframes width-right-line-4m3-6tun {
-        0%   {height: 0;}
-        100% {height: 30px;}
-    }
-
-  div.container-size div.width /* 4m3/6tun*/ {
-    left: 340px; bottom: 25px;
-  }
-
-  /* lenght */
-  
-  div.container-size div.lenght {
-    left: 0; bottom: 0;
-    padding-top: 0;
-    line-height: 1;
-  }
-
-  div.container-size.kontejner-4m3-6-tun div.width /* 4m3/6tun*/ {
-    left: 340px; bottom: 25px;
-  }
-
-  div.container-size.kontejner-4m3-6-tun div.lenght /* 4m3/6tun*/ {
-    width: 246px; height: 24px;
-    left: 86px; bottom: -13px;
-  }
-
-    div.dimensions div.lenght::before,
-    div.dimensions div.lenght::after {
-      width: 0; height: 2px;
-      top: 22px;
-      transform: rotate(349.6deg);
-    }
-
-      div.dimensions div.lenght::before {
-        width: 0; height: 2px;
-        right: 145px; top: 22px;
-        transform: rotate(349.6deg);
-        animation-name: lenght-left-line-4m3-6tun;
-        animation-duration: .15s;
-        animation-delay: 2s;
-        animation-fill-mode: forwards;
-      }
-
-      div.dimensions div.lenght::after {
-        top: -4px; left: 145px;
-        animation-name: lenght-right-line-4m3-6tun;
-        animation-duration: .15s;
-        animation-delay: 2s;
-        animation-fill-mode: forwards;
-      }
-
-    @keyframes lenght-left-line-4m3-6tun {
-        0%   {width: 0;}
-        100% {width: 100px;}
-    }
-
-    @keyframes lenght-right-line-4m3-6tun {
-        0%   {width: 0;}
-        100% {width: 100px;}
-    }
-
-  /* height */
-  
-  div.container-size div.height {
-    right: 0; bottom: 0;
-    padding-top: 0;
-    line-height: 1;
-  }
-
-  div.container-size.kontejner-4m3-6-tun div.width /* 4m3/6tun*/ {
-    left: 340px; bottom: 25px;
-  }
-
-  div.container-size.kontejner-4m3-6-tun div.lenght /* 4m3/6tun*/ {
-    width: 246px; height: 24px;
-    left: 86px; bottom: -13px;
-  }
-
-  div.container-size.kontejner-4m3-6-tun div.height /* 4m3/6tun*/ {
-    width: 95px; height: 24px;
-    right: 156px; bottom: 117px;
-  }
-
-    div.dimensions div.height::before,
-    div.dimensions div.height::after {
-      width: 0; height: 2px;
-      right: 73px; top: 12px;
-      transform: rotate(2deg);
-    }
-
-      div.dimensions div.height::before {
-        width: 0; height: 2px;
-        right: 73px; top: 12px;
-        transform: rotate(2deg);
-        animation-name: height-left-line-4m3-6tun;
-        animation-duration: .15s;
-        animation-delay: 1.5s;
-        animation-fill-mode: forwards;
-      }
-
-      div.dimensions div.height::after {
-        top: 16px; left: 70px; right: auto;
-        width: 0;
-        animation-name: height-right-line-4m3-6tun;
-        animation-duration: .15s;
-        animation-delay: 1.5s;
-        animation-fill-mode: forwards;
-      }
-
-      div.kontejner-odpad-sut-zemina-3m3-3tuny div.height::before,
-      div.kontejner-odpad-sut-zemina-3m3-3tuny div.height::after {
-        transform: rotate(348deg);
-      }
-
-      @keyframes height-left-line-4m3-6tun {
-          0%   {width: 0;}
-          100% {width: 38px;}
-      }
-
-      @keyframes height-right-line-4m3-6tun {
-          0%   {width: 0;}
-          100% {width: 35px;}
-      }
-
-  div.container-size strong {
-    display: block;
-    font-weight: 700;
+    height: auto;
   }
 
 a.btn-manipulation {
   background-color: transparent;
   font-weight: 300;
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: #303030;
   text-transform: none;
   border: 2px solid #FFF;
   border-right: 0;
   padding: 7px 32px 7px 20px;
   transition: all .25s;
-  margin: 40px auto 0 auto;
+  margin: 20px auto 0 auto;
   display: table;
 }
 
@@ -4675,7 +4494,7 @@ a.btn-manipulation {
 
   a.btn-manipulation i {
     position: absolute;
-    top: 14px; right: 0;
+    top: 11px; right: 0;
     color: #d71921;
     font-size: 1.125rem;
   }
@@ -4686,13 +4505,21 @@ a.btn-manipulation {
 
 div.waste-type {
   color: #FFF;
-  margin-top: 100px;
+  margin-top: 135px;
   font-size: 1.375rem;
   min-height: 190px;
 }
 
-  div.velkoobjemovy-kontejner-odpad-40m3-10tuny div.waste-type {
-    margin-top: 225px;
+  .kontejner-odpad-sut-zemina-4m3-5tun-uzky div.waste-type {
+    margin-top: 116px;
+  }
+
+  .kontejner-odpad-sut-zemina-3m3-3tuny div.waste-type {
+    margin-top: 120px;
+  }
+
+  .kontejner-odpad-sut-zemina-10m3-12tun div.waste-type {
+    margin-top: 115px;
   }
 
   div.waste-type-rectangle,
@@ -4746,12 +4573,12 @@ div.waste-type {
 
     body.order div.waste-type-rectangle {
       background-color: #d71921;
-      top: 282px;
+      top: 313px;
     }
 
     body.demand div.waste-type-rectangle {
       background-color: #d71921;
-      top: 387px;
+      top: 417px;
     }
 
       body.order div.waste-type-rectangle::before,

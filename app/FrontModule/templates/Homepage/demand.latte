@@ -75,10 +75,8 @@
 		                <ul class="list-inline kontejneru-den" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 		            		<li class="list-inline-item pocet-kontejneru">
 			                    Přibližný počet kontejnerů/den
-			                    <label class="select">
-			                        <select aria-label="Pocet" data-link={link setBasketVal! $index, "amount", 'basketD'} class="updateValue">
-			                            <option n:for="$i=1;$i<=6;$i++" {if !empty($container->amount) && $container->amount==$i}selected="selected"{/if} value="{$i}">{$i}</option>
-			                        </select>
+			                    <label>
+			                        <input data-link={link setBasketVal! $index, "amount", 'basketD'} class="updateValue form-control" value="{if !empty($container->amount)}{$container->amount}{else}1{/if}">
 			                    </label>
 			                </li>
 			                <li class="list-inline-item remove-container">
@@ -135,8 +133,22 @@
 						      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
 						      {/if}
 						    });
+						    $(".dateFrom").change(function(){
+								console.log($(".dateFrom")val());
+								$(".dateField input.dateTo").datetimepicker({
+									startDate: $(".dateFrom")val();
+								});
+						    });
 					    {/if}
+						$("input.dateTo").datetimepicker({
+							startDate: $(".dateFrom").val()
+						});
+						$(".dateFrom").change(function(){
+							console.log($(".dateFrom").getDate());
+							$("input.dateTo").setStartDate($(".dateFrom").getDate());
+						});
 					    *}
+					    
 						$(".updateValue").change(function(){
 							var link = $(this).data("link");
 							link = link + "&val=" + $(this).val();
@@ -294,17 +306,17 @@
 	    <div class="container">
 	        <h2 class="title underline">Termín realizace</h2>
 	        <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-	            <li class="list-inline-item date-from" id="date-from">
+	            <li class="list-inline-item dateField" id="date-from">
 	                Od
 	                <label class="select">
-	                	<input class="form-control updateValue" data-link="{link setOrderVal! 'termFrom', 'basketD'}" type="text" {if !empty($basket->termFrom)}value="{$basket->termFrom}"{/if} value="Vyberte datum" readonly>
+	                	<input class="form-control updateValue dateFrom" data-link="{link setOrderVal! 'termFrom', 'basketD'}" type="text" {if !empty($basket->termFrom)}value="{$basket->termFrom}"{/if} value="Vyberte datum" readonly>
 	                </label>
 	            </li>
 	            <!-- ./od -->
-	            <li class="list-inline-item date-to" id="date-to">
+	            <li class="list-inline-item dateField" id="date-to">
 	                Do
 	                <label class="select">
-	                	<input class="form-control updateValue" data-link="{link setOrderVal! 'termTo', 'basketD'}" type="text" {if !empty($basket->termTo)}value="{$basket->termTo}"{/if} value="Vyberte datum" readonly>
+	                	<input class="form-control updateValu dateTo" data-link="{link setOrderVal! 'termTo', 'basketD'}" type="text" {if !empty($basket->termTo)}value="{$basket->termTo}"{/if} value="Vyberte datum" readonly>
 	                </label>
 	            </li>
 	            <!-- ./od -->
@@ -476,9 +488,10 @@
 			var materialPrice = 0;
 			
 			if($("form ul.errors").length > 0){
-				$([document.documentElement, document.body]).animate({
-        			scrollTop: $("form ul.errors").offset().top - 120
-    			}, 500);				
+				var error = $("form ul.errors").html();
+				$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+				$('#modal-errors').modal('show');
+				$(".order-form ul.errors").html("");
 			}
 			
 			$(".variantImage").click(function(e){
@@ -616,7 +629,9 @@
 			function readFromAres(){
 				var ic=$(".idField");
 				if(ic.val()==""){
-					alert("Vyplňte IČO");
+					var error = "Vyplňte IČO";
+					$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+					$('#modal-errors').modal('show');
 				}
 				else{
 					var buttonText = $(".loadAres").text();
@@ -633,13 +648,15 @@
 					 if (data.stav == 'ok') {
 					  //$('input[name=dic]').val(data.dic);
 					  $('input[name=bussiness_company]').val(data.firma);
-					  if($('input[name=bussiness_different_delivery]').prop('checked')){
+					  //if($('input[name=bussiness_different_delivery]').prop('checked')){
 						  $('input[name=bussiness_delivery_street]').val(data.ulice);
 						  $('input[name=bussiness_delivery_city]').val(data.mesto);
 						  $('input[name=bussiness_delivery_zip]').val(data.psc);
-					  }
+					  //}
+					  $('input[name=bussiness_different_delivery]').prop('checked', true).trigger("change");
 					 } else {
-					  alert(data.stav);
+						$("#modal-errors ul.list-unstyled").html("<li>"+data.stav+"</li>");
+						$('#modal-errors').modal('show');
 					 }
      				//$(".loadAres").addClass("btn-primary");
      				$(".loadAres").html(buttonText);
@@ -739,6 +756,9 @@
   			$(".setAddress").click(function(e){
 				e.preventDefault();
 				checkPickedAddress();
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("#map").offset().top - 120
+    			}, 500);				
   			});
   			map.addListener("click", (mapsMouseEvent) => {
     		  var ll = mapsMouseEvent.latLng;
@@ -791,14 +811,18 @@
 					else if(inPrague){
 						$("#searchTextField").val("");
 						unsetMarker();
-						alert({_'ADRESA_MIMO_ZONU'});
+						var error = {_'ADRESA_MIMO_ZONU'};
+						$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+						$('#modal-errors').modal('show');
 						window.checkAddress = false;
 						enableDisableOrder();
 					}
 					else{
 						$("#searchTextField").val("");
 						unsetMarker();
-						alert({_'ADRESA_MIMO_PRAHU'});
+						var error = {_'ADRESA_MIMO_PRAHU'};
+						$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+						$('#modal-errors').modal('show');
 						window.checkAddress = false;
 						enableDisableOrder();
 					}

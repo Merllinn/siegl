@@ -24,7 +24,12 @@
                         <!-- ./turbokontejner -->
                     *}
                         <li class="list-inline-item vat">
-                            <div class="form-check"><input class="form-check-input" type="radio" name="dph" id="sDPH"{if $vat->isWith}checked{/if}><label class="form-check-label" for="sDPH"><a n:href="setVat! true">S DPH</a></label></div><div class="form-check"><input class="form-check-input" type="radio" name="dph" id="bezDPH" {if !$vat->isWith}checked{/if}><label class="form-check-label" for="bezDPH"><a n:href="setVat! false">Bez DPH</a></label></div>
+                            <div class="form-check">
+                            	<label class="form-check-label" for="sDPH">
+                            		S DPH
+                            	</label>
+                            	<input class="form-check-input formFieldVat" type="checkbox" data-on="{link setVat! true}" data-off="{link setVat! false}" name="dph" id="sDPH"{if $vat->isWith}checked{/if}>
+                            </div>
                         </li>
                         <!-- ./dph -->
                     </ul>
@@ -51,7 +56,7 @@
                         <div class="container-image">
                             <img src="{$mainImg|thumb}" alt="{$container->name}">
                         </div>
-                        <div class="accordion accordion-flush" id="containers{$container->id}">
+                        <div class="accordion accordion-flush chocolat-parent" id="containers{$container->id}">
                             {var $prices = $presenter->productManager->getPrices($container->id)}
                             <div class="accordion-item" n:foreach="$prices as $price">
                                 <div class="accordion-header" id="container-{$price->id}">
@@ -68,6 +73,9 @@
                                 <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}" n:if="!empty($attVals[$price->attributeValue]->desc)">
                                     <div class="accordion-body">
                                         {$attVals[$price->attributeValue]->desc|noescape}
+                                        {if !empty($attVals[$price->attributeValue]->file)}
+                                        	<a href="{$attVals[$price->attributeValue]|thumb}" class="chocolat-image" title="Zobrazit obrázek">viz foto</a>
+                                        {/if}
                                     </div>
                                 </div>
                             </div>
@@ -227,6 +235,19 @@
 			else{
 				$(".orderButton").removeClass("disabled");
 			}
+			
+			$(".formFieldVat").change(function(e){
+				e.preventDefault();
+				var checked = $(this).prop("checked");
+				if(checked){
+					var link = $(this).data("on");
+				}
+				else{
+					var link = $(this).data("off");
+				}
+				$.get(link);
+			});
+			
     	}
     </script>
 {/block}

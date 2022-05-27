@@ -147,10 +147,8 @@
 		                <ul class="list-inline kontejneru-den" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 		            		<li class="list-inline-item pocet-kontejneru">
 			                    Přibližný počet kontejnerů/den
-			                    <label class="select">
-			                        <select aria-label="Pocet" data-link={link setBasketVal! $index, "amount", 'basketD'} class="updateValue">
-			                            <option n:for="$i=1;$i<=6;$i++" {if !empty($container->amount) && $container->amount==$i}selected="selected"{/if} value="{$i}">{$i}</option>
-			                        </select>
+			                    <label>
+			                        <input data-link={link setBasketVal! $index, "amount", 'basketD'} class="updateValue form-control" value="{if !empty($container->amount)}{$container->amount}{else}1{/if}">
 			                    </label>
 			                </li>
 			                <li class="list-inline-item remove-container">
@@ -474,9 +472,10 @@
 			var materialPrice = 0;
 			
 			if($("form ul.errors").length > 0){
-				$([document.documentElement, document.body]).animate({
-        			scrollTop: $("form ul.errors").offset().top - 120
-    			}, 500);				
+				var error = $("form ul.errors").html();
+				$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+				$('#modal-errors').modal('show');
+				$(".order-form ul.errors").html("");
 			}
 			
 			$(".variantImage").click(function(e){
@@ -614,7 +613,9 @@
 			function readFromAres(){
 				var ic=$(".idField");
 				if(ic.val()==""){
-					alert("Vyplňte IČO");
+					var error = "Vyplňte IČO";
+					$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+					$('#modal-errors').modal('show');
 				}
 				else{
 					var buttonText = $(".loadAres").text();
@@ -636,8 +637,10 @@
 						  $('input[name=bussiness_delivery_city]').val(data.mesto);
 						  $('input[name=bussiness_delivery_zip]').val(data.psc);
 					  //}
+					  $('input[name=bussiness_different_delivery]').prop('checked', true).trigger("change");
 					 } else {
-					  alert(data.stav);
+						$("#modal-errors ul.list-unstyled").html("<li>"+data.stav+"</li>");
+						$('#modal-errors').modal('show');
 					 }
      				//$(".loadAres").addClass("btn-primary");
      				$(".loadAres").html(buttonText);
@@ -737,6 +740,9 @@
   			$(".setAddress").click(function(e){
 				e.preventDefault();
 				checkPickedAddress();
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("#map").offset().top - 120
+    			}, 500);				
   			});
   			map.addListener("click", (mapsMouseEvent) => {
     		  var ll = mapsMouseEvent.latLng;
@@ -789,14 +795,18 @@
 					else if(inPrague){
 						$("#searchTextField").val("");
 						unsetMarker();
-						alert({_'ADRESA_MIMO_ZONU'});
+						var error = {_'ADRESA_MIMO_ZONU'};
+						$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+						$('#modal-errors').modal('show');
 						window.checkAddress = false;
 						enableDisableOrder();
 					}
 					else{
 						$("#searchTextField").val("");
 						unsetMarker();
-						alert({_'ADRESA_MIMO_PRAHU'});
+						var error = {_'ADRESA_MIMO_PRAHU'};
+						$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+						$('#modal-errors').modal('show');
 						window.checkAddress = false;
 						enableDisableOrder();
 					}

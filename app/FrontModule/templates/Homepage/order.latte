@@ -104,7 +104,7 @@
 				                            </label>
 				                        </li>
 		                    		{/if}
-			                        <li class="list-inline-item remove-container">
+			                        <li class="list-inline-item remove-container" n:if="count($containers)>1">
 			                        	<a class="ajax btn-absolute" n:href="removeFromOrder! $index"></a>
 			                            <button class="btn btn-primary">Odebrat</button>
 			                        </li>
@@ -223,12 +223,30 @@
     </section>
     <!-- ./waste -->
     <section class="material">
+        {snippet addmaterial}
         <div class="container">
             <h3 class="title underline">Potřebujete stavební materiál?</h3>
             <p class="desc">Nechte si s přistavením kontejneru dovézt i stavební materiál<br>a budete mít dopravu <strong>zcela zdarma</strong></p>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material btn-i-need triggerMaterial changeMaterial {if empty($containers)}disabled{/if}" title="Přidat materiály k objednávce" {if !empty($materials)}style="display: none;"{/if} data-link="">Ano, potřebuji</a>
             <button class="btn btn-primary btn-arrow btn-red btn-add-material triggerMaterial changeMaterial" title="Žádný materiál nepotřebuji" {if empty($materials)}style="display: none;"{/if} data-link="{link unuseMaterial!, 'basket'}">Ne, nepotřebuji</a>
         </div>
+        <script n:if="$presenter->isAjax()">
+			$(".triggerMaterial").click(function(e){
+				e.preventDefault()
+				$(".changeMaterial").toggle();
+				if($(this).data("link")!=""){
+					$.get($(this).data("link"));
+				}
+				if($(".changeMaterial").is(":hidden")){
+					var pickedVariant = $(".roughness li.selected");
+					pickedVariant.find(".pickButton").text(pickedVariant.find(".pickButton").data("pick"));
+					pickedVariant.removeClass("selected");
+					$(".roughness").hide();
+					$(".select-material li.selected").removeClass("selected");
+				}
+			});
+        </script>
+        {/snippet}
         <div class="select-material changeMaterial" {if empty($materials)}style="display: none;"{/if}>
             <div class="container margin">
                 <h4>Vyberte typ materiálu</h4>
@@ -275,11 +293,11 @@
 	                        <div class="number">
                         		<span class="minus"></span><input class="amountField form-control materialSource materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
 	                        </div>
-	                        <span class="tons">tun =</span><input class="form-control materialTarger" type="text" value="{$materials[0]->amount*$materials[0]->priceObj->koef}" readonly><span class="material-quantity">m<sup>3</sup></span>
+	                        <span class="tons">tun =</span><input class="form-control materialTarger materialVolume" type="text" value="{$materials[0]->amount*$materials[0]->priceObj->koef}" readonly><span class="material-quantity">m<sup>3</sup></span>
                         {/if}
                         {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
 	                        <div class="number">
-                        		<span class="minus"></span><input class="amountField form-control materialSource" type="text" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
+                        		<span class="minus"></span><input class="amountField form-control materialSource materialVolume" type="text" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
 	                        </div>
 	                        <span class="material-quantity">m<sup>3</sup> =</span><input class="form-control materialTarger materialWeight" type="text" min="1" value="{$materials[0]->amount/$materials[0]->priceObj->koef|number:2}" readonly><span class="tons">tun</span>
                         {/if}
@@ -338,14 +356,22 @@
 							var maxWeight = parseInt($(".total-price").data("weight"));
 							var maxVolume = parseInt($(".total-price").data("volume"));
 							if(matWeight>maxWeight){
+								$(".materialWeight").val(maxWeight);
+								$(".materialVolume").val(matWeight*materialKoef);
 								window.checkWeight = false;
 								enableDisableOrder();
-								alert("Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.");
+								var error = "Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.";
+								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+								$('#modal-errors').modal('show');
 							}
 							else if(matVolume>maxVolume){
+								$(".materialWeight").val(maxVolume);
+								$(".materialVolume").val(maxVolume/materialKoef);
 								window.checkWeight = false;
 								enableDisableOrder();
-								alert("Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.");
+								var error = "Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.";
+								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+								$('#modal-errors').modal('show');
 							}
 							else{
 								window.checkWeight = true;
@@ -589,9 +615,10 @@
 			var materialPrice = 0;
 			
 			if($("form ul.errors").length > 0){
-				$([document.documentElement, document.body]).animate({
-        			scrollTop: $("form ul.errors").offset().top - 120
-    			}, 500);				
+				var error = $("form ul.errors").html();
+				$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+				$('#modal-errors').modal('show');
+				$(".order-form ul.errors").html("");
 			}
 			
 			$(".variantImage").click(function(e){
@@ -653,7 +680,9 @@
 			function readFromAres(){
 				var ic=$(".idField");
 				if(ic.val()==""){
-					alert("Vyplňte IČO");
+					var error = "Vyplňte IČO";
+					$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+					$('#modal-errors').modal('show');
 				}
 				else{
 					var buttonText = $(".loadAres").text();
@@ -669,14 +698,18 @@
 					 data = d.data;
 					 if (data.stav == 'ok') {
 					  //$('input[name=dic]').val(data.dic);
+					  
 					  $('input[name=bussiness_company]').val(data.firma);
 					  //if($('input[name=bussiness_different_delivery]').prop('checked')){
 						  $('input[name=bussiness_delivery_street]').val(data.ulice);
 						  $('input[name=bussiness_delivery_city]').val(data.mesto);
 						  $('input[name=bussiness_delivery_zip]').val(data.psc);
 					  //}
+					  $('input[name=bussiness_different_delivery]').prop('checked', true).trigger("change");
 					 } else {
-					  alert(data.stav);
+					  $("#modal-errors ul.list-unstyled").html("<li>"+data.stav+"</li>");
+					  $('#modal-errors').modal('show');
+
 					 }
      				//$(".loadAres").addClass("btn-primary");
      				$(".loadAres").html(buttonText);
@@ -776,6 +809,9 @@
   			$(".setAddress").click(function(e){
 				e.preventDefault();
 				checkPickedAddress();
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("#map").offset().top - 120
+    			}, 500);				
   			});
   			map.addListener("click", (mapsMouseEvent) => {
     		  var ll = mapsMouseEvent.latLng;
@@ -828,14 +864,16 @@
 					else if(inPrague){
 						$("#searchTextField").val("");
 						unsetMarker();
-						alert({_'ADRESA_MIMO_ZONU'});
+						$("#modal-errors ul.list-unstyled").html("<li>"+{_'ADRESA_MIMO_ZONU'}+"</li>");
+						$('#modal-errors').modal('show');
 						window.checkAddress = false;
 						enableDisableOrder();
 					}
 					else{
 						$("#searchTextField").val("");
 						unsetMarker();
-						alert({_'ADRESA_MIMO_PRAHU'});
+						$("#modal-errors ul.list-unstyled").html("<li>"+{_'ADRESA_MIMO_PRAHU'}+"</li>");
+						$('#modal-errors').modal('show');
 						window.checkAddress = false;
 						enableDisableOrder();
 					}
@@ -921,8 +959,7 @@
 					sendOrderButton.addClass("disabled");
 				}	
 			}
-    		
-
+			
 		}
 
 		

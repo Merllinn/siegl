@@ -99,6 +99,7 @@ final class HomepagePresenter extends HomepageForms
 		$this->$basket->containers = $containers;
 		$this->recalculateBasket($basket);
 		$this->redrawControl("orderContainers");
+		$this->redrawControl("addmaterial");
 		//$this->redirect("this");
 	}
 
@@ -256,6 +257,7 @@ final class HomepagePresenter extends HomepageForms
 		$this->$basket->containers = $containers;
 		if(count($containers)==0 && $basket=="basket"){
 			$this->$basket->materials = null;
+			$this->redrawControl("addmaterial");
 		}
 		$this->recalculateBasket($basket);
 		$this->redrawControl("orderContainers");

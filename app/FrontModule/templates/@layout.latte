@@ -27,11 +27,13 @@
 	<body class="{$bodyClass}">
 		{include '_parts/header.latte'}
         <!-- ./header -->
+        {*
         {foreach $flashes as $flash}
             <div class="container alert-container">
                 <div class="alert {$flash->type}">{$flash->message}</div>
             </div>
         {/foreach}
+        *}
 
         {block content}{/block}
 

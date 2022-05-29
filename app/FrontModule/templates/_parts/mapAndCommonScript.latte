@@ -1,0 +1,317 @@
+<script>
+    	$(document).ready(function(){
+			var materialPrice = 0;
+
+			if($("form ul.errors").length > 0){
+				var error = $("form ul.errors").html();
+				$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+				$('#modal-errors').modal('show');
+				$(".order-form ul.errors").html("");
+			}
+			
+			$(".variantImage").click(function(e){
+				e.stopPropagation();
+			});
+			
+			$(".updateValue").change(function(){
+				var link = $(this).data("link");
+				link = link + "&val=" + $(this).val();
+				$.get(link);
+			});
+			
+			if($("#searchTextField").val() != ""){
+				$("#searchTextField").trigger("change");
+			}
+			if($(".materialWeight").val() != 1){
+				$(".materialWeight").trigger("change");
+			}
+
+			function readFromAres(){
+				var ic=$(".idField");
+				if(ic.val()==""){
+					var error = "Vyplňte IČO";
+					$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+					$('#modal-errors').modal('show');
+				}
+				else{
+					var buttonText = $(".loadAres").text();
+					$(".loadAres").html(buttonText + ' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+     				//$(".loadAres").removeClass("btn-primary");
+				   $.ajax({
+					url: {link :Front:Homepage:ares},
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					data: "ico="+ic.val(),
+					cache: false,
+					success: function(d) {
+					 data = d.data;
+					 if (data.stav == 'ok') {
+					  //$('input[name=dic]').val(data.dic);
+					  
+					  $('input[name=bussiness_company]').val(data.firma);
+					  //if($('input[name=bussiness_different_delivery]').prop('checked')){
+						  $('input[name=bussiness_delivery_street]').val(data.ulice);
+						  $('input[name=bussiness_delivery_city]').val(data.mesto);
+						  $('input[name=bussiness_delivery_zip]').val(data.psc);
+					  //}
+					  $('input[name=bussiness_different_delivery]').prop('checked', true).trigger("change");
+					 } else {
+					  $("#modal-errors ul.list-unstyled").html("<li>"+data.stav+"</li>");
+					  $('#modal-errors').modal('show');
+
+					 }
+     				//$(".loadAres").addClass("btn-primary");
+     				$(".loadAres").html(buttonText);
+					},
+				   });
+   				}
+			}
+	        $(".loadAres").click(function(e){
+	            e.preventDefault();
+	            readFromAres();
+	        });
+	    });
+			
+		function initMap() {
+			var center = { lat: 50.1025735, lng: 14.4273201 };
+			var mapEl = document.getElementById("map");
+			var geocoder = new google.maps.Geocoder();
+			var map = new google.maps.Map(
+			   mapEl,
+			  {
+			    zoom: 14.21,
+			    center: center,
+			  }
+			);
+			
+            google.maps.Polygon.prototype.Contains = function (point) {
+                var crossings = 0,
+                    path = this.getPath();
+                // for each edge
+                for (var i = 0; i < path.getLength() ; i++) {
+                    var a = path.getAt(i),
+                        j = i + 1;
+                    if (j >= path.getLength()) {
+                        j = 0;
+                    }
+                    var b = path.getAt(j);
+                    if (rayCrossesSegment(point, a, b)) {
+                        crossings++;
+                    }
+                }
+                // odd number of crossings?
+                return (crossings % 2 == 1);
+                function rayCrossesSegment(point, a, b) {
+                    var px = point.lng(),
+                        py = point.lat(),
+                        ax = a.lng(),
+                        ay = a.lat(),
+                        bx = b.lng(),
+                        by = b.lat();
+                    if (ay > by) {
+                        ax = b.lng();
+                        ay = b.lat();
+                        bx = a.lng();
+                        by = a.lat();
+                    }
+                    if (py == ay || py == by) py += 0.00000001;
+                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
+                    if (px < Math.min(ax, bx)) return true;
+                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
+                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
+                    return (blue >= red);
+                }
+            };			
+			
+			var input = document.getElementById('searchTextField');
+			/*
+			const center = { lat: 50.064192, lng: -130.605469 };
+			// Create a bounding box with sides ~10km away from the center point
+			const defaultBounds = {
+			    north: center.lat + 0.1,
+			    south: center.lat - 0.1,
+			    east: center.lng + 0.1,
+			    west: center.lng - 0.1,
+			};
+			*/
+			const acoptions = {
+			    //bounds: defaultBounds,
+			    componentRestrictions: { country: "cz" },
+			    fields: ["address_components", "geometry"],
+			    strictBounds: false,
+			    //types: ["establishment"],
+			};
+  			new google.maps.places.Autocomplete(input, acoptions);
+  			var marker
+  			
+  			$("#searchTextField").keypress(function(event){
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+  				if(keycode == '13'){
+					event.preventDefault();
+					checkPickedAddress();
+				}
+  			});
+  			$("#searchTextField").change(function(){
+				//console.log("changed");
+				setTimeout(function(){
+					checkPickedAddress();
+				}, 200);				
+  			});
+  			$(".setAddress").click(function(e){
+				e.preventDefault();
+				checkPickedAddress();
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("#map").offset().top - 120
+    			}, 500);				
+  			});
+  			map.addListener("click", (mapsMouseEvent) => {
+    		  var ll = mapsMouseEvent.latLng;
+    		  geocoder
+    		  	.geocode({ location: ll })
+    		  	.then((response) => {
+    		  		if (response.results[0]) {
+    		  			$("#searchTextField").val(response.results[0].formatted_address);
+    		  			validateAddress(response.results[0]);
+					}else{
+						$("#searchTextField").val("nenalezeno");
+					}
+					
+    		  	});
+    		});
+    		
+    		function checkPickedAddress(){
+				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						validateAddress(results[0]);
+					} 
+				}); 				
+    		}
+    		
+    		function validateAddress(result){
+					var inPrague = false;
+					var inZone = false;
+					var activeZone = 0;
+					sendOrderButton = $(".sendOrderButton");
+					var i;
+					
+					{foreach $zones as $zone}
+						if(zone{$zone->id} != null && zone{$zone->id}.Contains(result.geometry.location)){
+							inZone = true;
+							var activeZone = {$zone->id};
+						}
+					{/foreach}
+					
+					for (i = 0; i < result.address_components.length; ++i) {
+						if(result.address_components[i].short_name == "Hlavní město Praha"){
+							inPrague = true;
+						}
+					}
+					if(inZone){
+						setMarker(result.geometry.location, $("#searchTextField").val());
+						map.setCenter(result.geometry.location);
+						window.checkAddress = true;
+						enableDisableOrder();
+					}
+					else if(inPrague){
+						$("#searchTextField").val("");
+						unsetMarker();
+						$("#modal-errors ul.list-unstyled").html("<li>"+{_'ADRESA_MIMO_ZONU'}+"</li>");
+						$('#modal-errors').modal('show');
+						window.checkAddress = false;
+						enableDisableOrder();
+					}
+					else{
+						$("#searchTextField").val("");
+						unsetMarker();
+						$("#modal-errors ul.list-unstyled").html("<li>"+{_'ADRESA_MIMO_PRAHU'}+"</li>");
+						$('#modal-errors').modal('show');
+						window.checkAddress = false;
+						enableDisableOrder();
+					}
+					var link = {link setBasketZone! $basket} + "&z=" + activeZone;
+					$.get(link);
+				
+    		}
+    		
+    		function unsetMarker(){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			}
+			
+    		function setMarker(latLn, caption){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			  marker = new google.maps.Marker({
+				position: latLn,
+				map,
+				title: caption,
+			  });
+			  var link = {link setAddress!} + "&a=" + caption;
+			  $.get(link);
+    		}
+    		
+    		//Draw zones polygons
+    		{foreach $zones as $zone}
+				const zone{$zone->id}Coords = [
+				    {var $points = explode(chr(10), $zone->points)}
+				    {foreach $points as $zonePoint}
+			    		{var $pArray = explode(',', $zonePoint)}
+			    		{var $latC = trim((float)$pArray[1])}
+			    		{var $lngC = trim((float)$pArray[0])}
+			    		{ lat: {$latC|noescape}, lng: {$lngC|noescape} },
+				    {/foreach}
+				];
+
+				{var $color = "#333333"};
+				{if !empty($zone->color)}
+					{php $color = $zone->color}
+				{/if}
+				const zone{$zone->id} = new google.maps.Polygon({
+				    paths: zone{$zone->id}Coords,
+				    strokeColor: {$color},
+				    strokeOpacity: 0.8,
+				    strokeWeight: 2,
+				    fillColor: {$color},
+				    fillOpacity: 0.5,
+				});
+
+				zone{$zone->id}.setMap(map);
+				
+  				zone{$zone->id}.addListener("click", (mapsMouseEvent) => {
+    			  var ll = mapsMouseEvent.latLng;
+    			  geocoder
+    		  		.geocode({ location: ll })
+    		  		.then((response) => {
+    		  			if (response.results[0]) {
+    		  				$("#searchTextField").val(response.results[0].formatted_address);
+							validateAddress(response.results[0]);
+						}else{
+							$("#searchTextField").val("nenalezeno");
+						}
+						
+    		  		});
+    			});
+			
+    		{/foreach}
+    		
+			function enableDisableOrder(){
+				{if $check==true}
+					sendOrderButton = $(".sendOrderButton");
+					var orderValid = true;
+					if(window.checkWeight==false) orderValid = false;
+					if(window.checkAddress==false) orderValid = false;
+					var containerCount = $(".oneContainer").length;
+					if(containerCount==0) orderValid = false;
+					if(orderValid){
+						sendOrderButton.removeClass("disabled");
+					}	
+					else{
+						sendOrderButton.addClass("disabled");
+					}
+				{/if}	
+			}
+			
+		}
+</script>

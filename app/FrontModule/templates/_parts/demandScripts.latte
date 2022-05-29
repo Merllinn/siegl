@@ -1,0 +1,155 @@
+<script>
+    	$(document).ready(function(){
+			$(".selectMoreDemand").click(function(e){
+				e.preventDefault();
+				if($(this).hasClass("selected")){
+					var link = $(this).data("unlink");
+					$(this).removeClass("selected");
+					$(this).text($(this).data("pick"));
+				}
+				else{
+					var link = $(this).data("link");
+					$(this).addClass("selected");
+					$(this).text($(this).data("picked"));
+				}
+				$.get(link);
+			});
+			$(".includeWeekend").click(function(e){
+				e.preventDefault();
+				var link = $(this).data("link");
+				if($(this).hasClass("active")){
+					link = link + "&val=0";
+					$(this).removeClass("active");
+				}
+				else{
+					link = link + "&val=1";
+					$(this).addClass("active");
+				}
+				$(this).trigger("blur");
+				$.get(link);
+			});
+			$(".triggerMaterial").click(function(e){
+				e.preventDefault()
+				$(".changeMaterial").toggle();
+				if($(this).data("link")!=""){
+					$.get($(this).data("link"));
+				}
+			});
+			$(".pickMaterial").click(function(e){
+				e.preventDefault();
+				var closestLi = $(this).closest("li");
+				//var link = $(this).data("link");
+				var matId = closestLi.data("mat");
+				closestLi.addClass("selected").siblings().removeClass("selected");
+				$(".roughness").hide();
+				$(".roughness.mat"+matId).show();
+				//$(".amount").hide();
+				//$(".tons-price").hide();
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $(".roughness.mat"+matId).offset().top
+    			}, 500);
+				//$.get(link);
+			});
+			$(".pickVariant").click(function(e){
+				e.preventDefault()
+				var thisLi = $(this).closest("li");
+				if(thisLi.hasClass("selected")){
+					var link = $(this).data("unlink");
+					thisLi.removeClass("selected");
+					thisLi.find(".amount").slideUp();
+					$(this).find(".pickButton").text($(this).find(".pickButton").data("pick"));
+				}
+				else{
+					//$(".variantLi").removeClass("selected");
+					var link = $(this).data("link");
+					thisLi.addClass("selected");
+					var materialKoef = thisLi.find(".amount").data("koef");
+					$(".materialTarget").val(($(".materialSource").val()*materialKoef).toFixed(2));
+					thisLi.find(".amount").slideDown();
+					$(this).find(".pickButton").text($(this).find(".pickButton").data("picked"));
+				}
+				$.get(link);
+				resolveMaterials();
+			});
+			
+			function resolveMaterials(){
+				$(".roughness").each(function(){
+					var matId = $(this).data("mat");
+					var pickedVariants = $(this).find(".variantLi.selected");
+					var matButton = $(".materialBlock"+matId+" .materialButton");
+					if(pickedVariants.length > 0){
+						matButton.text(matButton.data("picked"));
+					}
+					else{
+						matButton.text(matButton.data("pick"));
+					}
+				});
+			}
+			
+			  $('.minus').click(function () {
+				var $input = $(this).parent().find('input.amountField');
+				var count = parseFloat($input.val()) - 0.5;
+				count = count < 1 ? 1 : count;
+				$input.val(count);
+				$input.change();
+				return false;
+			  });
+			  
+			  $('.plus').click(function () {
+				var $input = $(this).parent().find('input.amountField');
+				$input.val(parseFloat($input.val()) + 0.5);
+				$input.change();
+				return false;
+			  });
+			  $(".materialSource").change(function(){
+					var amountBlock = $(this).closest(".amount");
+					var materialKoef = amountBlock.data("koef");
+					var thisVal = parseFloat($(this).val().replace(",", "."));
+					var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+					$(this).val(correctedVal);
+					var matWeight = $(this).val();
+					amountBlock.find(".materialTarget").val((matWeight*materialKoef).toFixed(2));
+					var link = amountBlock.data("link") + "&amount=" + matWeight;
+					//checkMaterialAmount();
+					$.get(link);
+
+			  });
+			  $(".materialTarget").change(function(){
+					var amountBlock = $(this).closest(".amount");
+					var materialKoef = amountBlock.data("koef");
+					var thisVal = parseFloat($(this).val().replace(",", "."));
+					amountBlock.find(".materialSource").val(thisVal/materialKoef).trigger("change");
+			  });
+			  
+			  $(".dateFrom").datetimepicker({
+				  pickTime: false,
+				  minView: 2,
+				  language:'cs',
+				  minuteStep: 30,
+				  format: 'dd/mm/yyyy',
+				  autoclose: true,
+				  startDate: '+0d',
+				  todayHighlight: true,
+			  });
+			  $(".dateTo").datetimepicker({
+				  pickTime: false,
+				  minView: 2,
+				  language:'cs',
+				  minuteStep: 30,
+				  format: 'dd/mm/yyyy',
+				  autoclose: true,
+				  {if !empty($basket->termFrom)}
+				  	startDate: {$basket->termFrom},
+				  {else}
+				  	startDate: '+0d',
+				  {/if}
+				  todayHighlight: true,
+			  });
+    		  
+    		  $(".dateFrom").on("changeDate", function(e) {
+        	  	$(".dateTo").datetimepicker('setStartDate', e.date);
+    		  });
+			
+		});
+
+</script>

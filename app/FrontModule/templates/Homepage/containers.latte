@@ -20,7 +20,13 @@
 		                                {if $catAttr}
 		                                	<option  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}" data-cat="{$catAttr->alias}">{$val} {$attr->unit|noescape}</option>
 		                                {else}
-		                                	<option  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+		                                	{if isset($allowedAttrs[$attr->id])}
+		                                		{if array_search($key, $allowedAttrs[$attr->id])!== false}
+		                                			<option  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+		                                		{/if}
+		                                	{else}
+		                                		<option  {if !empty($_GET["a".$attr->id]) && $_GET["a".$attr->id]==$key}selected="selected"{/if} value="{$key}">{$val} {$attr->unit|noescape}</option>
+		                                	{/if}
 		                                {/if}
 	                                {/foreach}
 	                            </select>

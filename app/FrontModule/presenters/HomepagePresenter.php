@@ -281,7 +281,7 @@ final class HomepagePresenter extends HomepageForms
 		}
 		$this->$basket->containers = $items;
 		$this->recalculateBasket($basket);
-		if(in_array($name, array("term"))!==false){
+		if(in_array($name, array("term","product"))!==false){
 			$this->redrawControl("orderContainers");
 		}
     }
@@ -473,7 +473,39 @@ final class HomepagePresenter extends HomepageForms
 				$_GET["a1"] = $category->attVal;
 			}
 	    }
-    	
+	    if(!empty($_GET["a1"])){
+    		$containersFilter = $this->productManager->getByType(1);
+			$containersFilter->where("id IN (SELECT product FROM product_prices WHERE attributeValue=".$_GET["a1"]." AND priceFrom>0)");
+    		$allowedWeights = array();
+    		$allowedVolumes = array();
+			foreach($containersFilter as $cont){
+				$attrs = $cont->attributes;
+				$attrsArr = explode("|", $attrs);
+				foreach($attrsArr as $attrPair){
+					$attrPairArr = explode("-", $attrPair);
+					$attrId = $attrPairArr[0];
+					$attrVal = $attrPairArr[1];
+					if($attrId==3){
+						$allowedWeights[] = $attrVal;
+					}
+					if($attrId==2){
+						$allowedVolumes[] = $attrVal;
+					}
+				}
+			}
+			$allowedAttrs = array(
+				"2" => $allowedVolumes,
+				"3" => $allowedWeights,
+			);
+			$this->template->allowedAttrs = $allowedAttrs;
+	    }
+	    if(!empty($_GET["a2"]) && array_search($_GET["a2"], $allowedVolumes)===false){
+			unset($_GET["a2"]);
+	    }
+	    if(!empty($_GET["a3"]) && array_search($_GET["a3"], $allowedWeights)===false){
+			unset($_GET["a3"]);
+	    }
+	    
     	$containers = $this->productManager->getByType(1);
     	foreach($_GET as $key=>$val){
 			if(!empty($val) && $key[0]=="a"){
@@ -492,6 +524,7 @@ final class HomepagePresenter extends HomepageForms
     	}
     	$this->template->containers = $containers;
     	$this->template->attVals = $this->attributeManager->getAllValues();
+    	
     }
     public function renderMaterials($id=""){
 	    $page = $this->template->page = $this->pageManager->findByLayout(9);
@@ -611,6 +644,8 @@ final class HomepagePresenter extends HomepageForms
         //SYSTEM
         $form ->addHidden("type");
         $form ->addHidden("usertype")->setDefaultValue(0);
+        $form ->addCheckbox("payment", "hotově řidiči při přistavení kontejneru")
+        	->addRule($form::FILLED, "Je nutné potvrdit způsob platby");
         
         //PERSONAL
         $form ->addText("name", "Jméno")
@@ -746,7 +781,10 @@ final class HomepagePresenter extends HomepageForms
 			$form->addError("Objednávka neobsahuje žádné kontejnery");
         }
         
-        if(!empty($this->$basketfield->containers)){
+        if($basketfield == "basketD" && empty($this->$basketfield->termFrom)){
+			$form->addError("Vyplňte termín, od kdy se plánuje realizace");
+        }
+        if($basketfield != "basketD" && !empty($this->$basketfield->containers)){
 	        $typesError = false;
 	        $productsError = false;
 	        $termsError = false;

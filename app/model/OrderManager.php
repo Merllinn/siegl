@@ -269,8 +269,10 @@ final class OrderManager
 			$order->weekends = $ses->weekends;
 			$more = $ses->more;
 			$mores = array();
-			foreach($more as $moreText=>$val){
-				$mores[] = $moreText;
+			if(!empty($more)){
+				foreach($more as $moreText=>$val){
+					$mores[] = $moreText;
+				}
 			}
 			$order->more = implode(chr(10), $mores);
         }
@@ -290,25 +292,27 @@ final class OrderManager
         //save containers
         if(!empty($containers)){
 	        foreach($containers as $container){
-	            $product = $pm->find($container->product);
-	            $price = $pm->findPrice($container->price->id);
-	            $itemData = array(
-	                "order_id"		=>$orderId,
-	                "products_id"   =>$container->product,
-	                "type"			=>1,
-	                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
-	            );
-	            if($order->type==1 || $order->type==2){
-					$itemData["term"] = $container->term . (!empty($container->time)?" " . $container->time:"");
-					$itemData["quantity"] = 1;
-					$itemData["price"] = $price->priceFrom;
-					$itemData["price_vat"] = $price->priceFrom * (1 + ($settings->vat/100));
+	            if(!empty($container->product) && !empty($container->price)){
+		            $product = $pm->find($container->product);
+		            $price = $pm->findPrice($container->price->id);
+		            $itemData = array(
+		                "order_id"		=>$orderId,
+		                "products_id"   =>$container->product,
+		                "type"			=>1,
+		                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
+		            );
+		            if($order->type==1 || $order->type==2){
+						$itemData["term"] = $container->term . (!empty($container->time)?" " . $container->time:"");
+						$itemData["quantity"] = 1;
+						$itemData["price"] = $price->priceFrom;
+						$itemData["price_vat"] = $price->priceFrom * (1 + ($settings->vat/100));
+		            }
+		            if($order->type==9){
+						$itemData["quantity"] = $container->amount;
+		            }
+		            $this->addProduct($itemData);
+		            //$totalPice += $price->priceFrom;
 	            }
-	            if($order->type==9){
-					$itemData["quantity"] = $container->amount;
-	            }
-	            $this->addProduct($itemData);
-	            //$totalPice += $price->priceFrom;
 	        }
         }
         //save containers

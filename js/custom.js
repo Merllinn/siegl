@@ -87,8 +87,7 @@ $(document).ready(function() {
 
   Chocolat(document.querySelectorAll('.chocolat-parent .chocolat-image'), {})
 
-  $(function(){
-    $("#date input,#date-from input,#date-to input").datetimepicker({
+  $("#date input,#date-from input,#date-to input").datetimepicker({
       pickTime: false,
       minView: 2,
       language:'cs',
@@ -97,26 +96,8 @@ $(document).ready(function() {
       autoclose: true,
       startDate: '+0d',
       todayHighlight: true,
-    });
   });
 
-  /*
-  $('.minus').click(function () {
-    var $input = $(this).parent().find('input.amountField');
-    var count = parseFloat($input.val()) - 0.5;
-    count = count < 1 ? 1 : count;
-    $input.val(count);
-    $input.change();
-    return false;
-  });
-  
-  $('.plus').click(function () {
-    var $input = $(this).parent().find('input.amountField');
-    $input.val(parseFloat($input.val()) + 0.5);
-    $input.change();
-    return false;
-  });
-  */
 
   $('.differentDelivery').change(function() {
     if ($('.differentDelivery').prop('checked')) {

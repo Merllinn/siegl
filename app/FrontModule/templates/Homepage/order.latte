@@ -43,7 +43,7 @@
                     			{php $zoneTimes[$orderTime] = $orderTime}
 		                    {/foreach}
 	                    {/if}
-	                    <div class="oneContainer" n:foreach="$containers as $index=>$container">
+	                    <div class="oneContainer" n:foreach="$containers as $index=>$container" data-id="{if !empty($container->price->product)}{$container->price->product}{else}{/if}">
 		                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                     			{var $attr = $presenter->attributeManager->find(1)}
 		                        <li class="list-inline-item druh-odpadu">
@@ -141,21 +141,29 @@
 							once: true
 						});
 					    {if!empty($basket->zoneObj)}
-						    $(".dateField input").datetimepicker({
-						      language:'cs',
-						      minuteStep: 30,
-						      format: 'dd/mm/yyyy',
-						      autoclose: true,
-                              pickTime: false,
-                              todayHighlight: true,
-                              minView: 2,
-						      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
-						      {var $date = new \Nette\Utils\DateTime()}
-						      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
-						      	startDate: {$date|date:"d.m.Y"},
-						      {else}
-						      	startDate: {$date->modify("+1 day")|date:"d.m.Y"},
-						      {/if}
+						    $(".dateField input").each(function(){
+							    var productId = $(this).closest(".oneContainer").data("id");
+							    var disabledDays = [];
+							    if(productId=="6"){
+									disabledDays = [0];
+							    }
+							    $(this).datetimepicker({
+							      language:'cs',
+							      minuteStep: 30,
+							      format: 'dd/mm/yyyy',
+							      autoclose: true,
+	                              pickTime: false,
+	                              todayHighlight: true,
+	                              daysOfWeekDisabled: disabledDays,
+	                              minView: 2,
+							      {var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
+							      {var $date = new \Nette\Utils\DateTime()}
+							      {if empty($basket->zoneObj->deadline) || $actualMinutes<$presenter->timeToMinutes($basket->zoneObj->deadline)}
+						      		startDate: {$date|date:"d.m.Y"},
+							      {else}
+						      		startDate: {$date->modify("+1 day")|date:"d.m.Y"},
+							      {/if}
+							    });
 						    });
 					    {/if}
 						$(".updateValue").change(function(){
@@ -287,116 +295,25 @@
                     </div>
                     <!-- ./typ a hrubost -->
                     {snippet matamount}
-                    <div class="amount" n:if="!empty($materials[0]->priceObj)" data-koef="{if $materials[0]->product==$settings->betonProduct}{1/$materials[0]->priceObj->koef}{else}{$materials[0]->priceObj->koef}{/if}" data-link="{link setMaterialAmount!}"  style="display: none;">
+                    <div class="amount" n:if="!empty($materials[0]->priceObj)" data-koef="{if $materials[0]->product==$settings->betonProduct}{1/$materials[0]->priceObj->koef}{else}{$materials[0]->priceObj->koef}{/if}" data-koef2="{$materials[0]->priceObj->koef}" data-link="{link setMaterialAmount!}"  style="display: none;">
                         <label for="amount">Množství materiálu</label>
                         {if !empty($materials[0]->product) && $materials[0]->product!=$settings->betonProduct}
 	                        <div class="number">
                         		<span class="minus"></span><input class="amountField form-control materialSource materialWeight" type="text" min="1" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
 	                        </div>
-	                        <span class="tons">tun =</span><input class="form-control materialTarger materialVolume" type="text" value="{$materials[0]->amount*$materials[0]->priceObj->koef}" readonly><span class="material-quantity">m<sup>3</sup></span>
+	                        <span class="tons">tun =</span><input class="form-control materialTarget materialVolume" type="text" value="{$materials[0]->amount*$materials[0]->priceObj->koef}"><span class="material-quantity">m<sup>3</sup></span>
                         {/if}
                         {if !empty($materials[0]->product) && $materials[0]->product==$settings->betonProduct}
 	                        <div class="number">
                         		<span class="minus"></span><input class="amountField form-control materialSource materialVolume" type="text" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span>
 	                        </div>
-	                        <span class="material-quantity">m<sup>3</sup> =</span><input class="form-control materialTarger materialWeight" type="text" min="1" value="{$materials[0]->amount/$materials[0]->priceObj->koef|number:2}" readonly><span class="tons">tun</span>
+	                        <span class="material-quantity">m<sup>3</sup> =</span><input class="form-control materialTarget materialWeight" type="text" min="1" value="{$materials[0]->amount/$materials[0]->priceObj->koef|number:2}" readonly><span class="tons">tun</span>
                         {/if}
                     </div>
                     <div class="tons-price" style="display: none;">
                         Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
                     </div>
-                    <script>
-					$(document).ready(function(){
-						window.checkAddress = false;
-						{if !empty($address)}
-							window.checkAddress = true;
-						{/if}
-						var materialKoef = 1;
-						{if !empty($materials[0]->priceObj)}
-							materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
-							materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
-							$(".materialPrice").html(materialPrice.toLocaleString());
-							$(".material-quantity").val(($(".materialWeight").val()*materialKoef).toFixed(2));
-							$(".amount").show();
-							$(".tons-price").show();
-						{/if}
-			
-					  $('.minus').click(function () {
-					    var $input = $(this).parent().find('input.amountField');
-					    var count = parseFloat($input.val()) - 0.5;
-					    count = count < 1 ? 1 : count;
-					    $input.val(count);
-					    $input.change();
-					    return false;
-					  });
-					  
-					  $('.plus').click(function () {
-					    var $input = $(this).parent().find('input.amountField');
-					    $input.val(parseFloat($input.val()) + 0.5);
-					    $input.change();
-					    return false;
-					  });
-						$(".materialSource").change(function(){
-							var amountBlock = $(this).closest(".amount");
-							var materialKoef = amountBlock.data("koef");
-							var thisVal = parseFloat($(this).val().replace(",", "."));
-							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
-							$(this).val(correctedVal);
-							var matWeight = $(this).val();
-							amountBlock.find(".materialTarger").val((matWeight*materialKoef).toFixed(2));
-							var link = amountBlock.data("link") + "&amount=" + matWeight;
-							checkMaterialAmount();
-							$.get(link);
-
-						});
-						function checkMaterialAmount(){
-							var matWeight = parseFloat($(".materialWeight").val());
-							materialKoef = parseFloat($(".amount").data("koef"));
-							var matVolume = Math.round(matWeight*materialKoef);
-							var maxWeight = parseInt($(".total-price").data("weight"));
-							var maxVolume = parseInt($(".total-price").data("volume"));
-							if(matWeight>maxWeight){
-								$(".materialWeight").val(maxWeight);
-								$(".materialVolume").val(matWeight*materialKoef);
-								window.checkWeight = false;
-								enableDisableOrder();
-								var error = "Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.";
-								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
-								$('#modal-errors').modal('show');
-							}
-							else if(matVolume>maxVolume){
-								$(".materialWeight").val(maxVolume);
-								$(".materialVolume").val(maxVolume/materialKoef);
-								window.checkWeight = false;
-								enableDisableOrder();
-								var error = "Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.";
-								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
-								$('#modal-errors').modal('show');
-							}
-							else{
-								window.checkWeight = true;
-								enableDisableOrder();
-							}
-						}
-
-						function enableDisableOrder(){
-							sendOrderButton = $(".sendOrderButton");
-							var orderValid = true;
-							if(window.checkWeight==false) orderValid = false;
-							if(window.checkAddress==false) orderValid = false;
-							var containerCount = $(".oneContainer").length;
-							if(containerCount==0) orderValid = false;
-							if(orderValid){
-								sendOrderButton.removeClass("disabled");
-							}	
-							else{
-								sendOrderButton.addClass("disabled");
-							}	
-						}
-						
-					  
-					});
-                    </script>
+					{include '../_parts/materialUpdate.latte', check=>true}
                     {/snippet}
                 </form>
             </div>
@@ -456,155 +373,7 @@
     </div>
     {/snippet}
     <!-- ./price -->
-    {form orderForm}
-    {input type}
-    {input usertype, class=>"userType"}
-    <div class="order-form">
-        <div class="container">
-            <ul class="errors" n:if="$form->hasErrors()">
-				<li n:foreach="$form->errors as $error">{$error}</li>
-			</ul>
-            <nav>
-                <div class="nav nav-tabs" id="nav-order-form" role="tablist">
-                    <button class="nav-link {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}active{/if}" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
-                    <button class="nav-link {if empty($basket->order->usertype)}active{/if}" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabOrderForm">
-                <div class="tab-pane fade {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}show active{/if}" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
-                    <div class="row">
-                        <div class="form-group col-md-6 arrow">
-                            {label name/}
-                            {input name}
-                        </div>
-                        <div class="form-group col-md-6 arrow">
-                            {label surname/}
-                            {input surname}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 arrow">
-                            {label email/}
-                            {input email}
-                        </div>
-                        <div class="form-group col-md-6 arrow">
-                            {label phone/}
-                            {input phone}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12 arrow note">
-                            {label note/}
-                            {input note}
-                        </div>
-                    </div>
-                    <div class="row billing-address">
-                        <div class="form-group col-md-12">
-                            <div class="billing-address">
-                                {input different_delivery}
-								{label different_delivery}{/label}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="billing-information" style="display: none">
-                        <div class="row">
-                            <div class="form-group col-md-12 arrow delivery-street">
-	                            {label delivery_street/}
-	                            {input delivery_street}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 arrow">
-	                            {label delivery_city/}
-	                            {input delivery_city}
-                            </div>
-                            <div class="form-group col-md-6 arrow">
-	                            {label delivery_zip/}
-	                            {input delivery_zip}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade {if empty($basket->order->usertype)}show active{/if}" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
-                    <div class="row row-ic">
-                        <div class="form-group col-md-12">
-	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 arrow">
-	                        {label bussiness_name/}
-	                        {input bussiness_name}
-                        </div>
-                        <div class="form-group col-md-6 arrow">
-	                        {label bussiness_surname/}
-	                        {input bussiness_surname}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 arrow">
-	                        {label bussiness_email/}
-	                        {input bussiness_email}
-                        </div>
-                        <div class="form-group col-md-6 arrow">
-	                        {label bussiness_phone/}
-	                        {input bussiness_phone}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12 arrow note">
-	                        {label bussiness_note/}
-	                        {input bussiness_note}
-                        </div>
-                    </div>
-                    <div class="row row-firm-name">
-                        <div class="form-group col-md-12 arrow company">
-	                        {label bussiness_company/}
-	                        {input bussiness_company}
-                        </div>
-                    </div>
-                    <div class="row billing-address">
-                        <div class="form-group col-md-12">
-                            <div class="billing-address">
-		                        {input bussiness_different_delivery}
-		                        {label bussiness_different_delivery}{/label}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="business-customer-billing-information" style="display: none">
-                        <div class="row">
-                            <div class="form-group col-md-12 arrow delivery-street">
-		                        {label bussiness_delivery_street/}
-		                        {input bussiness_delivery_street}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6 arrow">
-		                        {label bussiness_delivery_city/}
-		                        {input bussiness_delivery_city}
-                            </div>
-                            <div class="form-group col-md-6 arrow">
-		                        {label bussiness_delivery_zip/}
-		                        {input bussiness_delivery_zip}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row row-send-order">
-                    <div class="form-group col-md-12 send-order">
-                        <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
-                    </div>
-                </div>
-                
-            </div>
-            <img class="car" src="{$basePath}/img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
-            <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
-        </div>
-        {include '../_parts/footerMenu.latte', class=>''}
-        <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
-        <div class="rectangle"></div>
-    </div>
-    {/form}
+    {include "../_parts/orderForm.latte", basket=>$basket}
     <!-- ./form -->
     <div class="waste-type-rectangle"></div>
 {/block}
@@ -612,24 +381,7 @@
 {block scripts}
     <script>
     	$(document).ready(function(){
-			var materialPrice = 0;
 			
-			if($("form ul.errors").length > 0){
-				var error = $("form ul.errors").html();
-				$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
-				$('#modal-errors').modal('show');
-				$(".order-form ul.errors").html("");
-			}
-			
-			$(".variantImage").click(function(e){
-				e.stopPropagation();
-			});
-			
-			$(".updateValue").change(function(){
-				var link = $(this).data("link");
-				link = link + "&val=" + $(this).val();
-				$.get(link);
-			});
 			$(".triggerMaterial").click(function(e){
 				e.preventDefault()
 				$(".changeMaterial").toggle();
@@ -670,299 +422,12 @@
 				$.get(link);
 			});
 			
-			if($("#searchTextField").val() != ""){
-				$(".setAddress").trigger("click");
-			}
-			if($(".materialWeight").val() != 1){
-				$(".materialWeight").trigger("change");
-			}
-			
-			function readFromAres(){
-				var ic=$(".idField");
-				if(ic.val()==""){
-					var error = "Vyplňte IČO";
-					$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
-					$('#modal-errors').modal('show');
-				}
-				else{
-					var buttonText = $(".loadAres").text();
-					$(".loadAres").html(buttonText + ' <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-     				//$(".loadAres").removeClass("btn-primary");
-				   $.ajax({
-					url: {link :Front:Homepage:ares},
-					contentType: "application/json; charset=utf-8",
-					dataType: "json",
-					data: "ico="+ic.val(),
-					cache: false,
-					success: function(d) {
-					 data = d.data;
-					 if (data.stav == 'ok') {
-					  //$('input[name=dic]').val(data.dic);
-					  
-					  $('input[name=bussiness_company]').val(data.firma);
-					  //if($('input[name=bussiness_different_delivery]').prop('checked')){
-						  $('input[name=bussiness_delivery_street]').val(data.ulice);
-						  $('input[name=bussiness_delivery_city]').val(data.mesto);
-						  $('input[name=bussiness_delivery_zip]').val(data.psc);
-					  //}
-					  $('input[name=bussiness_different_delivery]').prop('checked', true).trigger("change");
-					 } else {
-					  $("#modal-errors ul.list-unstyled").html("<li>"+data.stav+"</li>");
-					  $('#modal-errors').modal('show');
-
-					 }
-     				//$(".loadAres").addClass("btn-primary");
-     				$(".loadAres").html(buttonText);
-					},
-				   });
-   				}
-			}
-            $(".loadAres").click(function(e){
-                e.preventDefault();
-                readFromAres();
-            });
 			
 		});
 		
-		function initMap() {
-			var center = { lat: 50.1025735, lng: 14.4273201 };
-			var mapEl = document.getElementById("map");
-			var geocoder = new google.maps.Geocoder();
-			var map = new google.maps.Map(
-			   mapEl,
-			  {
-			    zoom: 14.21,
-			    center: center,
-			  }
-			);
-			
-            google.maps.Polygon.prototype.Contains = function (point) {
-                var crossings = 0,
-                    path = this.getPath();
-                // for each edge
-                for (var i = 0; i < path.getLength() ; i++) {
-                    var a = path.getAt(i),
-                        j = i + 1;
-                    if (j >= path.getLength()) {
-                        j = 0;
-                    }
-                    var b = path.getAt(j);
-                    if (rayCrossesSegment(point, a, b)) {
-                        crossings++;
-                    }
-                }
-                // odd number of crossings?
-                return (crossings % 2 == 1);
-                function rayCrossesSegment(point, a, b) {
-                    var px = point.lng(),
-                        py = point.lat(),
-                        ax = a.lng(),
-                        ay = a.lat(),
-                        bx = b.lng(),
-                        by = b.lat();
-                    if (ay > by) {
-                        ax = b.lng();
-                        ay = b.lat();
-                        bx = a.lng();
-                        by = a.lat();
-                    }
-                    if (py == ay || py == by) py += 0.00000001;
-                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
-                    if (px < Math.min(ax, bx)) return true;
-                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
-                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
-                    return (blue >= red);
-                }
-            };			
-			
-			var input = document.getElementById('searchTextField');
-			/*
-			const center = { lat: 50.064192, lng: -130.605469 };
-			// Create a bounding box with sides ~10km away from the center point
-			const defaultBounds = {
-			    north: center.lat + 0.1,
-			    south: center.lat - 0.1,
-			    east: center.lng + 0.1,
-			    west: center.lng - 0.1,
-			};
-			*/
-			const acoptions = {
-			    //bounds: defaultBounds,
-			    componentRestrictions: { country: "cz" },
-			    fields: ["address_components", "geometry"],
-			    strictBounds: false,
-			    //types: ["establishment"],
-			};
-  			new google.maps.places.Autocomplete(input, acoptions);
-  			var marker
-  			
-  			$("#searchTextField").keypress(function(event){
-				var keycode = (event.keyCode ? event.keyCode : event.which);
-  				if(keycode == '13'){
-					event.preventDefault();
-					checkPickedAddress();
-				}
-  			});
-  			$("#searchTextField").change(function(){
-				checkPickedAddress();
-  			});
-  			$(".setAddress").click(function(e){
-				e.preventDefault();
-				checkPickedAddress();
-				$([document.documentElement, document.body]).animate({
-        			scrollTop: $("#map").offset().top - 120
-    			}, 500);				
-  			});
-  			map.addListener("click", (mapsMouseEvent) => {
-    		  var ll = mapsMouseEvent.latLng;
-    		  geocoder
-    		  	.geocode({ location: ll })
-    		  	.then((response) => {
-    		  		if (response.results[0]) {
-    		  			$("#searchTextField").val(response.results[0].formatted_address);
-    		  			validateAddress(response.results[0]);
-					}else{
-						$("#searchTextField").val("nenalezeno");
-					}
-					
-    		  	});
-    		});
-    		
-    		function checkPickedAddress(){
-				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
-					if (status == google.maps.GeocoderStatus.OK) {
-						validateAddress(results[0]);
-					} 
-				}); 				
-    		}
-    		
-    		function validateAddress(result){
-					var inPrague = false;
-					var inZone = false;
-					var activeZone = 0;
-					sendOrderButton = $(".sendOrderButton");
-					var i;
-					
-					{foreach $zones as $zone}
-						if(zone{$zone->id} != null && zone{$zone->id}.Contains(result.geometry.location)){
-							inZone = true;
-							var activeZone = {$zone->id};
-						}
-					{/foreach}
-					
-					for (i = 0; i < result.address_components.length; ++i) {
-						if(result.address_components[i].short_name == "Hlavní město Praha"){
-							inPrague = true;
-						}
-					}
-					if(inZone){
-						setMarker(result.geometry.location, $("#searchTextField").val());
-						map.setCenter(result.geometry.location);
-						window.checkAddress = true;
-						enableDisableOrder();
-					}
-					else if(inPrague){
-						$("#searchTextField").val("");
-						unsetMarker();
-						$("#modal-errors ul.list-unstyled").html("<li>"+{_'ADRESA_MIMO_ZONU'}+"</li>");
-						$('#modal-errors').modal('show');
-						window.checkAddress = false;
-						enableDisableOrder();
-					}
-					else{
-						$("#searchTextField").val("");
-						unsetMarker();
-						$("#modal-errors ul.list-unstyled").html("<li>"+{_'ADRESA_MIMO_PRAHU'}+"</li>");
-						$('#modal-errors').modal('show');
-						window.checkAddress = false;
-						enableDisableOrder();
-					}
-					var link = {link setBasketZone!} + "&z=" + activeZone;
-					$.get(link);
-				
-    		}
-    		
-    		function unsetMarker(){
-			  if(typeof  marker !== "undefined"){
-				marker.setMap(null);
-			  }
-			}
-			
-    		function setMarker(latLn, caption){
-			  if(typeof  marker !== "undefined"){
-				marker.setMap(null);
-			  }
-			  marker = new google.maps.Marker({
-				position: latLn,
-				map,
-				title: caption,
-			  });
-			  var link = {link setAddress!} + "&a=" + caption;
-			  $.get(link);
-    		}
-    		
-    		//Draw zones polygons
-    		{foreach $zones as $zone}
-				const zone{$zone->id}Coords = [
-				    {var $points = explode(chr(10), $zone->points)}
-				    {foreach $points as $zonePoint}
-			    		{var $pArray = explode(',', $zonePoint)}
-			    		{var $latC = trim((float)$pArray[1])}
-			    		{var $lngC = trim((float)$pArray[0])}
-			    		{ lat: {$latC|noescape}, lng: {$lngC|noescape} },
-				    {/foreach}
-				];
-
-				{var $color = "#333333"};
-				{if !empty($zone->color)}
-					{php $color = $zone->color}
-				{/if}
-				const zone{$zone->id} = new google.maps.Polygon({
-				    paths: zone{$zone->id}Coords,
-				    strokeColor: {$color},
-				    strokeOpacity: 0.8,
-				    strokeWeight: 2,
-				    fillColor: {$color},
-				    fillOpacity: 0.5,
-				});
-
-				zone{$zone->id}.setMap(map);
-				
-  				zone{$zone->id}.addListener("click", (mapsMouseEvent) => {
-    			  var ll = mapsMouseEvent.latLng;
-    			  geocoder
-    		  		.geocode({ location: ll })
-    		  		.then((response) => {
-    		  			if (response.results[0]) {
-    		  				$("#searchTextField").val(response.results[0].formatted_address);
-							validateAddress(response.results[0]);
-						}else{
-							$("#searchTextField").val("nenalezeno");
-						}
-						
-    		  		});
-    			});
-			
-    		{/foreach}
-    		
-			function enableDisableOrder(){
-				sendOrderButton = $(".sendOrderButton");
-				var orderValid = true;
-				if(window.checkWeight==false) orderValid = false;
-				if(window.checkAddress==false) orderValid = false;
-				var containerCount = $(".oneContainer").length;
-				if(containerCount==0) orderValid = false;
-				if(orderValid){
-					sendOrderButton.removeClass("disabled");
-				}	
-				else{
-					sendOrderButton.addClass("disabled");
-				}	
-			}
-			
-		}
 
 		
 		
     </script>
+    {include '../_parts/mapAndCommonScript.latte', zones=>$zones, check=>true, basket=>"basket"}
 {/block}

@@ -1,0 +1,159 @@
+    {form orderForm}
+    {input type}
+    {input usertype, class=>"userType"}
+    <div class="order-form">
+        <div class="container">
+            <ul class="errors" n:if="$form->hasErrors()">
+				<li n:foreach="$form->errors as $error">{$error}</li>
+			</ul>
+            <nav>
+                <div class="nav nav-tabs" id="nav-order-form" role="tablist">
+                    <button class="nav-link {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}active{/if}" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
+                    <button class="nav-link {if empty($basket->order->usertype)}active{/if}" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabOrderForm">
+                <div class="tab-pane fade {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}show active{/if}" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            {label name/}
+                            {input name}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            {label surname/}
+                            {input surname}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+                            {label email/}
+                            {input email}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+                            {label phone/}
+                            {input phone}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+                            {label note/}
+                            {input note}
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+                                {input different_delivery}
+								{label different_delivery}{/label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="billing-information" style="display: none">
+                        <div class="row">
+                            <div class="form-group col-md-12 arrow delivery-street">
+	                            {label delivery_street/}
+	                            {input delivery_street}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 arrow">
+	                            {label delivery_city/}
+	                            {input delivery_city}
+                            </div>
+                            <div class="form-group col-md-6 arrow">
+	                            {label delivery_zip/}
+	                            {input delivery_zip}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade {if empty($basket->order->usertype)}show active{/if}" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                    <div class="row row-ic">
+                        <div class="form-group col-md-12">
+	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_name/}
+	                        {input bussiness_name}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_surname/}
+	                        {input bussiness_surname}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_email/}
+	                        {input bussiness_email}
+                        </div>
+                        <div class="form-group col-md-6 arrow">
+	                        {label bussiness_phone/}
+	                        {input bussiness_phone}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12 arrow note">
+	                        {label bussiness_note/}
+	                        {input bussiness_note}
+                        </div>
+                    </div>
+                    <div class="row row-firm-name">
+                        <div class="form-group col-md-12 arrow company">
+	                        {label bussiness_company/}
+	                        {input bussiness_company}
+                        </div>
+                    </div>
+                    <div class="row billing-address">
+                        <div class="form-group col-md-12">
+                            <div class="billing-address">
+		                        {input bussiness_different_delivery}
+		                        {label bussiness_different_delivery}{/label}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="business-customer-billing-information" style="display: none">
+                        <div class="row">
+                            <div class="form-group col-md-12 arrow delivery-street">
+		                        {label bussiness_delivery_street/}
+		                        {input bussiness_delivery_street}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 arrow">
+		                        {label bussiness_delivery_city/}
+		                        {input bussiness_delivery_city}
+                            </div>
+                            <div class="form-group col-md-6 arrow">
+		                        {label bussiness_delivery_zip/}
+		                        {input bussiness_delivery_zip}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        Způsob platby
+                        <div class="billing-address">
+		                    {label payment}
+		                    	{input payment}
+		                    {/label}
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-send-order">
+                    <div class="form-group col-md-12 send-order">
+                        <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
+                    </div>
+                </div>
+                
+            </div>
+            <img class="car" src="{$basePath}/img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
+            <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
+        </div>
+        {include '../_parts/footerMenu.latte', class=>''}
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s11.png" alt="Obrázek mozaiky">
+        <div class="rectangle"></div>
+    </div>
+    {/form}

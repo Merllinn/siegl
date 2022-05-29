@@ -1,0 +1,112 @@
+                    <script>
+					$(document).ready(function(){
+						window.checkAddress = false;
+						{if !empty($address)}
+							window.checkAddress = true;
+						{/if}
+						var materialKoef = 1;
+						{if !empty($materials[0]->priceObj)}
+							materialPrice = parseInt({$materials[0]->priceObj->priceFrom|noescape});
+							materialKoef = parseFloat({$materials[0]->priceObj->koef|noescape});
+							$(".materialPrice").html(materialPrice.toLocaleString());
+							$(".material-quantity").val(($(".materialWeight").val()*materialKoef).toFixed(2));
+							$(".amount").show();
+							$(".tons-price").show();
+						{/if}
+			
+					  $('.minus').click(function () {
+					    var $input = $(this).parent().find('input.amountField');
+					    var count = parseFloat($input.val()) - 0.5;
+					    count = count < 1 ? 1 : count;
+					    $input.val(count);
+					    $input.change();
+					    return false;
+					  });
+					  
+					  $('.plus').click(function () {
+					    var $input = $(this).parent().find('input.amountField');
+					    $input.val(parseFloat($input.val()) + 0.5);
+					    $input.change();
+					    return false;
+					  });
+						$(".materialSource").change(function(){
+							var amountBlock = $(this).closest(".amount");
+							var materialKoef = amountBlock.data("koef");
+							var thisVal = parseFloat($(this).val().replace(",", "."));
+							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+							$(this).val(correctedVal);
+							var matWeight = $(this).val();
+							amountBlock.find(".materialTarget").val((matWeight*materialKoef).toFixed(2));
+							var link = amountBlock.data("link") + "&amount=" + matWeight;
+							{if $check==true}
+								checkMaterialAmount();
+							{/if}
+							$.get(link);
+
+						});
+						$(".materialTarget").change(function(){
+							var amountBlock = $(this).closest(".amount");
+							var materialKoef = amountBlock.data("koef");
+							var thisVal = parseFloat($(this).val().replace(",", "."));
+							amountBlock.find(".materialSource").val(thisVal/materialKoef).trigger("change");
+						});
+						{if $check==true}
+							function checkMaterialAmount(){
+							var matWeight = parseFloat($(".materialWeight").val());
+							materialKoef = parseFloat($(".amount").data("koef2"));
+							var matVolume = Math.round(matWeight*materialKoef);
+							var maxWeight = parseInt($(".total-price").data("weight"));
+							var maxVolume = parseInt($(".total-price").data("volume"));
+							//console.log("---------------------");
+							//console.log("matWeight:"+matWeight);
+							//console.log("maxWeight:"+maxWeight);
+							//console.log("matVolume:"+matVolume);
+							//console.log("maxVolume:"+maxVolume);
+							if(matWeight>maxWeight){
+								window.checkWeight = false;
+								enableDisableOrder();
+								var error = "Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.";
+								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+								$('#modal-errors').modal('show');
+								setTimeout(function(){
+									$(".materialWeight").val(maxWeight).trigger("change");
+								}, 500);
+							}
+							else if(matVolume>maxVolume){
+								window.checkWeight = false;
+								enableDisableOrder();
+								var error = "Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.";
+								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+								$('#modal-errors').modal('show');
+								//console.log("+++++++");
+								//console.log("matVolume:"+matVolume);
+								//console.log("materialKoef:"+materialKoef);
+								//console.log("newMatWeight."+matVolume*materialKoef);
+								setTimeout(function(){
+									$(".materialWeight").val(matVolume*materialKoef).trigger("change");
+								}, 500);
+							}
+							else{
+								window.checkWeight = true;
+								enableDisableOrder();
+							}
+						}
+							function enableDisableOrder(){
+							sendOrderButton = $(".sendOrderButton");
+							var orderValid = true;
+							if(window.checkWeight==false) orderValid = false;
+							if(window.checkAddress==false) orderValid = false;
+							var containerCount = $(".oneContainer").length;
+							if(containerCount==0) orderValid = false;
+							if(orderValid){
+								sendOrderButton.removeClass("disabled");
+							}	
+							else{
+								sendOrderButton.addClass("disabled");
+							}	
+						}
+						{/if}
+						
+					  
+					});
+                    </script>

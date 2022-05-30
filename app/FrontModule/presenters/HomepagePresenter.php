@@ -473,8 +473,10 @@ final class HomepagePresenter extends HomepageForms
 				$_GET["a1"] = $category->attVal;
 			}
 	    }
+    	
+    	$allowedAttrs = array();
+    	$containersFilter = $this->productManager->getByType(1);
 	    if(!empty($_GET["a1"])){
-    		$containersFilter = $this->productManager->getByType(1);
 			$containersFilter->where("id IN (SELECT product FROM product_prices WHERE attributeValue=".$_GET["a1"]." AND priceFrom>0)");
     		$allowedWeights = array();
     		$allowedVolumes = array();
@@ -493,12 +495,29 @@ final class HomepagePresenter extends HomepageForms
 					}
 				}
 			}
-			$allowedAttrs = array(
-				"2" => $allowedVolumes,
-				"3" => $allowedWeights,
-			);
-			$this->template->allowedAttrs = $allowedAttrs;
+			$allowedAttrs["2"] = $allowedVolumes;
+			$allowedAttrs["3"] = $allowedWeights;
 	    }
+	    if(!empty($_GET["a2"])){
+			$attrPair = "2-".$_GET["a2"];
+			$containersFilter->where("attributes LIKE '%".$attrPair."%'");
+    		$allowedWeights = array();
+			foreach($containersFilter as $cont){
+				$attrs = $cont->attributes;
+				$attrsArr = explode("|", $attrs);
+				foreach($attrsArr as $attrPair){
+					$attrPairArr = explode("-", $attrPair);
+					$attrId = $attrPairArr[0];
+					$attrVal = $attrPairArr[1];
+					if($attrId==3){
+						$allowedWeights[] = $attrVal;
+					}
+				}
+			}
+			$allowedAttrs["3"] = $allowedWeights;
+	    }
+		$this->template->allowedAttrs = $allowedAttrs;
+	    
 	    if(!empty($_GET["a2"]) && array_search($_GET["a2"], $allowedVolumes)===false){
 			unset($_GET["a2"]);
 	    }

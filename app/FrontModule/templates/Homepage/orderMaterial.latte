@@ -443,6 +443,7 @@
 			        {if $basket->materialTons>12}
 						$("#modal-errors ul.list-unstyled").html("<li>"+{_'TEXT_PREKROCENA_VAHA'}+"</li>");
 						$('#modal-errors').modal('show');
+						$(".materialWeight").val(12).trigger("change");
 			        {/if}
 				});
 	        </script>

@@ -33,7 +33,8 @@
 							var amountBlock = $(this).closest(".amount");
 							var materialKoef = amountBlock.data("koef");
 							var thisVal = parseFloat($(this).val().replace(",", "."));
-							var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+							//var correctedVal = (Math.round(thisVal * 2) / 2).toFixed(1);
+							var correctedVal = thisVal.toFixed(1);
 							$(this).val(correctedVal);
 							var matWeight = $(this).val();
 							amountBlock.find(".materialTarget").val((matWeight*materialKoef).toFixed(2));

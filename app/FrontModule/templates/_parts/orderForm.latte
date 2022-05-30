@@ -8,13 +8,14 @@
 			</ul>
             <nav>
                 <div class="nav nav-tabs" id="nav-order-form" role="tablist">
-                    <button class="nav-link {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}active{/if}" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true">Fyzická osoba</button>
-                    <button class="nav-link {if empty($basket->order->usertype)}active{/if}" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false">Firemní zákazník</button>
+                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true"><input class="form-check-input" type="radio" name="orderForm" id="orderFyzickaOsoba"><label class="form-check-label" for="orderFyzickaOsoba">Fyzická osoba</label></button>
+                    <button class="nav-link" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false"><input class="form-check-input" type="radio" name="orderForm" id="orderFiremniZakaznik"><label class="form-check-label" for="orderFiremniZakaznik">Firemní zákazník</label></button>
                 </div>
             </nav>
+            <p class="select-type">Pro dokončení objednávky vyberte, jestli jste fyzická osoba nebo firemní zákazník</p>
             <div class="tab-content" id="nav-tabOrderForm">
-                <div class="tab-pane fade {if !empty($basket->order->usertype) && $basket->order->usertype=="1"}show active{/if}" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
-                    <div class="row">
+                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                    <div class="row g-0">
                         <div class="form-group col-md-6 arrow">
                             {label name/}
                             {input name}
@@ -24,7 +25,7 @@
                             {input surname}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row g-0">
                         <div class="form-group col-md-6 arrow">
                             {label email/}
                             {input email}
@@ -34,13 +35,13 @@
                             {input phone}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row g-0">
                         <div class="form-group col-md-12 arrow note">
                             {label note/}
                             {input note}
                         </div>
                     </div>
-                    <div class="row billing-address">
+                    <div class="row g-0 billing-address">
                         <div class="form-group col-md-12">
                             <div class="billing-address">
                                 {input different_delivery}
@@ -49,13 +50,13 @@
                         </div>
                     </div>
                     <div id="billing-information" style="display: none">
-                        <div class="row">
+                        <div class="row g-0">
                             <div class="form-group col-md-12 arrow delivery-street">
 	                            {label delivery_street/}
 	                            {input delivery_street}
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row g-0">
                             <div class="form-group col-md-6 arrow">
 	                            {label delivery_city/}
 	                            {input delivery_city}
@@ -67,13 +68,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade {if empty($basket->order->usertype)}show active{/if}" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
-                    <div class="row row-ic">
+                <div class="tab-pane fade" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                    <div class="row g-0 row-ic">
                         <div class="form-group col-md-12">
 	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row g-0">
                         <div class="form-group col-md-6 arrow">
 	                        {label bussiness_name/}
 	                        {input bussiness_name}
@@ -83,7 +84,7 @@
 	                        {input bussiness_surname}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row g-0">
                         <div class="form-group col-md-6 arrow">
 	                        {label bussiness_email/}
 	                        {input bussiness_email}
@@ -93,19 +94,19 @@
 	                        {input bussiness_phone}
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row g-0">
                         <div class="form-group col-md-12 arrow note">
 	                        {label bussiness_note/}
 	                        {input bussiness_note}
                         </div>
                     </div>
-                    <div class="row row-firm-name">
+                    <div class="row g-0 row-firm-name">
                         <div class="form-group col-md-12 arrow company">
 	                        {label bussiness_company/}
 	                        {input bussiness_company}
                         </div>
                     </div>
-                    <div class="row billing-address">
+                    <div class="row g-0 billing-address">
                         <div class="form-group col-md-12">
                             <div class="billing-address">
 		                        {input bussiness_different_delivery}
@@ -114,13 +115,13 @@
                         </div>
                     </div>
                     <div id="business-customer-billing-information" style="display: none">
-                        <div class="row">
+                        <div class="row g-0">
                             <div class="form-group col-md-12 arrow delivery-street">
 		                        {label bussiness_delivery_street/}
 		                        {input bussiness_delivery_street}
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row g-0">
                             <div class="form-group col-md-6 arrow">
 		                        {label bussiness_delivery_city/}
 		                        {input bussiness_delivery_city}
@@ -132,9 +133,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row g-0 row-payment">
                     <div class="form-group col-md-12">
-                        Způsob platby
+                        <span>Způsob platby</span>
                         <div class="billing-address">
 		                    {label payment}
 		                    	{input payment}
@@ -142,12 +143,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row row-send-order">
+                <div class="row g-0 row-send-order">
                     <div class="form-group col-md-12 send-order">
                         <button class="sendOrderButton btn btn-primary btn-arrow btn-white">Odeslat objednávku <i class="fa-solid fa-angles-right"></i></button>
                     </div>
                 </div>
-                
             </div>
             <img class="car" src="{$basePath}/img/car.png" alt="Obrázek auta" data-aos="fade-in" data-aos-delay="350">
             <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">

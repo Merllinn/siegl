@@ -608,7 +608,7 @@ p.section-description {
   }
 
   .btn-arrow::before {
-    height: 46px;
+    height: 40px;
   }
 
   .btn-arrow::before,
@@ -619,6 +619,10 @@ p.section-description {
   .btn-arrow:after {
     width: 40px; height: 40px;
     right: -40px;
+  }
+
+  .btn-primary {
+    font-size: 1rem;
   }
 
   .btn-arrow.btn-back::before {
@@ -3281,7 +3285,8 @@ label.select {
             li.turbokontejner .form-check-input[type=checkbox]:checked::after,
             li.vat .form-check-input[type=checkbox]:checked::after,
             .modal-content [type=checkbox]:checked::after,
-            .billing-address [type=checkbox]:checked::after {
+            .billing-address [type=checkbox]:checked::after,
+            div.order-form .nav-tabs .form-check-input:checked[type=radio]::after {
               font-family: "Font Awesome 6 Free";
               font-weight: 600;
               color: #424242;
@@ -3294,12 +3299,21 @@ label.select {
             -webkit-text-stroke-color: #424242;
             }
 
-              .modal-content [type=checkbox]:checked::after {
-                font-size: 1.125rem;
-                top: 3px; right: 4px;
+              div.order-form .nav-tabs .form-check-input[type=radio] {
+                border-radius: 0;
               }
 
-              .billing-address [type=checkbox]:checked::after {
+              div.order-form .nav-tabs .form-check-input:checked[type=radio]:checked {
+                background-image: none;
+              }
+
+                .modal-content [type=checkbox]:checked::after {
+                  font-size: 1.125rem;
+                  top: 3px; right: 4px;
+                }
+
+              .billing-address [type=checkbox]:checked::after,
+              div.order-form .nav-tabs .form-check-input:checked[type=radio]::after {
                 font-size: .675rem;
                 top: 1px; right: 3.5px;
               }
@@ -3748,14 +3762,29 @@ section.waste img.mosaic {
 
 }
 
-@media (max-width: 480px) {
+@media (max-width: 690px) {
 
-  section.top.containers li.vat {
-    display: block;
+  div.roughness .btn-arrow {
+    line-height: 40px;
+    height: 40px;
   }
 
-  section.top.containers li.druh-odpadu {
-    display: none;
+}
+
+@media (max-width: 690px) {
+
+  div.roughness .btn-arrow {
+    line-height: 40px;
+    height: 40px;
+  }
+
+}
+
+@media (max-width: 525px) {
+
+  div.roughness .btn-arrow {
+    line-height: 37px;
+    height: 37px;
   }
 
 }
@@ -4788,7 +4817,16 @@ div.street {
         right: 14px;
       }
 
-    div.street::before {
+    body.demand div.term li {
+      position: relative;
+    }
+
+      body.demand div.term li label {
+        margin-left: 15px;
+      }
+
+    div.street::before,
+    body.demand div.term li::before {
       content: "";
       position: absolute;
       left: 203px;
@@ -4797,6 +4835,10 @@ div.street {
       background-size: cover;
       background-repeat: no-repeat;
     }
+
+      body.demand div.term li::before {
+        left: 31px;
+      }
 
 div.street input.form-control::placeholder {
   font-size: 1.125rem;
@@ -5245,6 +5287,15 @@ div.amount {
     border-radius: 0;
   }
 
+    input.materialTarget {
+      max-width: 100px;
+      padding: 0;
+    }
+
+    div.material-amount input.form-control {
+      background-color: #f2f2f2;
+    }
+
   div.amount span {
     cursor: pointer;
   }
@@ -5314,6 +5365,7 @@ div.amount {
 
   span.material-quantity {
     text-transform: lowercase;
+    margin-right: 10px;
     margin-left: 5px;
     cursor: text !important;
   }
@@ -5373,12 +5425,16 @@ div.order-form {
   background-color: #424242;
   padding-top: 84px;
   position: relative;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
   body.demand div.order-form {
     margin-top: -130px;
     padding-top: 315px;
+  }
+
+  div.order-form ul.errors {
+    margin: 0;
   }
 
   div.order-form nav {
@@ -5409,16 +5465,32 @@ div.order-form {
       background-color: #FFF;
       border: 0;
       border-radius: 0;
-      text-transform: uppercase;
+      padding: 0;
       padding-right: 1.25rem;
       padding-left: 1.25rem;
-      height: 46px;
-      font-weight: 600;
+      text-transform: uppercase;
       letter-spacing: .5px;
       color: #424242;
       position: relative;
       transition: none;
     }
+
+      div.order-form .nav-tabs .nav-link:nth-child(2) {
+        border-left: 1px solid #dfdfdf;
+      }
+
+      div.order-form .nav-tabs .nav-link label {
+        color: #424242;
+        font-weight: 600;
+        height: 46px;
+        padding-top: 9px;
+        padding-left: 10px;
+      }
+
+        div.order-form .nav-tabs .nav-link.active label,
+        div.order-form .nav-tabs .nav-link:hover label {
+          color: #FFF;
+        }
 
       div.order-form .nav-tabs .nav-link:first-child::before {
         content: "";
@@ -5442,6 +5514,21 @@ div.order-form {
         background-color: #d71921;
       }
 
+      div.order-form .nav-tabs .form-check-input[type=radio] {
+        position: absolute;
+        top: 9px; left: 0;
+        width: 18px; height: 18px;
+        border: 0;
+        position: relative;
+        border: 1px solid #bfbfbf;
+        cursor: pointer;
+      }
+
+      div.order-form .nav-tabs .form-check-input:checked {
+        background-color: #FFF;
+        border-color: #FFF;
+      }
+
   div.order-form .tab-content {
     max-width: 880px; width: 100%;
     margin: 0 auto;
@@ -5453,6 +5540,21 @@ div.order-form {
     margin-top: 40px;
     margin-left: -70px;
   }
+
+    div.order-form .row-payment {
+      margin-top: 40px;
+    }
+
+      div.order-form .row-payment span {
+        font-size: 1.125rem;
+        color: #FFF;
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+
+        div.order-form .row-payment .billing-address {
+          margin-top: 20px;
+        }
 
     div.order-form .row-ic,
     div.order-form .row-send-order {
@@ -5510,7 +5612,7 @@ div.order-form {
           content: "";
           width: 8px; height: 114px;
           position: absolute;
-          left: 124px; top: 46px;
+          left: 112px; top: 46px;
           background-color: #FFF;
         }
 
@@ -5562,6 +5664,13 @@ div.order-form {
 
     div.order-form .arrow.company input.form-control {
       width: calc(100% - 141px);
+    }
+
+    div.order-form p.select-type {
+      margin: 20px 0 0 0;
+      text-align: center;
+      font-weight: 600;
+      color: #FFF;
     }
 
 div.row.billing-address {
@@ -5809,6 +5918,14 @@ li.date-to label {
 
 }
 
+@media (max-width: 1050px) {
+
+  div.order-form {
+    padding-left: 50px;
+  }
+
+}
+
 @media (max-width: 1014px) {
 
   li.remove-container {
@@ -5823,14 +5940,116 @@ li.date-to label {
 
 }
 
+@media (max-width: 991px) {
+
+  div.amount {
+    font-size: 1.125rem;
+  }
+
+  div.filter li.remove-container::after {
+    left: 33px;
+  }
+
+  .minus::before,
+  .plus::before {
+    line-height: 2.7;
+  }
+
+}
+
 @media (max-width: 767px) {
 
   section.order h2 {
     font-size: 1.5rem;
   }
 
-  p.desc {
+  p.desc,
+  div.tons-price {
     font-size: 1.125rem;
+  }
+
+  div.tons-price::before {
+    margin: 20px auto;
+  }
+
+  div.amount label {
+    display: block;
+    margin: 0 auto 15px auto;
+  }
+
+  div.order-form {
+    padding-left: 0;
+  }
+
+    div.order-form nav {
+      font-size: 1rem;
+    }
+
+  div.order-form .row {
+    margin-top: 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  div.order-form .form-group {
+    margin-top: 10px;
+  }
+
+  div.total-price span.total,
+  div.total-price strong.price {
+    font-size: 1.5rem;
+  }
+
+}
+
+@media (max-width: 690px) {
+
+  .btn-add-material {
+    font-size: 1rem;
+    padding: 9px 27px 7px 27px;
+  }
+
+}
+
+@media (max-width: 685px) {
+
+  div.order-form .row {
+    margin-left: auto;
+  }
+
+  div.order-form .arrow label,
+  .row-ic label {
+    display: block;
+    width: auto;
+    margin-right: 0;
+    padding-top: 0;
+    padding-bottom: 5px;
+    text-align: left;
+    font-size: 1rem;
+  }
+
+  div.order-form .arrow label::after,
+  .row-ic label::after {
+    content: none;
+  }
+
+  div.order-form .arrow input.form-control,
+  div.order-form textarea.form-control,
+  div.order-form .arrow.delivery-street input.form-control {
+    width: 100%;
+  }
+
+  div.row div.billing-address {
+    padding-left: 0;
+  }
+
+}
+
+@media (max-width: 645px) {
+
+  div.total-price li.weekend strong,
+  div.total-price li.beton strong {
+    display: block;
   }
 
 }
@@ -5874,10 +6093,119 @@ li.date-to label {
 
 }
 
+@media (max-width: 580px) {
+
+  div.total-price span.with-vat {
+    font-size: 1.25rem;
+    margin-left: 0;
+    display: block;
+  }
+
+}
+
+@media (max-width: 525px) {
+
+  .btn-add-material {
+    padding-top: 7px;
+    padding-bottom: 6px;
+  }
+
+  div.order-form label {
+    font-size: 1rem;
+  }
+
+  div.order-form .nav-tabs .nav-link label {
+    padding-top: 10px;
+  }
+
+}
+
+@media (max-width: 645px) {
+
+  div.total-price li.weekend strong,
+  div.total-price li.beton strong {
+    display: inline-block;
+  }
+
+}
+
+@media (max-width: 505px) {
+
+  div.order-form div.nav-tabs {
+    justify-content: center;
+  }
+
+    div.order-form div.nav-tabs::before {
+      display: block;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+      padding-top: 0;
+      margin-bottom: 10px;
+    }
+
+    div.order-form .nav-tabs .nav-link:first-child::before {
+      content: none;
+    }
+
+}
+
+@media (max-width: 439px) {
+
+  div.order-form .nav-tabs .nav-link:nth-child(2) {
+    border: 0;
+  }
+
+  div.order-form .nav-tabs .nav-link:first-child {
+    margin-bottom: 5px;
+  }
+
+  div.order-form .arrow label,
+  .row-ic label {
+    font-size: .875rem;
+  }
+
+}
+
+@media (max-width: 435px) {
+
+  div.total-price ul {
+    font-size: 1rem;
+  }
+
+  div.total-price li strong {
+    display: block;
+    margin-left: 0;
+  }
+
+  div.total-price ul:not(:first-child),
+  div.total-price ul.summary  {
+    margin-bottom: 20px;
+  }
+
+  div.total-price ul li:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  div.total-price span.total {
+    display: block;
+    margin-right: 0;
+  }
+
+}
+
 @media (max-width: 415px) {
 
   li.remove-container {
     padding-left: 23px;
+  }
+
+  div.total-price {
+    padding: 20px 15px;
+  }
+
+  div.order-form {
+    padding-top: 20px;
   }
 
 }

@@ -663,8 +663,9 @@ final class HomepagePresenter extends HomepageForms
         //SYSTEM
         $form ->addHidden("type");
         $form ->addHidden("usertype")->setDefaultValue(0);
-        $form ->addCheckbox("payment", "hotově řidiči při přistavení kontejneru")
+        $form ->addCheckbox("payment", "Hotově řidiči při přistavení kontejneru")
         	->addRule($form::FILLED, "Je nutné potvrdit způsob platby");
+        $form["payment"]->getControlPrototype()->class("form-check-input");
         
         //PERSONAL
         $form ->addText("name", "Jméno")

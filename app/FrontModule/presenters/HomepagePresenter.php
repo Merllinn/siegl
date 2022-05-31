@@ -267,6 +267,10 @@ final class HomepagePresenter extends HomepageForms
     public function handleSetBasketVal($index, $name, $basket="basket", $val){
 		$items = $this->$basket->containers;
 		$items[$index]->$name = $val;
+		if($name=="product"){
+			unset($items[$index]->term);
+			unset($items[$index]->time);
+		}
 		if($name=="term"){
 			unset($items[$index]->time);
 		}

@@ -8,13 +8,13 @@
 			</ul>
             <nav>
                 <div class="nav nav-tabs" id="nav-order-form" role="tablist">
-                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true"><input class="form-check-input" type="radio" name="orderForm" id="orderFyzickaOsoba"><label class="form-check-label" for="orderFyzickaOsoba">Fyzická osoba</label></button>
-                    <button class="nav-link" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false"><input class="form-check-input" type="radio" name="orderForm" id="orderFiremniZakaznik"><label class="form-check-label" for="orderFiremniZakaznik">Firemní zákazník</label></button>
+                    <button class="nav-link" id="nav-individual-tab" data-bs-toggle="tab" data-bs-target="#nav-individual" type="button" role="tab" aria-controls="nav-individual" aria-selected="true"><input data-link="{link setOrderVal!, "userType", $basketType, 1}" class="form-check-input orderTypePick" type="radio" name="orderForm" id="orderFyzickaOsoba" value="1" {if !empty($basket->userType) && $basket->userType==1}checked{/if}><label class="form-check-label" for="orderFyzickaOsoba">Fyzická osoba</label></button>
+                    <button class="nav-link" id="nav-business-customer-tab" data-bs-toggle="tab" data-bs-target="#nav-business-customer" type="button" role="tab" aria-controls="nav-business-customer" aria-selected="false"><input data-link="{link setOrderVal!, "userType", $basketType, 2}" class="form-check-input orderTypePick" type="radio" name="orderForm" id="orderFiremniZakaznik" value="2" {if !empty($basket->userType) && $basket->userType==2}checked{/if}><label class="form-check-label" for="orderFiremniZakaznik">Firemní zákazník</label></button>
                 </div>
             </nav>
-            <p class="select-type">Pro dokončení objednávky vyberte, jestli jste fyzická osoba nebo firemní zákazník</p>
+            <p class="select-type noUserType" n:if="empty($basket->userType)">Pro dokončení objednávky vyberte, jestli jste fyzická osoba nebo firemní zákazník</p>
             <div class="tab-content" id="nav-tabOrderForm">
-                <div class="tab-pane fade" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
+                <div class="tab-pane fade userType1" id="nav-individual" role="tabpanel" aria-labelledby="nav-individual-tab">
                     <div class="row g-0">
                         <div class="form-group col-md-6 arrow">
                             {label name/}
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
+                <div class="tab-pane fade userType2" id="nav-business-customer" role="tabpanel" aria-labelledby="nav-business-customer-tab">
                     <div class="row g-0 row-ic">
                         <div class="form-group col-md-12">
 	                        {label ic/}{input ic}<button class="btn btn-primary loadAres">Načíst údaje</button>
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="business-customer-billing-information" style="display: none">
+                    <div id="business-customer-billing-information" style="display: none;">
                         <div class="row g-0">
                             <div class="form-group col-md-12 arrow delivery-street">
 		                        {label bussiness_delivery_street/}
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row g-0 row-payment">
+                <div class="row g-0 row-payment" style="display:none;">
                     <div class="form-group col-md-12">
                         <span>Způsob platby</span>
                         <div class="billing-address">

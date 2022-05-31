@@ -17,13 +17,6 @@ $(document).ready(function() {
         triggerOnce: true
   });
   
-	$("#nav-individual-tab").click(function(){
-		$("input.userType").val("1");
-	});
-	$("#nav-business-customer-tab").click(function(){
-		$("input.userType").val("0");
-	});
-  
 
   // Parallax background
   var scrolled = $(window).scrollTop()
@@ -154,5 +147,32 @@ $(document).ready(function() {
   $("button#close-menu").click(function(){
     $("div.mobile-navigation-open").fadeOut("fast", "linear");
   });
+  
+  function resolveOrderType(){
+	  var orderType = $(".orderTypePick:checked").val();
+	  if(orderType==1){
+		$("input.userType").val("1");
+		$(".row-payment").fadeIn();
+		$(".noUserType").fadeOut();
+		var link = $(".orderTypePick:checked").data("link");
+		$(".orderTypePick:checked").parent("button").trigger("click");
+		$.get(link);
+	  }
+	  else if(orderType==2){
+		$("input.userType").val("0");
+		$(".row-payment").fadeIn();
+		$(".noUserType").fadeOut();
+		var link = $(".orderTypePick:checked").data("link");
+		$(".orderTypePick:checked").parent("button").trigger("click");
+		$.get(link);
+	  }
+  }
+  
+  if($(".orderTypePick").length > 0){
+  	resolveOrderType();
+  	$(".orderTypePick").change(function(){
+		resolveOrderType();
+  	});
+  }
 
 });

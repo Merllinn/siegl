@@ -238,6 +238,7 @@ final class OrderManager
 		$order = $ses->order;
 		$order->date = new \Nette\Utils\DateTime();
 		$order->street = $ses->address;
+		$order->location = $ses->location;
         //resolve company
         $mapArray = array(
         	"bussiness_name" => "name",

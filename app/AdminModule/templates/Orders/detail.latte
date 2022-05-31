@@ -8,7 +8,9 @@
         <div class="row">
             <div class="col col-6">
 				<h4>Místo přistavení</h4>
-				<p>{$order->street}</p>
+				<p>{$order->street} | 
+				<a class="link" href="https://www.google.com/maps/place/{$order->location}" target="_blank">Zobrazit na mapě</a>
+				</p>
 				
 				<h4>Údaje o {if !empty($order->ic)}firemním {/if}zákazníkovi</h4>
 			    <table class="table table-striped">

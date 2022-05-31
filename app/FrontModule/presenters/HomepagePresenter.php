@@ -230,8 +230,9 @@ final class HomepagePresenter extends HomepageForms
 		$this->redrawControl("orderContainers");
 		//$this->redirect("this");
 	}
-	public function handleSetAddress($basket="basket", $a){
+	public function handleSetAddress($basket="basket", $a, $ll){
 		$this->$basket->address = $a;
+		$this->$basket->location = $ll;
 		$this->redrawControl("deliveryTerm");
 		$this->recalculateBasket($basket);
 		//$this->redirect("this");

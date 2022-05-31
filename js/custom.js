@@ -155,7 +155,7 @@ $(document).ready(function() {
 		$(".row-payment").fadeIn();
 		$(".noUserType").fadeOut();
 		var link = $(".orderTypePick:checked").data("link");
-		$(".orderTypePick:checked").parent("button").trigger("click");
+		//$(".orderTypePick:checked").parent("button").trigger("change");
 		$.get(link);
 	  }
 	  else if(orderType==2){
@@ -163,16 +163,16 @@ $(document).ready(function() {
 		$(".row-payment").fadeIn();
 		$(".noUserType").fadeOut();
 		var link = $(".orderTypePick:checked").data("link");
-		$(".orderTypePick:checked").parent("button").trigger("click");
+		//$(".orderTypePick:checked").parent("button").trigger("change");
 		$.get(link);
 	  }
   }
   
   if($(".orderTypePick").length > 0){
   	resolveOrderType();
-  	$(".orderTypePick").change(function(){
-		resolveOrderType();
-  	});
   }
+	$(".orderTypePick").change(function(){
+		resolveOrderType();
+	});
 
 });

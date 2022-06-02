@@ -13,10 +13,8 @@
 	        </p>
 	        <h2>Lokalita stavby</h2>
             <form class="orderform">
-                <div class="input-group street">
-                    <label for="searchTextField" class="form-label">Zadejte ulici</label>
-                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
-                    <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
+                <div class="input-address street">
+                    <label for="searchTextField" class="form-label">Zadejte ulici</label><input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}><button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
                 <p class="warning-street">Nezapomeňte vyplnit ulici včetně čísla popisného</p>
             </form>
@@ -35,7 +33,7 @@
 	    <div class="container">
 	        <h1 class="title underline">Rozsah zakázky</h1>
 	        <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
-	        <div class="filter">
+	        <div class="filter containers-filter">
 	            {snippet orderContainers}
 	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 	                	<h3 class="title small-title underline">Popište rozsah zakázky</h3>
@@ -219,19 +217,9 @@
 	                            <div class="amount" data-koef="{if $mat->id==$settings->betonProduct}{1/$price->koef}{else}{$price->koef}{/if}" data-koef2="{$price->koef}" data-link="{link setMaterialAmountD! $mat->id, $price->id}" style="{if empty($materials[$mat->id][$price->id])}display: none;{/if}">
 				                    <label for="amount">Množství materiálu</label>
 				                    	{if $mat->id==$settings->betonProduct}
-				                    		<div class="number">
-				                    			<span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span>
-				                    		</div> 
-				                    		<span class="material-quantity">m<sup>3</sup> =</span>
-				                    		<input class="form-control material-quantity materialTarget" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount*$price->koef|number:2}{else}{=1*$price->koef}{/if}" readonly> 
-				                    		<span class="tons">tun</span>
+				                    		<div class="number-mobile beton"><div class="number"><span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span></div> <span class="material-quantity">m<sup>3</sup> =</span></div><div class="quantity-mobile beton"><input class="form-control material-quantity materialTarget" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount*$price->koef|number:2}{else}{=1*$price->koef}{/if}" readonly> <span class="tons">tun</span></div>
 				                    	{else}
-				                    		<div class="number">
-				                    			<span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span>
-				                    		</div> 
-				                    		<span class="tons">tun =</span>
-				                    		<input class="form-control material-quantity materialTarget" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount/$price->koef|number:2}{else}{=1/$price->koef}{/if}"> 
-				                    		<span class="material-quantity">m<sup>3</sup></span>
+				                    		<div class="number-mobile"><div class="number"><span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span></div> <span class="tons">tun =</span></div><div class="quantity-mobile"><input class="form-control material-quantity materialTarget" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount/$price->koef|number:2}{else}{=1/$price->koef}{/if}"> <span class="material-quantity">m<sup>3</sup></span></div>
 				                    	{/if}
 				                </div>
                             </li>

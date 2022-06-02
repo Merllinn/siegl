@@ -13,10 +13,8 @@
 	        </p>
 	        <h2>Lokalita stavby</h2>
             <form class="orderform">
-                <div class="input-group street">
-                    <label for="searchTextField" class="form-label">Zadejte ulici</label>
-                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
-                    <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
+                <div class="input-address street">
+                    <label for="searchTextField" class="form-label">Zadejte ulici</label><input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}><button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
                 </div>
                 <p class="warning-street">Nezapomeňte vyplnit ulici včetně čísla popisného</p>
             </form>
@@ -107,7 +105,7 @@
 	    <div class="container">
 	        <h1 class="title underline">Rozsah zakázky</h1>
 	        <p class="desc">Jaký odpad a v jakém množství potřebujete zlikvidovat?</p>
-	        <div class="filter">
+	        <div class="filter containers-filter">
 	            {snippet orderContainers}
 	                <div class="describe" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 	                	<h3 class="title small-title underline">Popište rozsah zakázky</h3>

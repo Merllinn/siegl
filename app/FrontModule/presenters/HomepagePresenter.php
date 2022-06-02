@@ -38,6 +38,16 @@ final class HomepagePresenter extends HomepageForms
     public function renderOrder(){
 		$this->template->basket = $this->basket;
 		$this->template->address = $this->basket->address;
+
+		$containers = $this->basket->containers;
+		if(count($containers)==0){
+			$container = new \Nette\Utils\ArrayHash();
+			$container->amount = 1;
+			$containers[] = $container;
+			$this->basket->containers = $containers;
+			$this->recalculateBasket("basket");
+		}
+
 		$this->template->containers = $this->basket->containers;
 		$this->template->materials = $this->basket->materials;
 		$this->template->attVals = $this->attributeManager->getAllValues();
@@ -917,6 +927,43 @@ final class HomepagePresenter extends HomepageForms
         $form->onSuccess[] = [$this, 'createOrder'];
 
         return $form;
+    }
+    
+    public function handleAddToOrderC($c, $p=null){
+		$item = new \Nette\Utils\ArrayHash();
+		$item->product = $c;
+		if(!empty($p)){
+			$price = $this->productManager->findPrice($p);
+			$item->type = $price->attributeValue;
+			$item->price = $this->rowToArray($price);
+		}
+		$items[] = $item;
+	    $this->basket->containers = $items;
+        
+		$this->recalculateBasket();
+
+        $containerOrderPage = $this->pageManager->findByLayout(11);
+        $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);
+		
+    }
+
+    public function handleAddToOrderM($c, $p=null){
+		$material = new \Nette\Utils\ArrayHash();
+		$material->product = $c;
+		if(!empty($p)){
+			$price = $this->productManager->findPrice($p);
+			$material->price = $p;
+			$material->amount = 1;
+			$material->priceObj = $this->rowToArray($price);
+		}
+		$items[] = $material;
+	    $this->basketM->materials = $items;
+        
+		$this->recalculateBasket();
+
+        $containerOrderPage = $this->pageManager->findByLayout(15);
+        $this->redirect(":Front:Homepage:page", $containerOrderPage->alias);
+		
     }
 
 

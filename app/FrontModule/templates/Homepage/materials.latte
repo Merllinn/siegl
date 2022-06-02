@@ -61,6 +61,7 @@
                             <div class="accordion-item" n:foreach="$prices as $price">
                                 <div class="accordion-header" id="container-{$price->id}">
                                     <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
+                                        <input class="variantRadio" type="radio" name="variant" value="{$price->id}" />
                                         <em>{$attVals[$price->attributeValue]->name}</em>
                                         {if $price->type==1}
                                         	<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
@@ -82,7 +83,7 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH  za 1 tunu</span>
-                        <button type="button" class="btn btn-primary btn-arrow btn-red" data-bs-toggle="modal" data-bs-target="#container-{$container->alias}Modal" title="Vybrat a objednat kontejner">Vybrat materiál <i class="fa-solid fa-angles-right"></i></button>
+                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$container->alias}Modal"*} title="Vybrat a objednat kontejner">Vybrat materiál <i class="fa-solid fa-angles-right"></i></button>
                     </div>
                     <!-- ./col container -->
                 </div>
@@ -117,7 +118,7 @@
 {/block}
 
 {block modals}
-     <div n:foreach="$containers as $container" class="modal" id="container-{$container->alias}Modal" tabindex="-1" aria-labelledby="container-3m3-3tunyLabel" aria-hidden="true">
+     <div n:foreach="$containers as $container" class="modal" id="container-{$container->alias}Modal" tabindex="-1" aria-labelledby="container-3m3-3tunyLabel" aria-hidden="true" n:if="false">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
             	{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
@@ -193,61 +194,23 @@
 {block scripts}
     <script>
     	$(document).ready(function(){
-			$(".modal .form-check-input").on("change", function(){
-				$(".modal .form-check-input").prop('checked', false);
-				$(this).prop('checked', true);
-				synchButtons();
+			$(".accordion-button").click(function(){
+				$(this).find(".variantRadio").prop("checked", true);
 			});
-			
-			$(".includeRow").on("click", function(e){
+			$(".variantRadio").click(function(){
+				$(this).closest(".accordion-button").trigger("click");
+			});
+			$(".orderContainer").click(function(e){
 				e.preventDefault();
-				$(".modal .form-check-input").prop('checked', false);
-				$(this).closest("tr").find(".form-check-input").prop('checked', true);
-				synchButtons();
-			});
-			$(".cancelRow").on("click", function(e){
-				e.preventDefault();
-				$(this).closest("tr").find(".form-check-input").prop('checked', false);
-				synchButtons();
-			});
-			
-			synchButtons();
-    	});
-    	
-    	function synchButtons(){
-			var disabled = true;
-			$(".modal .form-check-input").each(function(){
-				var checked = $(this).is(':checked');
-				var row = $(this).closest("tr");
-				if(checked){
-					row.find(".cancelRow").show();
-					row.find(".includeRow").hide();
-					disabled = false;
-				}
-				else{
-					row.find(".cancelRow").hide();
-					row.find(".includeRow").show();
-				}
-			});
-			if(disabled){
-				$(".orderButton").addClass("disabled");
-			}
-			else{
-				$(".orderButton").removeClass("disabled");
-			}
-			
-			$(".formFieldVat").change(function(e){
-				e.preventDefault();
-				var checked = $(this).prop("checked");
-				if(checked){
-					var link = $(this).data("on");
-				}
-				else{
-					var link = $(this).data("off");
+				var link = {link addToOrderM!};
+				link = link + "&c="+$(this).data("id");
+				var checkedRadio = $(this).closest(".col-container").find(".variantRadio:checked");
+				if(checkedRadio.length > 0){
+					link = link + "&p="+checkedRadio.val();
 				}
 				$.get(link);
 			});
-			
-    	}
+    	});
+   	
     </script>
 {/block}

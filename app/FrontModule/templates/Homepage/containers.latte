@@ -46,7 +46,7 @@
                         <li class="list-inline-item vat">
                             <div class="form-check">
                             	<label class="form-check-label" for="sDPH">
-                            		S DPH
+                            		Ceny s DPH
                             	</label>
                             	<input class="form-check-input formFieldVat" type="checkbox" data-on="{link setVat! true}" data-off="{link setVat! false}" name="dph" id="sDPH"{if $vat->isWith}checked{/if}>
                             </div>
@@ -132,7 +132,7 @@
                             <div class="accordion-item" n:foreach="$prices as $price">
                                 <div class="accordion-header" id="container-{$price->id}">
                                     <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
-                                        <input class="variantRadio" type="radio" name="variant" value="{$price->id}" />
+                                        <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
                                         <em>{$attVals[$price->attributeValue]->name}</em>
                                         {if $price->type==1}
                                         	<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
@@ -154,7 +154,7 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
-                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$container->alias}Modal"*} title="Vybrat a objednat kontejner">Vybrat kontejner <i class="fa-solid fa-angles-right"></i></button>
+                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$container->alias}Modal"*} title="Objednat vybraný kontejner">Objednat online <i class="fa-solid fa-angles-right"></i></button>
                         <a class="container-detail" n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">Detail kontejneru</a>
                     </div>
                     <!-- ./col container -->

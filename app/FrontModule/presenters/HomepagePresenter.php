@@ -679,8 +679,8 @@ final class HomepagePresenter extends HomepageForms
         $form ->addHidden("type");
         $form ->addHidden("usertype")->setDefaultValue(0);
         $form ->addCheckbox("payment", "Hotově řidiči při přistavení kontejneru")
-        	->addRule($form::FILLED, "Je nutné potvrdit způsob platby");
-        $form["payment"]->getControlPrototype()->class("form-check-input");
+        	->getControlPrototype()->class("form-check-input");
+        //$form["payment"]->addRule($form::FILLED, "Je nutné potvrdit způsob platby");
         
         //PERSONAL
         $form ->addText("name", "Jméno")
@@ -814,6 +814,9 @@ final class HomepagePresenter extends HomepageForms
 
         if($values->type==1 && count($this->basket->containers)==0){
 			$form->addError("Objednávka neobsahuje žádné kontejnery");
+        }
+        if($values->payment != true){
+			$form->addError("Je nutné potvrdit způsob platby");
         }
         
         if($basketfield == "basketD" && empty($this->$basketfield->termFrom)){

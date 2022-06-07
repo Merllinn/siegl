@@ -12,6 +12,15 @@
 	</article>
 	<img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
 	<img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+	<div class="container images" n:if="count($images)>0">
+		<div class="row chocolat-parent">
+			<div class="col-4" n:foreach="$images as $image">
+				<a href="{$image|thumb}" class="chocolat-image">
+					<img src="{$image|thumb:null:400}" alt="" />
+				</a>
+			</div>
+		</div>
+    </div>
 	<div class="page-bottom-navigation">
         {include '../_parts/footerMenu.latte', class=>''}
         <!-- ./bottom navigation -->

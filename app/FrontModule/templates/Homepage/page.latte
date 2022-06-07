@@ -14,11 +14,16 @@
 	<img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
 	<div class="container images" n:if="count($images)>0">
 		<div class="row chocolat-parent">
-			<div class="col-4" n:foreach="$images as $image">
-				<a href="{$image|thumb}" class="chocolat-image">
-					<img src="{$image|thumb:null:400}" alt="" />
-				</a>
-			</div>
+			{var $i=0}
+			{foreach $images as $image}
+				{php $i++}
+				<div class="col-4 {if $i==1||$i==4}short-image{else}long-image{/if}">
+					<a href="{$image|thumb}" class="chocolat-image">
+						<img src="{$image|thumb:null:400}" alt="" />
+					</a>
+				</div>
+				{if $i==4}{php $i=0}{/if}
+			{/foreach}
 		</div>
     </div>
 	<div class="page-bottom-navigation">

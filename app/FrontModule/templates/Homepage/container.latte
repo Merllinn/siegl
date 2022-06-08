@@ -248,8 +248,8 @@
     	$(document).ready(function(){
 			$(".accordion-button").click(function(){
 				$(this).find(".variantRadio").prop("checked", true);
-				$(".variantRadio").closest(".accordion").removeClass("active");
-				$(this).closest(".accordion").addClass("active");
+				$(".variantRadio").closest(".accordion-item").removeClass("active");
+				$(this).closest(".accordion-item").addClass("active");
 			});
 			$(".variantRadio").click(function(){
 				$(this).closest(".accordion-button").trigger("click");

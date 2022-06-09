@@ -7,25 +7,25 @@
 		    	{$page->content|noescape}
 		    	{$page->content_continuation|noescape}
 		  	{/block}
+			<div class="gallery chocolat-parent">
+				<div class="row">
+					{var $i=0}
+					{foreach $images as $image}
+						{php $i++}
+						<div class="{if $i==1||$i==4}short-image{else}long-image{/if}" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}">
+							<a href="{$image|thumb}" class="chocolat-image">
+								<img src="{$image|thumb:null:800}" alt="" />
+							</a>
+						</div>
+						{if $i==4}{php $i=0}{/if}
+					{/foreach}
+				</div>
+			</div>
 		  	<a class="btn btn-primary btn-arrow btn-red btn-back" onclick="history.back();"><i class="fa-solid fa-angles-left"></i> Zpět</a>
 		</div>
 	</article>
 	<img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
 	<img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
-	<div class="container images" n:if="count($images)>0">
-		<div class="row chocolat-parent">
-			{var $i=0}
-			{foreach $images as $image}
-				{php $i++}
-				<div class="col-4 {if $i==1||$i==4}short-image{else}long-image{/if}">
-					<a href="{$image|thumb}" class="chocolat-image">
-						<img src="{$image|thumb:null:400}" alt="" />
-					</a>
-				</div>
-				{if $i==4}{php $i=0}{/if}
-			{/foreach}
-		</div>
-    </div>
 	<div class="page-bottom-navigation">
         {include '../_parts/footerMenu.latte', class=>''}
         <!-- ./bottom navigation -->

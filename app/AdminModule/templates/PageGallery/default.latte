@@ -28,7 +28,7 @@
 
       <h2 class="title">Uložené obrázky</h2>
 
-      <div class="adminGallery" id="sortable" data-action="{link saveOrder!}">
+      <div class="adminGallery sortable" data-action="{link saveOrder!}">
           <div n:foreach="$files as $file" data-id="{$file->id}" n:class="$file->main==1?main,fileBlock">
               <p n:if="$file->name<>''" class="title">{$file->name|truncate:50}</p>
               <a n:if="$file->main==0" n:href="setMain! $file->id" title="Nastavit jako hlavní" class="setMain"><i class="far fa-star"></i></a>

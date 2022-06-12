@@ -215,46 +215,12 @@
 			                            </label>
 			                        </li>
 			                        <!-- ./velikost kontejneru -->
+			                        <li class="list-inline-item remove-container">
+				                    	<a class="ajax btn-absolute" n:href="removeFromOrder! $index, 'basketM'"></a>
+				                        <button class="btn btn-primary">Odebrat</button>
+				                    </li>
+
 			                    </ul>
-			                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
-				                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
-					                    {if empty($basket->zoneObj)}
-		                    				<p>Nejprve vyberte místo přistavení</p>
-					                    {else}
-					                        <li class="list-inline-item date dateField">
-					                            <label class="select">
-					                                <input class="form-control updateValue" data-link={link setBasketVal! $index, "term", "basketM"} {if !empty($container->term)}value="{$container->term}"{/if} type="text" value="Datum přistavení" readonly>
-					                            </label>
-					                        </li>
-					                        <li class="list-inline-item timefield">
-					                            <label class="select">
-					                                <select name="time[{{$index}]" class="updateValue" data-link={link setBasketVal! $index, "time", "basketM"}>
-		                                				{if empty($container->term)}
-		                                					<option value="">Vyberte datum přistavení</option>
-		                                				{else}
-		                                					<option value="">Čas přistavení</option>
-		                                					{foreach $zoneTimes as $zoneTime}
-		                                						{var $timesArr = explode("-", $zoneTime)}
-		                                						{var $timeMinutes = $presenter->timeToMinutes(trim($timesArr[0]))}
-		                                						{var $isToday = (date("d/m/Y") == $container->term)}
-		                                						{var $actualMinutes = $presenter->timeToMinutes(date("H:i"))}
-		                                						{if !$isToday || $timeMinutes >= ($actualMinutes + (60*$basket->zoneObj->lead))}
-		                                							<option value="{$zoneTime}" {if !empty($container->time) && $container->time==$zoneTime}selected="selected"{/if}>
-		                                								{$zoneTime}
-		                                							</option>
-		                                						{/if}
-		                                					{/foreach}
-		                                				{/if}
-					                                </select>
-					                                {*<input class="form-control updateValue" data-link={link setBasketVal! $index, "time"} {if !empty($container->time)}value="{$container->time}"{/if} type="text" value="Čas přistavení" readonly>*}
-					                            </label>
-					                        </li>
-			                    		{/if}
-				                        <li class="list-inline-item remove-container">
-				                        	<a class="ajax btn-absolute" n:href="removeFromOrder! $index, 'basketM'"></a>
-				                            <button class="btn btn-primary">Odebrat</button>
-				                        </li>
-				                    </ul>
 		                    </div>
 	                    {else}
 	                    	<p class="empty-order">Objednávka zatím neobsahuje žádný kontejner.</p>

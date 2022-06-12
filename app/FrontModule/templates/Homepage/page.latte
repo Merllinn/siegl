@@ -7,7 +7,7 @@
 		    	{$page->content|noescape}
 		    	{$page->content_continuation|noescape}
 		  	{/block}
-			<div class="gallery chocolat-parent">
+			<div class="gallery chocolat-parent" n:if="count($images)>0">
 				<div class="row">
 					{var $i=0}
 					{foreach $images as $image}

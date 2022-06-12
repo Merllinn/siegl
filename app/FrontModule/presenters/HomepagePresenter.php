@@ -815,7 +815,7 @@ final class HomepagePresenter extends HomepageForms
         if($values->type==1 && count($this->basket->containers)==0){
 			$form->addError("Objednávka neobsahuje žádné kontejnery");
         }
-        if($values->payment != true){
+        if($basketfield != "basketD" && $values->payment != true){
 			$form->addError("Je nutné potvrdit způsob platby");
         }
         
@@ -845,8 +845,10 @@ final class HomepagePresenter extends HomepageForms
 	        }
 	        if($typesError) $form->addError("Vyplňte typ odpadu u všech kontejerů");
 	        if($productsError) $form->addError("Vyplňte velikost u všech kontejerů");
-	        if($termsError) $form->addError("Vyplňte termín přistavení u všech kontejerů");
-	        if($timesError) $form->addError("Vyplňte čas přistavení u všech kontejerů");
+	        if($basketfield == "basket"){
+		        if($termsError) $form->addError("Vyplňte termín přistavení u všech kontejerů");
+		        if($timesError) $form->addError("Vyplňte čas přistavení u všech kontejerů");
+	        }
         }
 
         if($form->isValid()){

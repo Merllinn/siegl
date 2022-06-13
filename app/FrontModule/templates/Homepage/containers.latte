@@ -120,42 +120,61 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-6 col-lg-4" n:foreach="$containers as $container">
+			        {var $isTurbo = false}
+			        {if $container->categories == '|12|'}
+        				{php $isTurbo = true}
+			        {/if}
     				{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
                     <div class="col-container">
-                        <h2><a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a></h2>
+                        <h2>
+                        	{if $isTurbo}
+                        		<a href="https://turbokontejnery.cz/">{$container->name}</a>
+                        	{else}
+                        		<a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a>
+                        	{/if}
+                        </h2>
                         {var $mainImg = $presenter->productManager->getMainPhoto($container->id)}
                         <div class="container-image">
                             <a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru"><img src="{$mainImg|thumb}" alt="{$container->name}"></a>
                         </div>
                         <div class="accordion accordion-flush chocolat-parent" id="containers{$container->id}">
-                            {var $prices = $presenter->productManager->getPrices($container->id)}
-                            <div class="accordion-item" n:foreach="$prices as $price">
-                                <div class="accordion-header" id="container-{$price->id}">
-                                    <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
-                                        <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
-                                        <em>{$attVals[$price->attributeValue]->name}</em>
-                                        {if $price->type==1}
-                                        	<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
-                                        {/if}
-                                        {if $price->type==2}
-                                        	<span class="price">{$price->text}</span>
-                                        {/if}
-                                    </button>
-                                </div>
-                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}" n:if="!empty($attVals[$price->attributeValue]->desc)">
-                                    <div class="accordion-body">
-                                        {$attVals[$price->attributeValue]->desc|noescape}
-                                        {if !empty($attVals[$price->attributeValue]->file)}
-                                        	<a href="{$attVals[$price->attributeValue]|thumb}" class="chocolat-image" title="Zobrazit obrázek">Více viz foto</a>
-                                        {/if}
-                                    </div>
-                                </div>
-                            </div>
+                            {if $isTurbo}
+                            	{$container->description|noescape}
+                            {else}
+	                            {var $prices = $presenter->productManager->getPrices($container->id)}
+	                            <div class="accordion-item" n:foreach="$prices as $price">
+	                                <div class="accordion-header" id="container-{$price->id}">
+	                                    <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
+	                                        <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
+	                                        <em>{$attVals[$price->attributeValue]->name}</em>
+	                                        {if $price->type==1}
+                                        		<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+	                                        {/if}
+	                                        {if $price->type==2}
+                                        		<span class="price">{$price->text}</span>
+	                                        {/if}
+	                                    </button>
+	                                </div>
+	                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}" n:if="!empty($attVals[$price->attributeValue]->desc)">
+	                                    <div class="accordion-body">
+	                                        {$attVals[$price->attributeValue]->desc|noescape}
+	                                        {if !empty($attVals[$price->attributeValue]->file)}
+                                        		<a href="{$attVals[$price->attributeValue]|thumb}" class="chocolat-image" title="Zobrazit obrázek">Více viz foto</a>
+	                                        {/if}
+	                                    </div>
+	                                </div>
+	                            </div>
+                            {/if}
                         </div>
                         <!-- ./prices -->
-                        <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
-                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$container->alias}Modal"*} title="Objednat vybraný kontejner">Objednat online <i class="fa-solid fa-angles-right"></i></button>
-                        <a class="container-detail" n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                        <span class="without-vat" n:if="!$isTurbo">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
+                        {if $isTurbo}
+	                        <button type="button" class="btn btn-primary btn-arrow btn-red">602 20 30 44 <i class="fa-solid fa-angles-right"></i></button>
+                        	<a class="container-detail" href="https://turbokontejnery.cz/" title="Přejít na detail kontejneru">Více informací</a>
+                        {else}
+	                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" title="Objednat vybraný kontejner">Objednat online <i class="fa-solid fa-angles-right"></i></button>
+                        	<a class="container-detail" n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">Detail kontejneru</a>
+                        {/if}
                     </div>
                     <!-- ./col container -->
                 </div>

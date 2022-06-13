@@ -583,7 +583,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 		
         $this->$basket->betonPrice = $betonPrice;
         $this->$basket->weekendPrice = $weekendPrice;
-        $this->$basket->price = $totalPrice + $weekendPrice;
+        $this->$basket->price = $totalPrice + $weekendPrice + $deliveryPrice;
         $this->$basket->maxWeight = $totalWeight;
         $this->$basket->maxVolume = $totalVolume;
         $this->$basket->materialTons = $materialTons;

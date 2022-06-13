@@ -25,6 +25,19 @@ $(document).ready(function(){
 		}
 		return false;
 	});
+
+   $( ".sortable" ).sortable({
+		update : function (event, ui) {
+			var sortEl = $(this);
+			var action = sortEl.closest(".sortable").data("action");
+			$.get(action, {
+				'items': sortEl.sortable("toArray", {
+					attribute:"data-id"
+				})
+			});
+		}
+   }).disableSelection();
+
 });
 
 

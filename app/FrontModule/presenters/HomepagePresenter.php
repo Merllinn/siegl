@@ -815,7 +815,7 @@ final class HomepagePresenter extends HomepageForms
         if($values->type==1 && count($this->basket->containers)==0){
 			$form->addError("Objednávka neobsahuje žádné kontejnery");
         }
-        if($values->payment != true){
+        if($basketfield != "basketD" && $values->payment != true){
 			$form->addError("Je nutné potvrdit způsob platby");
         }
         
@@ -845,8 +845,10 @@ final class HomepagePresenter extends HomepageForms
 	        }
 	        if($typesError) $form->addError("Vyplňte typ odpadu u všech kontejerů");
 	        if($productsError) $form->addError("Vyplňte velikost u všech kontejerů");
-	        if($termsError) $form->addError("Vyplňte termín přistavení u všech kontejerů");
-	        if($timesError) $form->addError("Vyplňte čas přistavení u všech kontejerů");
+	        if($basketfield == "basket"){
+		        if($termsError) $form->addError("Vyplňte termín přistavení u všech kontejerů");
+		        if($timesError) $form->addError("Vyplňte čas přistavení u všech kontejerů");
+	        }
         }
 
         if($form->isValid()){
@@ -882,21 +884,21 @@ final class HomepagePresenter extends HomepageForms
 				//TODO generate mail
 				//$this->sendMailFromTemplate("orderStatus1.latte", $data, $order->email, "Potvrzení objednávky kontejneru");
 				if($values->type==1){
-					$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva kontejneru");
+					$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $this->settings->email, "Nová objednávka kontejneru");
 					if(!empty($values->email)){
-						$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $values->email, "Nová objednáva kontejneru");
+						$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $values->email, "Nová objednávka kontejneru");
 					}
 					if(!empty($values->bussiness_email)){
-						$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $values->bussiness_email, "Nová objednáva kontejneru");
+						$this->sendMailFromTemplate("orderConfirmEshop.latte", $data, $values->bussiness_email, "Nová objednávka kontejneru");
 					}
 				}
 				if($values->type==2){
-					$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $this->settings->email, "Nová objednáva materiálu");
+					$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $this->settings->email, "Nová objednávka materiálu");
 					if(!empty($values->email)){
-						$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $values->email, "Nová objednáva materiálu");
+						$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $values->email, "Nová objednávka materiálu");
 					}
 					if(!empty($values->bussiness_email)){
-						$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $values->bussiness_email, "Nová objednáva materiálu");
+						$this->sendMailFromTemplate("orderMatConfirmEshop.latte", $data, $values->bussiness_email, "Nová objednávka materiálu");
 					}
 				}
 				if($values->type==9){

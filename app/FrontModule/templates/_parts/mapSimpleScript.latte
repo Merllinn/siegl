@@ -1,0 +1,250 @@
+    <script>
+    	$(document).ready(function(){
+			var materialPrice = 0;
+			
+			if($("#searchTextField").val() != ""){
+				$(".setAddress").trigger("click");
+			}
+		});
+		
+		function initMap() {
+			var center = { lat: 50.0731605, lng: 14.4467046 };
+			var mapEl = document.getElementById("map");
+			var geocoder = new google.maps.Geocoder();
+			var map = new google.maps.Map(
+			   mapEl,
+			  {
+			    zoom: 11.8,
+			    center: center,
+			  }
+			);
+			
+            google.maps.Polygon.prototype.Contains = function (point) {
+                var crossings = 0,
+                    path = this.getPath();
+                // for each edge
+                for (var i = 0; i < path.getLength() ; i++) {
+                    var a = path.getAt(i),
+                        j = i + 1;
+                    if (j >= path.getLength()) {
+                        j = 0;
+                    }
+                    var b = path.getAt(j);
+                    if (rayCrossesSegment(point, a, b)) {
+                        crossings++;
+                    }
+                }
+                // odd number of crossings?
+                return (crossings % 2 == 1);
+                function rayCrossesSegment(point, a, b) {
+                    var px = point.lng(),
+                        py = point.lat(),
+                        ax = a.lng(),
+                        ay = a.lat(),
+                        bx = b.lng(),
+                        by = b.lat();
+                    if (ay > by) {
+                        ax = b.lng();
+                        ay = b.lat();
+                        bx = a.lng();
+                        by = a.lat();
+                    }
+                    if (py == ay || py == by) py += 0.00000001;
+                    if ((py > by || py < ay) || (px > Math.max(ax, bx))) return false;
+                    if (px < Math.min(ax, bx)) return true;
+                    var red = (ax != bx) ? ((by - ay) / (bx - ax)) : Infinity;
+                    var blue = (ax != px) ? ((py - ay) / (px - ax)) : Infinity;
+                    return (blue >= red);
+                }
+            };			
+			
+			var input = document.getElementById('searchTextField');
+			/*
+			const center = { lat: 50.064192, lng: -130.605469 };
+			// Create a bounding box with sides ~10km away from the center point
+			const defaultBounds = {
+			    north: center.lat + 0.1,
+			    south: center.lat - 0.1,
+			    east: center.lng + 0.1,
+			    west: center.lng - 0.1,
+			};
+			*/
+			const acoptions = {
+			    //bounds: defaultBounds,
+			    componentRestrictions: { country: "cz" },
+			    fields: ["address_components", "geometry"],
+			    strictBounds: false,
+			    //types: ["establishment"],
+			};
+  			new google.maps.places.Autocomplete(input, acoptions);
+  			var marker
+  			
+  			$("#searchTextField").keypress(function(event){
+				var keycode = (event.keyCode ? event.keyCode : event.which);
+  				if(keycode == '13'){
+					event.preventDefault();
+					checkPickedAddress();
+				}
+  			});
+  			$("#searchTextField").change(function(){
+				checkPickedAddress();
+  			});
+  			$(".setAddress").click(function(e){
+				e.preventDefault();
+				checkPickedAddress();
+  			});
+  			map.addListener("click", (mapsMouseEvent) => {
+    		  var ll = mapsMouseEvent.latLng;
+    		  geocoder
+    		  	.geocode({ location: ll })
+    		  	.then((response) => {
+    		  		if (response.results[0]) {
+    		  			$("#searchTextField").val(response.results[0].formatted_address);
+    		  			validateAddress(response.results[0]);
+					}else{
+						$("#searchTextField").val("nenalezeno");
+					}
+					
+    		  	});
+    		});
+    		
+    		function checkPickedAddress(){
+				geocoder.geocode( { 'address': $("#searchTextField").val()}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						validateAddress(results[0]);
+					} 
+				}); 				
+    		}
+    		
+    		function validateAddress(result){
+					var inPrague = false;
+					var inZone = false;
+					var activeZone = 0;
+					sendOrderButton = $(".sendOrderButton");
+					var i;
+					
+					{foreach $zones as $zone}
+						if(zone{$zone->id} != null && zone{$zone->id}.Contains(result.geometry.location)){
+							inZone = true;
+							var activeZone = {$zone->id};
+						}
+					{/foreach}
+					
+					for (i = 0; i < result.address_components.length; ++i) {
+						if(result.address_components[i].short_name == "Hlavní město Praha"){
+							inPrague = true;
+						}
+					}
+					if(inZone){
+						setMarker(result.geometry.location, $("#searchTextField").val());
+						map.setCenter(result.geometry.location);
+						window.checkAddress = true;
+					}
+					else if(inPrague){
+						$("#searchTextField").val("");
+						unsetMarker();
+						alert({_'ADRESA_MIMO_ZONU'});
+						window.checkAddress = false;
+					}
+					else{
+						$("#searchTextField").val("");
+						unsetMarker();
+						alert({_'ADRESA_MIMO_PRAHU'});
+						window.checkAddress = false;
+					}
+					var link = {link setBasketZone!, "basketMap"} + "&z=" + activeZone;
+					$.get(link);
+				
+    		}
+    		
+    		function unsetMarker(){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			}
+			
+    		function setMarker(latLn, caption){
+			  if(typeof  marker !== "undefined"){
+				marker.setMap(null);
+			  }
+			  marker = new google.maps.Marker({
+				position: latLn,
+				map,
+				title: caption,
+			  });
+			  var link = {link setAddress!, "basketMap"} + "&a=" + caption;
+			  $.get(link);
+    		}
+    		
+    		//Draw area polygon
+				const zoneCompleteCoords = [
+				    {var $points = explode(chr(10), $settings->area)}
+				    {foreach $points as $zonePoint}
+			    		{var $pArray = explode(',', $zonePoint)}
+			    		{var $latC = trim((float)$pArray[1])}
+			    		{var $lngC = trim((float)$pArray[0])}
+			    		{ lat: {$latC|noescape}, lng: {$lngC|noescape} },
+				    {/foreach}
+				];
+
+				{var $color = "#333333"};
+				const zoneComplete = new google.maps.Polygon({
+				    paths: zoneCompleteCoords,
+				    strokeColor: {$color},
+				    strokeOpacity: 0.5,
+				    strokeWeight: 2,
+				    fillColor: {$color},
+				    fillOpacity: 0.2,
+				});
+
+				zoneComplete.setMap(map);
+    		
+    		//Draw zones polygons
+    		{foreach $zones as $zone}
+				const zone{$zone->id}Coords = [
+				    {var $points = explode(chr(10), $zone->points)}
+				    {foreach $points as $zonePoint}
+			    		{var $pArray = explode(',', $zonePoint)}
+			    		{var $latC = trim((float)$pArray[1])}
+			    		{var $lngC = trim((float)$pArray[0])}
+			    		{ lat: {$latC|noescape}, lng: {$lngC|noescape} },
+				    {/foreach}
+				];
+
+				{var $color = "#333333"};
+				{if !empty($zone->color)}
+					{php $color = $zone->color}
+				{/if}
+				const zone{$zone->id} = new google.maps.Polygon({
+				    paths: zone{$zone->id}Coords,
+				    strokeColor: {$color},
+				    strokeOpacity: 0.0,
+				    strokeWeight: 2,
+				    fillColor: {$color},
+				    fillOpacity: 0.0,
+				});
+
+				zone{$zone->id}.setMap(map);
+				
+  				zone{$zone->id}.addListener("click", (mapsMouseEvent) => {
+    			  var ll = mapsMouseEvent.latLng;
+    			  geocoder
+    		  		.geocode({ location: ll })
+    		  		.then((response) => {
+    		  			if (response.results[0]) {
+    		  				$("#searchTextField").val(response.results[0].formatted_address);
+							validateAddress(response.results[0]);
+						}else{
+							$("#searchTextField").val("nenalezeno");
+						}
+						
+    		  		});
+    			});
+			
+    		{/foreach}
+    		
+		}
+
+		
+		
+    </script>

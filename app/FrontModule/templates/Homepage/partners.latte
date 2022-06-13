@@ -1,0 +1,60 @@
+{layout ../@layout.latte}
+{block content}
+	<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvbrT0aEtXB5ZsAZUMRHhKxKTE8ocIlKA&callback=initMap&v=weekly&libraries=places"
+      defer
+    ></script>
+    <section class="top order">
+        <div class="container">
+            <h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">Mapa a čas přistavení kontejneru</h1>
+            <h2>Místo přistavení kontejneru</h2>
+            <form class="orderform">
+                <div class="input-group street">
+                    <label for="vase-ulice" class="form-label">Zadejte ulici</label>
+                    <input id="searchTextField" type="text" class="form-control" id="vase-ulice" placeholder="Vaše ulice" aria-label="Vaše ulice" {if !empty($address)}value="{$address}"{/if}>
+                    <button class="btn btn-primary setAddress" type="button"><i class="fa-solid fa-angles-right"></i></button>
+                </div>
+            </form>
+            <p class="desc">nebo vyberte konkrétní umístění na mapě</p>
+        </div>
+        <img class="mosaic left" src="{$basePath}/img/mosaic_s2.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+        <img class="mosaic right" src="{$basePath}/img/mosaic_s3.png" alt="Obrázek mozaiky" data-aos="fade-in" data-aos-delay="350">
+    </section>
+    <!-- ./top -->
+    <section class="map">
+        <div class="container">
+        	<div id="map" style="width:100%; height:680px;"></div>
+        </div>
+    </section>
+    {snippet deliveryTerm}
+        <div class="speed" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
+            <h2 class="title underline">Jak rychle vám kontejner přistavíme?</h2>
+            <div class="warrant deliveryBlock">
+                <ul class="list-unstyled">
+                    <li n:if="!empty($basket->zoneObj)">
+                        Vybrána zóna <strong>{$basket->zoneObj->name}</strong>
+                    </li>
+                    <li>
+                        Garantujeme čas přistavení do <span class="number standardDelivery">1 - {if !empty($basket->zoneObj)}{$basket->zoneObj->lead}{else}4{/if}</span> <strong class="standardUnit">hodin</strong>
+                    </li>
+                    <li>
+                        Turbokontejner s přistavením do <span class="number turbodelivery">60</span> <strong class="turbounit">minut</strong>
+                        <span class="turbo">(pouze telefonicky Po - Pá: 6:00 - 17:00)</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- ./speed -->
+    
+    {/snippet}
+    <div class="waste-type-rectangle"></div>
+    <div class="page-bottom-navigation map-bottom-navigation">
+        {include '../_parts/footerMenu.latte', class=>''}
+        <!-- ./bottom navigation -->
+    </div>
+    <!-- ./page bottom navigation -->
+{/block}
+
+{block scripts}
+	{include '../_parts/mapSimpleScript.latte', zones=>$zones, settings=>$settings}
+{/block}

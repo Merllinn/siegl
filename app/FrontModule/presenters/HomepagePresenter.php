@@ -35,6 +35,12 @@ final class HomepagePresenter extends HomepageForms
 		$this->template->zones = $this->commonManager->getActiveZones();
 	}
 	
+    public function renderPartners(){
+		$this->template->basket = $this->basketMap;
+		$this->template->address = $this->basketMap->address;
+		$this->template->zones = $this->commonManager->getActiveZones();
+	}
+	
     public function renderOrder(){
 		$this->template->basket = $this->basket;
 		$this->template->address = $this->basket->address;

@@ -2093,6 +2093,10 @@ img.car {
 
 @media (max-width: 375px) {
 
+  section.slide .btn-order {
+    bottom: -30px;
+  }
+
   div.map img {
     max-width: 100%;
   }
@@ -3183,7 +3187,7 @@ label.select {
     }
 
     div.filter li:not(:last-child) {
-      margin-right: 26px;
+      margin-right: 46px;
     }
 
       div.filter li.dateField,
@@ -3469,7 +3473,8 @@ label.select {
     div.filter li::after,
     li.date-from::after,
     li.date-to::after,
-    div.describe::before {
+    div.describe::before,
+    div.consistency li::after {
       content: "";
       position: absolute;
       left: -8px; top: 0;
@@ -3482,6 +3487,11 @@ label.select {
         background: url(../img/gray-arrow.svg);
         background-size: cover;
         top: 69px;
+      }
+
+      div.consistency.in-material li::after {
+        background: url(../img/gray-arrow.svg);
+        background-size: cover;
       }
 
         div.describe::after {
@@ -4804,6 +4814,15 @@ div.warrant {
       display: block;
     }
 
+  div.warrant a {
+    color: #3f3f3f;
+  }
+
+    div.warrant a:hover {
+      color: #3f3f3f;
+      text-decoration: none;
+    }
+
   span.number {
     font-size: 3.125rem;
     font-weight: 500;
@@ -5513,6 +5532,26 @@ div.amount {
   div.amount div {
     display: inline-block;
   }
+
+  div.amount div.consistency {
+    display: block;
+    text-transform: none;
+    font-size: 1rem;
+    cursor: text;
+  }
+
+    div.amount div.consistency ul {
+      margin-bottom: 40px;
+    }
+
+      div.amount div.consistency li {
+        position: relative;
+      }
+
+        div.amount div.consistency li:last-child label,
+        div.amount div.consistency .list-inline-item:not(:last-child) {
+          margin-right: 0;
+        }
 
   div.amount input.form-control {
     width: auto;
@@ -7017,6 +7056,10 @@ div.subpages .row {
     margin-top: 40px;
   }
 
+  div.subpages.career .row>[class*=col-] {
+    margin-top: 0;
+  }
+
 div.subpages.persons .row,
 div.subpages.career .row,
 div.subpages.about-us .row {
@@ -7025,6 +7068,10 @@ div.subpages.about-us .row {
 
   div.subpages.persons .row:not(:last-child) {
     margin-bottom: 40px;
+  }
+
+  div.subpages.career .row-positions {
+    margin-top: 40px;
   }
 
 div.row-blocks {

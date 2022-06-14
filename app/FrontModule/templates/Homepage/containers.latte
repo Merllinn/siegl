@@ -125,7 +125,7 @@
         				{php $isTurbo = true}
 			        {/if}
     				{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
-                    <div class="col-container">
+                    <div class="col-container {if $isTurbo}turbocontainer{/if}">
                         <h2>
                         	{if $isTurbo}
                         		<a href="https://turbokontejnery.cz/">{$container->name}</a>

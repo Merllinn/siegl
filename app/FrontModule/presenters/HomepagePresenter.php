@@ -278,6 +278,7 @@ final class HomepagePresenter extends HomepageForms
 		}
 		$this->recalculateBasket($basket);
 		$this->redrawControl("orderContainers");
+		$this->redrawControl("matamount");
 		//$this->redirect("this");
 	}
 
@@ -305,6 +306,7 @@ final class HomepagePresenter extends HomepageForms
 		if(in_array($name, array("term","product"))!==false){
 			$this->redrawControl("orderContainers");
 		}
+		$this->redrawControl("matamount");
     }
 
     public function handleSetOrderVal($name, $basket="basket", $val){

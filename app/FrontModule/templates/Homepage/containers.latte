@@ -168,11 +168,14 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat" n:if="!$isTurbo">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
-                        {if $isTurbo}
+                        {if $container->noOnlineOrder}
 	                        <button type="button" class="btn btn-primary btn-arrow btn-red">602 20 30 44 <i class="fa-solid fa-angles-right"></i></button>
-                        	<a class="container-detail" href="https://turbokontejnery.cz/" title="Přejít na detail kontejneru">Více informací</a>
                         {else}
 	                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" title="Objednat vybraný kontejner">Objednat online <i class="fa-solid fa-angles-right"></i></button>
+                        {/if}
+                        {if $isTurbo}
+                        	<a class="container-detail" href="https://turbokontejnery.cz/" title="Přejít na detail kontejneru">Více informací</a>
+                        {else}
                         	<a class="container-detail" n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">Detail kontejneru</a>
                         {/if}
                     </div>

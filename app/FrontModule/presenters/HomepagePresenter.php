@@ -313,6 +313,8 @@ final class HomepagePresenter extends HomepageForms
 		$this->$basket->$name = $val;
 		if($name=="termFrom"){
 			$this->redrawControl("realizationterm");
+			$this->redrawControl("orderContainers");
+			$this->redrawControl("matamount");
 		}
 		$this->recalculateBasket($basket);
     }

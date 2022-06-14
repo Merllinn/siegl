@@ -41,6 +41,8 @@
 							var link = amountBlock.data("link") + "&amount=" + matWeight;
 							{if $check==true}
 								checkMaterialAmount();
+							{else}								
+								checkWeekendMaterialAmount();
 							{/if}
 							$.get(link);
 
@@ -53,6 +55,57 @@
 						});
 						{if $check==true}
 							function checkMaterialAmount(){
+								var matWeight = parseFloat($(".materialWeight").val());
+								materialKoef = parseFloat($(".amount").data("koef2"));
+								var matVolume = Math.round(matWeight*materialKoef);
+								var maxWeight = parseInt($(".total-price").data("weight"));
+								var maxVolume = parseInt($(".total-price").data("volume"));
+								//console.log("---------------------");
+								//console.log("matWeight:"+matWeight);
+								//console.log("maxWeight:"+maxWeight);
+								//console.log("matVolume:"+matVolume);
+								//console.log("maxVolume:"+maxVolume);
+								if({$isSunday} && matWeight>6){
+									window.checkWeight = false;
+									enableDisableOrder();
+									var error = "Litujeme, ale v neděli není možné objednat víc než 6 tun materiálu.";
+									$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+									$('#modal-errors').modal('show');
+									setTimeout(function(){
+										$(".materialWeight").val(6).trigger("change");
+									}, 500);
+								}
+								else if(matWeight>maxWeight){
+									window.checkWeight = false;
+									enableDisableOrder();
+									var error = "Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.";
+									$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+									$('#modal-errors').modal('show');
+									setTimeout(function(){
+										$(".materialWeight").val(maxWeight).trigger("change");
+									}, 500);
+								}
+								else if(matVolume>maxVolume){
+									window.checkWeight = false;
+									enableDisableOrder();
+									var error = "Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.";
+									$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
+									$('#modal-errors').modal('show');
+									//console.log("+++++++");
+									//console.log("matVolume:"+matVolume);
+									//console.log("materialKoef:"+materialKoef);
+									//console.log("newMatWeight."+matVolume*materialKoef);
+									setTimeout(function(){
+										$(".materialWeight").val(matVolume*materialKoef).trigger("change");
+									}, 500);
+								}
+								else{
+									window.checkWeight = true;
+									enableDisableOrder();
+								}
+							}
+						{/if}
+						function checkWeekendMaterialAmount(){
 							var matWeight = parseFloat($(".materialWeight").val());
 							materialKoef = parseFloat($(".amount").data("koef2"));
 							var matVolume = Math.round(matWeight*materialKoef);
@@ -63,28 +116,14 @@
 							//console.log("maxWeight:"+maxWeight);
 							//console.log("matVolume:"+matVolume);
 							//console.log("maxVolume:"+maxVolume);
-							if(matWeight>maxWeight){
+							if({$isSunday} && matWeight>6){
 								window.checkWeight = false;
 								enableDisableOrder();
-								var error = "Litujeme, ale požadované množství materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální množství materiálu je "+maxWeight+" tun.";
+								var error = "Litujeme, ale v neděli není možné objednat víc než 6 tun materiálu.";
 								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
 								$('#modal-errors').modal('show');
 								setTimeout(function(){
-									$(".materialWeight").val(maxWeight).trigger("change");
-								}, 500);
-							}
-							else if(matVolume>maxVolume){
-								window.checkWeight = false;
-								enableDisableOrder();
-								var error = "Litujeme, ale požadovaný objem materiálu se do kontejneru nevejde. Upravte prosím množství materiálu. Maximální objem materiálu je "+maxVolume+" m3.";
-								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
-								$('#modal-errors').modal('show');
-								//console.log("+++++++");
-								//console.log("matVolume:"+matVolume);
-								//console.log("materialKoef:"+materialKoef);
-								//console.log("newMatWeight."+matVolume*materialKoef);
-								setTimeout(function(){
-									$(".materialWeight").val(matVolume*materialKoef).trigger("change");
+									$(".materialWeight").val(6).trigger("change");
 								}, 500);
 							}
 							else{
@@ -92,7 +131,8 @@
 								enableDisableOrder();
 							}
 						}
-							function enableDisableOrder(){
+						checkWeekendMaterialAmount();
+						function enableDisableOrder(){
 							sendOrderButton = $(".sendOrderButton");
 							var orderValid = true;
 							if(window.checkWeight==false) orderValid = false;
@@ -106,7 +146,6 @@
 								sendOrderButton.addClass("disabled");
 							}	
 						}
-						{/if}
 						
 					  
 					});

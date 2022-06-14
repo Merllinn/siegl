@@ -186,7 +186,14 @@
                     <div class="tons-price" style="display: none;">
                         Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
                     </div>
-                    {include '../_parts/materialUpdate.latte', check=>false}
+				    {var $isSunday = false}
+				    {if !empty($basket->termFrom)}
+					    {var $date = \Nette\Utils\Datetime::createFromFormat("d/m/Y", $basket->termFrom)}
+					    {if $date->format("N")==7}
+				            {var $isSunday = true}
+					    {/if}
+				    {/if}
+                    {include '../_parts/materialUpdate.latte', check=>false, isSunday=>$isSunday}
                     {/snippet}
                 </form>
             </div>
@@ -229,14 +236,27 @@
 			                        </li>
 			                        <!-- ./druh odpadu -->
 			                        {var $products = $presenter->productManager->getByType(1)}
+			                        {var $isSunday = false}
+			                        {if !empty($basket->termFrom)}
+				                        {var $date = \Nette\Utils\Datetime::createFromFormat("d/m/Y", $basket->termFrom)}
+				                        {if $date->format("N")==7}
+				                        	{var $isSunday = true}
+				                        {/if}
+			                        {/if}
 			                        <li class="list-inline-item objem">
 			                            <label class="select">
 				                            <select name="container{$index}"data-link={link setBasketVal! $index, "product", "basketM"}  class="form-select updateValue productPick" aria-label="Kontejner">
 				                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
-				                                <option n:if="$basket->materialTons<=6 || $product->id == $settings->bigContainer" n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
-			                                		{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
-			                                		{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
-				                                </option>
+				                                {foreach $products as $product}
+					                                {if !$product->noOnlineOrder}
+						                                {if $product->id != $settings->bigContainer || !$isSunday}
+							                                <option n:if="$basket->materialTons<=6 || $product->id == $settings->bigContainer"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
+			                                					{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
+			                                					{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
+							                                </option>
+						                                {/if}
+					                                {/if}
+				                                {/foreach}
 				                            </select>
 			                            </label>
 			                        </li>

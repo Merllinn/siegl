@@ -6,7 +6,11 @@
 				var error = $("form ul.errors").html();
 				$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
 				$('#modal-errors').modal('show');
-				$(".order-form ul.errors").html("");
+				$([document.documentElement, document.body]).animate({
+        			scrollTop: $("form ul.errors").offset().top - 120
+    			}, 500);	
+    			$(".order-form ul.errors").html("");
+			
 			}
 			
 			$(".variantImage").click(function(e){

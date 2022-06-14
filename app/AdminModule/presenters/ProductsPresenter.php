@@ -150,6 +150,7 @@ class ProductsPresenter extends BasePresenter
 				//->setPrompt("Vyberte kategorie")
 				;
 		$form->addCheckbox("turbo", "Turbokontejner");
+		$form->addCheckbox("noOnlineOrder", "Nelze objednat online");
         /*
         $form ->addTextArea("technical", "Technická specifikace")
 				->getControlPrototype()

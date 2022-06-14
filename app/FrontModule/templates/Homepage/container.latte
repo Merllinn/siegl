@@ -65,7 +65,12 @@
                                 <!-- ./prices -->
                                 <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
                             </div>
-                            <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$product->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$product->alias}Modal"*} title="Vybrat a objednat kontejner" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">Objednat online <i class="fa-solid fa-angles-right"></i></button>
+	                        {if $product->noOnlineOrder}
+		                        <button type="button" class="btn btn-primary btn-arrow btn-red">602 20 30 44 <i class="fa-solid fa-angles-right"></i></button>
+	                        {else}
+                            	<button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$product->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$product->alias}Modal"*} title="Vybrat a objednat kontejner" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">Objednat online <i class="fa-solid fa-angles-right"></i></button>
+	                        {/if}
+                            
                             <div class="or" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="500">
                                 <span>Nebo</span>
                                 <span class="phone">602 20 30 44</span>

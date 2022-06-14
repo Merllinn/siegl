@@ -56,7 +56,7 @@
 		                            <label class="select">
 			                            <select name="container{$index}"data-link={link setBasketVal! $index, "product"}  class="form-select updateValue productPick" aria-label="Kontejner">
 			                                <option {if empty($container->price->product)}selected="selected"{/if} value="" data-types="all">Vyberte velikost kontejneru</option>
-			                                <option n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
+			                                <option n:if="!$product->noOnlineOrder" n:foreach="$products as $product"  {if !empty($container->product) && $container->product==$product->id}selected="selected"{/if} value="{$product->id}" data-types="{$presenter->productManager->getPricesStr($product->id)}">
 		                                		{var $paVals = $presenter->getProductAttributeValues($product->attributes)}
 		                                		{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($product->perex)} - {$product->perex}{/if}
 			                                </option>
@@ -139,7 +139,7 @@
 						    $(".dateField input").each(function(){
 							    var productId = $(this).closest(".oneContainer").data("id");
 							    var disabledDays = [];
-							    if(productId=="6"){
+							    if(productId=={$settings->bigContainer}){
 									disabledDays = [0];
 							    }
 							    $(this).datetimepicker({
@@ -333,7 +333,14 @@
                     <div class="tons-price" style="display: none;">
                         Cena za 1 tunu je <strong class="materialPrice">1 950</strong> <i class="kc">Kč</i> <i>bez</i> DPH
                     </div>
-					{include '../_parts/materialUpdate.latte', check=>true}
+				    {var $isSunday = false}
+				    {if !empty($basket->termFrom)}
+					    {var $date = \Nette\Utils\Datetime::createFromFormat("d/m/Y", $basket->termFrom)}
+					    {if $date->format("N")==7}
+				            {var $isSunday = true}
+					    {/if}
+				    {/if}
+					{include '../_parts/materialUpdate.latte', check=>true, isSunday=>$isSunday}
                     {/snippet}
                 </form>
             </div>

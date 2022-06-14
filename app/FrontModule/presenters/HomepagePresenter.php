@@ -151,6 +151,8 @@ final class HomepagePresenter extends HomepageForms
 		$priceObj = $this->productManager->findPrice($var);
 		$material->priceObj = $this->rowToArray($priceObj);
 		$material->amount = 1;
+		unset($material->stone);
+		unset($material->consistence);
 		/*
 		if($material->product==$this->settings->betonProduct){
 			$material->amount = 1/$priceObj->koef;
@@ -221,6 +223,26 @@ final class HomepagePresenter extends HomepageForms
 		}
 		$this->recalculateBasket($basket);
 		$this->redrawControl("orderContainers");
+		//$this->redirect("this");
+	}
+	public function handleSetMaterialVal($index, $basket="basket", $name, $val){
+		$materials = $this->$basket->materials;
+		if(!empty($materials[$index])){
+			$material = $materials[$index];
+			$material->$name = $val;
+			$materials[$index] = $material;
+			$this->$basket->materials = $materials;
+		}
+		//$this->redirect("this");
+	}
+	public function handleSetMaterialsVal($index, $priceId, $basket="basket", $name, $val){
+		$materials = $this->$basket->materials;
+		if(!empty($materials[$index][$priceId])){
+			$material = $materials[$index][$priceId];
+			$material->$name = $val;
+			$materials[$index][$priceId] = $material;
+			$this->$basket->materials = $materials;
+		}
 		//$this->redirect("this");
 	}
 	public function handleSetMaterialAmountD($product, $variant, $amount){

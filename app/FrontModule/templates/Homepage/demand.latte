@@ -215,6 +215,27 @@
                                     </div>
                                 </label>
 	                            <div class="amount" data-koef="{if $mat->id==$settings->betonProduct}{1/$price->koef}{else}{$price->koef}{/if}" data-koef2="{$price->koef}" data-link="{link setMaterialAmountD! $mat->id, $price->id}" style="{if empty($materials[$mat->id][$price->id])}display: none;{/if}">
+                    				<div class="consistency in-material" n:if="$mat->id==$settings->betonProduct">
+                    					<ul class="list-inline">
+                    						<li class="list-inline-item" n:if="$price->ref('attributeValue')->name[0] != 'P'">
+                    							<label class="select">
+                    								<select name="velikost-kamene" class="form-select updateValue" data-link="{link setMaterialsVal! $mat->id, $price->id,"basketD", "stone"}">
+                    									<option>Vyberte velikost kamene</option>
+                    									<option n:foreach="$presenter->betonStoneSize as $val=>$name" value="{$val}" {if !empty($materials[$mat->id][$price->id]->stone) && $materials[$mat->id][$price->id]->stone==$val}selected="selected"{/if}>{$name}</option>
+                    								</select>
+                    							</label>
+                    						</li>
+                    						<li class="list-inline-item">
+                    							<label class="select">
+                    								<select name="konzistence" class="form-select updateValue" data-link="{link setMaterialsVal! $mat->id, $price->id,"basketD", "consistence"}">
+                    									<option>Vyberte konzistenci</option>
+                    									<option n:foreach="$presenter->betonConsistence as $val=>$name" value="{$val}" {if !empty($materials[$mat->id][$price->id]->consistence) && $materials[$mat->id][$price->id]->consistence==$val}selected="selected"{/if}>{$name}</option>
+                    								</select>
+                    							</label>
+                    						</li>
+                    					</ul>
+                    				</div>
+                    				<!-- ./consistency -->
 				                    <label for="amount">Množství materiálu</label>
 				                    	{if $mat->id==$settings->betonProduct}
 				                    		<div class="number-mobile beton"><div class="number"><span class="minus"></span><input id="amount" class="form-control materialSource amountField" type="text" min="1" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount}{else}1{/if}"><span class="plus"></span></div> <span class="material-quantity">m<sup>3</sup> =</span></div><div class="quantity-mobile beton"><input class="form-control material-quantity materialTarget" type="text" value="{if !empty($materials[$mat->id][$price->id])}{$materials[$mat->id][$price->id]->amount*$price->koef|number:2}{else}{=1*$price->koef}{/if}" readonly> <span class="tons">tun</span></div>

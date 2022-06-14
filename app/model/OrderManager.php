@@ -311,6 +311,7 @@ final class OrderManager
 		            if($order->type==9){
 						$itemData["quantity"] = $container->amount;
 		            }
+		            
 		            $this->addProduct($itemData);
 		            //$totalPice += $price->priceFrom;
 	            }
@@ -331,6 +332,12 @@ final class OrderManager
 		                "price"         =>$price->priceFrom,
 		                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
 		            );
+		            if(!empty($material->stone)){
+						$itemData["stone"] = $material->stone;
+		            }
+		            if(!empty($material->consistence)){
+						$itemData["consistence"] = $material->consistence;
+		            }
 		            $this->addProduct($itemData);
 				}
 	            if($order->type==9){
@@ -344,6 +351,12 @@ final class OrderManager
 			                "type"			=>2,
 			                "name"          =>$product->name." - ".$price->ref("attributeValue")->name,
 			            );
+			            if(!empty($variant->stone)){
+							$itemData["stone"] = $variant->stone;
+			            }
+			            if(!empty($variant->consistence)){
+							$itemData["consistence"] = $variant->consistence;
+			            }
 			            $this->addProduct($itemData);
 		            }
 				}
@@ -359,6 +372,12 @@ final class OrderManager
 		                "price"         =>$price->priceFrom,
 		                "price_vat"     =>$price->priceFrom * (1 + ($settings->vat/100)),
 		            );
+			        if(!empty($material->stone)){
+						$itemData["stone"] = $material->stone;
+			        }
+			        if(!empty($material->consistence)){
+						$itemData["consistence"] = $material->consistence;
+			        }
 		            $this->addProduct($itemData);
 				}
 	            //$totalPice += $price->priceFrom * $material->amount;

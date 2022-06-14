@@ -110,7 +110,14 @@
 						</thead>
 						<tbody>
 						<tr n:foreach="$materials as $itemId=>$product" data-id="{$itemId}">
-							<td><strong>{$product->name}</strong></td>
+							<td><strong>{$product->name}</strong>
+                                {if !empty($product->stone)}
+                                    <br>{$presenter->betonStoneSize[$product->stone]}
+                                {/if}
+                                {if !empty($product->consistence)}
+                                    <br>{$presenter->betonConsistence[$product->consistence]}
+                                {/if}
+							</td>
 							<td>
 								{$product->quantity} {if $product->products_id==$settings->betonProduct}m<sup>3</sup>{else}tun{/if}
 							</td>

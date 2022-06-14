@@ -149,26 +149,22 @@
                     <!-- ./typ a hrubost -->
                     {snippet matamount}
                     <div class="amount material-amount" n:if="!empty($materials[0]->priceObj)" data-koef="{if $materials[0]->product==$settings->betonProduct}{1/$materials[0]->priceObj->koef}{else}{$materials[0]->priceObj->koef}{/if}" data-koef2="{$materials[0]->priceObj->koef}" data-link="{link setMaterialAmount!, 'basketM'}"  style="display: none;">
-                    	<div class="consistency in-material">
+                    	<div class="consistency in-material" n:if="$materials[0]->product==$settings->betonProduct">
                     		<ul class="list-inline">
-                    			<li class="list-inline-item">
+                    			{var $pPrice = $presenter->productManager->findPrice($materials[0]->price)}
+                    			<li class="list-inline-item" n:if="$pPrice->ref('attributeValue')->name[0] != 'P'">
                     				<label class="select">
-                    					<select name="velikost-kamene" class="form-select">
-                    						<option selected="selected">Vyberte velikost kamene</option>
-                    						<option value="1">Bez kamene</option>
-                    						<option value="2">4 - 8 mm</option>
-                    						<option value="3">8 - 16 mm</option>
-                    						<option value="4">16 - 32 mm</option>
+                    					<select name="velikost-kamene" class="form-select updateValue" data-link="{link setMaterialVal! 0,"basketM", "stone"}">
+                    						<option>Vyberte velikost kamene</option>
+                    						<option n:foreach="$presenter->betonStoneSize as $val=>$name" value="{$val}" {if !empty($materials[0]->stone) && $materials[0]->stone==$val}selected="selected"{/if}>{$name}</option>
                     					</select>
                     				</label>
                     			</li>
                     			<li class="list-inline-item">
                     				<label class="select">
-                    					<select name="konzistence" class="form-select">
-                    						<option selected="selected">Vyberte konzistenci</option>
-                    						<option value="1">Suchý</option>
-                    						<option value="2">Zavlhlý</option>
-                    						<option value="3">Na lopatu</option>
+                    					<select name="konzistence" class="form-select updateValue" data-link="{link setMaterialVal! 0,"basketM", "consistence"}">
+                    						<option>Vyberte konzistenci</option>
+                    						<option n:foreach="$presenter->betonConsistence as $val=>$name" value="{$val}" {if !empty($materials[0]->consistence) && $materials[0]->consistence==$val}selected="selected"{/if}>{$name}</option>
                     					</select>
                     				</label>
                     			</li>

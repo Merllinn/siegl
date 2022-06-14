@@ -6,7 +6,7 @@
                 <div class="col-md-5 col-lg-4">
                     <div class="sidebar">
                         <h1>Kontejner <span>{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}</span></h1>
-                        <div class="sidebar-container">
+                        <div class="sidebar-container {if $product->noOnlineOrder}noOrder{/if}">
                             <table class="table">
                                 <tbody>
                                     <tr data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="100">

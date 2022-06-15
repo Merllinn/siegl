@@ -215,7 +215,7 @@
                                     </div>
                                 </label>
 	                            <div class="amount" data-koef="{if $mat->id==$settings->betonProduct}{1/$price->koef}{else}{$price->koef}{/if}" data-koef2="{$price->koef}" data-link="{link setMaterialAmountD! $mat->id, $price->id}" style="{if empty($materials[$mat->id][$price->id])}display: none;{/if}">
-                    				<div class="consistency in-material" n:if="$mat->id==$settings->betonProduct">
+                    				<div class="consistency" n:if="$mat->id==$settings->betonProduct">
                     					<ul class="list-inline">
                     						<li class="list-inline-item" n:if="$price->ref('attributeValue')->name[0] != 'P'">
                     							<label class="select">

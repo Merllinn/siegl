@@ -40,7 +40,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     
 	public $contactCategories = array(50=>"Vedení společnosti", 30=>"Administrativa", 40=>"Dispečink", 10=>"Řidiči", 20=>"Strojníci");
 	public $betonStoneSize = array(10=>"Bez kamene", 20=>"4 - 8 mm", 30=>"8 - 16 mm", 40=>"16 - 32 mm");
-	public $betonConsistence = array(10=>"suchý", 20=>"zavlhlý", 30=>"na lopatu");
+	public $betonConsistence = array(10=>"Suchý", 20=>"Zavlhlý", 30=>"Na lopatu");
     
 
     /** @var Model\CommonManager  @inject */

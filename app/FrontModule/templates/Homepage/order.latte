@@ -66,7 +66,7 @@
 		                        <!-- ./velikost kontejneru -->
 		                    </ul>
 		                    <p class="desc margin">Datum a čas přistavení kontejneru</p>
-			                    <ul class="list-inline" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
+			                    <ul class="list-inline{if empty($basket->zoneObj)} empty-order{/if}" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
 				                    {if empty($basket->zoneObj)}
 	                    				<p class="empty-order">Nejprve vyberte místo přistavení</p>
 				                    {else}
@@ -323,7 +323,7 @@
 		                        <div class="number-mobile beton"><div class="number"><span class="minus"></span><input class="amountField form-control materialSource materialVolume" type="text" value="{if empty($materials[0]->amount)}1{else}{$materials[0]->amount}{/if}"><span class="plus"></span></div><span class="material-quantity">m<sup>3</sup> =</span></div><div class="quantity-mobile beton"><input class="form-control materialTarget materialWeight" type="text" min="1" value="{$materials[0]->amount/$materials[0]->priceObj->koef|number:2}" readonly><span class="tons">tun</span></div>
 	                        {/if}
                         {else}
-							<p>{_'DOPLNTE_KONTEJNER'}</p>                        
+							<p class="empty-container">{_'DOPLNTE_KONTEJNER'}</p>                        
                         {/if}
                     </div>
                     <div class="tons-price" style="display: none;">

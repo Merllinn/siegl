@@ -41,16 +41,28 @@
 		                            {var $prices = $presenter->productManager->getPrices($product->id)}
 		                            <div class="accordion-item" n:foreach="$prices as $price">
 		                                <div class="accordion-header" id="container-{$price->id}">
-		                                    <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
-		                                        <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
-		                                        <em>{$attVals[$price->attributeValue]->name}</em>
-		                                        {if $price->type==1}
-                                        			<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
-		                                        {/if}
-		                                        {if $price->type==2}
-                                        			<span class="price">{$price->text}</span>
-		                                        {/if}
-		                                    </button>
+                                            {if $product->noOnlineOrder}
+    		                                    <button class="accordion-button collapsed noOrder {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
+    		                                        <em>{$attVals[$price->attributeValue]->name}</em>
+    		                                        {if $price->type==1}
+                                            			<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+    		                                        {/if}
+    		                                        {if $price->type==2}
+                                            			<span class="price">{$price->text}</span>
+    		                                        {/if}
+    		                                    </button>
+                                            {else}
+                                                <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
+                                                    <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
+                                                    <em>{$attVals[$price->attributeValue]->name}</em>
+                                                    {if $price->type==1}
+                                                        <span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+                                                    {/if}
+                                                    {if $price->type==2}
+                                                        <span class="price">{$price->text}</span>
+                                                    {/if}
+                                                </button>
+                                            {/if}
 		                                </div>
 		                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#{$product->alias}" n:if="!empty($attVals[$price->attributeValue]->desc)">
 		                                    <div class="accordion-body">
@@ -66,7 +78,7 @@
                                 <span class="without-vat">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
                             </div>
 	                        {if $product->noOnlineOrder}
-		                        <button type="button" class="btn btn-primary btn-arrow btn-red">602 20 30 44 <i class="fa-solid fa-angles-right"></i></button>
+		                        <a class="btn btn-primary btn-arrow btn-red btn-phone" href="tel:602203044">602 20 30 44 <i class="fa-solid fa-angles-right"></i></a>
 	                        {else}
                             	<button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$product->id}" {*data-bs-toggle="modal" data-bs-target="#container-{$product->alias}Modal"*} title="Vybrat a objednat kontejner" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="450">Objednat online <i class="fa-solid fa-angles-right"></i></button>
 	                        {/if}

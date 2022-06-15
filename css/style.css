@@ -427,8 +427,7 @@ h2 {
   }
 
 .btn-arrow::before,
-.btn-arrow::after,
-div.roughness label.select::before {
+.btn-arrow::after {
   content: "";
   position: absolute;
   left: -8px; top: 0;
@@ -514,8 +513,7 @@ div.roughness label.select::before {
   color: #FFF;
 }
 
-  .btn-red::before,
-  div.roughness label.select::before {
+  .btn-red::before {
     background: url("../img/red-arrow.svg");
     background-size: cover;
   }
@@ -2636,7 +2634,7 @@ section.blog {
 
   section.blog::after {
     content: "";
-    width: calc(100% + 400px); height: 663px;
+    width: calc(100% + 400px); height: 730px;
     background-color: #d71921;
     position: absolute;
     left: -200px; right: -200px; top: 0;
@@ -3531,7 +3529,8 @@ label.select {
         padding-right: 46px;
       }
 
-        section.waste div.filter ul.add-container {
+        section.waste div.filter ul.add-container,
+        section.waste div.filter ul.empty-order {
           padding-right: 0;
         }
 
@@ -4049,6 +4048,10 @@ section.products [class*=col-] {
   font-size: .875rem;
 }
 
+  .accordion-button.noOrder {
+    padding-left: 0;
+  }
+
   .accordion-button::before {
     content: "";
     width: 100%; height: 1px;
@@ -4102,6 +4105,11 @@ section.products [class*=col-] {
       top: 0; left: -20px;
       background-color: #FFF;
     }
+
+      section.material .accordion-button.noOrder em::before,
+      .accordion-button.noOrder em::before {
+        content: none;
+      }
 
   .accordion-button:not(.collapsed),
   .accordion-button:hover {
@@ -4163,6 +4171,18 @@ a.container-detail {
   margin-left: calc(50% - 134px);
 }
 
+  .col-container.turbocontainer p {
+    margin-bottom: 10px;
+    font-size: .875rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .col-container.turbocontainer .btn,
+  .col-container.noOrder .btn {
+    margin-left: calc(50% - 104px);
+  }
+
 div.container-image {
   max-width: 260px; width: 100%;
   text-align: center;
@@ -4170,12 +4190,20 @@ div.container-image {
   position: relative;
 }
 
+  div.container-image a {
+    display: inline-block;
+  }
+
   div.container-image img {
     max-width: 190px; width: 100%;
     height: auto;
     position: relative;
     z-index: 1;
   }
+
+    div.turbocontainer div.container-image img {
+      max-width: 265px;
+    }
 
   div.container-image::after {
     content: "";
@@ -4191,6 +4219,10 @@ div.col-container div.accordion {
   border-bottom: 1.5px solid #e7e7e7;
   padding-bottom: 16px;
 }
+
+  div.col-container.turbocontainer div.accordion {
+    border-bottom: 0;
+  }
 
 div.help {
   margin-top: 40px;
@@ -4298,6 +4330,11 @@ div.type-description {
     margin-left: calc(50% - 121px);
   }
 
+  .col-container.turbocontainer .btn,
+  .col-container.noOrder .btn {
+    margin-left: calc(50% - 91px);
+  }
+
 }
 
 @media (max-width: 680px) {
@@ -4339,12 +4376,22 @@ div.type-description {
     margin-left: calc(50% - 138px);
   }
 
+  .col-container.turbocontainer .btn,
+  .col-container.noOrder .btn {
+    margin-left: calc(50% - 108px);
+  }
+
 }
 
 @media (max-width: 470px) {
 
   .col-container .btn {
     margin-left: calc(50% - 102px);
+  }
+
+  .col-container.turbocontainer .btn,
+  .col-container.noOrder .btn {
+    margin-left: calc(50% - 72px);
   }
 
 }
@@ -4583,6 +4630,10 @@ div.sidebar a.btn {
   div.sidebar .btn-primary {
     padding-right: 14px;
     padding-left: 14px;
+  }
+
+  div.sidebar a.btn-phone {
+    margin-left: 32px;
   }
 
 div.sidebar div.or {
@@ -4844,6 +4895,10 @@ div.warrant {
     margin-left: 8px;
   }
 
+  div.sidebar a.btn-phone {
+    margin-left: 32px;
+  }
+
 }
 
 @media (max-width: 991px) {
@@ -4851,6 +4906,10 @@ div.warrant {
   div.sidebar button.btn,
   div.sidebar a.btn {
     margin-left: 42px;
+  }
+
+  div.sidebar a.btn-phone {
+    margin-left: 66px;
   }
 
   div.warrant {
@@ -4870,6 +4929,10 @@ div.warrant {
     margin-left: 30px;
   }
 
+  div.sidebar a.btn-phone {
+    margin-left: 54px;
+  }
+
 }
 
 @media (max-width: 870px) {
@@ -4881,6 +4944,10 @@ div.warrant {
   div.sidebar button.btn,
   div.sidebar a.btn {
     margin-left: 15px;
+  }
+
+  div.sidebar a.btn-phone {
+    margin-left: 39px;
   }
 
 }
@@ -4952,6 +5019,10 @@ div.warrant {
     margin-left: calc(50% - 107px);
   }
 
+  div.sidebar a.btn-phone {
+    margin-left: calc(50% - 79px);
+  }
+
 }
 
 @media (max-width: 690px) {
@@ -4980,6 +5051,10 @@ div.warrant {
   div.sidebar button.btn,
   div.sidebar a.btn {
     margin-left: calc(50% - 95px);
+  }
+
+  div.sidebar a.btn-phone {
+    margin-left: calc(50% - 67px);
   }
 
 }
@@ -5382,6 +5457,10 @@ div.roughness {
       margin-bottom: 30px;
     }
 
+    div.roughness div.consistency li:not(:last-child) {
+      margin-bottom: 0;
+    }
+
     div.roughness li span {
       font-size: 1.25rem;
       text-transform: uppercase;
@@ -5438,7 +5517,7 @@ div.roughness {
     object-fit: cover;
   }
 
-div.roughness label.select {
+/*div.roughness label.select {
   position: absolute;
   right: 0; bottom: 0;
 }
@@ -5457,11 +5536,10 @@ div.roughness label.select {
 
     div.roughness label.select::after {
       content: none;
-    }
+    }*/
 
 div.roughness div.amount {
   font-size: 1rem;
-  margin-top: 30px;
 }
 
 ul.delivery {
@@ -5652,7 +5730,8 @@ div.amount {
     vertical-align: middle;
   }
 
-  div.amount label {
+  div.amount label,
+  li.variantLi div.amount div.consistency label {
     margin-right: 35px;
     display: inline-block;
     vertical-align: middle;
@@ -5660,6 +5739,14 @@ div.amount {
 
     li.variantLi div.amount label {
       margin-right: 10px;
+    }
+
+    p.empty-container {
+      margin-top: 10px;
+      margin-bottom: 0;
+      font-size: 1rem;
+      text-transform: none;
+      font-weight: 700;
     }
 
   span.tons {

@@ -68,7 +68,7 @@
 								if({$isSunday} && matWeight>6){
 									window.checkWeight = false;
 									enableDisableOrder();
-									var error = "Litujeme, ale v neděli není možné objednat víc než 6 tun materiálu.";
+									var error = "Litujeme, ale na neděli není možné objednat více než 6 tun materiálu.";
 									$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
 									$('#modal-errors').modal('show');
 									setTimeout(function(){
@@ -119,7 +119,7 @@
 							if({$isSunday} && matWeight>6){
 								window.checkWeight = false;
 								enableDisableOrder();
-								var error = "Litujeme, ale v neděli není možné objednat víc než 6 tun materiálu.";
+								var error = "Litujeme, ale na neděli není možné objednat více než 6 tun materiálu.";
 								$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
 								$('#modal-errors').modal('show');
 								setTimeout(function(){

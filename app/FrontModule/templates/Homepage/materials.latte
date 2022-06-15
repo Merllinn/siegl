@@ -61,7 +61,7 @@
                             <div class="accordion-item" n:foreach="$prices as $price">
                                 <div class="accordion-header" id="container-{$price->id}">
                                     <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
-                                        <input class="variantRadio" type="radio" name="variant" value="{$price->id}" />
+                                        <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
                                         <em>{$attVals[$price->attributeValue]->name}</em>
                                         {if $price->type==1}
                                         	<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>

@@ -125,17 +125,21 @@
         				{php $isTurbo = true}
 			        {/if}
     				{var $paVals = $presenter->getProductAttributeValues($container->attributes)}
-                    <div class="col-container {if $isTurbo}turbocontainer{/if} {if $container->noOnlineOrder}noOrder{/if}">
+                    <div class="col-container {if $isTurbo}turbocontainer{/if}{if $container->noOnlineOrder} noOrder{/if}">
                         <h2>
                         	{if $isTurbo}
-                        		<a href="https://turbokontejnery.cz/">{$container->name}</a>
+                        		<a target="_blank" href="https://turbokontejnery.cz/">{$container->name}</a>
                         	{else}
                         		<a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">{$paVals[2]->name}{$paVals[2]->ref("attribute")->unit|noescape} / {$paVals[3]->name}{$paVals[3]->ref("attribute")->unit|noescape}{if !empty($container->perex)} <span>{$container->perex}</span>{/if}</a>
                         	{/if}
                         </h2>
                         {var $mainImg = $presenter->productManager->getMainPhoto($container->id)}
                         <div class="container-image">
-                            <a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru"><img src="{$mainImg|thumb}" alt="{$container->name}"></a>
+                            {if $isTurbo}
+                                <a target="_blank" href="https://turbokontejnery.cz/" title="Přejít na detail kontejneru"><img src="{$mainImg|thumb}" alt="{$container->name}"></a>
+                            {else}
+                                <a n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru"><img src="{$mainImg|thumb}" alt="{$container->name}"></a>
+                            {/if}
                         </div>
                         <div class="accordion accordion-flush chocolat-parent" id="containers{$container->id}">
                             {if $isTurbo}
@@ -144,16 +148,28 @@
 	                            {var $prices = $presenter->productManager->getPrices($container->id)}
 	                            <div class="accordion-item" n:foreach="$prices as $price">
 	                                <div class="accordion-header" id="container-{$price->id}">
-	                                    <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
-	                                        <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
-	                                        <em>{$attVals[$price->attributeValue]->name}</em>
-	                                        {if $price->type==1}
-                                        		<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
-	                                        {/if}
-	                                        {if $price->type==2}
-                                        		<span class="price">{$price->text}</span>
-	                                        {/if}
-	                                    </button>
+                                        {if $container->noOnlineOrder}
+    	                                    <button class="accordion-button collapsed noOrder {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
+    	                                        <em>{$attVals[$price->attributeValue]->name}</em>
+    	                                        {if $price->type==1}
+                                            		<span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+    	                                        {/if}
+    	                                        {if $price->type==2}
+                                            		<span class="price">{$price->text}</span>
+    	                                        {/if}
+    	                                    </button>
+                                        {else}
+                                            <button class="accordion-button collapsed {if empty($attVals[$price->attributeValue]->desc)}empty{/if}" type="button" {if !empty($attVals[$price->attributeValue]->desc)}data-bs-toggle="collapse" data-bs-target="#container-collapse{$price->id}"{/if} aria-expanded="false" aria-controls="{$price->id}">
+                                                <input class="variantRadio form-check-input" type="radio" name="variant" value="{$price->id}" />
+                                                <em>{$attVals[$price->attributeValue]->name}</em>
+                                                {if $price->type==1}
+                                                    <span class="price">{$price->priceFrom*$vat->koef|number:0:',':' '} Kč{if $price->priceFrom<$price->priceTo} - {$price->priceTo*$vat->koef|number:0:',':' '} Kč{/if}</span>
+                                                {/if}
+                                                {if $price->type==2}
+                                                    <span class="price">{$price->text}</span>
+                                                {/if}
+                                            </button>
+                                        {/if}
 	                                </div>
 	                                <div id="container-collapse{$price->id}" class="accordion-collapse collapse" aria-labelledby="container-{$price->id}" data-bs-parent="#containers{$container->id}" n:if="!empty($attVals[$price->attributeValue]->desc)">
 	                                    <div class="accordion-body">
@@ -169,12 +185,12 @@
                         <!-- ./prices -->
                         <span class="without-vat" n:if="!$isTurbo">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
                         {if $container->noOnlineOrder}
-	                        <button type="button" class="btn btn-primary btn-arrow btn-red">602 20 30 44 <i class="fa-solid fa-angles-right"></i></button>
+	                        <a class="btn btn-primary btn-arrow btn-red" href="tel:602203044" title="Objednat telefonicky">602 20 30 44 <i class="fa-solid fa-angles-right"></i></a>
                         {else}
 	                        <button type="button" class="btn btn-primary btn-arrow btn-red orderContainer" data-id="{$container->id}" title="Objednat vybraný kontejner">Objednat online <i class="fa-solid fa-angles-right"></i></button>
                         {/if}
                         {if $isTurbo}
-                        	<a class="container-detail" href="https://turbokontejnery.cz/" title="Přejít na detail kontejneru">Více informací</a>
+                        	<a class="container-detail" target="_blank" href="https://turbokontejnery.cz/" title="Přejít na detail kontejneru">Více informací</a>
                         {else}
                         	<a class="container-detail" n:href=":Front:Homepage:container $container->alias" title="Přejít na detail kontejneru">Detail kontejneru</a>
                         {/if}

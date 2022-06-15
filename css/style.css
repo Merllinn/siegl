@@ -3188,6 +3188,19 @@ label.select {
       margin-right: 46px;
     }
 
+      div.filter ul.vat::before {
+        content: "Zobrazit ceny";
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+        font-weight: 600;
+        cursor: text;
+      }
+
+      div.filter ul.vat li:not(:last-child) {
+        margin-right: 20px;
+      }
+
       div.filter li.dateField,
       div.filter li.timefield,
       div.filter ul.kontejneru-den li:not(:last-child) {
@@ -4183,6 +4196,10 @@ a.container-detail {
     margin-left: calc(50% - 104px);
   }
 
+  .col-container .btn.orderContainer {
+    margin-left: calc(50% - 146px);
+  }
+
 div.container-image {
   max-width: 260px; width: 100%;
   text-align: center;
@@ -4333,6 +4350,10 @@ div.type-description {
   .col-container.turbocontainer .btn,
   .col-container.noOrder .btn {
     margin-left: calc(50% - 91px);
+  }
+
+  .col-container .btn.orderContainer {
+    margin-left: calc(50% - 125px);
   }
 
 }
@@ -5517,27 +5538,6 @@ div.roughness {
     object-fit: cover;
   }
 
-/*div.roughness label.select {
-  position: absolute;
-  right: 0; bottom: 0;
-}
-
-  div.roughness label.select select {
-    background-color: #d71921;
-    color: #FFF;
-    padding-right: 27px;
-    text-transform: uppercase;
-  }
-
-    div.roughness label.select::before {
-      animation: none;
-      opacity: 1;
-    }
-
-    div.roughness label.select::after {
-      content: none;
-    }*/
-
 div.roughness div.amount {
   font-size: 1rem;
 }
@@ -6664,6 +6664,17 @@ li.date-to label {
 
 }
 
+@media (max-width: 460px) {
+
+  div.filter ul.vat::before {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+}
+
 @media (max-width: 452px) {
 
   div.filter ul {
@@ -6672,6 +6683,10 @@ li.date-to label {
 
   div.filter li:not(:last-child) {
     margin-bottom: 10px;
+  }
+
+  div.filter ul.vat li:not(:last-child) {
+    margin-bottom: 0;
   }
 
 }
@@ -6812,6 +6827,14 @@ li.date-to label {
   .row-ic button {
     font-size: .875rem;
     height: auto;
+  }
+
+}
+
+@media (max-width: 348px) {
+
+  div.filter ul.vat li:not(:last-child) {
+    margin-bottom: 10px;
   }
 
 }

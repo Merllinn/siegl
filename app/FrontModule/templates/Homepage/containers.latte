@@ -43,12 +43,22 @@
                             </div>
                         </li>
                         <!-- ./turbokontejner -->
+                    </ul>
+                    <ul class="list-inline vat" data-aos="fade-in" data-aos-duration="200" data-aos-delay="200">
                         <li class="list-inline-item vat">
                             <div class="form-check">
                             	<label class="form-check-label" for="sDPH">
-                            		Ceny s DPH
+                            		S DPH
                             	</label>
                             	<input class="form-check-input formFieldVat" type="checkbox" data-on="{link setVat! true}" data-off="{link setVat! false}" name="dph" id="sDPH"{if $vat->isWith}checked{/if}>
+                            </div>
+                        </li>
+                        <li class="list-inline-item vat">
+                            <div class="form-check">
+                                <label class="form-check-label" for="sDPH">
+                                    Bez DPH
+                                </label>
+                                <input class="form-check-input formFieldVat" type="checkbox" data-on="{link setVat! true}" data-off="{link setVat! false}" name="dph" id="sDPH"{if $vat->isWith}checked{/if}>
                             </div>
                         </li>
                         <!-- ./dph -->

@@ -291,7 +291,7 @@
                     <!-- ./typ a hrubost -->
                     {snippet matamount}
                     <div class="amount" n:if="!empty($materials[0]->priceObj)" data-koef="{if $materials[0]->product==$settings->betonProduct}{1/$materials[0]->priceObj->koef}{else}{$materials[0]->priceObj->koef}{/if}" data-koef2="{$materials[0]->priceObj->koef}" data-link="{link setMaterialAmount!}"  style="display: none;">
-                    	<div class="consistency in-material" n:if="$materials[0]->product==$settings->betonProduct">
+                    	<div class="consistency" n:if="$materials[0]->product==$settings->betonProduct">
                     		<ul class="list-inline">
                     			{var $pPrice = $presenter->productManager->findPrice($materials[0]->price)}
                     			<li class="list-inline-item" n:if="$pPrice->ref('attributeValue')->name[0] != 'P'">

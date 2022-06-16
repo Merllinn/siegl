@@ -120,11 +120,14 @@ final class HomepagePresenter extends HomepageForms
 	}
 
 	public function handleSetMaterial($mat, $basket="basket"){
-		$material = new \Nette\Utils\ArrayHash();
-		$material->product = $mat;
-		$materials[0] = $material;
-		$this->$basket->materials = $materials;
-		$this->recalculateBasket($basket);
+		$materials = $this->$basket->materials;
+		if(empty($materials[0]) || $materials[0]->product != $mat){
+			$material = new \Nette\Utils\ArrayHash();
+			$material->product = $mat;
+			$materials[0] = $material;
+			$this->$basket->materials = $materials;
+			$this->recalculateBasket($basket);
+		}
 		$this->redrawControl("matamount");
 		$this->redrawControl("orderContainers");
 		//$this->redirect("this");
@@ -514,6 +517,8 @@ final class HomepagePresenter extends HomepageForms
 			$category = $this->categoryManager->findByAlias($id);
 		    if($category){
 			    $this->template->title = $category->title;
+			    $this->template->catName = $category->name_long;
+			    $this->template->catAttrib = $category->attVal;
 			    $this->template->description = $category->seo_description;
 		    }
 			if(!empty($category->attVal)){
@@ -577,7 +582,7 @@ final class HomepagePresenter extends HomepageForms
 			if(!empty($val) && $key[0]=="a"){
 				$attr = substr($key, 1, 9);
 				if($attr==1){
-					$containers->where("id IN (SELECT product FROM product_prices WHERE attributeValue=".$attr." AND priceFrom>0)");
+					$containers->where("id IN (SELECT product FROM product_prices WHERE attributeValue IN (SELECT id FROM attribute_values WHERE id=".$attr.") AND priceFrom>0)");
 				}
 				else{
 					$attrPair = $attr."-".$val;
@@ -598,27 +603,15 @@ final class HomepagePresenter extends HomepageForms
 	    $this->template->keywords = $page->seo_keywords;
 	    $this->template->description = $page->seo_description;
 
+    	$containers = $this->productManager->getByType(2);
 	    if(!empty($id)){
 			$category = $this->categoryManager->findByAlias($id);
 		    if($category){
 			    $this->template->title = $category->title;
 			    $this->template->description = $category->seo_description;
+				$containers->where("categories LIKE '%|".$category->id."|%'");
 		    }
 	    }
-
-    	$containers = $this->productManager->getByType(2);
-    	foreach($_GET as $key=>$val){
-			if(!empty($val) && $key[0]=="a"){
-				$attr = substr($key, 1, 9);
-				if($attr==1){
-					$containers->where("id IN (SELECT product FROM product_prices WHERE attributeValue=".$attr." AND priceFrom>0)");
-				}
-				else{
-					$attrPair = $attr."-".$val;
-					$containers->where("attributes LIKE '%".$attrPair."%'");
-				}
-			}
-    	}
     	$this->template->containers = $containers;
     	$this->template->attVals = $this->attributeManager->getAllValues();
     }

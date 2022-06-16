@@ -176,6 +176,7 @@
 			  $.get(link);
     		}
     		
+    		{if $mode==0}
     		//Draw area polygon
 				const zoneCompleteCoords = [
 				    {var $points = explode(chr(10), $settings->area)}
@@ -198,6 +199,7 @@
 				});
 
 				zoneComplete.setMap(map);
+			{/if}
     		
     		//Draw zones polygons
     		{foreach $zones as $zone}
@@ -218,10 +220,10 @@
 				const zone{$zone->id} = new google.maps.Polygon({
 				    paths: zone{$zone->id}Coords,
 				    strokeColor: {$color},
-				    strokeOpacity: 0.0,
+				    strokeOpacity: {$mode}*0.8,
 				    strokeWeight: 2,
 				    fillColor: {$color},
-				    fillOpacity: 0.0,
+				    fillOpacity: {$mode}*0.5,
 				});
 
 				zone{$zone->id}.setMap(map);

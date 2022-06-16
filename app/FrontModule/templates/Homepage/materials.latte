@@ -38,7 +38,7 @@
                                 <label class="form-check-label" for="sDPH">
                                     Bez DPH
                                 </label>
-                                <input class="form-check-input formFieldVat" type="checkbox" data-on="{link setVat! true}" data-off="{link setVat! false}" name="dph" id="sDPH"{if $vat->isWith}checked{/if}>
+                                <input class="form-check-input formFieldVat" type="checkbox" data-on="{link setVat! false}" data-off="{link setVat! true}" name="dph" id="sDPH"{if !$vat->isWith}checked{/if}>
                             </div>
                         </li>
                         <!-- ./dph -->
@@ -48,6 +48,21 @@
                     *}
                 </form>
                 <!-- ./form -->
+                <script>
+                	$(document).ready(function(){
+						$(".formFieldVat").change(function(e){
+							e.preventDefault();
+							var checked = $(this).prop("checked");
+							if(checked){
+								var link = $(this).data("on");
+							}
+							else{
+								var link = $(this).data("off");
+							}
+							$.get(link);
+						});
+                	});
+                </script>
             </div>
             <img class="stripe" src="{$basePath}/img/stripe.png" alt="Obrázek pruhů">
         </div>

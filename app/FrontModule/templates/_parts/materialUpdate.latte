@@ -82,7 +82,13 @@
 									$("#modal-errors ul.list-unstyled").html("<li>"+error+"</li>");
 									$('#modal-errors').modal('show');
 									setTimeout(function(){
-										$(".materialWeight").val(maxWeight).trigger("change");
+										if($(".materialWeight").hasClass("materialTarget")){
+											$(".materialVolume").val(Math.floor(maxWeight*materialKoef)).trigger("change");
+											
+										}
+										else{
+											$(".materialWeight").val(maxWeight).trigger("change");
+										}
 									}, 500);
 								}
 								else if(matVolume>maxVolume){

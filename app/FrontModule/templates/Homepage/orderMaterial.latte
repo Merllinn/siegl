@@ -120,6 +120,7 @@
                                 {var $matImg = $presenter->productManager->getMainPhoto($mat->id)}
                                 <img src="{$matImg|thumb}" alt="{$mat->name}">
                                 <span>{$mat->name}</span>
+                                <a class="btn btn-primary btn-arrow btn-red pickedMaterialButton" style="{if !empty($materials) && $mat->id == $materials[0]->product}{else}display: none;{/if}" title="Tento materiál je vybraný">{_'TEXT_VYBRANY'}</a>
                             </label>
                         </li>
                     </ul>
@@ -471,6 +472,8 @@
 				var link = $(this).data("link");
 				var matId = $(this).data("mat");
 				$(this).closest("li").addClass("selected").siblings("li").removeClass("selected");
+				$(".pickedMaterialButton").hide();
+				$(this).closest("li").find(".pickedMaterialButton").show();
 				$(".roughness").hide();
 				$(".roughness.mat"+matId).show();
 				$(".amount").hide();

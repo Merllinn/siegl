@@ -85,6 +85,7 @@ class CategoriesPresenter extends BasePresenter
 		$form ->addText("name", "Jméno")
                 ->setRequired(true)
 				->addRule(Form::FILLED, "Vyplňte jméno kategorie");
+		$form ->addText("name_long", "Kontejnery na ...");
 		$form ->addText("link", "Adresa (pokud má odkazovat mimo web)");
 		$form ->addSelect("attVal", "Druh odpadu kategorie", $attVals)
 			->setPrompt("Vyberte druh odpadu kategorie");

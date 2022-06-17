@@ -521,11 +521,11 @@ final class HomepagePresenter extends HomepageForms
 			    $this->template->catName = $category->name_long;
 			    $this->template->catAttrib = $category->attVal;
 			    $this->template->description = $category->seo_description;
+				$containers->where("categories LIKE '%|".$category->id."|%'");
 		    }
 			if(!empty($category->attVal)){
 				$_GET["a1"] = $category->attVal;
 			}
-			$containers->where("categories LIKE '%|".$category->id."|%'");
 	    }
     	
     	$allowedAttrs = array();

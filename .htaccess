@@ -34,9 +34,9 @@
 	Redirect 301 /struktura-spolecnosti /o-nas
 	Redirect 301 /press-kit /kontakty,htm
 	Redirect 301 /cenik-kontejneru /kontejnery.html
-	Redirect 301 /cenik-ke-stazeni /kontejner.html
-	Redirect 301 /fakturacni-udaje /kontakty.html
-	Redirect 301 /certifikace /kontakty.html
+	Redirect 301 /cenik-ke-stazeni /kontejner.htm
+	Redirect 301 /fakturacni-udaje /kontakty.htm
+	Redirect 301 /certifikace /kontakty.htm
 	Redirect 301 /hledame-asistentku-reditele /kariera
 	Redirect 301 /kalkulace-firmy-24-hodin /poptavka
 	Redirect 301 /brigada-s-ubytovanim-praha /kariera
@@ -52,9 +52,39 @@
 	Redirect 301 /flexibilne-v-noci /sluzby
 	Redirect 301 /poptavka-firmy /poptavka
 	Redirect 301 /dispecink /kontakty.htm
-	Redirect 301 
-	Redirect 301 
-	Redirect 301 
-	Redirect 301 
-	Redirect 301 
+	Redirect 301 /komunikace-s-vedenim /
+	Redirect 301 /certifikace /o-nas
+	Redirect 301 /kalkulace-firmy-24-hodin-2 /poptavka
+	Redirect 301 /nasi-ridici /tym-siegl
+	Redirect 301 /terenni-prace /sluzby
+	Redirect 301 /jak-kontejner-objednat /
+	Redirect 301 /uploads/siegl/obchodni-podminky.pdf /
+	Redirect 301 /garance /
+	Redirect 301 /hledame-dispecera /kariera
+	Redirect 301 /zk /
+	Redirect 301 /vyklizeni-velkych-objektu /sluzby
+	Redirect 301 /vykopy-na-bazeny-na-klic /vykopove-zemni-prace-mensiho-rozsahu
+	Redirect 301 /hlavni-uroven /
+	Redirect 301 /vysledky-vyhledavani /
+	Redirect 301 /newsletter-ok /
+	Redirect 301 /ochutnejte-ok /
+	Redirect 301 /404 /
+	Redirect 301 /sleva-300-kc-prvni-kontejner /
+	Redirect 301 /odhlaseni-uspesne /
+	Redirect 301 /odhlaseni-neuspesne /
+	Redirect 301 /ebook-jak-usetrit-za-kontejner /
+	Redirect 301 /ebook-6-zakladnich-rad-jak-objednat-kontejner /
+	Redirect 301 /objednavka-ok /
+	Redirect 301 /dekujeme-za-tvuj-zajem /
+	Redirect 301 /formular-firemni-zakazniky-byl-odeslan /
+	Redirect 301 /poptavka-ok /
+	Redirect 301 /ppc-bannery /
+	Redirect 301 /pravidla-uziti-webu /
+	Redirect 301 /dekujeme /
+	Redirect 301 /souhlasim /
+	Redirect 301 /objednavka-kontejneru-ok /
+	Redirect 301 /poptavka-siegl-ok /
+	Redirect 301 /kontejner-nasut-akce /
+	Redirect 301 /aktualne/ /aktuality.htm
+
 </IfModule>

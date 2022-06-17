@@ -17,4 +17,44 @@
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz|map)$ index.php [L]
+
+	Redirect 301 /cenik.htm /kontejnery.html
+	Redirect 301 /kontejnery-praha-13 /mapa-pristaveni-kontejneru-praha
+	Redirect 301 /kontejnery-praha-16 /mapa-pristaveni-kontejneru-praha
+	Redirect 301 /kontejnery-praha-17 /mapa-pristaveni-kontejneru-praha
+	Redirect 301 /kontejnery-praha-22 /mapa-pristaveni-kontejneru-praha
+	Redirect 301 /benefity-u-siegl-sro /o-nas
+	Redirect 301 /nejcastejsi-dotazy-ridicu /o-nas
+	Redirect 301 /rozhovory-s-ridici /o-nas
+	Redirect 301 /videa-ridicu /o-nas
+	Redirect 301 /personalni-oddeleni /kontakty.htm
+	Redirect 301 /ridicsky-prukaz-c-na-nakladak.htm /zamestnani.htm
+	Redirect 301 /pro-firmy-subjekty /poptavka
+	Redirect 301 /fakta-cisla-vize /o-nas
+	Redirect 301 /struktura-spolecnosti /o-nas
+	Redirect 301 /press-kit /kontakty,htm
+	Redirect 301 /cenik-kontejneru /kontejnery.html
+	Redirect 301 /cenik-ke-stazeni /kontejner.html
+	Redirect 301 /fakturacni-udaje /kontakty.html
+	Redirect 301 /certifikace /kontakty.html
+	Redirect 301 /hledame-asistentku-reditele /kariera
+	Redirect 301 /kalkulace-firmy-24-hodin /poptavka
+	Redirect 301 /brigada-s-ubytovanim-praha /kariera
+	Redirect 301 /vedouci-administrativy-ekonomickeho-useku /kariera
+	Redirect 301 /hladame-vodica-nakladiaku /kariera
+	Redirect 301 /kontejnerova-doprava-odvoz-odpadu-suti /kariera
+	Redirect 301 /odvoz-uklid-demolicniho-odpadu-zeminy /sluzby
+	Redirect 301 /prodej-dovoz-stavebnich-materialu /materialy.tm
+	Redirect 301 /proc-siegl-s-r-o /o-nas
+	Redirect 301 /areal-siegl-s-r-o /kontakty.htm
+	Redirect 301 /dispecink-objednavky /kontakty.htm
+	Redirect 301 /tym-siegl-2 /tym-siegl
+	Redirect 301 /flexibilne-v-noci /sluzby
+	Redirect 301 /poptavka-firmy /poptavka
+	Redirect 301 /dispecink /kontakty.htm
+	Redirect 301 
+	Redirect 301 
+	Redirect 301 
+	Redirect 301 
+	Redirect 301 
 </IfModule>

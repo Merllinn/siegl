@@ -1,11 +1,13 @@
 {layout ../@layout.latte}
 {block content}
-	<div class="subpages">
+	<div class="subpages pragues">
 		<div class="container">
 			<h1 class="title underline" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="50">{$page->name}</h1>
 			{block subcontent}
-		    	{$page->content|noescape}
-		    	{$page->content_continuation|noescape}
+				<article class="article">
+		    		{$page->content|noescape}
+		    		{$page->content_continuation|noescape}
+		    	</article>
 		    	<div class="row justify-content-center">
 					<div class="col-12 col-md-4" n:foreach="$subpages as $sp" data-aos="fade-in" data-aos-duration="150" data-aos-delay="{25 + ($iterator->counter*25)}">
 						<div class="col-subpage">

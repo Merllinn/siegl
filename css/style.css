@@ -426,6 +426,11 @@ h2 {
     display: table;
   }
 
+.btn-centered {
+  display: table;
+  margin: 50px auto 0 auto;
+}
+
 .btn-arrow::before,
 .btn-arrow::after {
   content: "";
@@ -3995,6 +4000,7 @@ section.products [class*=col-] {
 
 .col-container {
   max-width: 357px; width: 100%;
+  height: 100%;
   margin: 0 auto;
   margin-top: 0 !important;
   background-color: #FFF;
@@ -7166,7 +7172,8 @@ div.subpages .row {
     margin-top: 40px;
   }
 
-  div.subpages.career .row>[class*=col-] {
+  div.subpages.career .row>[class*=col-],
+  div.subpages.pragues .row {
     margin-top: 0;
   }
 

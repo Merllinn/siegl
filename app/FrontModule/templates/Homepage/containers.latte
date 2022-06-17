@@ -194,6 +194,7 @@
                         </div>
                         <!-- ./prices -->
                         <span class="without-vat" n:if="!$isTurbo">Ceny jsou {if $vat->isWith}s{else}bez{/if} DPH</span>
+                        <span>Příplatek za víkend: {$settings->holidayPrice*$vat->koef}</span>
                         {if $container->noOnlineOrder}
 	                        <a class="btn btn-primary btn-arrow btn-red" href="tel:602203044" title="Objednat telefonicky">602 20 30 44 <i class="fa-solid fa-angles-right"></i></a>
                         {else}

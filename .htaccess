@@ -52,9 +52,5 @@
 	Redirect 301 /flexibilne-v-noci /sluzby
 	Redirect 301 /poptavka-firmy /poptavka
 	Redirect 301 /dispecink /kontakty.htm
-	Redirect 301 
-	Redirect 301 
-	Redirect 301 
-	Redirect 301 
-	Redirect 301 
+
 </IfModule>

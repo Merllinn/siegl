@@ -513,6 +513,7 @@ final class HomepagePresenter extends HomepageForms
 	    $this->template->keywords = $page->seo_keywords;
 	    $this->template->description = $page->seo_description;
 
+    	$containers = $this->productManager->getByType(1);
 	    if(!empty($id)){
 			$category = $this->categoryManager->findByAlias($id);
 		    if($category){
@@ -524,6 +525,7 @@ final class HomepagePresenter extends HomepageForms
 			if(!empty($category->attVal)){
 				$_GET["a1"] = $category->attVal;
 			}
+			$containers->where("categories LIKE '%|".$category->id."|%'");
 	    }
     	
     	$allowedAttrs = array();
@@ -577,12 +579,10 @@ final class HomepagePresenter extends HomepageForms
 			unset($_GET["a3"]);
 	    }
 	    
-    	$containers = $this->productManager->getByType(1);
     	foreach($_GET as $key=>$val){
 			if(!empty($val) && $key[0]=="a"){
 				$attr = substr($key, 1, 9);
 				if($attr==1){
-					$containers->where("id IN (SELECT product FROM product_prices WHERE attributeValue IN (SELECT id FROM attribute_values WHERE id=".$attr.") AND priceFrom>0)");
 				}
 				else{
 					$attrPair = $attr."-".$val;

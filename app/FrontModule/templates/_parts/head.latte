@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucen">
 
-    <meta name="robots" content="{if $settings->production==1}index,follow{else}noindex,nofollow{/if}" />
+    <meta name="robots" content="{if $settings->production==1 && (empty($page) || empty($page->noindex))}index,follow{else}noindex,nofollow{/if}" />
     <meta name="author" content="Tomáš Potěšil">
     <meta name="web_author" content="potesil.com">
     <meta name="dcterms.rightsHolder" content="potesil.com">

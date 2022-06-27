@@ -275,6 +275,7 @@ final class HomepagePresenter extends HomepageForms
 		$this->$basket->address = $a;
 		$this->$basket->location = $ll;
 		$this->redrawControl("deliveryTerm");
+		//$this->template->basket = $this->$basket;
 		$this->recalculateBasket($basket);
 		//$this->redirect("this");
 	}
@@ -286,6 +287,7 @@ final class HomepagePresenter extends HomepageForms
 		}
 		$this->redrawControl("orderContainers");
 		$this->redrawControl("realizationterm");
+		$this->redrawControl("deliveryTerm");
 		$this->recalculateBasket($basket);
     }
     

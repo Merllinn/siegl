@@ -303,6 +303,7 @@ class PagesPresenter extends BasePresenter
 				->addRule(Form::FILLED, "Vyplňte adresu");
 		}
 		//$form ->addCheckbox("outside", "Otevřít do nového okna");
+		$form ->addCheckbox("noindex", "Neindexovat roboty");
 		$form->addSubmit("submit", "Uložit stránku")->getControlPrototype()->class("btn btn-primary");
 
 		$form->onSuccess[] = [$this, 'savePage'];

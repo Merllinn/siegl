@@ -98,11 +98,11 @@
                 </div>
                 <!-- ./sidebar -->
                 <div class="col-md-7 col-lg-8">
-                    <div class="container-content chocolat-parent">
+                    <div class="container-content {$product->alias} chocolat-parent">
                         <div class="container-size">
                             <a class="chocolat-image" href="{$secondImg|thumb}" title="Zvětšit obrázek"><img src="{$secondImg|thumb}" alt="Obrázek kontejneru"></a>
                         </div>
-                        <a class="btn btn-primary btn-manipulation chocolat-image" href="{$basePath}/images/manipulace.jpeg" title="Zobrazit prostor pro manipulaci" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="100" data-aos-easing="linear" data-aos-delay="2200">Zobrazit prostor pro manipulaci <i class="fa-solid fa-magnifying-glass"></i></a>
+                        <a n:if="$product->id != 6" class="btn btn-primary btn-manipulation chocolat-image" href="{$basePath}/images/manipulace.jpeg" title="Zobrazit prostor pro manipulaci" data-aos="fade-up" data-aos-anchor-placement="bottom-bottom" data-aos-duration="100" data-aos-easing="linear" data-aos-delay="2200">Zobrazit prostor pro manipulaci <i class="fa-solid fa-magnifying-glass"></i></a>
                         <div class="waste-type" data-aos="fade-in" data-aos-duration="200" data-aos-easing="linear" data-aos-delay="400">
                             <h2>
                                 Jaký druh odpadu sem patří?

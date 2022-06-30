@@ -1,7 +1,7 @@
 {layout ../@layout.latte}
 {block content}
 	<script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvbrT0aEtXB5ZsAZUMRHhKxKTE8ocIlKA&callback=initMap&v=weekly&libraries=places"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2O-GO9lT6KAiN20MfRkoAyHd67hhZ9o8&callback=initMap&v=weekly&libraries=places"
       defer
     ></script>
     <section class="top order">
@@ -32,10 +32,10 @@
             <div class="warrant deliveryBlock">
                 <ul class="list-unstyled">
                     <li n:if="!empty($basket->zoneObj)">
-                        Vybrána <strong>{$basket->zoneObj->name}</strong>
+                        Vybrána <strong class="zone">{$basket->zoneObj->name}</strong>
                     </li>
                     <li>
-                        Garantujeme čas přistavení do <span class="number standardDelivery">1 - {if !empty($basket->zoneObj)}{$basket->zoneObj->lead}{else}4{/if}</span> <strong class="standardUnit">hodin</strong>
+                        Garantujeme čas přistavení do <span class="number standardDelivery">1 - {if !empty($basket->zoneObj)}{$basket->zoneObj->leadExternal}{else}4{/if}</span> <strong class="standardUnit">hodin</strong>
                     </li>
                     <li>
                         Turbokontejner s přistavením do <span class="number turbodelivery">60</span> <strong class="turbounit">minut</strong>

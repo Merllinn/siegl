@@ -63,6 +63,7 @@ class ZonesPresenter extends BasePresenter
 
         $grid->addColumnText('name', 'Název');
         $grid->addColumnText('lead', 'Doba přistavení [h]');
+        $grid->addColumnText('leadExternal', 'Doba přistavení externí [h]');
         $grid->addColumnText('deadline', 'Objednávky do');
         /*
         $grid->addColumnText('role', 'Role')
@@ -146,6 +147,7 @@ class ZonesPresenter extends BasePresenter
 				->addRule(Form::FILLED, "Vyplňte název");
 		$form ->addText("color", "Barva (např. #FC14D2)");
 		$form ->addText("lead", "Doba přistavení [h]");
+		$form ->addText("leadExternal", "Doba přistavení externí [h]");
 		$form ->addText("deadline", "Do kdy lze poslat objednávku [hh:mm]");
 		$form ->addTextarea("points", "Body hranice (souřadnice na jeden řádek)")
 				->addRule(Form::FILLED, "Vyplňte hranici");

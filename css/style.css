@@ -606,6 +606,14 @@ p.section-description {
 
 }
 
+@media (max-width: 700px) {
+
+  .modal-body .btn-close {
+    right: 0;
+  }
+
+}
+
 @media (max-width: 690px) {
 
   .btn-arrow i,
@@ -707,6 +715,23 @@ p.section-description {
 
   .btn-arrow.btn-back i {
     left: -22px;
+  }
+
+}
+
+@media (max-width: 375px) {
+
+  .modal-content h2 {
+    font-size: 1.5rem;
+    padding: 20px 32px;
+  }
+
+  .modal-errors.modal-content h2 {
+    top: 107px;
+  }
+
+  .modal-errors.modal-content {
+    padding-top: 210px;
   }
 
 }
@@ -4165,12 +4190,18 @@ section.products [class*=col-] {
   border: 0;
 }
 
+ul.lease,
 span.without-vat {
-  display: block;
+  margin-top: 16px;
+  margin-bottom: 0;
   text-align: center;
-  margin: 16px auto;
   font-size: .875rem;
   font-weight: 400;
+}
+
+span.without-vat {
+  display: block;
+  margin: 16px auto;
 }
 
 a.container-detail {
@@ -4202,7 +4233,7 @@ a.container-detail {
     margin-left: calc(50% - 104px);
   }
 
-  .col-container .btn.orderContainer {
+  .col-container .btn.orderMaterial {
     margin-left: calc(50% - 146px);
   }
 
@@ -4358,7 +4389,7 @@ div.type-description {
     margin-left: calc(50% - 91px);
   }
 
-  .col-container .btn.orderContainer {
+  .col-container .btn.orderMaterial {
     margin-left: calc(50% - 125px);
   }
 
@@ -4736,10 +4767,6 @@ a.btn-manipulation {
     font-size: 1.125rem;
   }
 
-  div.velkoobjemovy-kontejner-odpad-40m3-10tuny a.btn-manipulation {
-    display: none;
-  }
-
 div.waste-type {
   color: #FFF;
   margin-top: 135px;
@@ -4756,7 +4783,7 @@ div.waste-type {
   }
 
   .kontejner-odpad-sut-zemina-10m3-12tun div.waste-type {
-    margin-top: 115px;
+    margin-top: 180px;
   }
 
   div.waste-type-rectangle,
@@ -4890,6 +4917,10 @@ div.warrant {
     span.turbo {
       font-size: 1.125rem;
       display: block;
+    }
+
+    strong.zone {
+      text-transform: lowercase;
     }
 
   div.warrant a {
